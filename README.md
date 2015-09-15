@@ -1,0 +1,2 @@
+# insynctiveAutomation
+Automated Tests
