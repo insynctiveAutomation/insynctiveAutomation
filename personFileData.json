@@ -1,0 +1,62 @@
+{
+	"name":"Automated"
+	"middleName":"CrossBrowsing"
+	"lastName":"Test"
+	"maidenName":"Browser"
+	"birthDate":"01/05/1970"
+	"gender":"MALE"
+	"maritalStatus":"SINGLE"
+	"email":"InsynctiveTestNG@gmail.com"
+	"titleOfEmployee":"QA"
+	"departamentOfEmployee":"Quality Departament"
+	"primaryPhone":"2015555554"
+	"emergencyContact":
+		{
+			"name":"Bojan Petrovski"
+			"relationShip":"colleague"
+			"email":"bpetrovski@insynctive.com"
+			"phone":"38922461333"
+		}
+	
+	"ssn":"111223333"
+	"USAddress" :{
+		"street":"5th Street"
+		"secondStreet":"Optional Street"
+		"city":"City Bell"
+		"state":"California"
+		"zipCode":"12345"
+		"county":"Orange"
+		"sameAsHome":true
+	}
+	"Dependents" :[
+		{
+			"firstName":""
+			"lastName":""
+			"middleName":""
+			"relationShip":""
+			"gender":""
+			"dateOfBirth":""
+			"isDisable":true
+			"socialSecurityNumber": {
+				"type":"SSN"
+				"Number":"111223333"
+			}
+		}
+	]
+	"Tasks" :[
+		{
+			"detail":"Please take a look at this"
+			"basicTaskInstruction":"Check if it works : www.google.com"
+			"additionalInstruction":"Additional Instruction."
+		}
+	]
+	"Checklist" :{
+			"name":"Test Template"
+			"processes":[
+				{
+					"name":"I9"
+					"start":"ASAP"
+				}
+			]
+		}
+}

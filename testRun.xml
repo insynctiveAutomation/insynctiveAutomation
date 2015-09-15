@@ -1,0 +1,44 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Test Suite" verbose="1" >
+	<test name="Person File Test" preserve-order="true">
+	  <classes>
+	    <class name="insynctive.tests.PersonFileTest">
+	      <methods>
+
+			<!-- Initial Test -->
+	        <include name="loginTest" />
+	        <include name="createPersonTest" />
+
+			<!-- HEADER TEST-->	
+	        <include name="aaaachangeName2" />
+	        <include name="addTitle" />
+	        
+	        <!-- Personal Details -->
+	        <include name="changeName" />
+	        <include name="changeMaritalStatus" />
+	        <include name="changeBirthDate" />
+	        <include name="changeGender" />
+	        <include name="addSocialSecurityNumber" />
+
+			<!-- Contact -->
+	        <include name="addPhoneNumber" />
+	        <include name="changePrimaryEmail" />
+	      
+	      	<!-- EMERGENCY CONTACT -->
+	        <include name="addEmergencyContact" />
+	        <include name="changeEmergencyContact" />
+	        <include name="removeEmergencyContact" />
+	        
+			<!-- US ADDRESS -->
+	        <include name="addUSAddress" />
+	        <include name="removeUSAddress" />
+
+			<!-- Tasks -->
+	        <include name="assignTask" />
+	        <include name="startChecklist" />
+	      
+	      </methods>
+	    </class>
+	  </classes>
+	</test>
+</suite>
