@@ -14,9 +14,11 @@
 		<selenium.version>2.45.0</selenium.version>
 		<testNG-Version>6.9.4</testNG-Version>
 		<junit-Version>4.11</junit-Version>
+		<junit-dep>4.10</junit-dep>
+		<spring-version>4.1.6.RELEASE</spring-version>
 	</properties>
-	<dependencies>
 
+	<dependencies>
 		<dependency>
 			<groupId>net.oauth.core</groupId>
 			<artifactId>oauth</artifactId>
@@ -28,7 +30,7 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>${testNG-Version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- JUNIT -->
@@ -41,7 +43,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit-dep</artifactId>
-			<version>4.10</version>
+			<version>${junit-dep}</version>
 		</dependency>
 
 		<!-- SELENIUM -->
@@ -49,13 +51,6 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>${selenium.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-			<scope>test</scope>
 		</dependency>
 
 		<!-- JAVA MAIL -->
@@ -78,30 +73,63 @@
 		</dependency>
 
 		<!-- Spring MVC support -->
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-webmvc</artifactId>
-	        <version>4.1.4.RELEASE</version>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-web</artifactId>
+	        <version>1.2.5.RELEASE</version>
 	    </dependency>
-	 
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-web</artifactId>
-	        <version>4.1.4.RELEASE</version>
-	    </dependency>
-	     
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-core</artifactId>
-	        <version>4.1.4.RELEASE</version>
-	    </dependency>
-	     
-	    <!-- Jackson JSON Processor -->
-	    <dependency>
-	        <groupId>com.fasterxml.jackson.core</groupId>
-	        <artifactId>jackson-databind</artifactId>
-	        <version>2.4.1</version>
-	    </dependency>
+
+		<!-- Jackson JSON Processor -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.1</version>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -124,6 +152,10 @@
 						<suiteXmlFile>testRun.xml</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

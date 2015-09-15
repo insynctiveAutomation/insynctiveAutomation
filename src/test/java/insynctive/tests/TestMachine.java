@@ -282,13 +282,6 @@ public abstract class TestMachine {
 	
 	/* RUNNABLE TEST */
 //	public static void main(String[] args) throws IOException, JSONException, ConfigurationException {
-////		ChecklistsTest checklistPage = new ChecklistsTest();
-////		checklistPage.tags.add("Start Checklist[PASS]");
-////		checklistPage.generalStatus = true;
-////		checklistPage.sessionName = "Checklist Sanity Tests";
-////		checklistPage.jobID = "3556031";
-////		checklistPage.testEnvironment = TestEnvironment.FIREFOX;
-////		checklistPage.setFinalResult();
 //		String xmlFileName = "testRun.xml";
 //		List<XmlSuite> suite;
 //		try
