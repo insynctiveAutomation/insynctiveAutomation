@@ -1,9 +1,11 @@
 package insynctive.tests;
 
+import insynctive.controller.TestController;
 import insynctive.pages.insynctive.HomeForAgentsPage;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.exception.ConfigurationException;
 import insynctive.utils.Debugger;
+import insynctive.utils.TestResults;
 import insynctive.utils.data.TestEnvironment;
 import insynctive.utils.reader.InsynctivePropertiesReader;
 
@@ -168,14 +170,17 @@ public abstract class TestMachine {
 	}
 	
 	public void setResult(boolean status, String nameOfTest) throws MalformedURLException, IOException {
+		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
+		TestResults.results.add(result); 
 		if (status == false){
 			generalStatus = status;
 		}
-		tags.add(nameOfTest+"["+(status ? "PASS" : "FAIL")+"]");
+		tags.add(result);
 	}
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		if(InsynctivePropertiesReader.IsRemote()){
+			TestResults.results.add("<a href=\""+getPublicVideoLinkOfJob()+"\">Watch Video</a>");
 			makeCurlToChangeStatus();
 		}
 		if(InsynctivePropertiesReader.isNotificationActive()) {sendSlack();}

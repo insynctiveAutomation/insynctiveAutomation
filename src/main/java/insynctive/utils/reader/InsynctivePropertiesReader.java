@@ -54,7 +54,6 @@ public class InsynctivePropertiesReader {
 
 	public InsynctivePropertiesReader() throws ConfigurationException {
 		if (isRemote == null){
-			getRunIDAndAutoIncrement();
 			isRemote = this;
 		}
 	}

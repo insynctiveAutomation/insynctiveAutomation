@@ -25,6 +25,7 @@ public class PersonFileTest extends TestMachine {
 	@BeforeClass
 	public void tearUp() throws Exception {
 		super.tearUp();
+		properties.getRunIDAndAutoIncrement();
 		person = new PersonData(properties.getRunID());
 		this.sessionName = "Person File Test ("+ person.getEmail()+")";
 	}
@@ -44,6 +45,7 @@ public class PersonFileTest extends TestMachine {
 			LoginPage loginPage = login();
 			boolean result = loginPage.isLoggedIn();
 			setResult(result, "Login Test");
+			Debugger.log("loginTest => "+result, isSaucelabs);
 			assertTrue(result);
 		} catch(Exception ex){
 			failTest("Login",  ex, isSaucelabs);

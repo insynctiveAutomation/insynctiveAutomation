@@ -1,6 +1,9 @@
 package insynctive.controller;
 
+import insynctive.utils.TestResults;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,35 +23,50 @@ import org.xml.sax.SAXException;
 @EnableAutoConfiguration
 public class TestController {
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(value = "/test" ,method = RequestMethod.GET)
 	@ResponseBody
-	public String runTest() {
+	public String runTest(){
+		
+		TestResults.resetResults();
+		
 		String xmlFileName = "testRun.xml";
 		TestNG testNG = new TestNG();
-
 		List<XmlSuite> suite = getSuite(xmlFileName);
-
+	
 		testNG.setXmlSuites(suite);
+		testNG.setPreserveOrder(true);
 		testNG.run();
 
-		return "Finish()";
+		String resultResult = "";
+		for(String result : TestResults.results){
+			resultResult += "<p>"+result+"</p>";
+		}
+		
+		return resultResult;
 	}
 
 	private List<XmlSuite> getSuite(String xmlFileName) {
 		List<XmlSuite> suite = null;
-		try {
-			suite = (List<XmlSuite>) (new Parser(xmlFileName).parse());
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		try
+		{
+			suite = (List <XmlSuite>)(new Parser(xmlFileName).parse());
+		}
+		catch (ParserConfigurationException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (SAXException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
 		}
 		return suite;
 	}
-
+	
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(TestController.class, args);
-	}
+        SpringApplication.run(TestController.class, args);
+    }
 }
