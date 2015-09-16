@@ -16,6 +16,8 @@
 		<junit-Version>4.11</junit-Version>
 		<junit-dep>4.10</junit-dep>
 		<spring-version>4.1.6.RELEASE</spring-version>
+		<handlebars-version>2.2.1</handlebars-version>
+		<mustache-version>1.0</mustache-version>
 	</properties>
 
 	<dependencies>
@@ -119,16 +121,26 @@
 			<version>${spring-version}</version>
 		</dependency>
 		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-web</artifactId>
-	        <version>1.2.5.RELEASE</version>
-	    </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>1.2.5.RELEASE</version>
+		</dependency>
 
 		<!-- Jackson JSON Processor -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.4.1</version>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.2.3</version>
 		</dependency>
 
 	</dependencies>

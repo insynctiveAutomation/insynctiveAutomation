@@ -1,6 +1,5 @@
 package insynctive.tests;
 
-import insynctive.controller.TestController;
 import insynctive.pages.insynctive.HomeForAgentsPage;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.exception.ConfigurationException;
@@ -56,8 +55,8 @@ public abstract class TestMachine {
 	private String slackChannel = "https://hooks.slack.com/services/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";
 
 	//CROSSBROWSING
-	String username = "eugenio.valeiras+8@gmail.com";
-	String password = "ue0639059e6c8f00";
+	String username = "eugenio.valeiras+13@gmail.com";
+	String password = "ud7b1126a8727aa2";
 	
 	private String getJobURL() throws IOException, JSONException {
 		return getPublicVideoLinkOfJob();
@@ -76,6 +75,7 @@ public abstract class TestMachine {
 	public void tearUp() throws Exception {
 		properties = InsynctivePropertiesReader.getAllAccountsProperties();
 		isSaucelabs = InsynctivePropertiesReader.IsRemote();
+		TestResults.addResult("<h2>"+sessionName+"</h2>");
 	}
 	
 	@AfterClass(alwaysRun = true)
@@ -101,6 +101,7 @@ public abstract class TestMachine {
 	    caps.setCapability("record_network", "true");
 	    caps.setCapability("record_snapshot", "false");
 
+	    ("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub").equals("http://eugenio.valeiras%2b9%40gmail.com:uca60139cbdf183b@hub.crossbrowsertesting.com:80/wd/hub");
 	    webDriver.set(new RemoteWebDriver(new URL("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub"), caps));
 	    jobID = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
 		sessionId.set(jobID);
@@ -109,7 +110,7 @@ public abstract class TestMachine {
 	    return webDriver.get();
 	}
 
-	public void startTest(TestEnvironment testEnvironment) throws MalformedURLException, ConfigurationException {
+	public void startTest(TestEnvironment testEnvironment) throws ConfigurationException, JSONException, IOException {
 		if (InsynctivePropertiesReader.IsRemote()) {
 			driver = createDriver(testEnvironment);
 		} else {
@@ -119,6 +120,7 @@ public abstract class TestMachine {
 			driver = new FirefoxDriver(firefoxProfile);
 			driver.manage().window().maximize();
 		}
+		TestResults.setVideo(getJobURL());
 	}
 	
 	public void openPersonFile(String emailSearch) throws Throwable{
@@ -147,6 +149,10 @@ public abstract class TestMachine {
 	}
 
 	public void failTest(String testName,Exception ex, boolean isSaucelabs) throws Exception{
+		failTest(testName, ex, isSaucelabs, null);
+	}
+	
+	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception{
 		System.out.println(ex.getStackTrace()[4]);
 		System.out.println(ex.getStackTrace()[3]);
 		System.out.println(ex.getStackTrace()[2]);
@@ -166,21 +172,33 @@ public abstract class TestMachine {
 		}
 		
 		Debugger.log(nameAndCause, isSaucelabs);
-		setResult(false, nameAndCause);
+		
+		setResult(false, nameAndCause, duration);
 	}
 	
 	public void setResult(boolean status, String nameOfTest) throws MalformedURLException, IOException {
+		setResult(status, nameOfTest, null);
+	}
+	
+	public void setResult(boolean status, String nameOfTest, Long duration) throws MalformedURLException, IOException {
 		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
-		TestResults.results.add(result); 
+		
+		if(duration != null){
+			TestResults.addResult(result+" (Duration: "+duration/1000000+" ms)"); 
+		} else {
+			TestResults.addResult(result); 
+		}
+		
 		if (status == false){
 			generalStatus = status;
 		}
+		
 		tags.add(result);
 	}
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		if(InsynctivePropertiesReader.IsRemote()){
-			TestResults.results.add("<a href=\""+getPublicVideoLinkOfJob()+"\">Watch Video</a>");
+			TestResults.addResult("<a href=\""+getPublicVideoLinkOfJob()+"\">Watch Video</a>");
 			makeCurlToChangeStatus();
 		}
 		if(InsynctivePropertiesReader.isNotificationActive()) {sendSlack();}
@@ -214,12 +232,16 @@ public abstract class TestMachine {
 	}
 	
 	public String getPublicVideoLinkOfJob() throws IOException, JSONException{
-		String url = "http://crossbrowsertesting.com/api/v3/selenium/" + jobID;
-		JSONObject response = makeCurl(url, "GET");
-		
-		org.json.JSONArray videos = response.getJSONArray("videos");
-		JSONObject video = (JSONObject) videos.get(0);
-		return video.getString("show_result_public_url");
+		if (jobID != null){
+			String url = "http://crossbrowsertesting.com/api/v3/selenium/" + jobID;
+			JSONObject response = makeCurl(url, "GET");
+			
+			org.json.JSONArray videos = response.getJSONArray("videos");
+			JSONObject video = (JSONObject) videos.get(0);
+			return video.getString("show_result_public_url");
+ 		} else {
+ 			return null;
+ 		}
 	}
 	
 	private String getEmailForCurl() {
