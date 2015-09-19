@@ -29,17 +29,16 @@
 
 <body data-ng-controller="TestController as testCtrl">
 	<div ng-show="testCtrl.showPanel()" class="container">
-		<form  ng-submit="testCtrl.startTest(testSuiteName)" class="form-signin" name="sendTest">
+		<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
 	
 	  	<select name="testSuite" ng-model="testSuiteName" data-ng-options="testSuite as testSuite for testSuite in testCtrl.testsSuites" ng-change="testCtrl.getTestDetails(testSuiteName)" required>
 	    	<option value="">Select a Test Suite</option>
 	 	</select>
-	  	<!-- <select name="environment" ng-model="selectedEnvironment" data-ng-options="environment as environment for environment in testCtrl.environments" required>
+	  	<select name="environment" ng-model="selectedEnvironment" data-ng-options="environment as environment for environment in testCtrl.environments" required>
 	    	<option value="">Select an Environment</option>
-	 	</select> -->
+	 	</select>
 	 	
-		<!-- <button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button> -->
-		<button ng-disabled="sendTest.testSuite.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button>
+		<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button>
 		</form>	
 	</div>
 	
@@ -81,11 +80,11 @@
 		</div>
 	</div>
 	<div class="alert alert-danger animate-repeat" ng-repeat="error in testCtrl.errors">{{error}}</div>
-	<script src="resources/js/testSuite.js"></script>
-	<script src="resources/js/environment.js"></script>
-	<script src="resources/js/testController.js"></script>
-	<script src="resources/js/testService.js"></script>
-	<script src="resources/js/testDirectives.js"></script>
+	<script src="resources/js/entity/testSuite.js"></script>
+	<script src="resources/js/entity/environment.js"></script>
+	<script src="resources/js/home_page/testController.js"></script>
+	<script src="resources/js/home_page/testService.js"></script>
+	<script src="resources/js/home_page/testDirectives.js"></script>
 </body>
 </html>
 

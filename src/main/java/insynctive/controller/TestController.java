@@ -1,9 +1,11 @@
 package insynctive.controller;
 
+import insynctive.pages.insynctive.exception.ConfigurationException;
 import insynctive.results.Result;
 import insynctive.results.TestResults;
 import insynctive.results.TestSuite;
 import insynctive.utils.Sleeper;
+import insynctive.utils.reader.InsynctivePropertiesReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +16,14 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
@@ -41,10 +46,32 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
-	@ResponseBody
 	public ModelAndView root(){
 		ModelAndView model = new ModelAndView();
 		model.setViewName("test.html");
+		return model;
+	}
+	
+	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public InsynctivePropertiesReader getAccountProperties() throws ConfigurationException {
+		return InsynctivePropertiesReader.getAllAccountsProperties();
+	}
+	
+	@RequestMapping(value = "/account_config" ,method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView goAccountConfig() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("accountConfig.html");
+		return model;
+	}
+	
+	@RequestMapping(value = "/model/{model}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView goModel(@PathVariable("model") String modelName) throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName(modelName+".html");
 		return model;
 	}
 
@@ -108,7 +135,7 @@ public class TestController {
 	
 	@RequestMapping(value = "/get/{xmlName}" ,method = RequestMethod.GET)
 	@ResponseBody
-	public TestSuite getTestsRuns(@PathVariable("xmlName") String xmlName){
+	public TestSuite getTestsRuns(@PathVariable("xmlName") String xmlName) {
 		TestSuite testSuite = null;
 		try{
 			List<XmlSuite> suite = getXmlTestSuite(xmlName);
@@ -128,9 +155,12 @@ public class TestController {
 		return testSuite;
 	}
 	
-	@RequestMapping(value = "/test/{xmlName}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String runTest(@PathVariable("xmlName") String xmlName){
+	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
+		InsynctivePropertiesReader allAccountsProperties = InsynctivePropertiesReader.getAllAccountsProperties();
+		allAccountsProperties.setEnvironment(environment);
+		
 		tla = new TestListenerAdapter();
 		insynctive.utils.TestResults.resetResults();
 		
@@ -145,11 +175,23 @@ public class TestController {
 		
 		return "Finish!";
 	}
+	
+	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String saveAccountConfig(@RequestBody InsynctivePropertiesReader properties) throws ConfigurationException{
+		properties.saveAccConfig();
+		
+		return "Done!";
+	}
 
+	
+	
+	/*Private Methods*/
 	private List<XmlSuite> getXmlTestSuite(String xmlName) {
 		ClassLoader classLoader = getClass().getClassLoader();
 		String xmlFileName = classLoader.getResource("testsSuits/"+xmlName+".xml").getPath();
 		List<XmlSuite> suite = getSuite(xmlFileName);
+		
 		return suite;
 	}
 

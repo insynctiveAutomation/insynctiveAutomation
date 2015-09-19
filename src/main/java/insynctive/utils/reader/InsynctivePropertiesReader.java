@@ -49,7 +49,7 @@ public class InsynctivePropertiesReader {
 	// ChecklistList
 	private List<Checklist> checklists;
 
-	private boolean notification;
+	private Boolean notification;
 	
 
 	public InsynctivePropertiesReader() throws ConfigurationException {
@@ -120,8 +120,8 @@ public class InsynctivePropertiesReader {
 
 			// Get all properties
 			enviroment = accountsProperties.getProperty("environment");
+			setRemote(accountsProperties.getProperty("remote"));
 			notification = Boolean.parseBoolean(accountsProperties.getProperty("notification"));
-			
 			
 			loginUsername = accountsProperties.getProperty("loginUsername");
 			loginPassword = accountsProperties.getProperty("loginPassword");
@@ -133,7 +133,7 @@ public class InsynctivePropertiesReader {
 		}
 	}
 
-	public void getRunIDAndAutoIncrement() throws ConfigurationException {
+	public void IncrementRunID() throws ConfigurationException {
 		try {
 			// Open Properties Files
 			Properties runPropertie = new Properties();
@@ -164,30 +164,73 @@ public class InsynctivePropertiesReader {
 				insynctiveProp.DEFAULT_ACCOUNTS_PROPERTIES);
 		accountsProperties.load(fileInput);
 
-		insynctiveProp.remote = accountsProperties.getProperty("remote");
-		return Boolean.parseBoolean(insynctiveProp.remote);
+		insynctiveProp.setRemote(accountsProperties.getProperty("remote"));
+		return Boolean.parseBoolean(insynctiveProp.getRemote());
 
 		} catch (Exception ex) {
 			throw new ConfigurationException("Check config file => "+ ex.getMessage());
 		}
 	}
 	
-	public static boolean isNotificationActive() throws ConfigurationException {try {
-		InsynctivePropertiesReader insynctiveProp;
-		insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
-		
-		// Open Properties Files
-		Properties accountsProperties = new Properties();
-		FileInputStream fileInput = new FileInputStream(
-				insynctiveProp.DEFAULT_ACCOUNTS_PROPERTIES);
-		accountsProperties.load(fileInput);
-
-		insynctiveProp.notification = Boolean.parseBoolean(accountsProperties.getProperty("notification"));
-		return insynctiveProp.notification;
+	public static boolean isNotificationActive() throws ConfigurationException {
+		try {
+			InsynctivePropertiesReader insynctiveProp;
+			insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+			
+			// Open Properties Files
+			Properties accountsProperties = new Properties();
+			FileInputStream fileInput = new FileInputStream(
+					insynctiveProp.DEFAULT_ACCOUNTS_PROPERTIES);
+			accountsProperties.load(fileInput);
+	
+			insynctiveProp.notification = Boolean.parseBoolean(accountsProperties.getProperty("notification"));
+			return insynctiveProp.notification;
 
 		} catch (Exception ex) {
 			throw new ConfigurationException("Check config file => "+ ex.getMessage());
 		}
+	}
+	
+	public void setEnvironment(String environment) throws ConfigurationException{
+		try {
+			// Open Properties Files
+			Properties accPropertie = new Properties();
+			File fileID = new File(DEFAULT_ACCOUNTS_PROPERTIES);
+			FileInputStream accFile = new FileInputStream(fileID);
+			accPropertie.load(accFile);
+
+			// Get runID
+			accPropertie.setProperty("environment",environment);
+
+			// Save new Properties into File
+			OutputStream output = new FileOutputStream(fileID);
+			accPropertie.store(output, "environment");
+		} catch (Exception ex) {
+			throw new ConfigurationException("Check config file => "+ ex.getMessage());
+		}
+	}
+	
+	public void saveAccConfig() throws ConfigurationException {
+		try {
+			// Open Properties Files
+			Properties accPropertie = new Properties();
+			File fileID = new File(DEFAULT_ACCOUNTS_PROPERTIES);
+			FileInputStream accFile = new FileInputStream(fileID);
+			accPropertie.load(accFile);
+
+			// Get runID
+			accPropertie.setProperty("loginUsername",this.loginUsername);
+			accPropertie.setProperty("loginPassword",this.loginPassword);
+			accPropertie.setProperty("remote",this.remote);
+			accPropertie.setProperty("notification",this.notification.toString());
+			
+			// Save new Properties into File
+			OutputStream output = new FileOutputStream(fileID);
+			accPropertie.store(output, "environment");
+		} catch (Exception ex) {
+			throw new ConfigurationException("Check config file => "+ ex.getMessage());
+		}
+	
 	}
 
 	public void addAppToList(App app) {
@@ -298,5 +341,13 @@ public class InsynctivePropertiesReader {
 
 	public void setNotification(boolean notification) {
 		this.notification = notification;
+	}
+
+	public String getRemote() {
+		return remote;
+	}
+
+	public void setRemote(String remote) {
+		this.remote = remote;
 	}
 }

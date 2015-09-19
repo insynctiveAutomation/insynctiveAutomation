@@ -8,8 +8,8 @@ app.service('testService', function($http) {
 		$http.get('/testsSuites').success(callback);
 	};
 
-	this.startTest = function(testSuiteName, callback) {
-		$http.get('/test/'+testSuiteName).success(callback);
+	this.startTest = function(testSuiteName, environmentName, callback) {
+		$http.get('/test/'+testSuiteName+"/"+environmentName).success(callback);
 	};
 	
 	this.getTestDetails = function(testSuiteName, callback) {

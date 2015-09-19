@@ -30,11 +30,11 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, t
 	};
 	
 	/*On Start Button*/
-	this.startTest = function(testSuiteValue) {
+	this.startTest = function(testSuiteValue, selectedEnvironment) {
 		self.start = true;
 		self.runStatus = "Started!";
 		self.videoLink = "";
-		testService.startTest(testSuiteValue, function(data) {
+		testService.startTest(testSuiteValue, selectedEnvironment, function(data) {
 			self.runStatus = data;
 		});
 		testService.getVideoLink(function(data) {
