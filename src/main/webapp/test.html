@@ -58,7 +58,7 @@
 					</tr>
 					<tr data-ng-repeat="method in testCtrl.testDetails.includeMethods" class="animate-repeat">
 						<td class="col-sm-5"><span ng-bind="method.name"></span></td>
-						<td class="col-sm-2"><result ng-model="method.status" bind="method.status"/></td>
+						<td class="col-sm-2"><result ng-model="method.status" bind="method.status" value="{{method.status}}"/></td>
 					</tr>
 				</tbody>
 			</table>

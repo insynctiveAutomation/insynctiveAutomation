@@ -16,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ import org.xml.sax.SAXException;
 
 @Controller
 @EnableAutoConfiguration
+@Scope("session")
 public class TestController {
 
 	TestListenerAdapter tla = new TestListenerAdapter();
@@ -83,17 +85,23 @@ public class TestController {
 
 	@RequestMapping(value = "/video" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String getVideo() throws InterruptedException{
-		int times = 0;
-		while(times < 30){
-			String videoLink = insynctive.utils.TestResults.video;
-			if(videoLink != null){
-				return videoLink;
+	public String getVideo() throws InterruptedException, ConfigurationException{
+		if (InsynctivePropertiesReader.IsRemote()) {
+			int times = 1;
+			int sleep = 2000;
+			
+			while (times <= 30) {
+				String videoLink = insynctive.utils.TestResults.video;
+				if (videoLink != null) {
+					return videoLink;
+				}
+				Thread.sleep(sleep);
+				times++;
 			}
-			Thread.sleep(2000);
-			times++;
+			return "";
+		} else {
+			return "";
 		}
-		return "";
 	}
 	
 	@RequestMapping(value = "/testsSuites" ,method = RequestMethod.GET)
