@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'accountApp']);
 
-app.controller('TestController', function($modal, $scope, $timeout, $interval, testService) {
+app.controller('TestController', function($modal, $scope, $timeout, $interval, $compile, testService) {
 	var self = this;
 	this.errors = [];
 	this.testsSuites = [];
@@ -94,5 +94,21 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, t
 	
 	this.showPanel = function(){
 		return !self.runStatus || self.runStatus === 'Finish!' 
+	};
+	
+	/*Modal Manager*/
+	this.openConfig = function() {
+		var modalInstance = $modal.open({
+			animation : true,
+			templateUrl : '/accountConfigContent',
+			controller:  'AccountController',
+			controllerAs: 'accountCtrl',
+			
+			windowClass: 'app-modal-window',
+			backdrop: true,
+			
+			size : 'sm',
+			resolve : {}
+		});
 	};
 });

@@ -23,11 +23,13 @@
 <script src="node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
 
 <!-- MY CSS -->
-<link rel="stylesheet" href="resources/css/test.css">
+<link rel="stylesheet" href="resources/css/home_page/test.css">
+<link rel="stylesheet" href="resources/css/account_config/accountConfig.css">
 
 </head>
 
 <body data-ng-controller="TestController as testCtrl">
+	<div class="topcorner h4"><a ng-click="testCtrl.openConfig()">Configuration</a></div>
 	<div ng-show="testCtrl.showPanel()" class="container">
 		<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
 	
@@ -80,6 +82,14 @@
 		</div>
 	</div>
 	<div class="alert alert-danger animate-repeat" ng-repeat="error in testCtrl.errors">{{error}}</div>
+	
+	<!-- MODAL -->
+	<script src="resources/js/entity/accountConfig.js"></script>
+	<script src="resources/js/account_config/accountController.js"></script>
+	<script src="resources/js/account_config/accountService.js"></script>
+	<script src="resources/js/account_config/accountDirectives.js"></script>
+	
+	<!-- Test Page -->
 	<script src="resources/js/entity/testSuite.js"></script>
 	<script src="resources/js/entity/environment.js"></script>
 	<script src="resources/js/home_page/testController.js"></script>

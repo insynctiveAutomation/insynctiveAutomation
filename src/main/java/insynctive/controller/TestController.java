@@ -52,21 +52,27 @@ public class TestController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public InsynctivePropertiesReader getAccountProperties() throws ConfigurationException {
-		return InsynctivePropertiesReader.getAllAccountsProperties();
-	}
-	
-	@RequestMapping(value = "/account_config" ,method = RequestMethod.GET)
-	@ResponseBody
+	@RequestMapping(value = "/accountconfig" ,method = RequestMethod.GET)
 	public ModelAndView goAccountConfig() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("accountConfig.html");
 		return model;
 	}
 	
+	@RequestMapping(value = "/accountConfigContent" ,method = RequestMethod.GET)
+	public ModelAndView goAccountConfigModel() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("accountConfigModel.html");
+		return model;
+	}
+
+	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public InsynctivePropertiesReader getAccountProperties() throws ConfigurationException {
+		return InsynctivePropertiesReader.getAllAccountsProperties();
+	}
+
 	@RequestMapping(value = "/model/{model}" ,method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView goModel(@PathVariable("model") String modelName) throws ConfigurationException {
