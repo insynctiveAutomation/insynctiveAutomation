@@ -53,13 +53,6 @@ public class TestController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/accountconfig" ,method = RequestMethod.GET)
-	public ModelAndView goAccountConfig() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("accountConfig.html");
-		return model;
-	}
-	
 	@RequestMapping(value = "/accountConfigContent" ,method = RequestMethod.GET)
 	public ModelAndView goAccountConfigModel() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
@@ -202,8 +195,6 @@ public class TestController {
 		
 		return "Done!";
 	}
-
-	
 	
 	/*Private Methods*/
 	private List<XmlSuite> getXmlTestSuite(String xmlName) {

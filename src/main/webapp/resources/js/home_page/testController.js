@@ -94,8 +94,8 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 
 	/*Intervar 3 segs*/
 	this.getTestsStatus();
-	$interval(function(){
-		if(self.testDetails){
+	$interval(function() {
+		if(self.testDetails) {
 			testService.getTestsStatus(function(data) {
 				self.testStatus = data;
 				self.updateStatus();
@@ -119,7 +119,8 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 			backdrop: true,
 			
 			size : 'sm',
-			resolve : {}
+			resolve : {
+			}
 		});
 	};
 });
