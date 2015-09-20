@@ -1,8 +1,8 @@
 package insynctive.pages.insynctive;
 
+import insynctive.exception.MethodNoImplementedException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.exception.MethodNoImplementedException;
 import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
 import insynctive.utils.process.Process;

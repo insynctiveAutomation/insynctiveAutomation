@@ -1,6 +1,6 @@
 package insynctive.utils.reader;
 
-import insynctive.pages.insynctive.exception.ConfigurationException;
+import insynctive.exception.ConfigurationException;
 
 import java.io.FileInputStream;
 import java.util.Properties;

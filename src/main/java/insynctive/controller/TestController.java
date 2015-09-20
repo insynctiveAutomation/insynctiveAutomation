@@ -1,10 +1,9 @@
 package insynctive.controller;
 
-import insynctive.pages.insynctive.exception.ConfigurationException;
+import insynctive.exception.ConfigurationException;
 import insynctive.results.Result;
 import insynctive.results.TestResults;
 import insynctive.results.TestSuite;
-import insynctive.utils.Sleeper;
 import insynctive.utils.reader.InsynctivePropertiesReader;
 
 import java.io.File;
@@ -68,6 +67,13 @@ public class TestController {
 		return model;
 	}
 
+	@RequestMapping(value = "/model/{model}" ,method = RequestMethod.GET)
+	public ModelAndView goModel(@PathVariable("model") String modelName) throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName(modelName+".html");
+		return model;
+	}
+
 	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
@@ -75,12 +81,11 @@ public class TestController {
 		return InsynctivePropertiesReader.getAllAccountsProperties();
 	}
 
-	@RequestMapping(value = "/model/{model}" ,method = RequestMethod.GET)
+	@RequestMapping(value = "/clearTest" ,method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public ModelAndView goModel(@PathVariable("model") String modelName) throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName(modelName+".html");
-		return model;
+	public void clearTestResult() throws ConfigurationException {
+		tla = new TestListenerAdapter();
 	}
 
 	@RequestMapping(value = "/video" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
@@ -98,9 +103,9 @@ public class TestController {
 				Thread.sleep(sleep);
 				times++;
 			}
-			return "";
+			return "";//TimeOut
 		} else {
-			return "";
+			return "";//Local Test
 		}
 	}
 	
@@ -143,7 +148,6 @@ public class TestController {
 		testResults.setSkipedTests(resultsAux);
 		resultsAux = new ArrayList<Result>();
 		
-		
 		return testResults;
 	}
 	
@@ -165,6 +169,7 @@ public class TestController {
 				}
 			}
 		} catch(Exception ex) {
+			
 		}
 		return testSuite;
 	}

@@ -1,4 +1,4 @@
-package insynctive.pages.insynctive;
+package insynctive.pages.insynctive.apps;
 
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;

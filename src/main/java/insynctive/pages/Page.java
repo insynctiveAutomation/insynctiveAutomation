@@ -2,9 +2,10 @@ package insynctive.pages;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import insynctive.pages.insynctive.exception.ElementIsAllwaysVisibleException;
-import insynctive.pages.insynctive.exception.ElementNotFoundException;
-import insynctive.pages.insynctive.exception.WrongMessageException;
+import insynctive.exception.ElementIsAllwaysVisibleException;
+import insynctive.exception.ElementNotFoundException;
+import insynctive.exception.MethodNoImplementedException;
+import insynctive.exception.WrongMessageException;
 import insynctive.utils.Sleeper;
 
 import java.io.IOException;
@@ -308,4 +309,17 @@ public class Page {
 		waitUntilIsLoaded(element);
 		return element.getAttribute("value").equals(lastName);
 	}
+	
+	public void waitPageIsLoad() throws Exception {
+		throw new MethodNoImplementedException("waitPageIsLoad is not implemented");
+	}
+	
+	public long getTimeToLoad() throws Exception{
+		loadPage();
+		long startTime = System.nanoTime();
+		waitPageIsLoad();
+		long endTime = System.nanoTime();
+		return (endTime-startTime)/1000000;
+	}
+	
 }

@@ -1,8 +1,10 @@
-package insynctive.pages.insynctive;
+package insynctive.pages.insynctive.hr;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.exception.ElementNotFoundException;
+import insynctive.pages.insynctive.ImportPersonPage;
+import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.utils.Checklist;
 import insynctive.utils.PersonData;
 import insynctive.utils.Sleeper;

@@ -1,7 +1,7 @@
 package insynctive.utils;
 
-import insynctive.pages.insynctive.exception.ConfigurationException;
-import insynctive.pages.insynctive.exception.MethodNoImplementedException;
+import insynctive.exception.ConfigurationException;
+import insynctive.exception.MethodNoImplementedException;
 import insynctive.utils.reader.InsynctivePropertiesReader;
 
 import java.io.FileReader;

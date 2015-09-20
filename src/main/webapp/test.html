@@ -29,7 +29,7 @@
 </head>
 
 <body data-ng-controller="TestController as testCtrl">
-	<div class="topcorner h4"><a ng-click="testCtrl.openConfig()">Configuration</a></div>
+	<div class="topcorner h4"><a id="configurationLink" ng-click="testCtrl.openConfig()">Configuration</a></div>
 	<div ng-show="testCtrl.showPanel()" class="container">
 		<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
 	
@@ -62,9 +62,10 @@
 					</tr>
 				</tbody>
 			</table>
+			<button ng-click="testCtrl.clearTests()" class="btn btn-lg btn-primary">Clear Test!</button>
 		</div>
 		
-			<!-- VIEW OF XML -->
+		<!-- VIEW OF XML -->
 		<div class="viewXML" ng-if="testCtrl.testDetails && !testCtrl.start">
 			<h3>{{testCtrl.testDetails.testName}} <small>{{testCtrl.testDetails.className}}</small></h3>
 			<table class="table table-striped table-hover table-condensed">

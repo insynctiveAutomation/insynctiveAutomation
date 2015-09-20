@@ -1,7 +1,7 @@
 package insynctive.utils.process;
 
+import insynctive.exception.MethodNoImplementedException;
 import insynctive.pages.Page;
-import insynctive.pages.insynctive.exception.MethodNoImplementedException;
 import insynctive.utils.WhenStart;
 import insynctive.utils.data.Employee;
 

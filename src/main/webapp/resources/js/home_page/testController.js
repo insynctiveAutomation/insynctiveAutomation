@@ -48,9 +48,20 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 			testService.getTestsStatus(function(data) {
 				self.testStatus = data;
 				self.updateStatus();
-			})
+			});
 		}
 	};
+	
+	/*On Clear Button*/
+	this.clearTests = function(){
+		testService.clearTests(function(data) {
+			self.start = false;
+			self.getTestsStatus();
+			self.runStatus = '';
+			self.videoLink = "";
+			
+		});
+	}
 	
 	/*Private Methods*/
 	this.transformarATestSuite = function(jsonTestSuite) {

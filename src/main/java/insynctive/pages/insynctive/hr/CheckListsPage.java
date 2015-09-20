@@ -1,8 +1,9 @@
-package insynctive.pages.insynctive;
+package insynctive.pages.insynctive.hr;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.exception.ElementNotFoundException;
+import insynctive.pages.insynctive.TemplatePage;
 import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
 import insynctive.utils.data.Employee;
@@ -13,7 +14,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class CheckListsPage extends Page implements PageInterface{
+public class CheckListsPage extends Page implements PageInterface {
 
 	String enviroment;
 	

@@ -1,4 +1,4 @@
-package insynctive.pages.insynctive.exception;
+package insynctive.exception;
 
 public class MethodNoImplementedException extends Exception {
 

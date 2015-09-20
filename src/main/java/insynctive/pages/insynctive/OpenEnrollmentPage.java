@@ -1,8 +1,8 @@
 package insynctive.pages.insynctive;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.exception.ElementNotFoundException;
 import insynctive.utils.Sleeper;
 
 import org.openqa.selenium.WebDriver;

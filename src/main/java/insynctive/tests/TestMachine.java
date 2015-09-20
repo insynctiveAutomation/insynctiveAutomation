@@ -1,8 +1,8 @@
 package insynctive.tests;
 
-import insynctive.pages.insynctive.HomeForAgentsPage;
+import insynctive.exception.ConfigurationException;
 import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.exception.ConfigurationException;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.TestResults;
 import insynctive.utils.data.TestEnvironment;

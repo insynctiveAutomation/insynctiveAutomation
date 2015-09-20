@@ -44,3 +44,7 @@
 .modal-sm {
 	min-width: 315px;
 }
+
+#configurationLink {
+	padding-right: 10px;
+}

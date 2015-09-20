@@ -1,9 +1,9 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
-import insynctive.pages.insynctive.HomeForAgentsPage;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.EmergencyContact;
 import insynctive.utils.PersonData;

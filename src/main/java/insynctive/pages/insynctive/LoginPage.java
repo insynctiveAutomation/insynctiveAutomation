@@ -2,6 +2,7 @@ package insynctive.pages.insynctive;
 
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

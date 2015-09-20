@@ -1,8 +1,8 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
+import insynctive.exception.ConfigurationException;
 import insynctive.pages.insynctive.MarketPage;
-import insynctive.pages.insynctive.exception.ConfigurationException;
 import insynctive.utils.data.App;
 import insynctive.utils.data.TestEnvironment;
 import insynctive.utils.reader.InsynctivePropertiesReader;

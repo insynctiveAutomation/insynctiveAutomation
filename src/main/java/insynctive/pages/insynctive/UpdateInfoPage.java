@@ -1,8 +1,8 @@
 package insynctive.pages.insynctive;
 
+import insynctive.exception.ConfigurationException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.exception.ConfigurationException;
 import insynctive.utils.Sleeper;
 import insynctive.utils.reader.InsynctivePropertiesReader;
 

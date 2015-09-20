@@ -1,8 +1,8 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
-import insynctive.pages.insynctive.CheckListsPage;
-import insynctive.pages.insynctive.HomeForAgentsPage;
+import insynctive.pages.insynctive.hr.CheckListsPage;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Checklist;
 import insynctive.utils.Debugger;
 import insynctive.utils.PersonData;

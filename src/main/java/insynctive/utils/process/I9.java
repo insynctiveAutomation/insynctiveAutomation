@@ -1,7 +1,7 @@
 package insynctive.utils.process;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.exception.ElementNotFoundException;
 import insynctive.utils.Sleeper;
 import insynctive.utils.USAddress;
 import insynctive.utils.WhenStart;

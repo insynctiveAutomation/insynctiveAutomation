@@ -23,4 +23,8 @@ app.service('testService', function($http) {
 	this.getVideoLink = function(callback) {
 		$http.get('/video').success(callback);
 	};
+	
+	this.clearTests = function(callback) {
+		$http.get('/clearTest').success(callback);
+	};
 });
