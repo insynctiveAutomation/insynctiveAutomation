@@ -12,6 +12,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 	this.testStatus = [];
 	this.start = false;
 	this.videoLink;
+	this.loaderVisible = "hidden";
 	
 	/*On Load Methods*/
 	this.getTestsSuites = function() {
@@ -32,10 +33,12 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 	/*On Start Button*/
 	this.startTest = function(testSuiteValue, selectedEnvironment) {
 		self.start = true;
-		self.runStatus = "Started!";
+		self.runStatus = "Running..";
 		self.videoLink = "";
+		self.loaderVisible = "visible";
 		testService.startTest(testSuiteValue, selectedEnvironment, function(data) {
 			self.runStatus = data;
+			self.loaderVisible = "hidden";
 		});
 		testService.getVideoLink(function(data) {
 			self.videoLink = data;
@@ -56,12 +59,12 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 	this.clearTests = function(){
 		testService.clearTests(function(data) {
 			self.start = false;
+			self.loaderVisible = "hidden";
 			self.getTestsStatus();
 			self.runStatus = '';
-			self.videoLink = "";
-			
+			self.videoLink = '';
 		});
-	}
+	}; this.clearTests();
 	
 	/*Private Methods*/
 	this.transformarATestSuite = function(jsonTestSuite) {
@@ -104,7 +107,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 	}, 3000);
 	
 	this.showPanel = function(){
-		return !self.runStatus || self.runStatus === 'Finish!' 
+		return !self.runStatus 
 	};
 	
 	/*Modal Manager*/

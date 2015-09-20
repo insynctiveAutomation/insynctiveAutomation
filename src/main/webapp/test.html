@@ -26,6 +26,19 @@
 <link rel="stylesheet" href="resources/css/home_page/test.css">
 <link rel="stylesheet" href="resources/css/account_config/accountConfig.css">
 
+<!-- MODAL -->
+<script src="resources/js/entity/accountConfig.js"></script>
+<script src="resources/js/account_config/accountController.js"></script>
+<script src="resources/js/account_config/accountService.js"></script>
+<script src="resources/js/account_config/accountDirectives.js"></script>
+
+<!-- Test Page -->
+<script src="resources/js/entity/testSuite.js"></script>
+<script src="resources/js/entity/environment.js"></script>
+<script src="resources/js/home_page/testController.js"></script>
+<script src="resources/js/home_page/testService.js"></script>
+<script src="resources/js/home_page/testDirectives.js"></script>
+
 </head>
 
 <body data-ng-controller="TestController as testCtrl">
@@ -50,6 +63,7 @@
 		<div class="testRunning">
 			<h3>{{testCtrl.testDetails.testName}} <small>{{testCtrl.testDetails.className}}</small></h3>
 			<span class="started"> {{testCtrl.runStatus}}</span>
+			<img alt="loading" src="resources/gif/loader.gif" ng-class="[testCtrl.loaderVisible]">
 			<a ng-if="testCtrl.videoLink" ng-href="{{testCtrl.videoLink}}" class="video" target="_blank"> Watch Video </a>
 			<table class="table table-striped table-hover table-condensed">
 				<tbody ng-if="testCtrl.testDetails">
@@ -68,19 +82,6 @@
 	</div>
 	
 	<div class="alert alert-danger animate-repeat" ng-repeat="error in testCtrl.errors">{{error}}</div>
-	
-	<!-- MODAL -->
-	<script src="resources/js/entity/accountConfig.js"></script>
-	<script src="resources/js/account_config/accountController.js"></script>
-	<script src="resources/js/account_config/accountService.js"></script>
-	<script src="resources/js/account_config/accountDirectives.js"></script>
-	
-	<!-- Test Page -->
-	<script src="resources/js/entity/testSuite.js"></script>
-	<script src="resources/js/entity/environment.js"></script>
-	<script src="resources/js/home_page/testController.js"></script>
-	<script src="resources/js/home_page/testService.js"></script>
-	<script src="resources/js/home_page/testDirectives.js"></script>
 </body>
 </html>
 
