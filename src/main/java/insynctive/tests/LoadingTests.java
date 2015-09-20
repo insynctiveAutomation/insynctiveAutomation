@@ -23,6 +23,8 @@ import org.testng.annotations.Test;
 
 public class LoadingTests extends TestMachine {
 
+	int TIME_EXPECTED = 5000;
+	
 	@Override
 	@BeforeClass
 	public void tearUp() throws Exception {
@@ -63,7 +65,7 @@ public class LoadingTests extends TestMachine {
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnviroment());
 			long timeToLoad = homePage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > People > Loading Test");
 			Debugger.log("hrPeopleLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -80,7 +82,7 @@ public class LoadingTests extends TestMachine {
 			TaskPage taskPage = new TaskPage(driver, properties.getEnviroment());
 			long timeToLoad = taskPage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > Tasks > Loading Test");
 			Debugger.log("hrTasksLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -97,7 +99,7 @@ public class LoadingTests extends TestMachine {
 			CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnviroment());
 			long timeToLoad = checkListPage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > Checklist > Loading Test");
 			Debugger.log("hrChecklistLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -114,7 +116,7 @@ public class LoadingTests extends TestMachine {
 			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, properties.getEnviroment());
 			long timeToLoad = helpDeskPage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > HelpDesk > Loading Test");
 			Debugger.log("hrHelpDeskLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -131,7 +133,7 @@ public class LoadingTests extends TestMachine {
 			AppsPage appPage = new AppsPage(driver, properties.getEnviroment());
 			long timeToLoad = appPage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "APP > Loading Test");
 			Debugger.log("apptLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -147,7 +149,7 @@ public class LoadingTests extends TestMachine {
 			AccountPage accPage = new AccountPage(driver, properties.getEnviroment());
 			long timeToLoad = accPage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > Account > Loading Test");
 			Debugger.log("settingAccountLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -163,7 +165,7 @@ public class LoadingTests extends TestMachine {
 			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnviroment());
 			long timeToLoad = peoplePage.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > People > Loading Test");
 			Debugger.log("settingPeopleLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -179,7 +181,7 @@ public class LoadingTests extends TestMachine {
 			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnviroment());
 			long timeToLoad = otherSetting.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > Other Settings > Loading Test");
 			Debugger.log("settingOtherSettingsLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
@@ -195,7 +197,7 @@ public class LoadingTests extends TestMachine {
 			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnviroment());
 			long timeToLoad = v3Setting.getTimeToLoad();
 			
-			boolean result = timeToLoad < 5000;
+			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > V3 Settings > Loading Test");
 			Debugger.log("settingV3SettingsLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
