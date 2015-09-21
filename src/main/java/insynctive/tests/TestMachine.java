@@ -27,6 +27,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -55,8 +56,8 @@ public abstract class TestMachine {
 	private String slackChannel = "https://hooks.slack.com/services/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";
 
 	//CROSSBROWSING
-	String username = "eugenio.valeiras+13@gmail.com";
-	String password = "ud7b1126a8727aa2";
+	String username = "eugenio.valeiras+14@gmail.com";
+	String password = "u2f655d5dc0e358c";
 	
 	private String getJobURL() throws IOException, JSONException {
 		return getPublicVideoLinkOfJob();
@@ -153,6 +154,7 @@ public abstract class TestMachine {
 	}
 	
 	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception{
+		Reporter.log( testName, true );
 		System.out.println(ex.getStackTrace()[4]);
 		System.out.println(ex.getStackTrace()[3]);
 		System.out.println(ex.getStackTrace()[2]);

@@ -38,7 +38,6 @@ public class PeoplePage extends Page implements PageInterface {
 	@Override
 	public void waitPageIsLoad() throws Exception {
 		waitUntilIsLoaded(emailPreview);
-		waitUntilIsLoaded(accountActivationTemplateEditor);
 		waitUntilIsLoaded(resetEmailLink);
 		waitUntilIsLoaded(createPasswordNowLink);
 	}

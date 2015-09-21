@@ -31,7 +31,7 @@ public class CheckListsPage extends Page implements PageInterface {
 	WebElement personName;
 	@FindBy(id = "body_body_popupChecklist_cboTemplateTransition_I")
 	WebElement checklistName;
-	@FindBy(id = "body_body_popupChecklist_btnStart")
+	@FindBy(id = "btnStartChecklist")
 	WebElement startChecklist;
 	@FindBy(id = "body_body_popupChecklist_cboTemplateTransition_DDD_L_LBI4T0")
 	WebElement firstChecklist;
@@ -45,6 +45,10 @@ public class CheckListsPage extends Page implements PageInterface {
 	WebElement startCheckListiFrame;
 	@FindBy(className = "searchTextInput")
 	WebElement searchTemplate;
+	@FindBy(css = ".runningchecklist_runningforheader > input:nth-child(2)")
+	WebElement searchRunningFor;
+	@FindBy(css = ".runningchecklist_checklistheader > input:nth-child(2)")
+	WebElement searchChecklist;
 	@FindBy(css = "div.row:nth-child(7) > div:nth-child(3) > img:nth-child(1)")
 	WebElement deleteTemplate;
 
@@ -153,7 +157,8 @@ public class CheckListsPage extends Page implements PageInterface {
 	public void waitPageIsLoad() throws Exception {
 		swichToFirstFrame(driver);
 		waitUntilIsLoaded(startChecklist);
-		waitUntilIsLoaded(btnTemplate);
+		waitUntilIsLoaded(searchRunningFor);
+		waitUntilIsLoaded(searchChecklist);
 	}
 
 	/* Checks **/

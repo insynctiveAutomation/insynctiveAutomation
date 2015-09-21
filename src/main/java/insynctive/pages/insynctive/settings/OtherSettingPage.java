@@ -14,6 +14,8 @@ public class OtherSettingPage extends Page implements PageInterface {
 
 	@FindBy(id = "btnEmailSetup_CD")
 	WebElement emailSetupBtn;
+	@FindBy(id = "mailBoxFrame")
+	WebElement mailBoxFrame;
 
 	@Override
 	public boolean isPageLoad() {
@@ -31,6 +33,8 @@ public class OtherSettingPage extends Page implements PageInterface {
 	
 	@Override
 	public void waitPageIsLoad() throws Exception {
+		swichToIframe(mailBoxFrame);
 		waitUntilIsLoaded(emailSetupBtn);
+		swichToFirstFrame(driver);
 	}
 }

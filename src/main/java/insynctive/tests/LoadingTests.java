@@ -144,6 +144,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingAccountLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
 			AccountPage accPage = new AccountPage(driver, properties.getEnviroment());
@@ -160,6 +161,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingPeopleLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
 			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnviroment());
@@ -176,6 +178,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingOtherSettingsLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
 			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnviroment());
@@ -192,6 +195,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingV3SettingsLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
 			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnviroment());
@@ -207,7 +211,4 @@ public class LoadingTests extends TestMachine {
 			assertTrue(false);
 		}
 	}
-	
-	
-
 }

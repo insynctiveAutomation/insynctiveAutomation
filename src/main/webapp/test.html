@@ -63,7 +63,7 @@
 		<div class="testRunning">
 			<h3>{{testCtrl.testDetails.testName}} <small>{{testCtrl.testDetails.className}}</small></h3>
 			<span class="started"> {{testCtrl.runStatus}}</span>
-			<img alt="loading" src="resources/gif/loader.gif" ng-class="[testCtrl.loaderVisible]">
+			<img alt="loading" src="resources/gif/loader.gif" ng-class="[testCtrl.loaderVisible]"><br/>
 			<a ng-if="testCtrl.videoLink" ng-href="{{testCtrl.videoLink}}" class="video" target="_blank"> Watch Video </a>
 			<table class="table table-striped table-hover table-condensed">
 				<tbody ng-if="testCtrl.testDetails">

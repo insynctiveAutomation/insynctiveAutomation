@@ -188,6 +188,16 @@ public class TestController {
 		return "Finish!";
 	}
 	
+	@RequestMapping(value = "/test/{testName}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String getTest(@PathVariable("testName") String testName) throws ConfigurationException{
+		tla.getPassedTests().forEach(failTest -> System.out.println(failTest));
+		tla.getSkippedTests().forEach(failTest -> System.out.println(failTest));
+		tla.getFailedTests().forEach(failTest -> System.out.println(failTest));
+		tla.getTestContexts().forEach(failTest -> System.out.println(failTest));
+		return null;
+	}
+	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String saveAccountConfig(@RequestBody InsynctivePropertiesReader properties) throws ConfigurationException{
