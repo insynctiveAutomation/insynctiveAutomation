@@ -38,6 +38,7 @@ import org.xml.sax.SAXException;
 @Controller
 @EnableAutoConfiguration
 @Scope("session")
+@RequestMapping("/")
 public class TestController {
 
 	TestListenerAdapter tla = new TestListenerAdapter();

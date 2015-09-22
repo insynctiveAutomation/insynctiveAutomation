@@ -113,8 +113,12 @@ public class PersonData {
 //			JSONArray jsonDependents = (JSONArray) person.get("Dependents");
 			
 		} catch(Exception ex) {
-			throw new ConfigurationException("Fail reading (String)person configuration ====> "+ ex.getMessage());
+			throw new ConfigurationException("Fail reading Person Configuration ====> "+ ex.getMessage());
 		}
+	}
+	
+	public String getEmailToChange(){
+		return email.split("@")[0] + "+test@" + email.split("@")[1];
 	}
 	
 	public String getName() {

@@ -103,7 +103,7 @@ public class PersonFileTest extends TestMachine {
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
 			personFilePage.changePrimaryEmail(person);
 			
-			boolean result = personFilePage.isChangePrimaryEmail(person.getEmail());
+			boolean result = personFilePage.isChangePrimaryEmail(person.getEmailToChange());
 			Debugger.log("changePrimaryEmail => "+result, isSaucelabs);
 			long endTime = System.nanoTime();
 			setResult(result, "Change Primary Email", endTime - startTime);
@@ -332,9 +332,8 @@ public class PersonFileTest extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
 	public void assignTask(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
+		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
-			
 			personFilePage.assignTask();
 			
 			boolean result = personFilePage.isTaskAssigned();
@@ -343,6 +342,7 @@ public class PersonFileTest extends TestMachine {
 			setResult(result, "Assign Task", endTime - startTime);
 			assertTrue(result);
 		}catch (Exception ex){ 
+			personFilePage.goToPersonalTab();
 			long endTime = System.nanoTime();
 			failTest("Assign Task", ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
@@ -352,9 +352,8 @@ public class PersonFileTest extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
 	public void startChecklist(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
+		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
-			
 			personFilePage.assignChecklist();
 			
 			boolean result = personFilePage.isChecklistAssigned();
@@ -363,6 +362,7 @@ public class PersonFileTest extends TestMachine {
 			setResult(result, "Start Checklist", endTime - startTime);
 			assertTrue(result);
 		}catch (Exception ex){ 
+			personFilePage.goToPersonalTab();
 			long endTime = System.nanoTime();
 			failTest("Start Checklist", ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);

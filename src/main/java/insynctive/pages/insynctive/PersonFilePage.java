@@ -105,9 +105,9 @@ public class PersonFilePage extends Page implements PageInterface {
 	WebElement saveChangeBirthDate;
 
 	// Primary Email
-	@FindBy(className = "editor-text-input")
+	@FindBy(className = "email-input")
 	WebElement primaryEmailField;
-	@FindBy(className = "accept-button")
+	@FindBy(className = "save-email")
 	WebElement saveChangePrimaryEmail;
 	@FindBy(id = "saveBtn")
 	WebElement savePrimaryEmailChange;
@@ -293,15 +293,10 @@ public class PersonFilePage extends Page implements PageInterface {
 		clickAButton(primaryEmailLink);
 		waitUntilnotVisibility(loadingSpinner);
 		swichToIframe(primaryEmailiFrame);
-		waitUntilIsLoaded(primaryEmailLink);
-		clickAButton(primaryEmailLink);
 		waitUntilIsLoaded(primaryEmailField);
-		setTextInField(primaryEmailField, person.getEmail());
+		setTextInField(primaryEmailField, person.getEmailToChange());
 		waitUntilIsLoaded(saveChangePrimaryEmail);
 		clickAButton(saveChangePrimaryEmail);
-		waitUntilIsLoaded(savePrimaryEmailChange);
-		clickAButton(savePrimaryEmailChange);
-		waitUntilnotVisibility(saveChangePrimaryEmail);
 	}
 
 	public void changeTitle(String title, String departament) throws Exception {
@@ -460,7 +455,7 @@ public class PersonFilePage extends Page implements PageInterface {
 
 	/* Check if is complete Methods */
 	public boolean isChangePrimaryEmail(String email) throws Exception {
-		Sleeper.sleep(12000, driver);
+		Sleeper.sleep(4000, driver);
 		waitPageIsLoad();
 		return primaryEmailLink.getText().equals(email);
 	}
@@ -471,12 +466,8 @@ public class PersonFilePage extends Page implements PageInterface {
 			Sleeper.sleep(18000, driver);
 		waitPageIsLoad();
 
-		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
-				+ " " + personData.getMiddleName(): personData.getName();
-		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";
-		assertFullName += personData.getLastName();
 		waitUntilIsLoaded(fullNameLink);
-		boolean fullNameAssert = fullNameLink.getText().equals(assertFullName);
+		boolean fullNameAssert = fullNameLink.getText().equals(getNameToAssertInPersonalDetails(personData));
 
 		swichToFirstFrame(driver);
 		String assertTitleName = personData.getName()+ " " + personData.getLastName();
@@ -485,6 +476,18 @@ public class PersonFilePage extends Page implements PageInterface {
 		return fullNameAssert && titleNameAssert;
 	}
 	
+	private Object getNameToAssertInPersonalDetails(PersonData personData) {
+		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
+				+ " " + personData.getMiddleName(): personData.getName();
+		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";
+		assertFullName += personData.getLastName();
+		if(assertFullName.length() <= 35){
+			return assertFullName;
+		} else {
+			return assertFullName.substring(0,35)+"...";
+		}
+	}
+
 	public boolean isChangePeronDetailBeforeCreatePerson(PersonData personData, Wait wait)
 			throws Exception {
 		if (wait.isWait())
@@ -530,7 +533,7 @@ public class PersonFilePage extends Page implements PageInterface {
 	}
 
 	public boolean isAddPhoneNumber(String phoneNumber, String runID) throws Exception {
-		Sleeper.sleep(10000, driver);
+		Sleeper.sleep(7000, driver);
 		waitPageIsLoad();
 		waitUntilnotVisibility(loadingSpinner);
 		String phoneNumberFinal = getPhoneNumber(phoneNumber, runID);
@@ -555,27 +558,41 @@ public class PersonFilePage extends Page implements PageInterface {
 	}
 
 	public boolean isTaskAssigned() throws Exception {
-		Sleeper.sleep(5000, driver);
-		waitTaskTabIsLoad();
-		List<Task> tasks = Task.getTasks();
-		boolean result = firstTaskLink.getText().equals(
-				tasks.get(0).getDetail());
+		boolean result;
+		try{
+			Sleeper.sleep(8000, driver);
+			waitTaskTabIsLoad();
+			List<Task> tasks = Task.getTasks();
+			result = firstTaskLink.getText().equals(tasks.get(0).getDetail());
+		} catch(Exception ex) {
+			result = false;
+		} finally {
+			goToPersonalTab();
+		}
+		return result;
+	}
+	
+	public void goToPersonalTab() throws Exception{
 		swichToFirstFrame(driver);
 		clickAButton(personalLink);
-		return result;
 	}
 
 	public boolean isChecklistAssigned() throws Exception {
-		Sleeper.sleep(3000, driver);
-		waitUntilnotVisibility(loadingSpinner);
-		swichToFirstFrame(driver);
-		clickAButton(tasksTab);
-		swichToIframe(tabiFrame);
-		clickAButton(runningChecklist);
-		waitUntilIsLoaded(firstChecklist);
-		boolean result  =  firstChecklist.getText().equals(Checklist.getCheckListToAssign().getName());
-		swichToFirstFrame(driver);
-		clickAButton(personalTab);
+		boolean result;
+		try {
+			Sleeper.sleep(3000, driver);
+			waitUntilnotVisibility(loadingSpinner);
+			swichToFirstFrame(driver);
+			clickAButton(tasksTab);
+			swichToIframe(tabiFrame);
+			clickAButton(runningChecklist);
+			waitUntilIsLoaded(firstChecklist);
+			result  =  firstChecklist.getText().equals(Checklist.getCheckListToAssign().getName());
+		} catch(Exception ex){
+			result = false;
+		} finally {
+			goToPersonalTab();
+		}
 		return result;
 	}
 
