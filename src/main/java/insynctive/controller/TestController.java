@@ -1,6 +1,8 @@
 package insynctive.controller;
 
+import insynctive.dao.InsynctivePropertyDao;
 import insynctive.exception.ConfigurationException;
+import insynctive.model.InsynctiveProperty;
 import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
@@ -12,6 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -42,8 +45,14 @@ import org.xml.sax.SAXException;
 @Scope("session")
 public class TestController {
  
-	@Autowired
-	ServletContext servletContext;
+	private final ServletContext servletContext;
+	private final InsynctivePropertyDao propertyDao;
+
+	@Inject
+	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext) {
+		this.servletContext = servletContext;
+		this.propertyDao = propertyDao;
+	}
 	
 	TestListenerAdapter tla = new TestListenerAdapter();
 
@@ -78,8 +87,8 @@ public class TestController {
 	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public InsynctivePropertiesReader getAccountProperties() throws ConfigurationException {
-		return InsynctivePropertiesReader.getAllAccountsProperties();
+	public InsynctiveProperty getAccountProperties() throws ConfigurationException {
+		return propertyDao.getPropertybyID(1);
 	}
 
 	@RequestMapping(value = "/clearTest" ,method = RequestMethod.GET)

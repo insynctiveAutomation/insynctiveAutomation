@@ -1,6 +1,7 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
+
 import insynctive.pages.insynctive.MyTasksPage;
 import insynctive.pages.insynctive.hr.CheckListsPage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;

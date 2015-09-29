@@ -1,8 +1,8 @@
 package insynctive.utils;
 
-import insynctive.utils.reader.InsynctivePropertiesReader;
-
 import org.openqa.selenium.WebDriver;
+
+import insynctive.utils.reader.InsynctivePropertiesReader;
 
 public class Sleeper {
 

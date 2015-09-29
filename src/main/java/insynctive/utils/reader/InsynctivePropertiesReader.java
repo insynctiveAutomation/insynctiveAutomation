@@ -16,7 +16,7 @@ import org.openqa.selenium.WebDriver;
 public class InsynctivePropertiesReader {
 
 	//INSTANCE
-	private static InsynctivePropertiesReader isRemote;
+	private static InsynctivePropertiesReader isInstanced;
 	
 	// PROPERTIES PATH
 	private String DEFAULT_ACCOUNTS_PROPERTIES = "accounts.properties";
@@ -25,43 +25,43 @@ public class InsynctivePropertiesReader {
 	private String DEFAULT_CREATE_CHECKLISTS_JSON = "checklists_create.json";
 
 	// RUN ID
-	private String runID;
+		private String runID;
 
-	// ACCOUNTS PROPERTIES
-	private String enviroment;
-	private String remote;
-	
-	private String loginUsername;
-	private String loginPassword;
+		// ACCOUNTS PROPERTIES
+		private String enviroment;
+		private String remote;
+		
+		private String loginUsername;
+		private String loginPassword;
 
-	private String newEmployeeName;
-	private String newEmployeeLastName;
-	private String newEmployeeEmail;
-	private String newEmployeePassword;
-	private String newEmployeeTitle;
-	private String newEmployeeDepartment;
+		private String newEmployeeName;
+		private String newEmployeeLastName;
+		private String newEmployeeEmail;
+		private String newEmployeePassword;
+		private String newEmployeeTitle;
+		private String newEmployeeDepartment;
 
-	private String gmailPassword;
+		private String gmailPassword;
+		private boolean notification;
 
-	// AppList
-	private List<App> apps;
+		// AppList
+		private List<App> apps;
 
-	// ChecklistList
-	private List<Checklist> checklists;
+		// ChecklistList
+		private List<Checklist> checklists;
 
-	private Boolean notification;
 	
 
 	public InsynctivePropertiesReader() throws ConfigurationException {
-		if (isRemote == null){
-			isRemote = this;
+		if (isInstanced == null){
+			isInstanced = this;
 		}
 	}
 
 	public static InsynctivePropertiesReader getAllProperties(WebDriver driver)
 			throws ConfigurationException {
 		InsynctivePropertiesReader insynctiveProp;
-		insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+		insynctiveProp = (isInstanced == null) ? new InsynctivePropertiesReader() : isInstanced;
 			insynctiveProp = new InsynctivePropertiesReader();
 		try {
 			insynctiveProp.addAccountsProperties();
@@ -77,14 +77,14 @@ public class InsynctivePropertiesReader {
 	public static InsynctivePropertiesReader getAllAccountsProperties()
 			throws ConfigurationException {
 		InsynctivePropertiesReader insynctiveProp;
-		insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+		insynctiveProp = (isInstanced == null) ? new InsynctivePropertiesReader() : isInstanced;
 		insynctiveProp.addAccountsProperties();
 		return insynctiveProp;
 	}
 
 	public static InsynctivePropertiesReader getAllApps() throws Exception {
 		InsynctivePropertiesReader insynctiveProp;
-		insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+		insynctiveProp = (isInstanced == null) ? new InsynctivePropertiesReader() : isInstanced;
 		insynctiveProp.addApps();
 		return insynctiveProp;
 	}
@@ -92,7 +92,7 @@ public class InsynctivePropertiesReader {
 	public static InsynctivePropertiesReader getAllChecklist(WebDriver driver)
 			throws Exception {
 		InsynctivePropertiesReader insynctiveProp;
-		insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+		insynctiveProp = (isInstanced == null) ? new InsynctivePropertiesReader() : isInstanced;
 		insynctiveProp.addCheckLists(driver);
 		return insynctiveProp;
 	}
@@ -156,7 +156,7 @@ public class InsynctivePropertiesReader {
 	
 	public static boolean IsRemote() throws ConfigurationException {try {
 		InsynctivePropertiesReader insynctiveProp;
-		insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+		insynctiveProp = (isInstanced == null) ? new InsynctivePropertiesReader() : isInstanced;
 		
 		// Open Properties Files
 		Properties accountsProperties = new Properties();
@@ -175,7 +175,7 @@ public class InsynctivePropertiesReader {
 	public static boolean isNotificationActive() throws ConfigurationException {
 		try {
 			InsynctivePropertiesReader insynctiveProp;
-			insynctiveProp = (isRemote == null) ? new InsynctivePropertiesReader() : isRemote;
+			insynctiveProp = (isInstanced == null) ? new InsynctivePropertiesReader() : isInstanced;
 			
 			// Open Properties Files
 			Properties accountsProperties = new Properties();
@@ -222,7 +222,7 @@ public class InsynctivePropertiesReader {
 			accPropertie.setProperty("loginUsername",this.loginUsername);
 			accPropertie.setProperty("loginPassword",this.loginPassword);
 			accPropertie.setProperty("remote",this.remote);
-			accPropertie.setProperty("notification",this.notification.toString());
+			accPropertie.setProperty("notification",String.valueOf(isNotification()));
 			
 			// Save new Properties into File
 			OutputStream output = new FileOutputStream(fileID);

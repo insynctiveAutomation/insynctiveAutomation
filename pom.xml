@@ -11,21 +11,40 @@
     	Automated Tests
     </description>
 	<properties>
+		<!-- SPRING MVC-->
 		<spring-version>4.0.3.RELEASE</spring-version>
-		<junit-Version>4.11</junit-Version>
-		<junit-dep>4.10</junit-dep>
-		<jstl-version>1.2</jstl-version>
 		<spring-boot-version>1.2.5.RELEASE</spring-boot-version>
-		<javax-mail-version>1.4</javax-mail-version>
-		<handlebars-version>2.2.1</handlebars-version>
 		<mustache-version>1.0</mustache-version>
-	
+		<handlebars-version>2.2.1</handlebars-version>
 		<json-version>20141113</json-version>
 		<json-simple-version>1.1</json-simple-version>
+		<fasterxml-jackson-version>2.2.3</fasterxml-jackson-version>
+		
+		<!-- JAVA CONNECTION -->
+		<javax-servlet-api>3.0.1</javax-servlet-api>
+		<javax-servlet>1.2</javax-servlet>
+		<jstl-version>1.2</jstl-version>
+		<javax-mail-version>1.4</javax-mail-version>
+		<org.apache.httpcomponents>4.3.2</org.apache.httpcomponents>
+		<jstl>1.2</jstl>
+		<oauth-version>20100527</oauth-version>
+		<cglib>2.2.2</cglib>
+
+		<!-- TESTS -->
+		<junit-Version>4.11</junit-Version>
+		<junit-dep>4.10</junit-dep>
 		<selenium.version>2.45.0</selenium.version>
 		<testNG-Version>6.9.4</testNG-Version>
-		<fasterxml-jackson-version>2.2.3</fasterxml-jackson-version>
-		<oauth-version>20100527</oauth-version>
+		
+		<!-- DATA BASE -->
+		<hibernate.version>4.1.5.Final</hibernate.version>
+		<hibernate-validator>4.2.0.Final</hibernate-validator>
+		<mysql.connector.version>5.1.32</mysql.connector.version>
+		<dbcp.version>1.4</dbcp.version>
+
+		<!-- LOG 4J -->
+		<log4j>1.2.16</log4j>
+		<org.slf4j>1.7.5</org.slf4j>
 	</properties>
 
 	<dependencies>
@@ -33,6 +52,48 @@
 			<groupId>net.oauth.core</groupId>
 			<artifactId>oauth</artifactId>
 			<version>${oauth-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>${cglib}</version>
+		</dependency>
+		
+		<!-- lof4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${org.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${org.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j}</version> <!-- 1.2.16 -->
+		</dependency>
+		
+			<!-- Use Apache HttpClient as HTTP Client -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${org.apache.httpcomponents}</version>
+		</dependency>
+
+		<!-- DataBase Pool -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${dbcp.version}</version>
 		</dependency>
 
 		<!-- TESTNG -->
@@ -128,19 +189,24 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-
-		<!-- Spring fast BOOT -->
+		
+		<!-- Hibernate -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring-boot-version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator}</version>
 		</dependency>
 
-		<!-- JSTL -->
+		<!-- MySql Driver -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl-version}</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
 		</dependency>
 
 		<!-- JACKSON -->
@@ -159,42 +225,57 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.4.1.1</version>
 		</dependency>
+
+		<!-- Servlet API, JSTL -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax-servlet-api}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${javax-servlet}</version>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
 			<plugins>
+
+				<!-- ECLIPSE MAVEN PLUGINS -->
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.4</version>
-					<configuration>
+				    <groupId>org.apache.maven.plugins</groupId>
+				    <artifactId>maven-war-plugin</artifactId>
+				    <version>2.6</version>
+				    <configuration>
 						<warSourceDirectory>src/main/webapp</warSourceDirectory>
 						<warName>Insynctive</warName>
 						<failOnMissingWebXml>false</failOnMissingWebXml>
 					</configuration>
-				</plugin>
+			    </plugin>
+					
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.0</version>
+					<version>3.2</version>
 					<configuration>
 						<source>1.8</source>
 						<target>1.8</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.18.1</version>
-					<configuration>
 						<forkCount>0</forkCount>
 						<suiteXmlFiles>
 							<suiteXmlFile>testRun.xml</suiteXmlFile>
 						</suiteXmlFiles>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
 			</plugins>
 		</pluginManagement>
