@@ -3,7 +3,7 @@ package insynctive.results;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestResults {
+public class TestResultsTestNG {
 
 	private List<Result> passedTests = new ArrayList<Result>();
 	private List<Result> failedTests = new ArrayList<Result>();

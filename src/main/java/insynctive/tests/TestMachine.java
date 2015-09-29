@@ -183,8 +183,9 @@ public abstract class TestMachine {
 	}
 	
 	public void setResult(boolean status, String nameOfTest, Long duration) throws MalformedURLException, IOException {
-		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
 		
+		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
+
 		if(duration != null){
 			TestResults.addResult(result+" (Duration: "+duration/1000000+" ms)"); 
 		} else {

@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Test Suite" verbose="1" >
+	<test name="Test">
+	  <classes>
+	    <class name="insynctive.tests.PersonFileTest">
+	      <methods>
+
+			<!-- Initial Test -->
+	        <include name="loginTest" />
+	        <include name="createPersonTest" />
+	         <include name="changeName2" />
+	        <include name="changeName" />
+
+	      </methods>
+	    </class>
+	  </classes>
+	</test>
+</suite>

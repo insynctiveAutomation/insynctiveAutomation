@@ -67,7 +67,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "HR > People > Loading Test");
+			setResult(result, "HR > People > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("hrPeopleLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -84,7 +84,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "HR > Tasks > Loading Test");
+			setResult(result, "HR > Tasks > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("hrTasksLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -101,7 +101,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "HR > Checklist > Loading Test");
+			setResult(result, "HR > Checklist > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("hrChecklistLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -118,7 +118,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "HR > HelpDesk > Loading Test");
+			setResult(result, "HR > HelpDesk > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("hrHelpDeskLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -135,7 +135,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "APP > Loading Test");
+			setResult(result, "APP > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("apptLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -152,7 +152,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "Setting > Account > Loading Test");
+			setResult(result, "Setting > Account > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("settingAccountLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -169,7 +169,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "Setting > People > Loading Test");
+			setResult(result, "Setting > People > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("settingPeopleLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -186,7 +186,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "Setting > Other Settings > Loading Test");
+			setResult(result, "Setting > Other Settings > Loading Test (Duration: "+timeToLoad+" ms)");
 			Debugger.log("settingOtherSettingsLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
@@ -203,7 +203,7 @@ public class LoadingTests extends TestMachine {
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
-			setResult(result, "Setting > V3 Settings > Loading Test");
+			setResult(result, "Setting > V3 Settings > Loading Test (Duration: "+timeToLoad+" ms)"); 
 			Debugger.log("settingV3SettingsLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 

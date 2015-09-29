@@ -2,17 +2,20 @@ package insynctive.controller;
 
 import insynctive.exception.ConfigurationException;
 import insynctive.results.Result;
-import insynctive.results.TestResults;
+import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
 import insynctive.utils.reader.InsynctivePropertiesReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Scope;
@@ -36,35 +39,39 @@ import org.testng.xml.XmlTest;
 import org.xml.sax.SAXException;
 
 @Controller
-@EnableAutoConfiguration
 @Scope("session")
-@RequestMapping("/")
 public class TestController {
-
-	TestListenerAdapter tla = new TestListenerAdapter();
+ 
+	@Autowired
+	ServletContext servletContext;
 	
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(TestController.class, args);
-	}
+	TestListenerAdapter tla = new TestListenerAdapter();
 
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
 	public ModelAndView root(){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("test.html");
+		model.setViewName("test");
+		return model;
+	}
+	
+	@RequestMapping(value = "/main" ,method = RequestMethod.GET)
+	public ModelAndView main(){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("main");
 		return model;
 	}
 	
 	@RequestMapping(value = "/accountConfigContent" ,method = RequestMethod.GET)
 	public ModelAndView goAccountConfigModel() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("accountConfigModel.html");
+		model.setViewName("accountConfigModel");
 		return model;
 	}
 
 	@RequestMapping(value = "/model/{model}" ,method = RequestMethod.GET)
 	public ModelAndView goModel(@PathVariable("model") String modelName) throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName(modelName+".html");
+		model.setViewName(modelName);
 		return model;
 	}
 
@@ -120,9 +127,9 @@ public class TestController {
 	
 	@RequestMapping(value = "/status" ,method = RequestMethod.GET)
 	@ResponseBody
-	public TestResults getStatus(){
+	public TestResultsTestNG getStatus(){
 		List<Result> resultsAux = new ArrayList<Result>();
-		TestResults testResults = new TestResults();
+		TestResultsTestNG testResults = new TestResultsTestNG();
 		
 		for(ITestResult testResult : tla.getPassedTests()){
 			resultsAux.add(new Result(testResult.getName(),"SUCCESS"));
@@ -209,8 +216,8 @@ public class TestController {
 	
 	/*Private Methods*/
 	private List<XmlSuite> getXmlTestSuite(String xmlName) {
-		ClassLoader classLoader = getClass().getClassLoader();
-		String xmlFileName = classLoader.getResource("testsSuits/"+xmlName+".xml").getPath();
+		String xmlFileName = new File( servletContext.getRealPath("/WEB-INF/testsSuits/"+xmlName+".xml")).getPath();
+		
 		List<XmlSuite> suite = getSuite(xmlFileName);
 		
 		return suite;
@@ -239,10 +246,9 @@ public class TestController {
 	
 	private List<String> getTestSuites(){
 		List<String> results = new ArrayList<String>();
-		ClassLoader classLoader = getClass().getClassLoader();
-		
-		File[] files = new File(classLoader.getResource("testsSuits").getFile()).listFiles();
 
+		File[] files = new File( servletContext.getRealPath("/WEB-INF/testsSuits/")).listFiles();
+		
 		for (File file : files) {
 		    if (file.isFile()) {
 		        results.add(file.getName());
