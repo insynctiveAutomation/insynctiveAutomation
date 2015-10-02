@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeClass;
 
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
+import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
@@ -64,8 +65,8 @@ public abstract class TestMachine {
 	private String slackChannel = "https://hooks.slack.com/services/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";
 
 	//CROSSBROWSING
-	String username = "eugenio.valeiras+15@gmail.com";
-	String password = "u5d607b6a5c18b13";
+	String username;
+	String password;
 	
 	private String getJobURL() throws IOException, JSONException {
 		return getPublicVideoLinkOfJob();
@@ -83,7 +84,13 @@ public abstract class TestMachine {
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
 		sessionFactory = HibernateUtil.getSessionFactory();
+		
+		CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) openSession().get(CrossBrowserAccount.class, 1);
+		username = crossBrowserAccount.getEmail();
+		password = crossBrowserAccount.getPassword();
+		
 		account = (Account) openSession().get(Account.class, 1);
+		
 		properties = account.getAccountProperty();
 		TestResults.addResult("<h2>"+sessionName+"</h2>");
 	}
