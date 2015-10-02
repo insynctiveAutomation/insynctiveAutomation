@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.hibernate.mapping.Map;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -40,6 +42,7 @@ import insynctive.model.InsynctiveProperty;
 import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
+import insynctive.utils.CreateTestForm;
 
 @Controller
 @Scope("session")
@@ -220,18 +223,22 @@ public class TestController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/start/{email}" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
+	@RequestMapping(value = "/start" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String startCreatePerson(@PathVariable("email") String email) throws ConfigurationException{
+	public String startCreatePerson(@RequestBody CreateTestForm form) throws ConfigurationException{
+		
 		InsynctiveProperty properties = account.getAccountProperty();
-		properties.setEnvironment("alpha2"); 
 		List<XmlSuite> suites = getXmlTestSuite("createPerson");
+		HashMap<String,String> params = new HashMap<String, String>();
+		params.put("email", form.getEmail());
+		for (XmlSuite suite : suites){
+			suite.setParameters(params);
+		}
+		properties.setEnvironment("alpha2"); 
 		
 		insynctive.utils.TestResults.resetResults();
 		tla = new TestListenerAdapter();
-
 		TestNG testNG = new TestNG();
-		
 		testNG.setXmlSuites(suites);
 		testNG.setPreserveOrder(true);
 		testNG.addListener(tla);

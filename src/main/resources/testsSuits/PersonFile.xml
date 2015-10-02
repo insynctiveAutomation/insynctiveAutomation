@@ -2,7 +2,7 @@
 <suite name="Test Suite" verbose="1" >
 	<test name="Person File Test">
 	  <classes>
-	    <class name="insynctive.tests.PersonFileTest">
+	    <class name="insynctive.tests.CreatePersonTest">
 	      <methods>
 
 			<!-- Initial Test -->

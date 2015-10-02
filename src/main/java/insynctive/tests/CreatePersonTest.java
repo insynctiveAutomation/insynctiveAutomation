@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.pages.insynctive.LoginPage;
@@ -32,9 +34,14 @@ public class CreatePersonTest extends TestMachine {
 		};
 	}
 	
+	@Parameters({"email"})	
 	@Test(dataProvider = "hardCodedBrowsers")
-	public void loginTest(TestEnvironment testEnvironment, ITestContext ctx) throws Exception {
+	public void loginTest(@Optional("email") String email, TestEnvironment testEnvironment, ITestContext ctx) throws Exception {
 			
+		if(email.equals("email")){
+			throw new Exception("No email added");
+		}
+		
 		this.testName = ctx.getCurrentXmlTest().getName().equals("Default test") ? "Default" : ctx.getCurrentXmlTest().getName();
 		this.suiteName =  ctx.getCurrentXmlTest().getSuite().getName().equals("Default suite") ? "Default" : ctx.getCurrentXmlTest().getName();
 		System.out.println("Test Name: "+testName +" Suite Name: "+suiteName);
@@ -52,8 +59,12 @@ public class CreatePersonTest extends TestMachine {
 		}
 	}
 
+	@Parameters({"email"})
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void createPersonTest(TestEnvironment testEnvironment) throws Throwable {
+	public void createPersonTest(@Optional("email") String email, TestEnvironment testEnvironment) throws Throwable {
+		if(email.equals("email")){
+			throw new Exception("No email added");
+		}
 		try{
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			person = new PersonData(account.getRunIDString());
