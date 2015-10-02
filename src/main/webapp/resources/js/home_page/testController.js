@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'accountApp']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ngResource', 'ui.bootstrap', 'accountApp']);
 
-app.controller('TestController', function($modal, $scope, $timeout, $interval, $compile, testService) {
+app.controller('TestController', function($http, $modal, $scope, $timeout, $interval, $compile, $resource, testService) {
 	var self = this;
 	this.errors = [];
 	this.testsSuites = [];
@@ -14,15 +14,13 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 	this.videoLink;
 	this.loaderVisible = "hidden";
 	
-	/*On Load Methods*/
+	/* On Load Methods */
 	this.getTestsSuites = function() {
-		testService.getTestsSuites(function(data) {
-			self.testsSuites = _.map(data,self.split);
-		});
+		return ['LoadingPage','PersonFile','Login','Test']
 	};
 	this.testsSuites = this.getTestsSuites();
 
-	/*On change TestSuite Combo*/
+	/* On change TestSuite Combo */
 	this.getTestDetails = function(testSuiteValue){
 		testService.getTestDetails(testSuiteValue, function(data) {
 			self.testDetails = data;
@@ -30,7 +28,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 		});
 	};
 	
-	/*On Start Button*/
+	/* On Start Button */
 	this.startTest = function(testSuiteValue, selectedEnvironment) {
 		self.start = true;
 		self.runStatus = "Running..";
@@ -45,7 +43,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 		});
 	};
 	
-	/*Get Status of the Test*/
+	/* Get Status of the Test */
 	this.getTestsStatus = function(){
 		if(self.testDetails){
 			testService.getTestsStatus(function(data) {
@@ -55,7 +53,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 		}
 	};
 	
-	/*On Clear Button*/
+	/* On Clear Button */
 	this.clearTests = function(){
 		testService.clearTests(function(data) {
 			self.start = false;
@@ -66,7 +64,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 		});
 	}; this.clearTests();
 	
-	/*Private Methods*/
+	/* Private Methods */
 	this.transformarATestSuite = function(jsonTestSuite) {
 		return TestSuite.asTestSuite(jsonTestSuite);
 	};
@@ -95,7 +93,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 		}
 	};
 
-	/*Intervar 3 segs*/
+	/* Intervar 3 segs */
 	this.getTestsStatus();
 	$interval(function() {
 		if(self.testDetails) {
@@ -110,7 +108,7 @@ app.controller('TestController', function($modal, $scope, $timeout, $interval, $
 		return !self.runStatus 
 	};
 	
-	/*Modal Manager*/
+	/* Modal Manager */
 	this.openConfig = function() {
 		var modalInstance = $modal.open({
 			animation : true,

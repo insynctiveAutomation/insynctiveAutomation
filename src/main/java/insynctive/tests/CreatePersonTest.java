@@ -1,11 +1,6 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
-import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
-import insynctive.utils.Debugger;
-import insynctive.utils.PersonData;
-import insynctive.utils.data.TestEnvironment;
 
 import java.lang.reflect.Method;
 
@@ -13,6 +8,12 @@ import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import insynctive.pages.insynctive.LoginPage;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.utils.Debugger;
+import insynctive.utils.PersonData;
+import insynctive.utils.data.TestEnvironment;
 
 public class CreatePersonTest extends TestMachine {
 
@@ -54,8 +55,8 @@ public class CreatePersonTest extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void createPersonTest(TestEnvironment testEnvironment) throws Throwable {
 		try{
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnviroment());
-			person = new PersonData(properties);
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+			person = new PersonData(account.getRunIDString());
 			
 			homePage.createPersonCheckingInviteSS(person);
 			homePage.sendInviteEmail(person);

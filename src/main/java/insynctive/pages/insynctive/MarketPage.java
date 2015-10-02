@@ -1,16 +1,16 @@
 package insynctive.pages.insynctive;
 
-import insynctive.exception.ConfigurationException;
-import insynctive.pages.Page;
-import insynctive.pages.PageInterface;
-import insynctive.utils.data.App;
-import insynctive.utils.reader.InsynctivePropertiesReader;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import insynctive.exception.ConfigurationException;
+import insynctive.pages.Page;
+import insynctive.pages.PageInterface;
+import insynctive.utils.data.App;
+import insynctive.utils.reader.InsynctivePropertiesReader;
 
 public class MarketPage extends Page implements PageInterface {
 

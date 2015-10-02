@@ -1,14 +1,14 @@
 package insynctive.pages.insynctive;
 
-import insynctive.exception.ElementNotFoundException;
-import insynctive.pages.Page;
-import insynctive.pages.PageInterface;
-import insynctive.utils.Sleeper;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import insynctive.exception.ElementNotFoundException;
+import insynctive.pages.Page;
+import insynctive.pages.PageInterface;
+import insynctive.utils.Sleeper;
 
 public class OpenEnrollmentPage extends Page implements PageInterface{
 

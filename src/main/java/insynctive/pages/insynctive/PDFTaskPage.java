@@ -1,15 +1,15 @@
 package insynctive.pages.insynctive;
 
-import insynctive.pages.PDFItemsPage;
-import insynctive.pages.PageInterface;
-import insynctive.utils.Sleeper;
-import insynctive.utils.reader.PDFPropertiesReader;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+
+import insynctive.pages.PDFItemsPage;
+import insynctive.pages.PageInterface;
+import insynctive.utils.Sleeper;
+import insynctive.utils.reader.PDFPropertiesReader;
 
 public class PDFTaskPage extends PDFItemsPage implements PageInterface {
 

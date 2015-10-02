@@ -1,15 +1,15 @@
 package insynctive.pages.insynctive;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
 import insynctive.exception.ConfigurationException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Sleeper;
 import insynctive.utils.reader.InsynctivePropertiesReader;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class UpdateInfoPage extends Page implements PageInterface{
 

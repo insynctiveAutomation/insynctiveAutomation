@@ -4,6 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.apps.AppsPage;
 import insynctive.pages.insynctive.hr.CheckListsPage;
@@ -17,9 +21,6 @@ import insynctive.pages.insynctive.settings.V3SettingsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.data.TestEnvironment;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 public class LoadingTests extends TestMachine {
 
@@ -29,7 +30,6 @@ public class LoadingTests extends TestMachine {
 	@BeforeClass
 	public void tearUp() throws Exception {
 		super.tearUp();
-		properties.IncrementRunID();
 		this.sessionName = "Loading Tests";
 	}
 	
@@ -62,7 +62,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void hrPeopleLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnviroment());
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			long timeToLoad = homePage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -79,7 +79,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void hrTasksLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			TaskPage taskPage = new TaskPage(driver, properties.getEnviroment());
+			TaskPage taskPage = new TaskPage(driver, properties.getEnvironment());
 			long timeToLoad = taskPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -96,7 +96,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void hrChecklistLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnviroment());
+			CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnvironment());
 			long timeToLoad = checkListPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -113,7 +113,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void hrHelpDeskLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, properties.getEnviroment());
+			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, properties.getEnvironment());
 			long timeToLoad = helpDeskPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -130,7 +130,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void apptLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			AppsPage appPage = new AppsPage(driver, properties.getEnviroment());
+			AppsPage appPage = new AppsPage(driver, properties.getEnvironment());
 			long timeToLoad = appPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -147,7 +147,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingAccountLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			AccountPage accPage = new AccountPage(driver, properties.getEnviroment());
+			AccountPage accPage = new AccountPage(driver, properties.getEnvironment());
 			long timeToLoad = accPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -164,7 +164,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingPeopleLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnviroment());
+			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnvironment());
 			long timeToLoad = peoplePage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -181,7 +181,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingOtherSettingsLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnviroment());
+			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnvironment());
 			long timeToLoad = otherSetting.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
@@ -198,7 +198,7 @@ public class LoadingTests extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 	public void settingV3SettingsLoadingTest(TestEnvironment testEnvironment) throws Throwable {
 		try{ 
-			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnviroment());
+			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnvironment());
 			long timeToLoad = v3Setting.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;

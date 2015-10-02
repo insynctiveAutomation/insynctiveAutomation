@@ -1,6 +1,13 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Method;
+
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
 import insynctive.pages.insynctive.hr.CheckListsPage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Checklist;
@@ -14,12 +21,6 @@ import insynctive.utils.process.AssignTask;
 import insynctive.utils.process.I9;
 import insynctive.utils.process.PDFForm;
 import insynctive.utils.process.W4;
-
-import java.lang.reflect.Method;
-
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 public class ChecklistsTest extends TestMachine {
 
@@ -161,8 +162,8 @@ public class ChecklistsTest extends TestMachine {
 	private HomeForAgentsPage createAndAssignTask(Checklist checklist,
 			Employee employee) throws Exception, Throwable {
 		login();
-		HomeForAgentsPage homeForAgent = new HomeForAgentsPage(driver, properties.getEnviroment());
-		CheckListsPage checkListsPage = new CheckListsPage(driver, properties.getEnviroment());
+		HomeForAgentsPage homeForAgent = new HomeForAgentsPage(driver, properties.getEnvironment());
+		CheckListsPage checkListsPage = new CheckListsPage(driver, properties.getEnvironment());
 
 		homeForAgent.waitPageIsLoad();
 		

@@ -1,26 +1,17 @@
 package insynctive.controller;
 
-import insynctive.dao.InsynctivePropertyDao;
-import insynctive.exception.ConfigurationException;
-import insynctive.model.InsynctiveProperty;
-import insynctive.results.Result;
-import insynctive.results.TestResultsTestNG;
-import insynctive.results.TestSuite;
-import insynctive.utils.reader.InsynctivePropertiesReader;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -41,25 +32,39 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.xml.sax.SAXException;
 
+import insynctive.dao.AccountDao; 
+import insynctive.dao.InsynctivePropertyDao;
+import insynctive.exception.ConfigurationException;
+import insynctive.model.Account;
+import insynctive.model.InsynctiveProperty;
+import insynctive.results.Result;
+import insynctive.results.TestResultsTestNG;
+import insynctive.results.TestSuite;
+
 @Controller
 @Scope("session")
 public class TestController {
  
 	private final ServletContext servletContext;
 	private final InsynctivePropertyDao propertyDao;
-
+	private final AccountDao accDao;
+	private int accID = 1;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
+	private Account account;
+	
 	@Inject
-	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext) {
+	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao) {
 		this.servletContext = servletContext;
 		this.propertyDao = propertyDao;
+		this.accDao = accDao;
 	}
 	
 	TestListenerAdapter tla = new TestListenerAdapter();
 
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
-	public ModelAndView root(){
+	public ModelAndView root(HttpSession session){
 		ModelAndView model = new ModelAndView();
 		model.setViewName("test");
+		account = accDao.getAccountByID(accID);
 		return model;
 	}
 	
@@ -88,7 +93,7 @@ public class TestController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public InsynctiveProperty getAccountProperties() throws ConfigurationException {
-		return propertyDao.getPropertybyID(1);
+		return propertyDao.getPropertybyID(accID);
 	}
 
 	@RequestMapping(value = "/clearTest" ,method = RequestMethod.GET)
@@ -101,7 +106,7 @@ public class TestController {
 	@RequestMapping(value = "/video" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String getVideo() throws InterruptedException, ConfigurationException{
-		if (InsynctivePropertiesReader.IsRemote()) {
+		if (account.getAccountProperty().isRemote()) {
 			int times = 1;
 			int sleep = 2000;
 			
@@ -121,7 +126,7 @@ public class TestController {
 	
 	@RequestMapping(value = "/testsSuites" ,method = RequestMethod.GET)
 	@ResponseBody
-	public List<String> getTestsSuites(){
+	public List<String> getTestsSuites() throws MalformedURLException, URISyntaxException{
 		List<String> testsSuites = getTestSuites();
 		return testsSuites;
 	}
@@ -159,7 +164,7 @@ public class TestController {
 		resultsAux = new ArrayList<Result>();
 		
 		return testResults;
-	}
+	} 
 	
 	@RequestMapping(value = "/get/{xmlName}" ,method = RequestMethod.GET)
 	@ResponseBody
@@ -187,17 +192,17 @@ public class TestController {
 	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
-		InsynctivePropertiesReader allAccountsProperties = InsynctivePropertiesReader.getAllAccountsProperties();
-		allAccountsProperties.setEnvironment(environment);
+		InsynctiveProperty properties = account.getAccountProperty();
+		properties.setEnvironment(environment); 
 		
 		tla = new TestListenerAdapter();
 		insynctive.utils.TestResults.resetResults();
 		
-		List<XmlSuite> suite = getXmlTestSuite(xmlName);
-		
+		List<XmlSuite> suites = getXmlTestSuite(xmlName);
+
 		TestNG testNG = new TestNG();
 		
-		testNG.setXmlSuites(suite);
+		testNG.setXmlSuites(suites);
 		testNG.setPreserveOrder(true);
 		testNG.addListener(tla);
 		testNG.run();
@@ -217,9 +222,8 @@ public class TestController {
 	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String saveAccountConfig(@RequestBody InsynctivePropertiesReader properties) throws ConfigurationException{
-		properties.saveAccConfig();
-		
+	public String saveAccountConfig(@RequestBody InsynctiveProperty properties) throws ConfigurationException{
+		propertyDao.update(properties);
 		return "Done!";
 	}
 	
@@ -253,10 +257,13 @@ public class TestController {
 		return suite;
 	}
 	
-	private List<String> getTestSuites(){
+	private List<String> getTestSuites() throws MalformedURLException, URISyntaxException{
 		List<String> results = new ArrayList<String>();
 
-		File[] files = new File( servletContext.getRealPath("/WEB-INF/testsSuits/")).listFiles();
+		System.out.println(servletContext.getContextPath());
+		System.out.println(servletContext.getResource("/WEB-INF/testsSuits/"));
+		System.out.println(servletContext.getResourceAsStream("/WEB-INF/testsSuits/"));
+		File[] files = new File(servletContext.getResource("/WEB-INF/testsSuits/").toURI()).listFiles();
 		
 		for (File file : files) {
 		    if (file.isFile()) {

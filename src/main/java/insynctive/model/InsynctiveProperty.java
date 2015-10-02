@@ -1,76 +1,55 @@
 package insynctive.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import insynctive.utils.data.App;
+
 @Entity
-@Table(name = "insynctiveProperty")
+@Table(name = "InsynctiveProperty")
 public class InsynctiveProperty {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "id")
-	private int id;
-
-	// RUN ID
-	@Column(name = "runID")
-	private String runID;
+	@Column(name = "insynctive_property_id")
+	private int insynctivePropertyID;
 
 	// ACCOUNTS PROPERTIES
 	@Column(name = "environment")
-	private String enviroment;
-	@Column(name = "remote")
-	private Boolean remote;
+	private String environment;
 
 	@Column(name = "loginUserName")
 	private String loginUsername;
 	@Column(name = "loginPassword")
 	private String loginPassword;
 
-	@Column(name = "newEmployeeName")
-	private String newEmployeeName;
-	@Column(name = "newEmployeeLastName")
-	private String newEmployeeLastName;
-	@Column(name = "newEmployeeEmail")
-	private String newEmployeeEmail;
-	@Column(name = "newEmployeePassword")
-	private String newEmployeePassword;
-	@Column(name = "newEmployeeTitle")
-	private String newEmployeeTitle;
-	@Column(name = "newEmployeeDepartment")
-	private String newEmployeeDepartment;
-
 	@Column(name = "gmailPassword")
 	private String gmailPassword;
 
 	@Column(name = "notification")
 	private Boolean notification;
+	@Column(name = "remote")
+	private Boolean remote;
 
 	public int getId() {
-		return id;
+		return insynctivePropertyID;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.insynctivePropertyID = id;
 	}
 
-	public String getRunID() {
-		return runID;
+	public String getEnvironment() {
+		return environment;
 	}
 
-	public void setRunID(String runID) {
-		this.runID = runID;
-	}
-
-	public String getEnviroment() {
-		return enviroment;
-	}
-
-	public void setEnviroment(String enviroment) {
-		this.enviroment = enviroment;
+	public void setEnvironment(String enviroment) {
+		this.environment = enviroment;
 	}
 
 	public Boolean isRemote() {
@@ -97,54 +76,6 @@ public class InsynctiveProperty {
 		this.loginPassword = loginPassword;
 	}
 
-	public String getNewEmployeeName() {
-		return newEmployeeName;
-	}
-
-	public void setNewEmployeeName(String newEmployeeName) {
-		this.newEmployeeName = newEmployeeName;
-	}
-
-	public String getNewEmployeeLastName() {
-		return newEmployeeLastName;
-	}
-
-	public void setNewEmployeeLastName(String newEmployeeLastName) {
-		this.newEmployeeLastName = newEmployeeLastName;
-	}
-
-	public String getNewEmployeeEmail() {
-		return newEmployeeEmail;
-	}
-
-	public void setNewEmployeeEmail(String newEmployeeEmail) {
-		this.newEmployeeEmail = newEmployeeEmail;
-	}
-
-	public String getNewEmployeePassword() {
-		return newEmployeePassword;
-	}
-
-	public void setNewEmployeePassword(String newEmployeePassword) {
-		this.newEmployeePassword = newEmployeePassword;
-	}
-
-	public String getNewEmployeeTitle() {
-		return newEmployeeTitle;
-	}
-
-	public void setNewEmployeeTitle(String newEmployeeTitle) {
-		this.newEmployeeTitle = newEmployeeTitle;
-	}
-
-	public String getNewEmployeeDepartment() {
-		return newEmployeeDepartment;
-	}
-
-	public void setNewEmployeeDepartment(String newEmployeeDepartment) {
-		this.newEmployeeDepartment = newEmployeeDepartment;
-	}
-
 	public String getGmailPassword() {
 		return gmailPassword;
 	}
@@ -153,11 +84,16 @@ public class InsynctiveProperty {
 		this.gmailPassword = gmailPassword;
 	}
 
-	public Boolean getNotification() {
+	public Boolean isNotification() {
 		return notification;
 	}
 
 	public void setNotification(Boolean notification) {
 		this.notification = notification;
+	}
+
+	public List<App> getApps() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

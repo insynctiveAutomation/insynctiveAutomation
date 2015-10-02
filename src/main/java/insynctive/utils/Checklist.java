@@ -1,14 +1,14 @@
 package insynctive.utils;
 
-import insynctive.exception.ConfigurationException;
-import insynctive.utils.process.Process;
-
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import insynctive.exception.ConfigurationException;
+import insynctive.utils.process.Process;
 
 public class Checklist {
 

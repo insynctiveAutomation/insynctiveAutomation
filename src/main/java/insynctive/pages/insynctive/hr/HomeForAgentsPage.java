@@ -1,5 +1,10 @@
 package insynctive.pages.insynctive.hr;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
 import insynctive.exception.ElementNotFoundException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
@@ -8,11 +13,6 @@ import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.utils.Checklist;
 import insynctive.utils.PersonData;
 import insynctive.utils.Sleeper;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 //TODO get subject of email.
 public class HomeForAgentsPage extends Page implements PageInterface {

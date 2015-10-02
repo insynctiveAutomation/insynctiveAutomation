@@ -1,11 +1,6 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
-import insynctive.exception.ConfigurationException;
-import insynctive.pages.insynctive.MarketPage;
-import insynctive.utils.data.App;
-import insynctive.utils.data.TestEnvironment;
-import insynctive.utils.reader.InsynctivePropertiesReader;
 
 import java.lang.reflect.Method;
 
@@ -14,9 +9,16 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.exception.ConfigurationException;
+import insynctive.pages.insynctive.MarketPage;
+import insynctive.utils.PersonData;
+import insynctive.utils.data.App;
+import insynctive.utils.data.TestEnvironment;
+import insynctive.utils.reader.InsynctivePropertiesReader;
+
 public class InstallAppTest extends TestMachine {
 
-	boolean isSaucelabs;
+	PersonData person;
 	
 	@AfterClass(alwaysRun = true)
 	public void teardown() throws ConfigurationException {
@@ -27,9 +29,9 @@ public class InstallAppTest extends TestMachine {
 
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
-		properties = InsynctivePropertiesReader.getAllProperties(driver);
+		super.tearUp();
+		person = new PersonData(String.valueOf(account.getRunIDString()));
 		this.sessionName = "Install Apps";
-		isSaucelabs = InsynctivePropertiesReader.IsRemote();
 	}
 	
 	@DataProvider(name = "hardCodedBrowsers", parallel = true)
@@ -46,9 +48,9 @@ public class InstallAppTest extends TestMachine {
 		
 		MarketPage marketPage = new MarketPage(driver);
 		
-		for(App app : properties.getApps()){
+		for(App app : properties.getApps()){ 
 			marketPage.installApp(app, 
-					properties.getEnviroment(), 
+					properties.getEnvironment(), 
 					properties.getLoginUsername(), 
 					properties.getLoginPassword());
 			

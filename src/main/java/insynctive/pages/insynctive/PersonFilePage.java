@@ -1,5 +1,13 @@
 package insynctive.pages.insynctive;
 
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Checklist;
@@ -11,14 +19,6 @@ import insynctive.utils.Sleeper;
 import insynctive.utils.Task;
 import insynctive.utils.USAddress;
 import insynctive.utils.Wait;
-
-import java.util.List;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class PersonFilePage extends Page implements PageInterface {
 

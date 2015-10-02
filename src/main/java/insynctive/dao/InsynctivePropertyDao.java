@@ -1,9 +1,8 @@
 package insynctive.dao;
 
-import javax.inject.Inject;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +12,8 @@ import insynctive.model.InsynctiveProperty;
 @Transactional
 public class InsynctivePropertyDao {
 
-	private final SessionFactory sessionFactory;
-	
-	@Inject
-	public InsynctivePropertyDao(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	private Session openSession() {
 		return sessionFactory.getCurrentSession();
@@ -26,5 +21,9 @@ public class InsynctivePropertyDao {
 	
 	public InsynctiveProperty getPropertybyID(int id){
 		return (InsynctiveProperty) openSession().get(InsynctiveProperty.class, id);
+	}
+
+	public void update(InsynctiveProperty properties) {
+		openSession().update(properties);
 	}
 }

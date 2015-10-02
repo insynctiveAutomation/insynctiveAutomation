@@ -11,15 +11,13 @@
     	Automated Tests
     </description>
 	<properties>
-		<!-- SPRING MVC-->
+		<!-- SPRING MVC -->
 		<spring-version>4.0.3.RELEASE</spring-version>
 		<spring-boot-version>1.2.5.RELEASE</spring-boot-version>
-		<mustache-version>1.0</mustache-version>
-		<handlebars-version>2.2.1</handlebars-version>
 		<json-version>20141113</json-version>
 		<json-simple-version>1.1</json-simple-version>
 		<fasterxml-jackson-version>2.2.3</fasterxml-jackson-version>
-		
+
 		<!-- JAVA CONNECTION -->
 		<javax-servlet-api>3.0.1</javax-servlet-api>
 		<javax-servlet>1.2</javax-servlet>
@@ -35,7 +33,7 @@
 		<junit-dep>4.10</junit-dep>
 		<selenium.version>2.45.0</selenium.version>
 		<testNG-Version>6.9.4</testNG-Version>
-		
+
 		<!-- DATA BASE -->
 		<hibernate.version>4.1.5.Final</hibernate.version>
 		<hibernate-validator>4.2.0.Final</hibernate-validator>
@@ -53,13 +51,13 @@
 			<artifactId>oauth</artifactId>
 			<version>${oauth-version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>${cglib}</version>
 		</dependency>
-		
+
 		<!-- lof4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -81,8 +79,8 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j}</version> <!-- 1.2.16 -->
 		</dependency>
-		
-			<!-- Use Apache HttpClient as HTTP Client -->
+
+		<!-- Use Apache HttpClient as HTTP Client -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -189,7 +187,7 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-		
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -249,36 +247,49 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<pluginManagement>
-			<plugins>
+		<plugins>
+			<!-- ECLIPSE MAVEN PLUGINS -->
+			<plugin> 
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<encoding>UTF-8</encoding>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 
-				<!-- ECLIPSE MAVEN PLUGINS -->
-				<plugin>
-				    <groupId>org.apache.maven.plugins</groupId>
-				    <artifactId>maven-war-plugin</artifactId>
-				    <version>2.6</version>
-				    <configuration>
-						<warSourceDirectory>src/main/webapp</warSourceDirectory>
-						<warName>Insynctive</warName>
-						<failOnMissingWebXml>false</failOnMissingWebXml>
-					</configuration>
-			    </plugin>
-					
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-						<forkCount>0</forkCount>
-						<suiteXmlFiles>
-							<suiteXmlFile>testRun.xml</suiteXmlFile>
-						</suiteXmlFiles>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.github.jsimone</groupId>
+									<artifactId>webapp-runner</artifactId>
+									<version>7.0.57.2</version>
+									<destFileName>webapp-runner.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 		<finalName>Insynctive</finalName>
 	</build>
 

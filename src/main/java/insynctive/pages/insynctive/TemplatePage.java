@@ -1,16 +1,16 @@
 package insynctive.pages.insynctive;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
 import insynctive.exception.MethodNoImplementedException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
 import insynctive.utils.process.Process;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class TemplatePage extends Page implements PageInterface{
 

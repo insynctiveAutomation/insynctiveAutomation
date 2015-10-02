@@ -2,24 +2,23 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import insynctive.pages.insynctive.MyTasksPage;
-import insynctive.pages.insynctive.hr.CheckListsPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
-import insynctive.utils.Sleeper;
-import insynctive.utils.data.TestEnvironment;
-import insynctive.utils.reader.InsynctivePropertiesReader;
-
 import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.pages.insynctive.MyTasksPage;
+import insynctive.pages.insynctive.hr.CheckListsPage;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.utils.Sleeper;
+import insynctive.utils.data.TestEnvironment;
+
 public class PDFSignatureTest extends TestMachine {
 	
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
-		properties = InsynctivePropertiesReader.getAllProperties(driver);
+		super.tearUp();
 		this.sessionName = "PDF Signature";
 	}
 
@@ -36,14 +35,14 @@ public class PDFSignatureTest extends TestMachine {
 		startTest(testEnvironment);
 		
 		login();
-		new HomeForAgentsPage(driver, properties.getEnviroment()).waitPageIsLoad();
+		new HomeForAgentsPage(driver, properties.getEnvironment()).waitPageIsLoad();
 		
-				CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnviroment());
+				CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnvironment());
 				checkListPage.loadPage();
 				checkListPage.startChecklist("PDF", "Eugenio Valeiras");
 				
 				Sleeper.sleep(3000, driver);
-				MyTasksPage myTasksPage = new MyTasksPage(driver, properties.getEnviroment());
+				MyTasksPage myTasksPage = new MyTasksPage(driver, properties.getEnvironment());
 				myTasksPage.loadPage();
 				myTasksPage.openJustNowTask();
 				

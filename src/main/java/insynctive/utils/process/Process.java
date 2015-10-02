@@ -1,14 +1,14 @@
 package insynctive.utils.process;
 
-import insynctive.exception.MethodNoImplementedException;
-import insynctive.pages.Page;
-import insynctive.utils.WhenStart;
-import insynctive.utils.data.Employee;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import insynctive.exception.MethodNoImplementedException;
+import insynctive.pages.Page;
+import insynctive.utils.WhenStart;
+import insynctive.utils.data.Employee;
 
 public abstract class Process extends Page{
 

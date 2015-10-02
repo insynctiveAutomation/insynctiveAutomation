@@ -1,9 +1,9 @@
 package insynctive.utils.reader;
 
-import insynctive.exception.ConfigurationException;
-
 import java.io.FileInputStream;
 import java.util.Properties;
+
+import insynctive.exception.ConfigurationException;
 
 public class PDFPropertiesReader {
 

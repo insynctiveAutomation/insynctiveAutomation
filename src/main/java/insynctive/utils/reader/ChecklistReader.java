@@ -1,8 +1,5 @@
 package insynctive.utils.reader;
 
-import insynctive.utils.Checklist;
-import insynctive.utils.process.Process;
-
 import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -12,6 +9,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.WebDriver;
+
+import insynctive.utils.Checklist;
+import insynctive.utils.process.Process;
 
 public class ChecklistReader {
 

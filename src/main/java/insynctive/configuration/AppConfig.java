@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.hibernate.cfg.Environment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = "insynctive")
 @EnableTransactionManagement
 public class AppConfig {
-
+	
 	@Bean
 	public PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
@@ -68,9 +69,9 @@ public class AppConfig {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put("hibernate.hbm2ddl.auto", "create");
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		properties.put("hibernate.show_sql", true);
+		properties.put(Environment.HBM2DDL_AUTO, "create");
+		properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+		properties.put(Environment.SHOW_SQL, true);
 		return properties;
 	}
 	

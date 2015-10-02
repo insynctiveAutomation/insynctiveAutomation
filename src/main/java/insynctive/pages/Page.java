@@ -2,11 +2,6 @@ package insynctive.pages;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import insynctive.exception.ElementIsAllwaysVisibleException;
-import insynctive.exception.ElementNotFoundException;
-import insynctive.exception.MethodNoImplementedException;
-import insynctive.exception.WrongMessageException;
-import insynctive.utils.Sleeper;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -20,6 +15,12 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import insynctive.exception.ElementIsAllwaysVisibleException;
+import insynctive.exception.ElementNotFoundException;
+import insynctive.exception.MethodNoImplementedException;
+import insynctive.exception.WrongMessageException;
+import insynctive.utils.Sleeper;
 
 public class Page {
 

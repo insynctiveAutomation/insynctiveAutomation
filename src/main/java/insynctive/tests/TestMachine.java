@@ -1,13 +1,5 @@
 package insynctive.tests;
 
-import insynctive.exception.ConfigurationException;
-import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
-import insynctive.utils.Debugger;
-import insynctive.utils.TestResults;
-import insynctive.utils.data.TestEnvironment;
-import insynctive.utils.reader.InsynctivePropertiesReader;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,6 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -31,22 +25,36 @@ import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import insynctive.exception.ConfigurationException;
+import insynctive.model.Account;
+import insynctive.model.InsynctiveProperty;
+import insynctive.pages.insynctive.LoginPage;
+import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.utils.Debugger;
+import insynctive.utils.HibernateUtil;
+import insynctive.utils.TestResults;
+import insynctive.utils.data.TestEnvironment;
+
 public abstract class TestMachine {
 
+	//Hibernate connection
+	SessionFactory sessionFactory;
+	
 	//Session Name
 	public String sessionName = "Insynctive Session";
 	public String testName = "Test Name";
 	public String suiteName = "Suite Name";
-	TestEnvironment testEnvironment;
+	public boolean isSaucelabs;
+	public TestEnvironment testEnvironment;
+	public InsynctiveProperty properties;
+	public Account account; 
 	
 	public WebDriver driver;
-	public InsynctivePropertiesReader properties;
 	
 	/** TAGS => Add tests result test.*/
 	List<String> tags = new ArrayList<String>();
 	
 	boolean generalStatus = true;
-	boolean isSaucelabs;
 	
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();
@@ -74,14 +82,19 @@ public abstract class TestMachine {
 	
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
-		properties = InsynctivePropertiesReader.getAllAccountsProperties();
-		isSaucelabs = InsynctivePropertiesReader.IsRemote();
+		sessionFactory = HibernateUtil.getSessionFactory();
+		account = (Account) openSession().get(Account.class, 1);
+		properties = account.getAccountProperty();
 		TestResults.addResult("<h2>"+sessionName+"</h2>");
+	}
+	
+	public Session openSession(){
+		return sessionFactory.openSession();
 	}
 	
 	@AfterClass(alwaysRun = true)
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		if(InsynctivePropertiesReader.IsRemote()){
+		if(properties.isRemote()){
 			this.driver.quit();
 		}
 		setFinalResult();
@@ -112,7 +125,7 @@ public abstract class TestMachine {
 	}
 
 	public void startTest(TestEnvironment testEnvironment) throws ConfigurationException, JSONException, IOException {
-		if (InsynctivePropertiesReader.IsRemote()) {
+		if (properties.isRemote()) {
 			driver = createDriver(testEnvironment);
 		} else {
 			FirefoxProfile firefoxProfile = new FirefoxProfile();
@@ -125,12 +138,12 @@ public abstract class TestMachine {
 	}
 	
 	public void openPersonFile(String emailSearch) throws Throwable{
-		HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnviroment());
+		HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 		homePage.openPersonFile(emailSearch);
 	}
 
 	public LoginPage login(String username, String password) throws Exception {
-		LoginPage loginPage = new LoginPage(driver, properties.getEnviroment());
+		LoginPage loginPage = new LoginPage(driver, properties.getEnvironment());
 		loginPage.loadPage();
 		loginPage.login(username, password);
 		return loginPage;
@@ -141,7 +154,7 @@ public abstract class TestMachine {
 	}
 	
 	public LoginPage loginAsEmployee(String email, String password) throws Exception {
-		LoginPage loginPage = new LoginPage(driver, properties.getEnviroment());
+		LoginPage loginPage = new LoginPage(driver, properties.getEnvironment());
 		loginPage.setReturnAsEmployee();
 		loginPage.loadPage();
 		loginPage.login(email, password);
@@ -200,11 +213,11 @@ public abstract class TestMachine {
 	}
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		if(InsynctivePropertiesReader.IsRemote()){
+		if(properties.isRemote()){
 			TestResults.addResult("<a href=\""+getPublicVideoLinkOfJob()+"\">Watch Video</a>");
 			makeCurlToChangeStatus();
 		}
-		if(InsynctivePropertiesReader.isNotificationActive()) {sendSlack();}
+		if(properties.isNotification()) {sendSlack();}
 	}
 	
 	public JSONObject makeCurl(String url, String type) throws IOException, JSONException{
@@ -268,7 +281,7 @@ public abstract class TestMachine {
 		JSONArray attachments = new JSONArray();
 		JSONObject attachment = new JSONObject(); 
 		attachment.put("fallback", "Status of test: "+generalStatus);
-		attachment.put("pretext", (jobID == null ? "Local Test" : "<"+getJobURL()+"|Watch test video here>")+" | Environment: "+properties.getEnviroment());
+		attachment.put("pretext", (jobID == null ? "Local Test" : "<"+getJobURL()+"|Watch test video here>")+" | Environment: "+properties.getEnvironment());
 		attachment.put("color", generalStatus ? "#00CE00" : "#FC000D"); //AA3939
 		
 		JSONArray fields = new JSONArray();

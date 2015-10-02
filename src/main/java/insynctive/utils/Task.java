@@ -1,7 +1,5 @@
 package insynctive.utils;
 
-import insynctive.exception.ConfigurationException;
-
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +7,8 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import insynctive.exception.ConfigurationException;
 
 public class Task {
 

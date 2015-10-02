@@ -1,13 +1,11 @@
 package insynctive.utils;
 
-import insynctive.exception.ConfigurationException;
-import insynctive.exception.MethodNoImplementedException;
-import insynctive.utils.reader.InsynctivePropertiesReader;
-
 import java.io.FileReader;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import insynctive.exception.ConfigurationException;
 
 public class PersonData {
 
@@ -52,14 +50,6 @@ public class PersonData {
 
 	JSONParser parser = new JSONParser();
 
-	public PersonData(InsynctivePropertiesReader properties) throws MethodNoImplementedException {
-		this.name = properties.getNewEmployeeName();
-		this.lastName = properties.getNewEmployeeLastName();
-		this.email = properties.getNewEmployeeEmail();
-		this.departamentOfEmployee = properties.getNewEmployeeDepartment();
-		this.titleOfEmployee = properties.getNewEmployeeTitle();
-	}
-	
 	public PersonData(String name, String lastname, String email){
 		this.name = name;
 		this.lastName = lastname;

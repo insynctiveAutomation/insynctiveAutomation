@@ -1,6 +1,13 @@
 package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Method;
+
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
@@ -9,24 +16,17 @@ import insynctive.utils.EmergencyContact;
 import insynctive.utils.PersonData;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
-
-import java.lang.reflect.Method;
-
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
  
 
 public class PersonFileTest extends TestMachine {
 
 	PersonData person;
-	
+
 	@Override
 	@BeforeClass
 	public void tearUp() throws Exception {
 		super.tearUp();
-		properties.IncrementRunID();
-		person = new PersonData(properties.getRunID());
+		person = new PersonData(String.valueOf(account.getRunIDString()));
 		this.sessionName = "Person File Test ("+ person.getEmail()+")";
 	}
 	
@@ -76,9 +76,9 @@ public class PersonFileTest extends TestMachine {
 	public void createPersonTest(TestEnvironment testEnvironment) throws Throwable {
 		long startTime = System.nanoTime();
 		try{ 
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnviroment());
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			
-			person.setName(person.getName() + " " + properties.getRunID());
+			person.setName(person.getName() + " " + account.getRunIDString());
 			homePage.createPersonCheckingInviteSS(person);
 			homePage.sendInviteEmail(person);
 			
@@ -100,7 +100,7 @@ public class PersonFileTest extends TestMachine {
 	public void changePrimaryEmail(TestEnvironment testEnvironment) throws Exception {
 		long startTime = System.nanoTime();  
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			personFilePage.changePrimaryEmail(person);
 			
 			boolean result = personFilePage.isChangePrimaryEmail(person.getEmailToChange());
@@ -120,7 +120,7 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.changeMaritalStatus(person.getMaritalStatus());
 			
@@ -141,7 +141,7 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.changeName(person.getName(), person.getLastName(), person.getMiddleName(), person.getMaidenName());
 			
@@ -162,7 +162,7 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.changeNameIntoTitle(person.getName(), person.getLastName(), person.getMiddleName(), person.getMaidenName());
 			
@@ -183,7 +183,7 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.changeGender(person.getGender());
 			
@@ -204,7 +204,7 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.changeBirthDate(person.getBirthDate());
 			
@@ -224,7 +224,7 @@ public class PersonFileTest extends TestMachine {
 	public void addTitle(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.changeTitle(person.getTitleOfEmployee(), person.getDepartamentOfEmployee());
 			
@@ -258,11 +258,11 @@ public class PersonFileTest extends TestMachine {
 	public void addPhoneNumber(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.addPhoneNumber(person.getPrimaryPhone(), properties.getRunID());
+			personFilePage.addPhoneNumber(person.getPrimaryPhone(), account.getRunIDString());
 
-			boolean result = personFilePage.isAddPhoneNumber(person.getPrimaryPhone(), properties.getRunID());
+			boolean result = personFilePage.isAddPhoneNumber(person.getPrimaryPhone(), account.getRunIDString());
 			Debugger.log("addPhoneNumber =>"+result, isSaucelabs);
 			long endTime = System.nanoTime();
 			setResult(result, "Add Phone Number", endTime - startTime);
@@ -278,7 +278,7 @@ public class PersonFileTest extends TestMachine {
 	public void addUSAddress(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
 			personFilePage.addUsAddress(person.getUSAddress());
 			
@@ -298,7 +298,7 @@ public class PersonFileTest extends TestMachine {
 	public void removeUSAddress(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			personFilePage.removeUsAddress(person.getUSAddress());
 
 			boolean result = personFilePage.isRemoveUsAddress(person.getUSAddress());
@@ -332,7 +332,7 @@ public class PersonFileTest extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
 	public void assignTask(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
-		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
 			personFilePage.assignTask();
 			
@@ -352,7 +352,7 @@ public class PersonFileTest extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
 	public void startChecklist(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
-		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
 			personFilePage.assignChecklist();
 			
@@ -373,11 +373,11 @@ public class PersonFileTest extends TestMachine {
 	public void addSocialSecurityNumber(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.addSocialSecurityNumber(person.getSsn(), properties.getRunID());
+			personFilePage.addSocialSecurityNumber(person.getSsn(), account.getRunIDString());
 			
-			boolean result = personFilePage.isSocialSecurityNumberAdded(person.getSsn(), properties.getRunID());
+			boolean result = personFilePage.isSocialSecurityNumberAdded(person.getSsn(), account.getRunIDString());
 			Debugger.log("Add Social Security Number => "+result, isSaucelabs);
 			long endTime = System.nanoTime();
 			setResult(result, "Add Social Security Number", endTime - startTime);
@@ -393,7 +393,7 @@ public class PersonFileTest extends TestMachine {
 	public void addEmergencyContact(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			EmergencyContact emg = person.getEmergencyContact();
 			personFilePage.addEmergencyContact(emg.getName(), emg.getRelationship(), emg.getPhone(), emg.getEmail());
 			
@@ -413,7 +413,7 @@ public class PersonFileTest extends TestMachine {
 	public void changeEmergencyContact(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			EmergencyContact emg = person.getEmergencyContact();
 			personFilePage.editEmergencyContact(emg.getName()+"Test", emg.getRelationship(), emg.getPhone(), emg.getEmail());
 			
@@ -438,7 +438,7 @@ public class PersonFileTest extends TestMachine {
 	public void removeEmergencyContact(TestEnvironment testEnvironment) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			int count = personFilePage.getNumberOfEmergencyContacts();
 			personFilePage.removeLastEmergencyContact();
 		

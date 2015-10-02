@@ -1,9 +1,5 @@
 package insynctive.utils.reader;
 
-import insynctive.exception.ConfigurationException;
-import insynctive.utils.Checklist;
-import insynctive.utils.data.App;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +9,13 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 
+import insynctive.exception.ConfigurationException;
+import insynctive.model.Account;
+import insynctive.model.InsynctiveProperty;
+import insynctive.utils.Checklist;
+import insynctive.utils.data.App;
+
+@Deprecated()
 public class InsynctivePropertiesReader {
 
 	//INSTANCE
@@ -349,5 +352,24 @@ public class InsynctivePropertiesReader {
 
 	public void setRemote(String remote) {
 		this.remote = remote;
+	}
+
+	public static Account createAccount() throws ConfigurationException {
+		Account account = new Account();
+		InsynctivePropertiesReader properties = getAllAccountsProperties();
+		account.setUsername(properties.getLoginUsername());
+		account.setPassword(properties.getLoginPassword());
+		account.setRunID(Integer.parseInt(properties.getRunID()));
+		
+		InsynctiveProperty property = new InsynctiveProperty();
+		property.setEnvironment(properties.getEnviroment());
+		property.setGmailPassword(properties.getGmailPassword());
+		property.setLoginUsername(properties.getLoginUsername());
+		property.setLoginPassword(properties.getLoginPassword());
+		property.setNotification(properties.isNotification());
+		property.setRemote(Boolean.parseBoolean(properties.getRemote()));
+		
+		account.setAccountProperty(property);
+		return account;
 	}
 }

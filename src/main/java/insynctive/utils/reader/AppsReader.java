@@ -1,8 +1,5 @@
 package insynctive.utils.reader;
 
-import insynctive.exception.ConfigurationException;
-import insynctive.utils.data.App;
-
 import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -10,6 +7,9 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
+
+import insynctive.exception.ConfigurationException;
+import insynctive.utils.data.App;
 
 public class AppsReader {
 

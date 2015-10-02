@@ -1,28 +1,25 @@
 package insynctive.tests;
 
-import insynctive.pages.insynctive.OpenEnrollmentPage;
-import insynctive.utils.data.TestEnvironment;
-import insynctive.utils.reader.InsynctivePropertiesReader;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
-
-import static org.junit.Assert.assertTrue;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.pages.insynctive.OpenEnrollmentPage;
+import insynctive.utils.PersonData;
+import insynctive.utils.data.TestEnvironment;
+
 public class OpenEnrollmentTest extends TestMachine {
 
-	//	@AfterClass(alwaysRun = true)
-//	public void teardown() {
-//		this.driver.quit();
-//	}
+	PersonData person;
 
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
-		properties = InsynctivePropertiesReader.getAllAccountsProperties();
-		properties.addCheckLists(driver);
+		super.tearUp();
+		person = new PersonData(String.valueOf(account.getRunIDString()));
 		this.sessionName = "Open Enrollment";
 	}
 
@@ -38,7 +35,7 @@ public class OpenEnrollmentTest extends TestMachine {
 		startTest(testEnvironment);
 		login("InsynctiveTestNG+206@gmail.com", "password");
 		
-		OpenEnrollmentPage openEnrollmentPage = new OpenEnrollmentPage(driver, properties.getEnviroment());
+		OpenEnrollmentPage openEnrollmentPage = new OpenEnrollmentPage(driver, properties.getEnvironment());
 		openEnrollmentPage.waitPageIsLoad();
 
 		assertTrue(openEnrollmentPage.startUpdateInfo());
