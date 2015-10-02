@@ -1,4 +1,5 @@
-<div class="lgContent">
+<img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif" ng-if="accountCtrl.isLoading"><br/>
+<div ng-if="!accountCtrl.isLoading" ng class="lgContent">
 	<form ng-submit="accountCtrl.saveConfig()" class="form-signin"
 		name="sendTest">
 

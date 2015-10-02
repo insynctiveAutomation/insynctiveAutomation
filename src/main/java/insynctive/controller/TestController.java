@@ -220,6 +220,26 @@ public class TestController {
 		return null;
 	}
 	
+	@RequestMapping(value = "/start/{email}" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String startCreatePerson(@PathVariable("email") String email) throws ConfigurationException{
+		InsynctiveProperty properties = account.getAccountProperty();
+		properties.setEnvironment("alpha2"); 
+		List<XmlSuite> suites = getXmlTestSuite("createPerson");
+		
+		insynctive.utils.TestResults.resetResults();
+		tla = new TestListenerAdapter();
+
+		TestNG testNG = new TestNG();
+		
+		testNG.setXmlSuites(suites);
+		testNG.setPreserveOrder(true);
+		testNG.addListener(tla);
+		testNG.run();
+		
+		return "Finish!";
+	}
+	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String saveAccountConfig(@RequestBody InsynctiveProperty properties) throws ConfigurationException{
@@ -260,10 +280,7 @@ public class TestController {
 	private List<String> getTestSuites() throws MalformedURLException, URISyntaxException{
 		List<String> results = new ArrayList<String>();
 
-		System.out.println(servletContext.getContextPath());
-		System.out.println(servletContext.getResource("/WEB-INF/testsSuits/"));
-		System.out.println(servletContext.getResourceAsStream("/WEB-INF/testsSuits/"));
-		File[] files = new File(servletContext.getResource("/WEB-INF/testsSuits/").toURI()).listFiles();
+		File[] files = new File( servletContext.getRealPath("/WEB-INF/testsSuits/")).listFiles();
 		
 		for (File file : files) {
 		    if (file.isFile()) {

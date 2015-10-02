@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ngResource', 'ui.bootstrap', 'accountApp']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'accountApp']);
 
-app.controller('TestController', function($http, $modal, $scope, $timeout, $interval, $compile, $resource, testService) {
+app.controller('TestController', function($http, $modal, $scope, $timeout, $interval, $compile, testService) {
 	var self = this;
 	this.errors = [];
 	this.testsSuites = [];
@@ -16,9 +16,11 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 	
 	/* On Load Methods */
 	this.getTestsSuites = function() {
-		return ['LoadingPage','PersonFile','Login','Test']
+		testService.getTestsSuites(function(data) {
+			self.testsSuites = _.map(data,self.split);
+		});
 	};
-	this.testsSuites = this.getTestsSuites();
+	this.getTestsSuites();
 
 	/* On change TestSuite Combo */
 	this.getTestDetails = function(testSuiteValue){

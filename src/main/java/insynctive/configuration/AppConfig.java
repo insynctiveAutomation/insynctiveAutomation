@@ -4,12 +4,13 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
@@ -21,6 +22,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = "insynctive")
 @EnableTransactionManagement
 public class AppConfig {
+	
+	@Autowired
+    Environment env;
 	
 	@Bean
 	public PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
@@ -37,16 +41,16 @@ public class AppConfig {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
 		/*HEROKU*/
-//		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//		dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_fa8eb9422d1df16");
-//		dataSource.setUsername("bc629656bad916");
-//		dataSource.setPassword("5748788a");
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
+		dataSource.setUsername("b797aea885e227");
+		dataSource.setPassword("503f6e18");
 		
 		/*LOCAL*/
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/insynctive");
-		dataSource.setUsername("root");
-		dataSource.setPassword("");
+//		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//		dataSource.setUrl("jdbc:mysql://localhost:3306/insynctive");
+//		dataSource.setUsername("root");
+//		dataSource.setPassword("");
 
 		return dataSource;
 	}
@@ -69,9 +73,9 @@ public class AppConfig {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put(Environment.HBM2DDL_AUTO, "create");
-		properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
-		properties.put(Environment.SHOW_SQL, true);
+		properties.put("hibernate.hbm2ddl.auto", "update");
+		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+		properties.put("hibernate.show_sql", true);
 		return properties;
 	}
 	

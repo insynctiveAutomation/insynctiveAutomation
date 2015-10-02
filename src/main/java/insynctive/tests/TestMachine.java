@@ -64,8 +64,8 @@ public abstract class TestMachine {
 	private String slackChannel = "https://hooks.slack.com/services/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";
 
 	//CROSSBROWSING
-	String username = "eugenio.valeiras+14@gmail.com";
-	String password = "u2f655d5dc0e358c";
+	String username = "eugenio.valeiras+15@gmail.com";
+	String password = "u5d607b6a5c18b13";
 	
 	private String getJobURL() throws IOException, JSONException {
 		return getPublicVideoLinkOfJob();

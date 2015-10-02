@@ -7,11 +7,14 @@ app.controller('AccountController', function($modalInstance, accountService) {
 	var self = this;
 	this.accountConfig;
 	this.saved = '';
+	this.isLoading = false;
 	
 	/*On Load Methods*/
 	this.getConfig = function() {
+		self.isLoading = true;
 		accountService.getAccountConfig(function(data) {
 			self.accountConfig = data;
+			self.isLoading = false;
 		});
 	};
 	this.accountConfig = this.getConfig();
