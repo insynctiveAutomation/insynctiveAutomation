@@ -8,25 +8,22 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.model.EmergencyContact;
+import insynctive.model.PersonData;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
-import insynctive.utils.EmergencyContact;
-import insynctive.utils.PersonData;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
 
 public class PersonFileTest extends TestMachine {
 
-	PersonData person;
-
 	@Override
 	@BeforeClass
 	public void tearUp() throws Exception {
 		super.tearUp();
-		person = new PersonData(String.valueOf(account.getRunIDString()));
 		this.sessionName = "Person File Test ("+ person.getEmail()+")";
 	}
 	

@@ -8,8 +8,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.model.PersonData;
 import insynctive.pages.insynctive.OpenEnrollmentPage;
-import insynctive.utils.PersonData;
 import insynctive.utils.data.TestEnvironment;
 
 public class OpenEnrollmentTest extends TestMachine {

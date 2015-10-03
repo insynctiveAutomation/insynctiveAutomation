@@ -1,16 +1,50 @@
-package insynctive.utils;
+package insynctive.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "USAddress")
 public class USAddress {
-
+	@Id
+	@GeneratedValue
+	@Column(name = "USAddress_id")
+	private int id;
+	
+	@Column(name = "street")
 	private String street;
+	
+	@Column(name = "apt")
 	private String apt;
+	
+	@Column(name = "second_street")
 	private String secondStreet;
+	
+	@Column(name = "city")
 	private String city;
+	
+	@Column(name = "state")
 	private String state;
+	
+	@Column(name = "zip_code")
 	private String zipCode;
+	
+	@Column(name = "county")
 	private String county;
+	
+	@Column(name = "short_description")
 	private String shortDescription;
+	
+	@Column(name = "same_as_home")
 	private boolean sameAsHome;
+	
+	public USAddress() {
+
+	}
+	
 	public String getStreet() {
 		return street;
 	}

@@ -1,10 +1,10 @@
 package insynctive.utils.data;
 
-import insynctive.utils.EmergencyContact;
-import insynctive.utils.PersonData;
-import insynctive.utils.PersonData.Gender;
-import insynctive.utils.PersonData.MaritalStatus;
-import insynctive.utils.USAddress;
+import insynctive.model.EmergencyContact;
+import insynctive.model.PersonData;
+import insynctive.model.USAddress;
+import insynctive.model.PersonData.Gender;
+import insynctive.model.PersonData.MaritalStatus;
 
 public enum Employee {
 

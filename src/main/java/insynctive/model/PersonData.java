@@ -1,14 +1,85 @@
-package insynctive.utils;
+package insynctive.model;
 
 import java.io.FileReader;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import insynctive.exception.ConfigurationException;
+import insynctive.utils.Dependent;
 
+@Entity
+@Table(name = "Person")
 public class PersonData {
+	@Transient
+	private String DEFAULT_FILE = "personFileData.json";
+	
+	// PROPERTIES PATH
+	@Id
+	@GeneratedValue
+	@Column(name = "person_data_id")
+	private int id;
 
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "middle_name")
+	private String middleName;
+	
+	@Column(name = "lastname")
+	private String lastName;
+
+	@Column(name = "maiden_name")
+	private String maidenName;
+
+	@Column(name = "birthdate")
+	private String birthDate;
+
+	@Column(name = "gender")
+	private Gender gender;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "title_of_employee")
+	private String titleOfEmployee;
+
+	@Column(name = "departament")
+	private String departamentOfEmployee;
+
+	@Column(name = "primary_phone")
+	private String primaryPhone;
+	
+	@Column(name = "ssn")
+	private String ssn;
+	
+	@Column(name = "marital_status")
+	private MaritalStatus maritalStatus;
+
+	@NotNull
+	@OneToOne
+	@Cascade({CascadeType.SAVE_UPDATE})
+	@JoinColumn(name = "emergency_contact_id")
+	private EmergencyContact emergencyContact;
+
+	@NotNull
+	@OneToOne
+	@Cascade({CascadeType.SAVE_UPDATE})
+	@JoinColumn(name = "USAddress_id")
+	private USAddress usAddress;
+	
 	public enum Gender{
 		MALE("Male"), FEMALE("Female"), UNKNOWN("Unknown"); 
 		public final String name;
@@ -27,29 +98,9 @@ public class PersonData {
 		}
 	}
 
-	// PROPERTIES PATH
-	private String DEFAULT_FILE = "personFileData.json";
-
-	private String name;
-	private String middleName;
-	private String lastName;
-	private String maidenName;
-	private String birthDate;
-	private Gender gender;
-	private MaritalStatus maritalStatus;
-	private String email;
-	private String emailAfterEdit;
-	private String titleOfEmployee;
-	private String departamentOfEmployee;
-	private String primaryPhone;
-	private EmergencyContact emergencyContact;
-	private USAddress usAddress;
-	private Dependent Dependents;
-	private String searchEmail;
-	private String ssn;
-
-	JSONParser parser = new JSONParser();
-
+	public PersonData(){
+	}
+	
 	public PersonData(String name, String lastname, String email){
 		this.name = name;
 		this.lastName = lastname;
@@ -67,6 +118,7 @@ public class PersonData {
 
 	private void addData(String runID, String path) throws ConfigurationException {
 		try {
+			JSONParser parser = new JSONParser();
 			JSONObject person = (JSONObject) parser.parse(new FileReader(path));
 			name = (String)person.get("name");
 			middleName = (String)person.get("middleName");
@@ -76,11 +128,9 @@ public class PersonData {
 			gender = Gender.valueOf((String)person.get("gender"));
 			maritalStatus = MaritalStatus.valueOf((String)person.get("maritalStatus"));
 			email = (String)person.get("email");
-			searchEmail = email.split("@")[0];
 			setSsn((String)person.get("ssn"));
 			
 			email = email.split("@")[0] + "+" + runID + "@" + email.split("@")[1];
-			emailAfterEdit = (String)person.get("emailAfterEdit");
 			titleOfEmployee = (String)person.get("titleOfEmployee");
 			departamentOfEmployee = (String)person.get("departamentOfEmployee");
 			primaryPhone = (String)person.get("primaryPhone");
@@ -199,14 +249,6 @@ public class PersonData {
 		usAddress = uSAddress;
 	}
 
-	public Dependent getDependents() {
-		return Dependents;
-	}
-
-	public void setDependents(Dependent dependents) {
-		Dependents = dependents;
-	}
-
 	public String getDepartamentOfEmployee() {
 		return departamentOfEmployee;
 	}
@@ -223,20 +265,8 @@ public class PersonData {
 		this.titleOfEmployee = titleOfEmployee;
 	}
 
-	public String getEmailAfterEdit() {
-		return emailAfterEdit;
-	}
-
-	public void setEmailAfterEdit(String emailAfterEdit) {
-		this.emailAfterEdit = emailAfterEdit;
-	}
-
 	public String getSearchEmail() {
-		return searchEmail;
-	}
-
-	public void setSearchEmail(String searchEmail) {
-		this.searchEmail = searchEmail;
+		return email.split("@")[0];
 	}
 
 	public String getSsn() {
@@ -245,6 +275,10 @@ public class PersonData {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+	
+	public String getEmailWithRunID(Account acc){
+		return (email.split("@")[0] + "+" + acc.getRunID() + "@" + email.split("@")[1]);
 	}
 	
 	@Override

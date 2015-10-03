@@ -8,11 +8,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.model.PersonData;
 import insynctive.pages.insynctive.hr.CheckListsPage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Checklist;
 import insynctive.utils.Debugger;
-import insynctive.utils.PersonData;
 import insynctive.utils.Task;
 import insynctive.utils.WhenStart;
 import insynctive.utils.data.Employee;

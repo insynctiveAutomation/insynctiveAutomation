@@ -1,10 +1,34 @@
-package insynctive.utils;
+package insynctive.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EmergencyContact")
 public class EmergencyContact {
+	@Id
+	@GeneratedValue
+	@Column(name = "emergency_contact_id")
+	private int id;
+	
+	@Column(name = "name")
 	String name;
+	
+	@Column(name = "relationship")
 	String relationship;
+	
+	@Column(name = "email")
 	String email;
+	
+	@Column(name = "phone")
 	String phone;
+	
+	public EmergencyContact() {
+
+	}
 	
 	public EmergencyContact(String name, String relationship, String email,
 			String phone) {

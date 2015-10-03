@@ -34,15 +34,18 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.xml.sax.SAXException;
 
-import insynctive.dao.AccountDao; 
+import insynctive.dao.AccountDao;
+import insynctive.dao.CreatePersonFormDao;
+import insynctive.dao.CrossBrowserAccountDao;
 import insynctive.dao.InsynctivePropertyDao;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
+import insynctive.model.CreatePersonForm;
 import insynctive.model.InsynctiveProperty;
 import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
-import insynctive.utils.CreateTestForm;
+import insynctive.utils.HibernateUtil;
 
 @Controller
 @Scope("session")
@@ -51,14 +54,18 @@ public class TestController {
 	private final ServletContext servletContext;
 	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
+	private final CreatePersonFormDao createPersonFormDao;
+	private final CrossBrowserAccountDao crossDao;
 	private int accID = 1;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
 	private Account account;
 	
 	@Inject
-	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao) {
+	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao) {
 		this.servletContext = servletContext;
 		this.propertyDao = propertyDao;
 		this.accDao = accDao;
+		this.crossDao = crossDao;
+		this.createPersonFormDao = createPersonFormDao;
 	}
 	
 	TestListenerAdapter tla = new TestListenerAdapter();
@@ -225,16 +232,19 @@ public class TestController {
 	
 	@RequestMapping(value = "/start" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String startCreatePerson(@RequestBody CreateTestForm form) throws ConfigurationException{
-		
-		InsynctiveProperty properties = account.getAccountProperty();
-		List<XmlSuite> suites = getXmlTestSuite("createPerson");
+	public String startCreatePerson(@RequestBody CreatePersonForm form) throws ConfigurationException{
+		form.setEnvironment("Alpha2");
+		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
+		List<XmlSuite> suites = getXmlTestSuite("CreatePerson");
+
 		HashMap<String,String> params = new HashMap<String, String>();
-		params.put("email", form.getEmail());
+		params.put("personID", String.valueOf(newPersonID));
+		
 		for (XmlSuite suite : suites){
-			suite.setParameters(params);
+			for(XmlTest test : suite.getTests()){
+				test.setParameters(params);
+			}
 		}
-		properties.setEnvironment("alpha2"); 
 		
 		insynctive.utils.TestResults.resetResults();
 		tla = new TestListenerAdapter();
@@ -244,7 +254,11 @@ public class TestController {
 		testNG.addListener(tla);
 		testNG.run();
 		
-		return "Finish!";
+		if(tla.getFailedTests().size() > 0 || tla.getConfigurationFailures().size() > 0){
+			return "The person is not created, please try again...";
+		}
+
+		return "Check your inbox "+form.getEmail()+" and start testing..";
 	}
 	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")

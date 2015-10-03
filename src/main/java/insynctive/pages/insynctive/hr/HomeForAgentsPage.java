@@ -6,12 +6,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import insynctive.exception.ElementNotFoundException;
+import insynctive.model.PersonData;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.insynctive.ImportPersonPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.utils.Checklist;
-import insynctive.utils.PersonData;
 import insynctive.utils.Sleeper;
 
 //TODO get subject of email.

@@ -17,6 +17,8 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import insynctive.utils.SessionScope;
+
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = "insynctive")
@@ -25,6 +27,11 @@ public class AppConfig {
 	
 	@Autowired
     Environment env;
+
+	@Bean
+	public SessionScope sessionScope(){
+		return new SessionScope();
+	}
 	
 	@Bean
 	public PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {

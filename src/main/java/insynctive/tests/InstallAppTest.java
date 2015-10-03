@@ -10,8 +10,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import insynctive.exception.ConfigurationException;
+import insynctive.model.PersonData;
 import insynctive.pages.insynctive.MarketPage;
-import insynctive.utils.PersonData;
 import insynctive.utils.data.App;
 import insynctive.utils.data.TestEnvironment;
 import insynctive.utils.reader.InsynctivePropertiesReader;

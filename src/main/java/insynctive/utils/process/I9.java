@@ -7,9 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import insynctive.exception.ElementNotFoundException;
+import insynctive.model.USAddress;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Sleeper;
-import insynctive.utils.USAddress;
 import insynctive.utils.WhenStart;
 import insynctive.utils.data.Employee;
 

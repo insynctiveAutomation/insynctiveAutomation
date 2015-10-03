@@ -8,16 +8,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import insynctive.model.EmergencyContact;
+import insynctive.model.PersonData;
+import insynctive.model.USAddress;
+import insynctive.model.PersonData.Gender;
+import insynctive.model.PersonData.MaritalStatus;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Checklist;
-import insynctive.utils.EmergencyContact;
-import insynctive.utils.PersonData;
-import insynctive.utils.PersonData.Gender;
-import insynctive.utils.PersonData.MaritalStatus;
 import insynctive.utils.Sleeper;
 import insynctive.utils.Task;
-import insynctive.utils.USAddress;
 import insynctive.utils.Wait;
 
 public class PersonFilePage extends Page implements PageInterface {
@@ -490,8 +490,7 @@ public class PersonFilePage extends Page implements PageInterface {
 
 	public boolean isChangePeronDetailBeforeCreatePerson(PersonData personData, Wait wait)
 			throws Exception {
-		if (wait.isWait())
-			Sleeper.sleep(18000, driver);
+		if (wait.isWait()) Sleeper.sleep(18000, driver);
 		waitPageIsLoad();
 		
 		String assertTitleName = personData.getName()+ " " + personData.getLastName();

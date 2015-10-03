@@ -21,7 +21,7 @@ public class Account {
 	@Column(name = "account_id")
 	private int account_id;
 	
-	@Column(name = "runID")
+	@Column(name = "run_id")
 	private int runID;
 
 	@Column(name = "username")
@@ -35,6 +35,11 @@ public class Account {
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "insynctive_property_id")
 	private InsynctiveProperty accountProperty;
+	
+	@OneToOne
+	@Cascade({CascadeType.SAVE_UPDATE})
+	@JoinColumn(name = "person_data_id")
+	private PersonData person;
 	
 	public String getUsername() {
 		return username;
@@ -70,5 +75,13 @@ public class Account {
 
 	public void setRunID(int runID) {
 		this.runID = runID;
+	}
+
+	public PersonData getPerson() {
+		return person;
+	}
+
+	public void setPerson(PersonData person) {
+		this.person = person;
 	}
 }

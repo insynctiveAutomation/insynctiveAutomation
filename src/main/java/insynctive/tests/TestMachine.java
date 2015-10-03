@@ -29,6 +29,7 @@ import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
+import insynctive.model.PersonData;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
@@ -39,7 +40,7 @@ import insynctive.utils.data.TestEnvironment;
 public abstract class TestMachine {
 
 	//Hibernate connection
-	SessionFactory sessionFactory;
+	public SessionFactory sessionFactory;
 	
 	//Session Name
 	public String sessionName = "Insynctive Session";
@@ -47,8 +48,10 @@ public abstract class TestMachine {
 	public String suiteName = "Suite Name";
 	public boolean isSaucelabs;
 	public TestEnvironment testEnvironment;
+
 	public InsynctiveProperty properties;
 	public Account account; 
+	public PersonData person;
 	
 	public WebDriver driver;
 	
@@ -83,16 +86,23 @@ public abstract class TestMachine {
 	
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
-		sessionFactory = HibernateUtil.getSessionFactory();
-		
-		CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) openSession().get(CrossBrowserAccount.class, 1);
-		username = crossBrowserAccount.getEmail();
-		password = crossBrowserAccount.getPassword();
-		
-		account = (Account) openSession().get(Account.class, 1);
-		
-		properties = account.getAccountProperty();
-		TestResults.addResult("<h2>"+sessionName+"</h2>");
+		try{
+			sessionFactory = HibernateUtil.getSessionFactory();
+			
+			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) openSession().get(CrossBrowserAccount.class, 1);
+			username = crossBrowserAccount.getEmail();
+			password = crossBrowserAccount.getPassword();
+			
+			account = (Account) openSession().get(Account.class, 1);
+			person = account.getPerson();
+			
+			properties = account.getAccountProperty();
+			TestResults.addResult("<h2>"+sessionName+"</h2>");
+		} catch(Exception ex){
+			throw new Exception("Fail on TearUp "+ex);
+		} finally {
+
+		}
 	}
 	
 	public Session openSession(){

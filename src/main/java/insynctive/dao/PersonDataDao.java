@@ -7,17 +7,16 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import insynctive.model.Account;
-import insynctive.model.CrossBrowserAccount;
+import insynctive.model.PersonData;
 
 @Repository
 @Transactional
-public class CrossBrowserAccountDao {
+public class PersonDataDao {
 
-	private final SessionFactory sessionFactory;
+private final SessionFactory sessionFactory;
 	
 	@Inject
-	public CrossBrowserAccountDao(SessionFactory sessionFactory) {
+	public PersonDataDao(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 	
@@ -25,7 +24,9 @@ public class CrossBrowserAccountDao {
 		return sessionFactory.getCurrentSession();
 	}
 	
-	public CrossBrowserAccount getAccountByID(int id){
-		return (CrossBrowserAccount) openSession().get(CrossBrowserAccount.class, id);
+	public PersonData getAccountByID(int id){
+		return (PersonData) openSession().get(PersonData.class, id);
 	}
+	
+	
 }

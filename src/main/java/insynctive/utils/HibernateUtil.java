@@ -9,8 +9,12 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import insynctive.model.Account;
+import insynctive.model.CreatePersonForm;
 import insynctive.model.CrossBrowserAccount;
+import insynctive.model.EmergencyContact;
 import insynctive.model.InsynctiveProperty;
+import insynctive.model.PersonData;
+import insynctive.model.USAddress;
 
 public class HibernateUtil {
 
@@ -37,7 +41,11 @@ public class HibernateUtil {
 			   .addProperties(prop)
 			   .addAnnotatedClass(Account.class)
 			   .addAnnotatedClass(InsynctiveProperty.class)
-			   .addAnnotatedClass(CrossBrowserAccount.class);
+			   .addAnnotatedClass(CrossBrowserAccount.class)
+			   .addAnnotatedClass(EmergencyContact.class)
+			   .addAnnotatedClass(USAddress.class)
+			   .addAnnotatedClass(CreatePersonForm.class)
+			   .addAnnotatedClass(PersonData.class);
 			
 			ServiceRegistry serviceRegistry =  new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
 			sessionFactory = config.buildSessionFactory(serviceRegistry);;
