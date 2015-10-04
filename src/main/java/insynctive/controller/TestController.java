@@ -46,6 +46,7 @@ import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
 import insynctive.utils.HibernateUtil;
+import insynctive.utils.NightlyRegressions;
 
 @Controller
 @Scope("session")
@@ -202,6 +203,31 @@ public class TestController {
 	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
+		InsynctiveProperty properties = account.getAccountProperty();
+		properties.setEnvironment(environment); 
+		
+		tla = new TestListenerAdapter();
+		insynctive.utils.TestResults.resetResults();
+		
+		List<XmlSuite> suites = getXmlTestSuite(xmlName);
+
+		TestNG testNG = new TestNG();
+		
+		testNG.setXmlSuites(suites);
+		testNG.setPreserveOrder(true);
+		testNG.addListener(tla);
+		testNG.run();
+		
+		return "Finish!";
+	}
+	
+	@RequestMapping(value = "/nt" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String runTest(@RequestBody NightlyRegressions nightlyData) throws ConfigurationException{
+		String data = nightlyData.getText().split("[")[1].split("]")[0];
+		String environment = data.split(",")[0];
+		String xmlName = data.split(",")[1];
+		
 		InsynctiveProperty properties = account.getAccountProperty();
 		properties.setEnvironment(environment); 
 		
