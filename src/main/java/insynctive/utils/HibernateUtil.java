@@ -2,8 +2,10 @@ package insynctive.utils;
 
 import java.util.Properties;
 
+import org.dom4j.tree.AbstractEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -61,5 +63,21 @@ public class HibernateUtil {
 
 	public static Session getCurrentSession() {
 		return HibernateUtil.getSessionFactory().getCurrentSession();
+	}
+	
+	public static void save(AbstractEntity entity) {
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		session.evict(entity);
+		session.saveOrUpdate(entity);
+		tx.commit();
+	}
+	
+	public static void saverOrUpdate(AbstractEntity entity){
+		save(entity);
+	}
+
+	private static Session getSession() {
+		return getSessionFactory().openSession();
 	}
 }
