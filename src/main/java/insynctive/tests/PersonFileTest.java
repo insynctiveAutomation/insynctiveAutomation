@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.model.EmergencyContact;
@@ -451,8 +453,22 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
+	public void assignJob(TestEnvironment testEnvironment) throws Exception{
+		long startTime = System.nanoTime();
+		try{ 
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 
+			personFilePage.assignJob();
+			
+			//TODO
+			assertTrue(true);
+		}catch (Exception ex){ 
+			long endTime = System.nanoTime();
+			failTest("Assign Job", ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
 }
 
 

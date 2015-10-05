@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import insynctive.model.CreatePersonForm;
 import insynctive.pages.insynctive.LoginPage;
+import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.data.TestEnvironment;
@@ -78,6 +79,23 @@ public class CreatePersonTest extends TestMachine {
 		}catch (Exception ex){ 
 			long endTime = System.nanoTime();
 			failTest("Create Person", ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+	
+	@Parameters({"email"})
+	@Test
+	public void assignJob(@Optional("person_id") String personID) throws Exception{
+		long startTime = System.nanoTime();
+		try{ 
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+
+			personFilePage.assignJob();
+			
+			assertTrue(true);
+		}catch (Exception ex){ 
+			long endTime = System.nanoTime();
+			failTest("Assign Job", ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
 		}
 	}

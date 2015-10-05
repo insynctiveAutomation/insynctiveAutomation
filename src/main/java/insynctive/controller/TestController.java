@@ -138,7 +138,7 @@ public class TestController {
 	@RequestMapping(value = "/testsSuites" ,method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getTestsSuites() throws MalformedURLException, URISyntaxException{
-		List<String> testsSuites = getTestSuites();
+		List<String> testsSuites = getTestSuitesForRunUI();
 		return testsSuites;
 	}
 	
@@ -182,7 +182,7 @@ public class TestController {
 	public TestSuite getTestsRuns(@PathVariable("xmlName") String xmlName) {
 		TestSuite testSuite = null;
 		try{
-			List<XmlSuite> suite = getXmlTestSuite(xmlName);
+			List<XmlSuite> suite = getXmlTestSuiteForUI(xmlName);
 			testSuite = new TestSuite();
 			
 			for(XmlTest test : suite.get(0).getTests()){
@@ -213,7 +213,7 @@ public class TestController {
 		tla = new TestListenerAdapter();
 		insynctive.utils.TestResults.resetResults();
 		
-		List<XmlSuite> suites = getXmlTestSuite(xmlName);
+		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
 
 		TestNG testNG = new TestNG();
 		
@@ -241,7 +241,7 @@ public class TestController {
 		tla = new TestListenerAdapter();
 		insynctive.utils.TestResults.resetResults();
 		
-		List<XmlSuite> suites = getXmlTestSuite(xmlName);
+		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
 
 		TestNG testNG = new TestNG();
 		
@@ -268,7 +268,7 @@ public class TestController {
 	public String startCreatePerson(@RequestBody CreatePersonForm form) throws ConfigurationException{
 		form.setEnvironment("Alpha2");
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
-		List<XmlSuite> suites = getXmlTestSuite("CreatePerson");
+		List<XmlSuite> suites = getXmlTestSuiteForExternalUser("CreatePerson");
 
 		HashMap<String,String> params = new HashMap<String, String>();
 		params.put("personID", String.valueOf(newPersonID));
@@ -302,8 +302,16 @@ public class TestController {
 	}
 	
 	/*Private Methods*/
-	private List<XmlSuite> getXmlTestSuite(String xmlName) {
-		String xmlFileName = new File( servletContext.getRealPath("/WEB-INF/testsSuits/"+xmlName+".xml")).getPath();
+	private List<XmlSuite> getXmlTestSuiteForUI(String xmlName){
+		return getXmlTestSuite(xmlName, "/WEB-INF/testsSuits/");
+	}
+	
+	private List<XmlSuite> getXmlTestSuiteForExternalUser(String xmlName){
+		return getXmlTestSuite(xmlName, "/WEB-INF/externalTest/");
+	}
+	
+	private List<XmlSuite> getXmlTestSuite(String xmlName, String path) {
+		String xmlFileName = new File( servletContext.getRealPath(path+xmlName+".xml")).getPath();
 		
 		List<XmlSuite> suite = getSuite(xmlFileName);
 		
@@ -331,10 +339,18 @@ public class TestController {
 		return suite;
 	}
 	
-	private List<String> getTestSuites() throws MalformedURLException, URISyntaxException{
+	private List<String> getTestSuitesForRunUI() throws MalformedURLException, URISyntaxException{
+		return getTestSuites("/WEB-INF/testsSuits/");
+	}
+	
+	private List<String> getTestSuitesForExternalClient() throws MalformedURLException, URISyntaxException{
+		return getTestSuites("/WEB-INF/externalTest/");
+	}
+	
+	private List<String> getTestSuites(String path) throws MalformedURLException, URISyntaxException{
 		List<String> results = new ArrayList<String>();
 
-		File[] files = new File( servletContext.getRealPath("/WEB-INF/testsSuits/")).listFiles();
+		File[] files = new File( servletContext.getRealPath(path)).listFiles();
 		
 		for (File file : files) {
 		    if (file.isFile()) {

@@ -159,6 +159,8 @@ public class PersonFilePage extends Page implements PageInterface {
 	WebElement personalTab;
 	@FindBy(css = "#statusesListHeader > li:nth-child(2)")
 	WebElement tasksTab;
+	@FindBy(css = "#statusesListHeader > li:nth-child(4)")
+	WebElement employmentTab;
 	@FindBy(css = "#btnAssignTask > span")
 	WebElement assignTaskButton;
 	@FindBy(id = "lName")
@@ -220,6 +222,37 @@ public class PersonFilePage extends Page implements PageInterface {
 	WebElement lastEmergencyContactName;
 	@FindBy(css = "#content > div:nth-of-type(5) > div > div:nth-last-of-type(2) > span:nth-of-type(5) > img:nth-of-type(1)")
 	WebElement lastEmergencyContactDelete;
+
+	@FindBy(id = "btnAddNewJob")
+	WebElement addJobButon;
+	@FindBy(id = "employmentFrm")
+	WebElement employmentFrm;
+	@FindBy(id = "btnSave")
+	WebElement saveBtn;
+	@FindBy(id = "statesPicker")
+	WebElement statesPicker;
+	@FindBy(id = "searchResult")
+	WebElement searchResult;
+	@FindBy(id = "categoryPicker")
+	WebElement categoryPicker;
+	@FindBy(id = "rateEditor")
+	WebElement rateEditor;
+	@FindBy(css = "#ui-tooltip-0 > div > div > form > div > div:nth-child(1) > div.editable-input > input")
+	WebElement rateInput;
+	@FindBy(className = "editable-submit")
+	WebElement saveRate;
+	@FindBy(id = "paymentUnitKey")
+	WebElement paymentUnitKey;
+	@FindBy(id = "btnActivate")
+	WebElement btnActivate;
+	@FindBy(id = "datePicker")
+	WebElement datePicker;
+	@FindBy(id = "statesPickerSearch")
+	WebElement statesPickerSearch;
+	@FindBy(css = "div.searchItemDocument:nth-child(1) > p:nth-child(1)")
+	WebElement firstSearchJobState;
+	@FindBy(css = "div.searchItemDocument:nth-child(1)")
+	WebElement chefExecutives;
 	
 
 	public PersonFilePage(WebDriver driver, String enviroment) {
@@ -823,5 +856,29 @@ public class PersonFilePage extends Page implements PageInterface {
 		boolean changeFullName = isChangePeronDetailBeforeCreatePerson(personData, Wait.NOWAIT);
 
 		return changeTitle && changeFullName;
+	}
+
+	public void assignJob() throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(employmentTab);
+		swichToIframe(tabiFrame);
+		swichToIframe(employmentFrm);
+		clickAButton(addJobButon);
+		clickAButton(datePicker);
+		setTextInField(dateInput, "10/05/2000");
+		clickAButton(saveBtn);
+		clickAButton(statesPicker);
+		setTextInField(statesPickerSearch, "California");
+		Sleeper.sleep(1000, driver);
+		clickAButton(firstSearchJobState);
+		clickAButton(categoryPicker);
+		clickAButton(chefExecutives);
+		clickAButton(rateEditor);
+		setTextInField(rateInput, "1000");
+		clickAButton(saveRate);
+		clickAButton(paymentUnitKey);
+		clickAButton(findElementByText("div", "Year"));
+		Sleeper.sleep(1500, driver);
+		clickAButton(btnActivate);
 	}
 }
