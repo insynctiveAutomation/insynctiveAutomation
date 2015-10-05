@@ -377,6 +377,7 @@ public class PersonFilePage extends Page implements PageInterface {
 					task.getAdditionalInstruction());
 			swichToFirstFrame(driver);
 			clickAButton(btnAssignTask);
+			Sleeper.sleep(2500, driver);
 		}
 	}
 

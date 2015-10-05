@@ -198,7 +198,7 @@ public class TestController {
 		return testSuite;
 	}
 	
-	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
 		account = accDao.incrementRunIDAndGetAcc(accID);

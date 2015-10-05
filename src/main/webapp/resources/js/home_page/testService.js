@@ -9,7 +9,7 @@ app.service('testService', function($http) {
 	};
 
 	this.startTest = function(testSuiteName, environmentName, callback, errorCallback) {
-		$http.get('test/'+testSuiteName+"/"+environmentName).success(callback).error(errorCallback);
+		$http.post('test/'+testSuiteName+"/"+environmentName, {}).success(callback).error(errorCallback);
 	};
 	
 	this.getTestDetails = function(testSuiteName, callback) {
