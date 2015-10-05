@@ -22,7 +22,7 @@ public class Account {
 	private int account_id;
 	
 	@Column(name = "run_id")
-	private int runID;
+	private int run_id;
 
 	@Column(name = "username")
 	private String username;
@@ -66,15 +66,15 @@ public class Account {
 	}
 
 	public int getRunID() {
-		return runID;
+		return run_id;
 	}
 	
 	public String getRunIDString() {
-		return String.valueOf(runID);
+		return String.valueOf(run_id);
 	}
 
 	public void setRunID(int runID) {
-		this.runID = runID;
+		this.run_id = runID;
 	}
 
 	public PersonData getPerson() {
@@ -86,6 +86,6 @@ public class Account {
 	}
 	
 	public int incrementRunID(){
-		return this.runID+=1;
+		return this.run_id+=1;
 	}
 }

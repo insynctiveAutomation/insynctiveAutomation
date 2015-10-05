@@ -12,7 +12,6 @@ import insynctive.exception.ConfigurationException;
 
 public class Task {
 
-	private static String DEFAULT_FILE = "personFileData.json";
 	private String detail;
 	private String basicTaskInstruction;
 	private String additionalInstruction;

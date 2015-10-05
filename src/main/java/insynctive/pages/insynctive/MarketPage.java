@@ -10,12 +10,10 @@ import insynctive.exception.ConfigurationException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.data.App;
-import insynctive.utils.reader.InsynctivePropertiesReader;
 
 public class MarketPage extends Page implements PageInterface {
 
 	JavascriptExecutor jsExecutor;
-	InsynctivePropertiesReader properties;
 	
 	/* Market */
 	@FindBy(id = "ASPxImageSlider1")
@@ -51,7 +49,6 @@ public class MarketPage extends Page implements PageInterface {
 
 	public MarketPage(WebDriver driver) throws ConfigurationException {
 		super(driver);
-		properties = InsynctivePropertiesReader.getAllAccountsProperties();
 		jsExecutor = (JavascriptExecutor) driver;
 		this.PAGE_URL = "http://appsmarket.insynctive.com/";
 		this.PAGE_TITLE = "Home Page";

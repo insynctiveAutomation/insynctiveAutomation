@@ -10,12 +10,11 @@ import org.openqa.selenium.support.PageFactory;
 
 import insynctive.model.EmergencyContact;
 import insynctive.model.PersonData;
-import insynctive.model.USAddress;
 import insynctive.model.PersonData.Gender;
 import insynctive.model.PersonData.MaritalStatus;
+import insynctive.model.USAddress;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
 import insynctive.utils.Task;
 import insynctive.utils.Wait;

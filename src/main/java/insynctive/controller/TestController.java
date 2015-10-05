@@ -13,7 +13,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.hibernate.mapping.Map;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -45,7 +44,6 @@ import insynctive.model.InsynctiveProperty;
 import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
-import insynctive.utils.HibernateUtil;
 import insynctive.utils.NightlyRegressions;
 
 @Controller
@@ -203,6 +201,7 @@ public class TestController {
 	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
+		account = accDao.incrementRunIDAndGetAcc(accID);
 		InsynctiveProperty properties = account.getAccountProperty();
 		if(!properties.getEnvironment().equals(environment)){
 			properties.setEnvironment(environment); 

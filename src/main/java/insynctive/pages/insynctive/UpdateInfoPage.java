@@ -9,12 +9,10 @@ import insynctive.exception.ConfigurationException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Sleeper;
-import insynctive.utils.reader.InsynctivePropertiesReader;
 
 public class UpdateInfoPage extends Page implements PageInterface{
 
 	String enviroment;
-	InsynctivePropertiesReader properties;
 	
 	@FindBy(css = "#popupCustom_CIFD-1 > iframe")
 	WebElement personalInfoFrame;
@@ -84,7 +82,6 @@ public class UpdateInfoPage extends Page implements PageInterface{
 		this.PAGE_URL = "NO URL";
 		this.PAGE_TITLE = "";
 		PageFactory.initElements(driver, this);
-		properties = InsynctivePropertiesReader.getAllAccountsProperties();
 	}
 	
 	public void startUpdateInfo() throws Throwable {

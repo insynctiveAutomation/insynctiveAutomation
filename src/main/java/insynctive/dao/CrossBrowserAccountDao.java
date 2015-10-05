@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
 
 @Repository

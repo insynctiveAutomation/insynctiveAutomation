@@ -2,9 +2,9 @@ package insynctive.utils.data;
 
 import insynctive.model.EmergencyContact;
 import insynctive.model.PersonData;
-import insynctive.model.USAddress;
 import insynctive.model.PersonData.Gender;
 import insynctive.model.PersonData.MaritalStatus;
+import insynctive.model.USAddress;
 
 public enum Employee {
 

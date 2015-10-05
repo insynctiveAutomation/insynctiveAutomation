@@ -18,7 +18,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import insynctive.exception.ConfigurationException;
-import insynctive.utils.Dependent;
 
 @Entity
 @Table(name = "Person")
