@@ -84,4 +84,8 @@ public class Account {
 	public void setPerson(PersonData person) {
 		this.person = person;
 	}
+	
+	public int incrementRunID(){
+		return this.runID+=1;
+	}
 }

@@ -76,6 +76,7 @@ public class PersonFileTest extends TestMachine {
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			
 			person.setName(person.getName() + " " + account.getRunIDString());
+			person.setEmail(person.getEmailWithRunID(account));
 			homePage.createPersonCheckingInviteSS(person);
 			homePage.sendInviteEmail(person);
 			

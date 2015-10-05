@@ -389,8 +389,7 @@ public class PersonFilePage extends Page implements PageInterface {
 		clickOnStartChecklist();
 		swichToIframe(startChecklistiFrame);
 		waitUntilIsLoaded(checkListsCombo);
-		setTextInCombo(checkListsCombo, Checklist.getCheckListToAssign()
-				.getName());
+		setTextInCombo(checkListsCombo, "Test Template");
 		clickAButton(assignChecklistButton);
 		Sleeper.sleep(8000, driver);
 	}
@@ -586,9 +585,9 @@ public class PersonFilePage extends Page implements PageInterface {
 			swichToIframe(tabiFrame);
 			clickAButton(runningChecklist);
 			waitUntilIsLoaded(firstChecklist);
-			result  =  firstChecklist.getText().equals(Checklist.getCheckListToAssign().getName());
+			result  =  firstChecklist.getText().equals("Test Template");
 		} catch(Exception ex){
-			result = false;
+			throw ex;
 		} finally {
 			goToPersonalTab();
 		}

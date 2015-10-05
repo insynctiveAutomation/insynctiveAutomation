@@ -8,4 +8,4 @@ INSERT INTO CrossBrowserAccount VALUES(1, "eugenio.valeiras+15@gmail.com", "u5d6
 
 /**MAIN DATA**/
 INSERT INTO insynctiveproperty VALUES(1,"staging","benefits123","password","evaleiras@insynctive.com", false, false);
-INSERT INTO account VALUES(1, "EugeValeiras",1, "password", 1, 1);
+INSERT INTO account VALUES(1, "EugeValeiras",4, "password", 1, 1);

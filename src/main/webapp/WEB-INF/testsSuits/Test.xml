@@ -4,13 +4,9 @@
 	  <classes>
 	    <class name="insynctive.tests.PersonFileTest">
 	      <methods>
-
-			<!-- Initial Test -->
 	        <include name="loginTest" />
 	        <include name="createPersonTest" />
-	         <include name="changeName2" />
-	        <include name="changeName" />
-
+	        <include name="startChecklist" />
 	      </methods>
 	    </class>
 	  </classes>

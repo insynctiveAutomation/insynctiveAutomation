@@ -204,7 +204,10 @@ public class TestController {
 	@ResponseBody
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
 		InsynctiveProperty properties = account.getAccountProperty();
-		properties.setEnvironment(environment); 
+		if(!properties.getEnvironment().equals(environment)){
+			properties.setEnvironment(environment); 
+			propertyDao.update(properties);
+		}
 		
 		tla = new TestListenerAdapter();
 		insynctive.utils.TestResults.resetResults();

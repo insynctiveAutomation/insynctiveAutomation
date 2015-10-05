@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -27,6 +28,7 @@ import org.testng.annotations.BeforeClass;
 
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
+import insynctive.model.CreatePersonForm;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.PersonData;
@@ -88,15 +90,20 @@ public abstract class TestMachine {
 	public void tearUp() throws Exception {
 		try{
 			sessionFactory = HibernateUtil.getSessionFactory();
+			Transaction transaction = openSession().beginTransaction();
 			
 			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) openSession().get(CrossBrowserAccount.class, 1);
 			username = crossBrowserAccount.getEmail();
 			password = crossBrowserAccount.getPassword();
 			
 			account = (Account) openSession().get(Account.class, 1);
-			person = account.getPerson();
+			account.incrementRunID();
+			openSession().saveOrUpdate(account);
 			
+			person = account.getPerson();
 			properties = account.getAccountProperty();
+			
+			transaction.commit();
 			TestResults.addResult("<h2>"+sessionName+"</h2>");
 		} catch(Exception ex){
 			throw new Exception("Fail on TearUp "+ex);
@@ -297,7 +304,7 @@ public abstract class TestMachine {
 		
 		JSONArray attachments = new JSONArray();
 		JSONObject attachment = new JSONObject(); 
-		attachment.put("fallback", "Status of test: "+generalStatus);
+		attachment.put("fallback", "Status of the Test "+sessionName+": "+(generalStatus ? "PASS" : "FAIL"));
 		attachment.put("pretext", (jobID == null ? "Local Test" : "<"+getJobURL()+"|Watch test video here>")+" | Environment: "+properties.getEnvironment());
 		attachment.put("color", generalStatus ? "#00CE00" : "#FC000D"); //AA3939
 		

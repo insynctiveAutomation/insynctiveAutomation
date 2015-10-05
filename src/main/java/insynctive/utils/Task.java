@@ -32,9 +32,19 @@ public class Task {
 	}
 	
 	public static List<Task> getTasks() throws ConfigurationException{
-		return addData(DEFAULT_FILE);
+		return addHardCodeData();
 	}
 	
+	private static List<Task> addHardCodeData() {
+		List<Task> tasks = new ArrayList<Task>();
+		Task task = new Task();
+		task.detail = "Please take a look at this";
+		task.basicTaskInstruction = "Check if it works : www.google.com";
+		task.additionalInstruction = "Additional Instruction.";
+		tasks.add(task);
+		return tasks;
+	}
+
 	private static List<Task> addData(String path) throws ConfigurationException {
 		try {
 			JSONObject fileObject = (JSONObject) parser.parse(new FileReader(path));
