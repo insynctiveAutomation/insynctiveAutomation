@@ -44,6 +44,7 @@ import insynctive.model.InsynctiveProperty;
 import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
+import insynctive.runnable.RunnableTest;
 import insynctive.utils.NightlyRegressions;
 
 @Controller
@@ -57,6 +58,7 @@ public class TestController {
 	private final CrossBrowserAccountDao crossDao;
 	private int accID = 1;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
 	private Account account;
+	private Thread[] workers;
 	
 	@Inject
 	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao) {
@@ -218,9 +220,12 @@ public class TestController {
 		testNG.setXmlSuites(suites);
 		testNG.setPreserveOrder(true);
 		testNG.addListener(tla);
-		testNG.run();
+		//START TEST IN OTHER THREAD
+		workers = new Thread[1];
+		workers[0] = new Thread(new RunnableTest(testNG));
+		workers[0].start();
 		
-		return "Finish!";
+		return "The Test Starts!";
 	}
 	
 	@RequestMapping(value = "/nt" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
@@ -280,13 +285,13 @@ public class TestController {
 		testNG.setXmlSuites(suites);
 		testNG.setPreserveOrder(true);
 		testNG.addListener(tla);
-		testNG.run();
 		
-		if(tla.getFailedTests().size() > 0 || tla.getConfigurationFailures().size() > 0){
-			return "The person is not created, please try again...";
-		}
-
-		return "Check your inbox "+form.getEmail()+" and start testing..";
+		//START TEST IN OTHER THREAD
+		workers = new Thread[1];
+		workers[0] = new Thread(new RunnableTest(testNG));
+		workers[0].start();
+		
+		return "Check your inbox "+form.getEmail()+" in minutes and start testing..";
 	}
 	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")

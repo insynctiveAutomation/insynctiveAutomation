@@ -38,7 +38,7 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 		self.loaderVisible = "visible";
 		testService.startTest(testSuiteValue, selectedEnvironment, function(data) {
 			self.runStatus = data;
-			self.loaderVisible = "hidden";
+//			self.loaderVisible = "hidden";
 		}, function(data){
 			data;
 		});
