@@ -39,6 +39,8 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 		testService.startTest(testSuiteValue, selectedEnvironment, function(data) {
 			self.runStatus = data;
 			self.loaderVisible = "hidden";
+		}, function(data){
+			data;
 		});
 		testService.getVideoLink(function(data) {
 			self.videoLink = data;
