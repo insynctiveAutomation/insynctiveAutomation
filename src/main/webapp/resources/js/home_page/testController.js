@@ -4,6 +4,7 @@ var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'accountApp']
 
 app.controller('TestController', function($http, $modal, $scope, $timeout, $interval, $compile, testService) {
 	var self = this;
+	this.tlaIndex;
 	this.errors = [];
 	this.testsSuites = [];
 	this.runStatus;
@@ -37,7 +38,8 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 		self.videoLink = "";
 		self.loaderVisible = "visible";
 		testService.startTest(testSuiteValue, selectedEnvironment, function(data) {
-			self.runStatus = data;
+			self.runStatus = "The test Start!";
+			self.tlaIndex = data.index;
 //			self.loaderVisible = "hidden";
 		}, function(data){
 			data;
@@ -49,8 +51,8 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 	
 	/* Get Status of the Test */
 	this.getTestsStatus = function(){
-		if(self.testDetails){
-			testService.getTestsStatus(function(data) {
+		if(self.testDetails && self.testSuiteValue){
+			testService.getTestsStatus(self.testSuiteValue, function(data) {
 				self.testStatus = data;
 				self.updateStatus();
 			});
@@ -59,13 +61,17 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 	
 	/* On Clear Button */
 	this.clearTests = function(){
-		testService.clearTests(function(data) {
-			self.start = false;
-			self.loaderVisible = "hidden";
-			self.getTestsStatus();
-			self.runStatus = '';
-			self.videoLink = '';
-		});
+		if(self.tlaIndex){
+			testService.clearTests(self.tlaIndex, function(data) {
+				self.start = false;
+				self.loaderVisible = "hidden";
+				self.getTestsStatus();
+				self.runStatus = '';
+				self.videoLink = '';
+				self.tlaIndex = undefined;
+				self.getTestDetails($scope.testSuiteName);
+			}); 
+		}
 	}; this.clearTests();
 	
 	/* Private Methods */
@@ -100,8 +106,8 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 	/* Intervar 3 segs */
 	this.getTestsStatus();
 	$interval(function() {
-		if(self.testDetails) {
-			testService.getTestsStatus(function(data) {
+		if(self.testDetails && self.tlaIndex) {
+			testService.getTestsStatus(self.tlaIndex, function(data) {
 				self.testStatus = data;
 				self.updateStatus();
 			})

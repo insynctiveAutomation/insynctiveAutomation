@@ -16,15 +16,15 @@ app.service('testService', function($http) {
 		$http.get('get/'+testSuiteName).success(callback);
 	};
 	
-	this.getTestsStatus = function(callback) {
-		$http.get('status').success(callback);
+	this.getTestsStatus = function(tlaIndex, callback) {
+		$http.get('status/'+tlaIndex).success(callback);
 	};
 	
 	this.getVideoLink = function(callback) {
 		$http.get('video').success(callback);
 	};
 	
-	this.clearTests = function(callback) {
-		$http.get('clearTest').success(callback);
+	this.clearTests = function(tlaIndex, callback) {
+		$http.get('clearTest/'+tlaIndex).success(callback);
 	};
 });

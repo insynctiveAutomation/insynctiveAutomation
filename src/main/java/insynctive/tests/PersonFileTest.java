@@ -79,8 +79,8 @@ public class PersonFileTest extends TestMachine {
 			
 			person.setName(person.getName() + " " + account.getRunIDString());
 			person.setEmail(person.getEmailWithRunID(account));
-			homePage.createPersonCheckingInviteSS(person, CheckInApp.YES);
-			homePage.sendInviteEmail(person, CheckInApp.YES);
+			homePage.createPersonCheckingInviteSS(person, CheckInApp.NO);
+			homePage.sendInviteEmail(person, CheckInApp.NO);
 			
 			boolean result = homePage.checkIfPersonIsCreated(person);
 			

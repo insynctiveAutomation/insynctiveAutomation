@@ -95,7 +95,8 @@ public class CreatePersonTest extends TestMachine {
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 
 			personFilePage.assignJob();
-			
+			long endTime = System.nanoTime();
+			setResult(true, "AssignJob", endTime - startTime);
 			assertTrue(true);
 		}catch (Exception ex){ 
 			long endTime = System.nanoTime();

@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -51,14 +52,21 @@ import insynctive.utils.NightlyRegressions;
 @Scope("session")
 public class TestController {
  
-	private final ServletContext servletContext;
 	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
 	private final CreatePersonFormDao createPersonFormDao;
 	private final CrossBrowserAccountDao crossDao;
+
+	private final ServletContext servletContext;
+
 	private int accID = 1;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
 	private Account account;
-	private Thread[] workers;
+	
+	private Integer threadIndex = 0;
+	private Map<Integer, Thread> workers = new HashMap<>();
+	
+	private Integer testListenenerIndex = 0;
+	private Map<Integer, TestListenerAdapter> tla = new HashMap<>();
 	
 	@Inject
 	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao) {
@@ -69,8 +77,6 @@ public class TestController {
 		this.createPersonFormDao = createPersonFormDao;
 	}
 	
-	TestListenerAdapter tla = new TestListenerAdapter();
-
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
 	public ModelAndView root(HttpSession session){
 		ModelAndView model = new ModelAndView();
@@ -107,11 +113,11 @@ public class TestController {
 		return propertyDao.getPropertybyID(accID);
 	}
 
-	@RequestMapping(value = "/clearTest" ,method = RequestMethod.GET)
+	@RequestMapping(value = "/clearTest/{index}" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public void clearTestResult() throws ConfigurationException {
-		tla = new TestListenerAdapter();
+	public void clearTestResult(@PathVariable("index") Integer index) throws ConfigurationException {
+		tla.remove(index);
 	}
 
 	@RequestMapping(value = "/video" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
@@ -150,25 +156,25 @@ public class TestController {
 		return environments;
 	}
 	
-	@RequestMapping(value = "/status" ,method = RequestMethod.GET)
+	@RequestMapping(value = "/status/{index}" ,method = RequestMethod.GET)
 	@ResponseBody
-	public TestResultsTestNG getStatus(){
+	public TestResultsTestNG getStatus(@PathVariable("index") Integer index){
 		List<Result> resultsAux = new ArrayList<Result>();
 		TestResultsTestNG testResults = new TestResultsTestNG();
 		
-		for(ITestResult testResult : tla.getPassedTests()){
+		for(ITestResult testResult : tla.get(index).getPassedTests()){
 			resultsAux.add(new Result(testResult.getName(),"SUCCESS"));
 		}
 		testResults.setPassedTests(resultsAux);
 		resultsAux = new ArrayList<Result>();
 		
-		for(ITestResult testResult : tla.getFailedTests()){
+		for(ITestResult testResult : tla.get(index).getFailedTests()){
 			resultsAux.add(new Result(testResult.getName(),"FAILED"));
 		}
 		testResults.setFailedTests(resultsAux);
 		resultsAux = new ArrayList<Result>();
 		
-		for(ITestResult testResult : tla.getSkippedTests()){
+		for(ITestResult testResult : tla.get(index).getSkippedTests()){
 			resultsAux.add(new Result(testResult.getName(),"SKIPPED"));
 		}
 		testResults.setSkipedTests(resultsAux);
@@ -200,7 +206,7 @@ public class TestController {
 		return testSuite;
 	}
 	
-	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
+	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.POST)
 	@ResponseBody
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
 		account = accDao.incrementRunIDAndGetAcc(accID);
@@ -210,8 +216,9 @@ public class TestController {
 			propertyDao.update(properties);
 		}
 		
-		tla = new TestListenerAdapter();
 		insynctive.utils.TestResults.resetResults();
+		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
+		tla.put(testListenenerIndex, testListenerAdapter);
 		
 		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
 
@@ -219,47 +226,25 @@ public class TestController {
 		
 		testNG.setXmlSuites(suites);
 		testNG.setPreserveOrder(true);
-		testNG.addListener(tla);
+		testNG.addListener(testListenerAdapter);
+		
 		//START TEST IN OTHER THREAD
-		workers = new Thread[1];
-		workers[0] = new Thread(new RunnableTest(testNG));
-		workers[0].start();
+		Thread thread = new Thread(new RunnableTest(testNG));
+		workers.put(threadIndex, thread);
+		thread.start();
+		threadIndex++;
 		
-		return "The Test Starts!";
+		
+		return "{\"index\" : \""+(testListenenerIndex++)+"\"}";
 	}
 	
-	@RequestMapping(value = "/nt" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
+	@RequestMapping(value = "/test/{testName}/{index}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String runTest(@RequestBody NightlyRegressions nightlyData) throws ConfigurationException{
-		String data = nightlyData.getText().split("[")[1].split("]")[0];
-		String environment = data.split(",")[0];
-		String xmlName = data.split(",")[1];
-		
-		InsynctiveProperty properties = account.getAccountProperty();
-		properties.setEnvironment(environment); 
-		
-		tla = new TestListenerAdapter();
-		insynctive.utils.TestResults.resetResults();
-		
-		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
-
-		TestNG testNG = new TestNG();
-		
-		testNG.setXmlSuites(suites);
-		testNG.setPreserveOrder(true);
-		testNG.addListener(tla);
-		testNG.run();
-		
-		return "Finish!";
-	}
-	
-	@RequestMapping(value = "/test/{testName}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
-	@ResponseBody
-	public String getTest(@PathVariable("testName") String testName) throws ConfigurationException{
-		tla.getPassedTests().forEach(failTest -> System.out.println(failTest));
-		tla.getSkippedTests().forEach(failTest -> System.out.println(failTest));
-		tla.getFailedTests().forEach(failTest -> System.out.println(failTest));
-		tla.getTestContexts().forEach(failTest -> System.out.println(failTest));
+	public String getTest(@PathVariable("testName") String testName, @PathVariable("index") Integer index) throws ConfigurationException{
+		tla.get(index).getPassedTests().forEach(failTest -> System.out.println(failTest));
+		tla.get(index).getSkippedTests().forEach(failTest -> System.out.println(failTest));
+		tla.get(index).getFailedTests().forEach(failTest -> System.out.println(failTest));
+		tla.get(index).getTestContexts().forEach(failTest -> System.out.println(failTest));
 		return null;
 	}
 	
@@ -280,18 +265,33 @@ public class TestController {
 		}
 		
 		insynctive.utils.TestResults.resetResults();
-		tla = new TestListenerAdapter();
+		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
+		tla.put(testListenenerIndex, testListenerAdapter);
+		
 		TestNG testNG = new TestNG();
 		testNG.setXmlSuites(suites);
 		testNG.setPreserveOrder(true);
-		testNG.addListener(tla);
+		testNG.addListener(testListenerAdapter);
 		
 		//START TEST IN OTHER THREAD
-		workers = new Thread[1];
-		workers[0] = new Thread(new RunnableTest(testNG));
-		workers[0].start();
+		Thread thread = new Thread(new RunnableTest(testNG));
+		workers.put(threadIndex, thread);
+		thread.start();
+		threadIndex++;
 		
-		return "Check your inbox "+form.getEmail()+" in minutes and start testing..";
+		return "{\"index\" : \""+(testListenenerIndex++)+"\"}";
+	}
+	
+	@RequestMapping(value = "/isPersonCreated/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String isPersonCreated(@PathVariable("tlaIndex") Integer tlaIndex) throws ConfigurationException{
+		List<ITestResult> passedTests = tla.get(tlaIndex).getPassedTests();
+		for(ITestResult test : passedTests){
+			if(test.getMethod().getMethodName().equals("createPersonTest")){
+				return "{\"status\": true}";
+			}
+		}
+		return "{\"status\": false}";
 	}
 	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
