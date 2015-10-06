@@ -266,7 +266,7 @@ public class TestController {
 	@RequestMapping(value = "/start" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String startCreatePerson(@RequestBody CreatePersonForm form) throws ConfigurationException{
-		form.setEnvironment("Alpha2");
+		form.setEnvironment("demotest");
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		List<XmlSuite> suites = getXmlTestSuiteForExternalUser("CreatePerson");
 

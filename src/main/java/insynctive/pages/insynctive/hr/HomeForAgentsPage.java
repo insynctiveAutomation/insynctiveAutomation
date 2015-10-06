@@ -11,6 +11,7 @@ import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.insynctive.ImportPersonPage;
 import insynctive.pages.insynctive.PersonFilePage;
+import insynctive.utils.CheckInApp;
 import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
 
@@ -95,7 +96,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 	}
 	
 	/* Actions **/
-	public void createPersonCheckingInviteSS(PersonData personData) throws Exception {
+	public void createPersonCheckingInviteSS(PersonData personData, CheckInApp checkInApp) throws Exception {
 		openCreatePersonFrame();
 		setTextInField(firstNameTextBox, personData.getName());
 		setTextInField(lastNameTextBox, personData.getLastName());
@@ -107,7 +108,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 		clickAButton(saveNewEmployeeButton);
 		//TODO To the correct message [<User> added [admin/agent/employee]  <Person Name>]
 		String assertMessage = loginUserFullName.getText()+" added employee "+personData.getName()+" "+personData.getLastName();
-		checkInAppMessage(assertMessage); 
+		if(checkInApp.bool)checkInAppMessage(assertMessage); 
 	}
 
 	private void openCreatePersonFrame() throws Exception {
@@ -116,14 +117,14 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 		waitAddPersonIsLoad();
 	}
 	
-	public void sendInviteEmail(PersonData personData) throws Exception {
+	public void sendInviteEmail(PersonData personData, CheckInApp checkInApp) throws Exception {
 		waitUntilInvitePanelIsLoad();
 		setTextInField(inviteEmailField, personData.getEmail());
 		Sleeper.sleep(3500, driver);
 		clickAButton(sendInviteButton);
 		
 		String assertMessage = "Invitation to Sign up was sent to "+personData.getName()+" "+personData.getLastName();
-		checkInAppMessage(assertMessage);
+		if(checkInApp.bool) checkInAppMessage(assertMessage);
 	}
 
 	public void openPersonFile(String personName) throws Exception {

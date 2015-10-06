@@ -187,6 +187,9 @@ public abstract class TestMachine {
 	
 	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception{
 		Reporter.log( testName, true );
+		System.out.println(ex.getStackTrace()[7]);
+		System.out.println(ex.getStackTrace()[6]);
+		System.out.println(ex.getStackTrace()[5]);
 		System.out.println(ex.getStackTrace()[4]);
 		System.out.println(ex.getStackTrace()[3]);
 		System.out.println(ex.getStackTrace()[2]);

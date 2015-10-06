@@ -868,8 +868,9 @@ public class PersonFilePage extends Page implements PageInterface {
 		setTextInField(dateInput, "10/05/2000");
 		clickAButton(saveBtn);
 		clickAButton(statesPicker);
+		Sleeper.sleep(1500, driver);
 		setTextInField(statesPickerSearch, "California");
-		Sleeper.sleep(1000, driver);
+		Sleeper.sleep(3000, driver);
 		clickAButton(firstSearchJobState);
 		clickAButton(categoryPicker);
 		clickAButton(chefExecutives);

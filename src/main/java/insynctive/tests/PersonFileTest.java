@@ -14,6 +14,7 @@ import insynctive.model.EmergencyContact;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
@@ -78,8 +79,8 @@ public class PersonFileTest extends TestMachine {
 			
 			person.setName(person.getName() + " " + account.getRunIDString());
 			person.setEmail(person.getEmailWithRunID(account));
-			homePage.createPersonCheckingInviteSS(person);
-			homePage.sendInviteEmail(person);
+			homePage.createPersonCheckingInviteSS(person, CheckInApp.YES);
+			homePage.sendInviteEmail(person, CheckInApp.YES);
 			
 			boolean result = homePage.checkIfPersonIsCreated(person);
 			

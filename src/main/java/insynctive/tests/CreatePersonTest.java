@@ -12,6 +12,7 @@ import insynctive.model.CreatePersonForm;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
 import insynctive.utils.data.TestEnvironment;
 
@@ -39,9 +40,12 @@ public class CreatePersonTest extends TestMachine {
 		transaction.commit();
 		
 		account.getAccountProperty().setEnvironment(createPersonForm.getEnvironment());
+		account.getAccountProperty().setLoginUsername("evaleiras@insynctive.com");
+		account.getAccountProperty().setLoginPassword("password");
 		person.setEmail(createPersonForm.getEmail());
 		person.setName(createPersonForm.getName());
 		person.setLastName(createPersonForm.getLastName());
+		sessionName = "Crete person: "+createPersonForm.getEmail();
 		
 		startTest(testEnvironment);
 
@@ -67,8 +71,8 @@ public class CreatePersonTest extends TestMachine {
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			
-			homePage.createPersonCheckingInviteSS(person);
-			homePage.sendInviteEmail(person);
+			homePage.createPersonCheckingInviteSS(person, CheckInApp.NO);
+			homePage.sendInviteEmail(person, CheckInApp.NO);
 			
 			boolean result = homePage.checkIfPersonIsCreated(person);
 			
