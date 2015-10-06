@@ -1,4 +1,4 @@
-package insynctive.pages.insynctive.hr;
+package insynctive.pages.insynctive.agent.hr;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

@@ -28,6 +28,7 @@ public class Page {
     public WebDriver driver;
     public String PAGE_URL;
     public String PAGE_TITLE;
+    public String enviroment;
     
     /* InApp */
 	@FindBy(css = "#jqxNotificationDefaultContainer-top-right > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > div:nth-child(2)")
@@ -47,6 +48,12 @@ public class Page {
 
 	@FindBy(id = "arrowImage")
 	private WebElement arrowImage;
+	
+	@FindBy(id = "lblName")
+	private WebElement labelNameInHeader;
+	
+	@FindBy(id = "imgPhoto")
+	private WebElement imgPhotoInHeader;
 	
 	@FindBy(id = "popupAccount_linkLogout")
 	private WebElement singoutLink; 

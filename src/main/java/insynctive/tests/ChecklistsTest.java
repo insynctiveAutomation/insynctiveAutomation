@@ -9,8 +9,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import insynctive.model.PersonData;
-import insynctive.pages.insynctive.hr.CheckListsPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.hr.CheckListsPage;
+import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Checklist;
 import insynctive.utils.Debugger;
 import insynctive.utils.Task;

@@ -8,7 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 
 
 public class LoginPage extends Page implements PageInterface{

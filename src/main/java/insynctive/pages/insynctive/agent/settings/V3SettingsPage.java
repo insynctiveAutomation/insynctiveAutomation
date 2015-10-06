@@ -1,4 +1,4 @@
-package insynctive.pages.insynctive.settings;
+package insynctive.pages.insynctive.agent.settings;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

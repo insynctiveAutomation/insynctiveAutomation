@@ -31,7 +31,7 @@ import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.PersonData;
 import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.HibernateUtil;
 import insynctive.utils.TestResults;

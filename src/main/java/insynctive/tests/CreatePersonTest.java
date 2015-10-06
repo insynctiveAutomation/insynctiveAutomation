@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import insynctive.model.CreatePersonForm;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
 import insynctive.utils.data.TestEnvironment;
@@ -65,7 +65,7 @@ public class CreatePersonTest extends TestMachine {
 	}
 
 	@Parameters({"email"})
-	@Test
+	@Test(dependsOnMethods="loginTest")
 	public void createPersonTest(@Optional("person_id") String personID) throws Throwable {
 		long startTime = System.nanoTime();
 		try{ 
@@ -88,7 +88,7 @@ public class CreatePersonTest extends TestMachine {
 	}
 	
 	@Parameters({"email"})
-	@Test
+	@Test(dependsOnMethods="createPersonTest")
 	public void assignJob(@Optional("person_id") String personID) throws Exception{
 		long startTime = System.nanoTime();
 		try{ 

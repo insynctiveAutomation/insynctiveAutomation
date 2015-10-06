@@ -15,67 +15,14 @@ import insynctive.model.PersonData.MaritalStatus;
 import insynctive.model.USAddress;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
+import insynctive.pages.PersonalPage;
 import insynctive.utils.Sleeper;
 import insynctive.utils.Task;
 import insynctive.utils.Wait;
 
-public class PersonFilePage extends Page implements PageInterface {
+public class PersonFilePage extends PersonalPage implements PageInterface {
 
 	String enviroment;
-
-	@FindBy(id = "phone-text")
-	WebElement phoneNumberLink;
-	@FindBy(id = "title-text")
-	WebElement titleLink;
-	@FindBy(id = "department-text")
-	WebElement departamentLink;
-
-	// Links
-	@FindBy(css = "#statusesListHeader > li:nth-child(1)")
-	WebElement personalLink;
-	@FindBy(xpath = "//*[@id=\"full-name-field\"]/div[1]/span")
-	WebElement fullNameLink;
-	@FindBy(id = "name")
-	WebElement nameLink;
-	@FindBy(id = "date-picker")
-	WebElement birthDateLink;
-	@FindBy(className = "gender-picker")
-	WebElement genderLink;
-	@FindBy(className = "marital-picker")
-	WebElement maritalLink;
-	@FindBy(className = "email-primary")
-	WebElement primaryEmailLink;
-	@FindBy(id = "addPhoneBtn")
-	WebElement addPhoneNumberLink;
-	@FindBy(id = "add-address")
-	WebElement addAddressLink;
-	@FindBy(id = "addBtn")
-	WebElement addSocialSecurityNumber;
-
-	// iFrames
-	@FindBy(id = "tabFrame")
-	WebElement tabiFrame;
-	@FindBy(css = ".header-name-popover")
-	WebElement editNameintoTitleiFrame;
-	@FindBy(className = "full-name-popover")
-	WebElement editNameiFrame;
-	@FindBy(className = "date-picker-popover")
-	WebElement birthDateiFrame;
-	@FindBy(className = "emails-edit-popover")
-	WebElement primaryEmailiFrame;
-	@FindBy(className = "phones-add-popover")
-	WebElement editPhoneNumberiFrame;
-	@FindBy(className = "ssn-popover")
-	WebElement socialSecurtyiFrame;
-	@FindBy(className = "address-add-popover")
-	WebElement usAddressiFrame;
-	@FindBy(className = "address-edit-popover")
-	WebElement usAddressEditiFrame;
-	@FindBy(className = "emergency-add-popover")
-	WebElement emergencyContactFrame;
-	@FindBy(className = "emergency-edit-popover")
-	WebElement emergencyContactEditFrame;
-	
 
 	// title
 	@FindBy(id = "Title")
@@ -84,75 +31,6 @@ public class PersonFilePage extends Page implements PageInterface {
 	WebElement departamentField;
 	@FindBy(id = "saveBtn")
 	WebElement saveChangeTitle;
-
-	// FullName
-	@FindBy(id = "FirstName")
-	WebElement firstName;
-	@FindBy(id = "LastName")
-	WebElement lastName;
-	@FindBy(id = "MiddleName")
-	WebElement middleName;
-	@FindBy(id = "PreviousName")
-	WebElement maidenName;
-	@FindBy(xpath = "//*[@id='saveBtn']/span[1]")
-	WebElement saveChangeFullName;
-
-	// Birth Date
-	@FindBy(id = "dateInput")
-	WebElement dateInput;
-	@FindBy(id = "saveBtnNewDatePicker")
-	WebElement saveChangeBirthDate;
-
-	// Primary Email
-	@FindBy(className = "email-input")
-	WebElement primaryEmailField;
-	@FindBy(className = "save-email")
-	WebElement saveChangePrimaryEmail;
-	@FindBy(id = "saveBtn")
-	WebElement savePrimaryEmailChange;
-	@FindBy(css = ".error-msg")
-	WebElement errorMessageEmail;
-
-	// Has Not Dependents
-	@FindBy(css = "#dependents-grid > span.no-dependents")
-	WebElement hasNotDependentsLink;
-
-	@FindBy(css = "#dependents-grid > span.no-dependents")
-	WebElement hasNotDependentsLabel;
-
-	// Add Phone Number
-	@FindBy(id = "addBtn")
-	WebElement addPhoneNumberLink2;
-	@FindBy(id = "inputAddPhone")
-	WebElement addPhoneNumberInput;
-	@FindBy(id = "btnAddPhone")
-	WebElement buttonAddPhone;
-	@FindBy(id = "saveBtn")
-	WebElement saveChangeAddPhoneNumber;
-	@FindBy(id = "mobile-phone")
-	WebElement mobilePhoneNumber;
-	@FindBy(className = "delete-phone-btn")
-	WebElement deletePhoneNumber;
-
-	// Add Address
-	@FindBy(id = "address1")
-	WebElement streetAddressField;
-	@FindBy(id = "address2")
-	WebElement streetAddressOptionalField;
-	@FindBy(id = "city")
-	WebElement cityField;
-	@FindBy(css = "#state_dd_chosen > a")
-	WebElement stateCombo;
-	@FindBy(id = "zip-code")
-	WebElement zipCodeField;
-	@FindBy(css = "#county_dd_chosen > a")
-	WebElement countyCombo;
-	@FindBy(id = "is-mailing")
-	WebElement sameAsHomeAddressCheck;
-	@FindBy(id = "save-address")
-	WebElement saveAddressButton;
-	@FindBy(css = ".address-name > span:nth-child(1)")
-	WebElement addressSaved;
 
 	// Tasks
 	@FindBy(css = "#statusesListHeader > li:nth-child(1)")
@@ -183,77 +61,10 @@ public class PersonFilePage extends Page implements PageInterface {
 	WebElement assignChecklistButton;
 	@FindBy(css = "div.row:nth-child(3) > div:nth-child(1) > span:nth-child(1)")
 	WebElement firstChecklist;
-	@FindBy(id = "delete-addresses")
-	WebElement removeAddressButton;
 	@FindBy(css = "#pendingTasksList > div.task-list > div:nth-child(1) > span > div")
 	WebElement firstTaskLink;
 	@FindBy(id = "froalaEditor")
 	WebElement AdditionalInstructioniFrame;
-	@FindBy(id = "ssnBtn")
-	WebElement ssnInsert;
-	@FindBy(id = "ssn-input")
-	WebElement ssnTextField;
-	@FindBy(id = "saveSSN")
-	WebElement saveSsn;
-	@FindBy(id = "no-results")
-	WebElement noResultCombo;
-
-	@FindBy(id = "Month")
-	private WebElement monthInput;
-	@FindBy(id = "Day")
-	private WebElement dayInput;
-	@FindBy(id = "Year")
-	private WebElement yearInput;
-
-	// Emergency Contacts
-	@FindBy(id = "addContact")
-	WebElement addEmergencyContact;
-	@FindBy(id = "ContactName")
-	WebElement emergencyContactName;
-	@FindBy(id = "Relationship")
-	WebElement relationship;
-	@FindBy(id = "Email")
-	WebElement emergencyContactEmail;
-	@FindBy(id = "Phone")
-	WebElement emergencyContactPhone;
-	@FindBy(xpath = ".//*[@id='saveBtn']")
-	WebElement emergencyContactSave;
-	@FindBy(css = "#content > div:nth-of-type(5) > div > div:nth-last-of-type(2) > span:nth-of-type(1) > span:nth-of-type(1)")
-	WebElement lastEmergencyContactName;
-	@FindBy(css = "#content > div:nth-of-type(5) > div > div:nth-last-of-type(2) > span:nth-of-type(5) > img:nth-of-type(1)")
-	WebElement lastEmergencyContactDelete;
-
-	@FindBy(id = "btnAddNewJob")
-	WebElement addJobButon;
-	@FindBy(id = "employmentFrm")
-	WebElement employmentFrm;
-	@FindBy(id = "btnSave")
-	WebElement saveBtn;
-	@FindBy(id = "statesPicker")
-	WebElement statesPicker;
-	@FindBy(id = "searchResult")
-	WebElement searchResult;
-	@FindBy(id = "categoryPicker")
-	WebElement categoryPicker;
-	@FindBy(id = "rateEditor")
-	WebElement rateEditor;
-	@FindBy(css = "#ui-tooltip-0 > div > div > form > div > div:nth-child(1) > div.editable-input > input")
-	WebElement rateInput;
-	@FindBy(className = "editable-submit")
-	WebElement saveRate;
-	@FindBy(id = "paymentUnitKey")
-	WebElement paymentUnitKey;
-	@FindBy(id = "btnActivate")
-	WebElement btnActivate;
-	@FindBy(id = "datePicker")
-	WebElement datePicker;
-	@FindBy(id = "statesPickerSearch")
-	WebElement statesPickerSearch;
-	@FindBy(css = "div.searchItemDocument:nth-child(1) > p:nth-child(1)")
-	WebElement firstSearchJobState;
-	@FindBy(css = "div.searchItemDocument:nth-child(1)")
-	WebElement chefExecutives;
-	
 
 	public PersonFilePage(WebDriver driver, String enviroment) {
 		super(driver);
@@ -261,132 +72,6 @@ public class PersonFilePage extends Page implements PageInterface {
 		this.PAGE_URL = "NO URL";
 		this.PAGE_TITLE = "NO TITLE";
 		PageFactory.initElements(driver, this);
-	}
-
-	/* Complete Test Methods */
-	public void changeName(String nameIn, String lastNameIn,
-			String middleNameIn, String maidenNameIn) throws Exception {
-		waitPageIsLoad();
-		clickAButton(fullNameLink);
-		swichToIframe(editNameiFrame);
-		setTextInField(firstName, nameIn);
-		setTextInField(lastName, lastNameIn);
-		setTextInField(middleName, middleNameIn);
-		setTextInField(maidenName, maidenNameIn);
-		clickAButton(saveChangeFullName);
-		waitUntilnotVisibility(saveChangeFullName);
-	}
-
-	public void changeNameIntoTitle(String nameIn, String lastNameIn,
-			String middleNameIn, String maidenNameIn) throws Exception {
-		waitPageIsLoad();
-		swichToFirstFrame(driver);
-		clickAButton(nameLink);
-		swichToIframe(editNameintoTitleiFrame);
-		setTextInField(firstName, nameIn);
-		setTextInField(lastName, lastNameIn);
-		setTextInField(middleName, middleNameIn);
-		setTextInField(maidenName, maidenNameIn);
-		clickAButton(saveChangeFullName);
-		waitUntilnotVisibility(saveChangeFullName);
-	}
-
-	public void changeGender(Gender gender) throws Exception {
-		waitPageIsLoad();
-		clickAButton(genderLink);
-		clickAButton(driver.findElement(
-				By.xpath("//div[@class='enum-item' and contains(., '"
-						+ gender.name + "')]")));
-	}
-
-	public void changeBirthDate(String birthDate) throws Exception {
-		String[] birthParts = birthDate.split("/");
-		waitPageIsLoad();
-		clickAButton(birthDateLink);
-		swichToIframe(birthDateiFrame);
-		waitUntilnotVisibility(loadingSpinner);
-		selectElementInDefaultCombo(monthInput, getMonth(birthParts[0]));
-		selectElementInDefaultCombo(dayInput, getDay(birthParts[1]));
-		selectElementInDefaultCombo(yearInput, birthParts[2]);
-		clickAButton(saveChangeBirthDate);
-	}
-
-	public void changeMaritalStatus(MaritalStatus status) throws Exception {
-		waitPageIsLoad();
-		clickAButton(maritalLink);
-		clickAButton(driver.findElement(
-				By.xpath("//div[@class='enum-item' and contains(., '"
-						+ status.status + "')]")));
-	}
-
-	public void changePrimaryEmail(PersonData person) throws Exception {
-		waitPageIsLoad();
-		Sleeper.sleep(1000, driver);
-		clickAButton(primaryEmailLink);
-		waitUntilnotVisibility(loadingSpinner);
-		swichToIframe(primaryEmailiFrame);
-		waitUntilIsLoaded(primaryEmailField);
-		setTextInField(primaryEmailField, person.getEmailToChange());
-		waitUntilIsLoaded(saveChangePrimaryEmail);
-		clickAButton(saveChangePrimaryEmail);
-	}
-
-	public void changeTitle(String title, String departament) throws Exception {
-		waitPageIsLoad();
-		swichToFirstFrame(driver);
-		clickAButton(nameLink);
-		swichToIframe(editNameintoTitleiFrame);
-		setTextInField(titleField, title);
-		setTextInField(departamentField, departament);
-		clickAButton(saveChangeTitle);
-		waitUntilnotVisibility(saveChangeTitle);
-	}
-
-	public void addHasNotDependents() throws Exception {
-		waitPageIsLoad();
-		clickAButton(hasNotDependentsLink);
-	}
-
-	public void addPhoneNumber(String phoneNumber, String runID) throws Exception {
-		waitPageIsLoad();
-		clickAButton(addPhoneNumberLink);
-		swichToIframe(editPhoneNumberiFrame);
-		waitUntilIsLoaded(addPhoneNumberLink2);
-		clickAButton(addPhoneNumberLink2);
-		waitUntilIsLoaded(addPhoneNumberInput);
-		waitUntilIsLoaded(buttonAddPhone);
-		setTextInField(addPhoneNumberInput, getPhoneNumber(phoneNumber, runID));
-		clickAButton(buttonAddPhone);
-		waitUntilIsLoaded(deletePhoneNumber);
-		clickAButton(saveChangeAddPhoneNumber);
-	}
-
-	private String getPhoneNumber(String phoneNumber, String runID) {
-		String phoneNumberRet = "";
-		phoneNumberRet = phoneNumber.substring(0,phoneNumber.length()-runID.length());
-		return phoneNumberRet+runID;
-	}
-
-	public void addUsAddress(USAddress usAddress) throws Exception {
-		waitPageIsLoad();
-		clickAButton(addAddressLink);
-		swichToIframe(usAddressiFrame);
-		waitUsAddresFrameIsLoad();
-		completeAddressForm(usAddress);
-		clickAButton(saveAddressButton);
-		waitPageIsLoad();
-		waitUntilIsLoaded(addressSaved);
-	}
-
-	public void removeUsAddress(USAddress usAddress) throws Exception {
-		waitPageIsLoad();
-		WebElement address = searchAddress(usAddress);
-		clickAButton(address);
-		swichToIframe(usAddressEditiFrame);
-		waitUsAddresFrameIsLoad();
-		waitUntilIsLoaded(removeAddressButton);
-		clickAButton(removeAddressButton);
-		waitPageIsLoad();
 	}
 
 	public void assignTask() throws Exception {
@@ -427,62 +112,15 @@ public class PersonFilePage extends Page implements PageInterface {
 		Sleeper.sleep(8000, driver);
 	}
 
-	public void addSocialSecurityNumber(String ssnNumber, String runID) throws Exception {
+	public void changeTitle(String title, String departament) throws Exception {
 		waitPageIsLoad();
-		clickAButton(addSocialSecurityNumber);
-		swichToIframe(socialSecurtyiFrame);
-		clickAButton(ssnInsert);
-		setTextInField(ssnTextField, getSSN(ssnNumber, runID));
-		clickAButton(saveSsn);
-	}
-	
-	private String getSSN(String ssn, String runID) {
-		String ssnRet = "";
-		ssnRet = ssn.substring(0,ssn.length()-runID.length());
-		return ssnRet+runID;
-	}
-
-	public void addEmergencyContact(String name, String relationship,
-			String phone, String email) throws Exception {
-		waitPageIsLoad();
-		clickAButton(addEmergencyContact);
-		waitEmergencyContactFrameIsLoad();
-		clickAButton(emergencyContactName);
-		setTextInField(emergencyContactName, name);
-		clickAButton(this.relationship);
-		setTextInField(this.relationship, relationship);
-		clickAButton(emergencyContactPhone);
-		setTextInField(emergencyContactPhone, phone);
-		clickAButton(emergencyContactEmail);
-		setTextInField(emergencyContactEmail, email);
-		clickAButton(emergencyContactSave);
-
-	}
-	
-	public void editEmergencyContact(String name, String relationship,
-			String phone, String email) throws Exception {
-		waitPageIsLoad();
-		clickAButton(lastEmergencyContactName);
-		waitEditEmergencyContactFrameIsLoad();
-		clickAButton(emergencyContactName);
-		emergencyContactName.clear();
-		setTextInField(emergencyContactName, name);
-		clickAButton(this.relationship);
-		this.relationship.clear();
-		setTextInField(this.relationship, relationship);
-		clickAButton(emergencyContactPhone);
-		emergencyContactPhone.clear();
-		setTextInField(emergencyContactPhone, phone);
-		clickAButton(emergencyContactEmail);
-		emergencyContactEmail.clear();
-		setTextInField(emergencyContactEmail, email);
-		clickAButton(emergencyContactSave);
-
-	}
-	
-	public void removeLastEmergencyContact() throws Exception {
-		waitPageIsLoad();
-		clickAButton(lastEmergencyContactDelete);
+		swichToFirstFrame(driver);
+		clickAButton(nameLink);
+		swichToIframe(editNameintoTitleiFrame);
+		setTextInField(titleField, title);
+		setTextInField(departamentField, departament);
+		clickAButton(saveChangeTitle);
+		waitUntilnotVisibility(saveChangeTitle);
 	}
 
 	/* Check if is complete Methods */
@@ -506,18 +144,6 @@ public class PersonFilePage extends Page implements PageInterface {
 		boolean titleNameAssert = nameLink.getText().equals(assertTitleName);
 
 		return fullNameAssert && titleNameAssert;
-	}
-	
-	private Object getNameToAssertInPersonalDetails(PersonData personData) {
-		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
-				+ " " + personData.getMiddleName(): personData.getName();
-		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";
-		assertFullName += personData.getLastName();
-		if(assertFullName.length() <= 35){
-			return assertFullName;
-		} else {
-			return assertFullName.substring(0,35)+"...";
-		}
 	}
 
 	public boolean isChangePeronDetailBeforeCreatePerson(PersonData personData, Wait wait)
@@ -680,23 +306,6 @@ public class PersonFilePage extends Page implements PageInterface {
 		Sleeper.sleep(2000, driver);
 	}
 	
-	public void waitEmergencyContactFrameIsLoad() throws Exception {
-		swichToIframe(emergencyContactFrame);
-		waitUntilIsLoaded(emergencyContactName);
-		waitUntilIsLoaded(emergencyContactPhone);
-		waitUntilIsLoaded(emergencyContactEmail);
-		waitUntilIsLoaded(relationship);
-
-	}
-	
-	public void waitEditEmergencyContactFrameIsLoad() throws Exception {
-		swichToIframe(emergencyContactEditFrame);
-		waitUntilIsLoaded(emergencyContactName);
-		waitUntilIsLoaded(emergencyContactPhone);
-		waitUntilIsLoaded(emergencyContactEmail);
-		waitUntilIsLoaded(relationship);
-
-	}
 	/* Utilities */
 	public int getNumberOfEmergencyContacts () throws Exception
 	{
@@ -706,117 +315,6 @@ public class PersonFilePage extends Page implements PageInterface {
 	}
 
 	/* Private Methods */
-	private void waitUsAddresFrameIsLoad() throws Exception {
-		waitUntilIsLoaded(streetAddressField);
-		waitUntilIsLoaded(streetAddressOptionalField);
-		waitUntilIsLoaded(cityField);
-		waitUntilIsLoaded(stateCombo);
-		waitUntilIsLoaded(zipCodeField);
-		waitUntilIsLoaded(countyCombo);
-	}
-	
-	private WebElement searchAddress(USAddress usAddress) {
-		List<WebElement> allAddress = driver.findElements(By.className("address-name"));
-		WebElement address;
-		for (int index = 0; index < allAddress.size(); index++) {
-			address = allAddress.get(index);
-			if(isTheSameAddress(address, usAddress)){
-				return address;
-			}
-		}
-		return null;
-	}
-	
-	private void completeAddressForm(USAddress usAddress) throws Exception {
-		setTextInField(streetAddressField, usAddress.getStreet());
-		setTextInField(streetAddressOptionalField, usAddress.getSecondStreet());
-		setTextInField(cityField, usAddress.getCity());
-		setTextInCombo(stateCombo, usAddress.getState());
-		setTextInField(zipCodeField, usAddress.getZipCode());
-		setTextInCombo(countyCombo, usAddress.getCounty());
-		if(usAddress.isSameAsHome()){
-			//TODO ADD BOX CKICK
-		}
-	}
-	private String getDay(String number) {
-		if(Integer.parseInt(number) < 10) {
-			Integer numberInt = Integer.parseInt(number);
-			return numberInt.toString();
-		} else {
-			return number;
-		}
-	}
-
-	private String getMonth(String number) {
-		switch (Integer.parseInt(number)) {
-		case 1:
-			return "January";
-		case 2:
-			return "February";
-		case 3:
-			return "March";
-		case 4:
-			return "April";
-		case 5:
-			return "May";
-		case 6:
-			return "June";
-		case 7:
-			return "July";
-		case 8:
-			return "August";
-		case 9:
-			return "September";
-		case 10:
-			return "October";
-		case 11:
-			return "November";
-		case 12:
-			return "December";
-
-		default:
-			return "ERROR";
-		}
-	}
-
-	private String getShortMonth(String number) {
-		switch (Integer.parseInt(number)) {
-		case 1:
-			return "Jan";
-		case 2:
-			return "Feb";
-		case 3:
-			return "Mar";
-		case 4:
-			return "Apr";
-		case 5:
-			return "May";
-		case 6:
-			return "Jun";
-		case 7:
-			return "Jul";
-		case 8:
-			return "Aug";
-		case 9:
-			return "Sep";
-		case 10:
-			return "Oct";
-		case 11:
-			return "Nov";
-		case 12:
-			return "Dec";
-
-		default:
-			return "ERROR";
-		}
-	}
-	private boolean isTheSameAddress(WebElement address, USAddress usAddress) {
-		return address.getText().contains(usAddress.getCity())
-				&& address.getText().contains(usAddress.getCounty())
-				&& address.getText().contains(usAddress.getStreet())
-				&& address.getText().contains(usAddress.getZipCode());
-	}
-
 	private void openTaskTab() throws Exception {
 		swichToFirstFrame(driver);
 		clickAButton(tasksTab);
@@ -832,7 +330,6 @@ public class PersonFilePage extends Page implements PageInterface {
 		waitUntilIsLoaded(startChecklistButton);
 		clickAButton(startChecklistButton);
 	}
-	
 
 	// TODO METHODS
 	@Override

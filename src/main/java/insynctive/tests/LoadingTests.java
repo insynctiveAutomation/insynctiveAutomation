@@ -9,15 +9,15 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.apps.AppsPage;
-import insynctive.pages.insynctive.hr.CheckListsPage;
-import insynctive.pages.insynctive.hr.HelpDeskPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
-import insynctive.pages.insynctive.hr.TaskPage;
-import insynctive.pages.insynctive.settings.AccountPage;
-import insynctive.pages.insynctive.settings.OtherSettingPage;
-import insynctive.pages.insynctive.settings.PeoplePage;
-import insynctive.pages.insynctive.settings.V3SettingsPage;
+import insynctive.pages.insynctive.agent.apps.AppsPage;
+import insynctive.pages.insynctive.agent.hr.CheckListsPage;
+import insynctive.pages.insynctive.agent.hr.HelpDeskPage;
+import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.hr.TaskPage;
+import insynctive.pages.insynctive.agent.settings.AccountPage;
+import insynctive.pages.insynctive.agent.settings.OtherSettingPage;
+import insynctive.pages.insynctive.agent.settings.PeoplePage;
+import insynctive.pages.insynctive.agent.settings.V3SettingsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.data.TestEnvironment;
 

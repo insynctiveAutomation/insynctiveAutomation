@@ -9,8 +9,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import insynctive.pages.insynctive.MyTasksPage;
-import insynctive.pages.insynctive.hr.CheckListsPage;
-import insynctive.pages.insynctive.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.hr.CheckListsPage;
+import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Sleeper;
 import insynctive.utils.data.TestEnvironment;
 
