@@ -86,6 +86,10 @@ public abstract class TestMachine {
 	
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
+		tearUp(1);
+	}
+	
+	public void tearUp(Integer accountID) throws Exception{
 		try{
 			sessionFactory = HibernateUtil.getSessionFactory();
 			
@@ -93,7 +97,7 @@ public abstract class TestMachine {
 			username = crossBrowserAccount.getEmail();
 			password = crossBrowserAccount.getPassword();
 			
-			account = (Account) openSession().get(Account.class, 1);
+			account = (Account) openSession().get(Account.class, accountID);
 			account.incrementRunID();
 			
 			person = account.getPerson();
@@ -106,6 +110,7 @@ public abstract class TestMachine {
 
 		}
 	}
+	
 	
 	public Session openSession(){
 		return sessionFactory.openSession();

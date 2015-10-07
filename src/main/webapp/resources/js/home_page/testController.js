@@ -122,7 +122,7 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 	this.openConfig = function() {
 		var modalInstance = $modal.open({
 			animation : true,
-			templateUrl : '/accountConfigContent',
+			templateUrl : 'accountConfigContent',
 			controller:  'AccountController',
 			controllerAs: 'accountCtrl',
 			

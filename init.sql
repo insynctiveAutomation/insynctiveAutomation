@@ -9,3 +9,9 @@ INSERT INTO CrossBrowserAccount VALUES(1, "eugenio.valeiras+17@gmail.com", "u5d6
 /**MAIN DATA**/
 INSERT INTO insynctiveproperty VALUES(1,"staging","benefits123","password","evaleiras@insynctive.com", false, false);
 INSERT INTO account VALUES(1, "EugeValeiras",7, "password", 1, 1);
+
+/**Person Data**/
+
+/**MAIN DATA**/
+INSERT INTO insynctiveproperty VALUES(2,"staging","benefits123","password","evaleiras@insynctive.com", false, false);
+INSERT INTO account VALUES(2, "FirstStep",3000, "password", 2, 1);

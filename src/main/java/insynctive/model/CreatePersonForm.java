@@ -26,6 +26,9 @@ public class CreatePersonForm {
 	@Column(name = "environment")
 	private String environment;
 	
+	@Column(name = "status_of_test")
+	private boolean statusOfTest;
+	
 	public String getEmail() {
 		return email;
 	}
@@ -65,5 +68,12 @@ public class CreatePersonForm {
 	public void setEnvironment(String environment) {
 		this.environment = environment;
 	}
-	
+
+	public boolean isStatusOfTest() {
+		return statusOfTest;
+	}
+
+	public void setStatusOfTest(boolean statusOfTest) {
+		this.statusOfTest = statusOfTest;
+	}
 }

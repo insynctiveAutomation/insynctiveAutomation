@@ -251,10 +251,9 @@ public class TestController {
 	@RequestMapping(value = "/start" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String startCreatePerson(@RequestBody CreatePersonForm form) throws ConfigurationException{
-		form.setEnvironment("demotest");
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
+		
 		List<XmlSuite> suites = getXmlTestSuiteForExternalUser("CreatePerson");
-
 		HashMap<String,String> params = new HashMap<String, String>();
 		params.put("personID", String.valueOf(newPersonID));
 		
@@ -284,14 +283,14 @@ public class TestController {
 	
 	@RequestMapping(value = "/isPersonCreated/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String isPersonCreated(@PathVariable("tlaIndex") Integer tlaIndex) throws ConfigurationException{
-		List<ITestResult> passedTests = tla.get(tlaIndex).getPassedTests();
-		for(ITestResult test : passedTests){
-			if(test.getMethod().getMethodName().equals("createPersonTest")){
-				return "{\"status\": true}";
-			}
-		}
-		return "{\"status\": false}";
+	public String isPersonCreated(@PathVariable("tlaIndex") Integer tlaIndex) throws Exception{
+		return checkStatusOfMethodInTLA(tlaIndex, "createPersonTest");
+	}
+	
+	@RequestMapping(value = "/checkIfIsJobAdded/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String checkIfIsJobAdded(@PathVariable("tlaIndex") Integer tlaIndex) throws Exception{
+		return checkStatusOfMethodInTLA(tlaIndex, "assignJob");
 	}
 	
 	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
@@ -358,5 +357,21 @@ public class TestController {
 		    }
 		}
 		return results;
+	}
+	
+	private String checkStatusOfMethodInTLA(Integer tlaIndex, String nameOfTest) throws Exception {
+		List<ITestResult> passedTests = tla.get(tlaIndex).getPassedTests();
+		for(ITestResult test : passedTests){
+			if(test.getMethod().getMethodName().equals("createPersonTest")){
+				return "{\"status\": true}";
+			}
+		}
+		List<ITestResult> failedTests = tla.get(tlaIndex).getFailedTests();
+		for(ITestResult test : failedTests){
+			if(test.getMethod().getMethodName().equals("createPersonTest")){
+				throw new Exception("The Methods Create Job Fails");
+			}
+		}
+		return "{\"status\": false}";
 	}
 }

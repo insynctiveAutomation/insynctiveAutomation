@@ -2,12 +2,18 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.hibernate.Transaction;
+import org.json.JSONException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import insynctive.exception.ConfigurationException;
 import insynctive.model.CreatePersonForm;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
@@ -18,30 +24,36 @@ import insynctive.utils.data.TestEnvironment;
 
 public class CreatePersonTest extends TestMachine {
 
+	CreatePersonForm createPersonForm;
+	
 	@Override
 	@BeforeClass
 	public void tearUp() throws Exception {
-		super.tearUp();
+		super.tearUp(2);
 		this.sessionName = "Create Person Test";
+	}
+
+	@Override
+	@AfterClass
+	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
+		super.teardown();
 	}
 	
 	@Parameters({"personID"})	
 	@Test
 	public void loginTest(@Optional("personID") Integer personID) throws Exception {
-		testEnvironment = TestEnvironment.FIREFOX;
-		account.getAccountProperty().setRemote(true);
 		if(personID.equals("personID")){
 			throw new Exception("No email added");
 		}
 		
 		//Search for The Person Data
 		Transaction transaction = openSession().beginTransaction();
-		CreatePersonForm createPersonForm = (CreatePersonForm) openSession().get(CreatePersonForm.class, personID);
+		createPersonForm = (CreatePersonForm) openSession().get(CreatePersonForm.class, personID);
 		transaction.commit();
 		
-		account.getAccountProperty().setEnvironment(createPersonForm.getEnvironment());
-		account.getAccountProperty().setLoginUsername("evaleiras@insynctive.com");
-		account.getAccountProperty().setLoginPassword("password");
+		//Complete Data
+		testEnvironment = TestEnvironment.FIREFOX;
+		account.getAccountProperty().setRemote(true);
 		person.setEmail(createPersonForm.getEmail());
 		person.setName(createPersonForm.getName());
 		person.setLastName(createPersonForm.getLastName());
