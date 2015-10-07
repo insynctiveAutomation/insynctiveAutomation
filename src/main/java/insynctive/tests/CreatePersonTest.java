@@ -64,7 +64,7 @@ public class CreatePersonTest extends TestMachine {
 		}
 	}
 
-	@Parameters({"email"})
+	@Parameters({"personID"})
 	@Test(dependsOnMethods="loginTest")
 	public void createPersonTest(@Optional("person_id") String personID) throws Throwable {
 		long startTime = System.nanoTime();
@@ -87,7 +87,7 @@ public class CreatePersonTest extends TestMachine {
 		}
 	}
 	
-	@Parameters({"email"})
+	@Parameters({"personID"})
 	@Test(dependsOnMethods="createPersonTest")
 	public void assignJob(@Optional("person_id") String personID) throws Exception{
 		long startTime = System.nanoTime();
@@ -97,6 +97,7 @@ public class CreatePersonTest extends TestMachine {
 			personFilePage.assignJob();
 			long endTime = System.nanoTime();
 			setResult(true, "AssignJob", endTime - startTime);
+			Debugger.log("assignJob => "+true, isSaucelabs);
 			assertTrue(true);
 		}catch (Exception ex){ 
 			long endTime = System.nanoTime();
