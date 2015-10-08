@@ -8,9 +8,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import insynctive.model.PersonData;
-import insynctive.model.USAddress;
 import insynctive.model.PersonData.Gender;
 import insynctive.model.PersonData.MaritalStatus;
+import insynctive.model.USAddress;
 import insynctive.utils.Sleeper;
 
 public abstract class PersonalPage extends Page {
@@ -145,10 +145,9 @@ public abstract class PersonalPage extends Page {
 	@FindBy(css = ".error-msg")
 	public WebElement errorMessageEmail;
 
-	// Has Not Dependents
+	// Has Not Dependents 
 	@FindBy(css = "#dependents-grid > span.no-dependents")
 	public WebElement hasNotDependentsLink;
-
 	@FindBy(css = "#dependents-grid > span.no-dependents")
 	public WebElement hasNotDependentsLabel;
 
@@ -297,12 +296,6 @@ public abstract class PersonalPage extends Page {
 		clickAButton(saveChangeAddPhoneNumber);
 	}
 
-	public String getPhoneNumber(String phoneNumber, String runID) {
-		String phoneNumberRet = "";
-		phoneNumberRet = phoneNumber.substring(0,phoneNumber.length()-runID.length());
-		return phoneNumberRet+runID;
-	}
-
 	public void addUsAddress(USAddress usAddress) throws Exception {
 		waitPageIsLoad();
 		clickAButton(addAddressLink);
@@ -375,24 +368,19 @@ public abstract class PersonalPage extends Page {
 		clickAButton(ssnInsert);
 		setTextInField(ssnTextField, getSSN(ssnNumber, runID));
 		clickAButton(saveSsn);
-	}
+	} 
 	
-	public String getSSN(String ssn, String runID) {
-		String ssnRet = "";
-		ssnRet = ssn.substring(0,ssn.length()-runID.length());
-		return ssnRet+runID;
-	}
-	
-	public Object getNameToAssertInPersonalDetails(PersonData personData) {
-		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
-				+ " " + personData.getMiddleName(): personData.getName();
-		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";
-		assertFullName += personData.getLastName();
-		if(assertFullName.length() <= 35){
-			return assertFullName;
-		} else {
-			return assertFullName.substring(0,35)+"...";
-		}
+	/*Wait Methods*/
+	@Override
+	public void waitPageIsLoad() throws Exception {
+		swichToFirstFrame(driver);
+		waitUntilnotVisibility(loadingSpinner);
+		swichToIframe(tabiFrame);
+		waitUntilIsLoaded(genderLink);
+		waitUntilIsLoaded(maritalLink);
+		waitUntilIsLoaded(primaryEmailLink);
+		waitUntilIsLoaded(fullNameLink);
+		Sleeper.sleep(1000, driver);
 	}
 	
 	public void waitEmergencyContactFrameIsLoad() throws Exception {
@@ -422,7 +410,7 @@ public abstract class PersonalPage extends Page {
 		waitUntilIsLoaded(countyCombo);
 	}
 	
-	//UTILITIES
+	/*UTILITIES*/
 	public void completeAddressForm(USAddress usAddress) throws Exception {
 		setTextInField(streetAddressField, usAddress.getStreet());
 		setTextInField(streetAddressOptionalField, usAddress.getSecondStreet());
@@ -525,5 +513,29 @@ public abstract class PersonalPage extends Page {
 		default:
 			return "ERROR";
 		}
+	}
+	
+	public Object getNameToAssertInPersonalDetails(PersonData personData) {
+		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
+				+ " " + personData.getMiddleName(): personData.getName();
+		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";
+		assertFullName += personData.getLastName();
+		if(assertFullName.length() <= 35){
+			return assertFullName;
+		} else {
+			return assertFullName.substring(0,35)+"...";
+		}
+	}
+	
+	public String getSSN(String ssn, String runID) {
+		String ssnRet = "";
+		ssnRet = ssn.substring(0,ssn.length()-runID.length());
+		return ssnRet+runID;
+	}
+
+	public String getPhoneNumber(String phoneNumber, String runID) {
+		String phoneNumberRet = "";
+		phoneNumberRet = phoneNumber.substring(0,phoneNumber.length()-runID.length());
+		return phoneNumberRet+runID;
 	}
 }

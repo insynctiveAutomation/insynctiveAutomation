@@ -13,7 +13,6 @@ import insynctive.model.PersonData;
 import insynctive.model.PersonData.Gender;
 import insynctive.model.PersonData.MaritalStatus;
 import insynctive.model.USAddress;
-import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.PersonalPage;
 import insynctive.utils.Sleeper;
@@ -284,19 +283,6 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	
 	
 	/* Waits Methods */
-	@Override
-	public void waitPageIsLoad() throws Exception {
-		swichToFirstFrame(driver);
-		waitUntilnotVisibility(loadingSpinner);
-		waitUntilIsLoaded(nameLink);
-		swichToIframe(tabiFrame);
-		waitUntilIsLoaded(genderLink);
-		waitUntilIsLoaded(maritalLink);
-		waitUntilIsLoaded(primaryEmailLink);
-		waitUntilIsLoaded(fullNameLink);
-		Sleeper.sleep(2000, driver);
-	}
-
 	public void waitTaskTabIsLoad() throws Exception {
 		swichToFirstFrame(driver);
 		waitUntilnotVisibility(loadingSpinner);

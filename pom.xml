@@ -20,6 +20,7 @@
 
 		<!-- JAVA CONNECTION -->
 		<javax-servlet-api>3.0.1</javax-servlet-api>
+		<javax-servler-version>2.0</javax-servler-version>
 		<javax-servlet>1.2</javax-servlet>
 		<jstl-version>1.2</jstl-version>
 		<javax-mail-version>1.4</javax-mail-version>
@@ -232,6 +233,12 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${javax-servler-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${javax-servlet}</version>
 		</dependency>
@@ -249,7 +256,7 @@
 	<build>
 		<plugins>
 			<!-- ECLIPSE MAVEN PLUGINS -->
-			<plugin> 
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>

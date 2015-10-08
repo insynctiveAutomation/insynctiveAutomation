@@ -4,13 +4,12 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
@@ -20,13 +19,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import insynctive.utils.SessionScope;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = "insynctive")
 @EnableTransactionManagement
+@PropertySource("classpath:application.properties")
 public class AppConfig {
 	
-	@Autowired
-    Environment env;
+	@Value("${local}")
+	private Boolean local;
 
 	@Bean
 	public SessionScope sessionScope(){
@@ -34,7 +33,7 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
+	public static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
@@ -47,17 +46,23 @@ public class AppConfig {
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-		/*HEROKU*/
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
-		dataSource.setUsername("b797aea885e227");
-		dataSource.setPassword("503f6e18");
+		if(local){
 		
-		/*LOCAL*/
-//		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//		dataSource.setUrl("jdbc:mysql://localhost:3306/insynctive");
-//		dataSource.setUsername("root");
-//		dataSource.setPassword("");
+			/*LOCAL*/
+			dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+			dataSource.setUrl("jdbc:mysql://localhost:3306/insynctive");
+			dataSource.setUsername("root");
+			dataSource.setPassword("");
+			
+		} else {
+		
+			/*HEROKU*/
+			dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+			dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
+			dataSource.setUsername("b797aea885e227");
+			dataSource.setPassword("503f6e18");
+			
+		}
 
 		return dataSource;
 	}

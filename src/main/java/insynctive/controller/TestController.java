@@ -46,7 +46,6 @@ import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
 import insynctive.runnable.RunnableTest;
-import insynctive.utils.NightlyRegressions;
 
 @Controller
 @Scope("session")

@@ -47,16 +47,16 @@ public class Page {
 	public WebElement loadingSpinner;
 
 	@FindBy(id = "arrowImage")
-	private WebElement arrowImage;
+	public WebElement arrowImage;
 	
 	@FindBy(id = "lblName")
-	private WebElement labelNameInHeader;
+	public WebElement labelNameInHeader;
 	
 	@FindBy(id = "imgPhoto")
-	private WebElement imgPhotoInHeader;
+	public WebElement imgPhotoInHeader;
 	
 	@FindBy(id = "popupAccount_linkLogout")
-	private WebElement singoutLink; 
+	public WebElement singoutLink; 
     
     public Page(){
     	
@@ -320,6 +320,10 @@ public class Page {
 	
 	public void waitPageIsLoad() throws Exception {
 		throw new MethodNoImplementedException("waitPageIsLoad is not implemented");
+	}
+	
+	public boolean equals(WebElement elem, String text){
+		return elem.getText().equals(text);
 	}
 	
 	public long getTimeToLoad() throws Exception{

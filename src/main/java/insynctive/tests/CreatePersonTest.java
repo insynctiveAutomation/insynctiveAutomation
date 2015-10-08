@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.testng.annotations.AfterClass;
@@ -48,7 +49,9 @@ public class CreatePersonTest extends TestMachine {
 		
 		//Search for The Person Data
 		Transaction transaction = openSession().beginTransaction();
-		createPersonForm = (CreatePersonForm) openSession().get(CreatePersonForm.class, personID);
+		Session session = openSession();
+		createPersonForm = (CreatePersonForm) session.get(CreatePersonForm.class, personID);
+		session.flush();
 		transaction.commit();
 		
 		//Complete Data
