@@ -8,15 +8,18 @@ app.controller('LoginController', function($cookies, $scope, $window, loginServi
 	this.username;
 	this.password;
 	this.loginNotification;
+	$scope.disabled = false;
 	
 	/*On Load Methods*/
 	this.login = function() {
+		$scope.disabled = true;
 		loginService.login({username : self.username, password : self.password}, function(data) {
 			$cookies.put('userID', data.accID);
 			$window.location.href = '/';
 		}, function(data){
 			self.loginNotification = 'Error on log in'
 			self.notification = data;
+			$scope.disabled = false;
 		});
 	};
 });
