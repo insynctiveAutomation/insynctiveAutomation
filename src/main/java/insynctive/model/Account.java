@@ -19,12 +19,12 @@ public class Account {
 	@Id
 	@GeneratedValue
 	@Column(name = "account_id")
-	private int account_id;
+	private int accountID;
 	
 	@Column(name = "run_id")
 	private int run_id;
 
-	@Column(name = "username")
+	@Column(name = "username", unique = true)
 	private String username;
 
 	@Column(name = "password")
@@ -87,5 +87,13 @@ public class Account {
 	
 	public int incrementRunID(){
 		return this.run_id+=1;
+	}
+
+	public int getAccountID() {
+		return accountID;
+	}
+
+	public void setAccountID(int account_id) {
+		this.accountID = account_id;
 	}
 }

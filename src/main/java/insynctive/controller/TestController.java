@@ -46,6 +46,7 @@ import insynctive.results.Result;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
 import insynctive.runnable.RunnableTest;
+import insynctive.utils.LoginForm;
 
 @Controller
 @Scope("session")
@@ -58,7 +59,7 @@ public class TestController {
 
 	private final ServletContext servletContext;
 
-	private int accID = 1;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
+	private Integer accID;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
 	private Account account;
 	
 	private Integer threadIndex = 0;
@@ -76,11 +77,37 @@ public class TestController {
 		this.createPersonFormDao = createPersonFormDao;
 	}
 	
+	@RequestMapping(value = "/login" ,method = RequestMethod.GET)
+	public ModelAndView loginGet(HttpSession session){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("login");
+		return model;
+	}
+	
+	@RequestMapping(value = "/login" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String loginPost(@RequestBody LoginForm form) throws Exception{
+		Account acc = accDao.getAccountLogin(form.getUsername(), form.getPassword());
+		if(acc != null){
+			accID = acc.getAccountID();
+			return "{\"accID\" : \""+(acc.getAccountID())+"\"}";
+		}
+		throw new Exception("Account not found");
+	}
+	
+	@RequestMapping(value = "/logout" ,method = RequestMethod.POST)
+	public ModelAndView logout() throws Exception{
+		accID = null;
+		ModelAndView model = new ModelAndView();
+		model.setViewName("login");
+		return model;
+	}
+	
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
 	public ModelAndView root(HttpSession session){
 		ModelAndView model = new ModelAndView();
 		model.setViewName("test");
-		account = accDao.getAccountByID(accID);
+		account = accID != null ? accDao.getAccountByID(accID) : null;
 		return model;
 	}
 	

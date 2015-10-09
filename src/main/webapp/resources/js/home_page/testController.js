@@ -1,9 +1,10 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'accountApp']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'accountApp']);
 
-app.controller('TestController', function($http, $modal, $scope, $timeout, $interval, $compile, testService) {
+app.controller('TestController', function($cookies, $http, $window, $modal, $scope, $interval, testService) {
 	var self = this;
+	this.isLogin = false;
 	this.tlaIndex;
 	this.errors = [];
 	this.testsSuites = [];
@@ -14,6 +15,15 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 	this.start = false;
 	this.videoLink;
 	this.loaderVisible = "hidden";
+	
+	this.checkIfIsLogin = function(){
+		if(!$cookies.get('userID')){
+			$window.location.href = '/login';
+		} else {
+			self.isLogin = true;
+		}
+	}
+	this.checkIfIsLogin();
 	
 	/* On Load Methods */
 	this.getTestsSuites = function() {
@@ -73,6 +83,13 @@ app.controller('TestController', function($http, $modal, $scope, $timeout, $inte
 			}); 
 		}
 	}; this.clearTests();
+	
+	this.logout = function(){
+		testService.logout(function(data) {
+			$cookies.remove('userID');
+			$window.location.href = '/login';
+		});
+	}
 	
 	/* Private Methods */
 	this.transformarATestSuite = function(jsonTestSuite) {

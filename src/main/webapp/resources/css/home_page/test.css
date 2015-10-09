@@ -38,9 +38,15 @@ a:hover {
 	transform: translate(-50%, -50%);
 }
 
-.topcorner {
+.top-right-corner {
 	position: absolute;
 	top: 0;
+	right: 0;
+}
+
+.bottom-right-corner {
+	position: absolute;
+	bottom: 0;
 	right: 0;
 }
 

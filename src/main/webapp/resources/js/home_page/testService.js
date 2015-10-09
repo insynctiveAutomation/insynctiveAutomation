@@ -27,4 +27,8 @@ app.service('testService', function($http) {
 	this.clearTests = function(tlaIndex, callback) {
 		$http.get('clearTest/'+tlaIndex).success(callback);
 	};
+	
+	this.logout = function(callback) {
+		$http.post('logout', {}).success(callback);
+	};
 });

@@ -44,21 +44,23 @@
 </head>
 
 <body data-ng-controller="TestController as testCtrl">
-	<div class="topcorner h4"><a id="configurationLink" ng-click="testCtrl.openConfig()">Configuration</a></div>
-	<div ng-show="testCtrl.showPanel()" class="container">
-		<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
-	
-	  	<select name="testSuite" ng-model="testSuiteName" data-ng-options="testSuite as testSuite for testSuite in testCtrl.testsSuites" ng-change="testCtrl.getTestDetails(testSuiteName)" required>
-	    	<option value="">Select a Test Suite</option>
-	 	</select>
-	  	<select name="environment" ng-model="selectedEnvironment" data-ng-options="environment as environment for environment in testCtrl.environments" required>
-	    	<option value="">Select an Environment</option>
-	 	</select> 
-	 	
-		<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button>
-		</form>	
+	<div ng-if="testCtrl.isLogin">
+		<div class="top-right-corner h4"><a id="configurationLink" ng-click="testCtrl.openConfig()">Configuration</a></div>
+		<div class="bottom-right-corner h4"><a id="configurationLink" ng-click="testCtrl.logout()">Logout</a></div>
+		<div ng-show="testCtrl.showPanel()" class="container">
+			<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
+		
+		  	<select name="testSuite" ng-model="testSuiteName" data-ng-options="testSuite as testSuite for testSuite in testCtrl.testsSuites" ng-change="testCtrl.getTestDetails(testSuiteName)" required>
+		    	<option value="">Select a Test Suite</option>
+		 	</select>
+		  	<select name="environment" ng-model="selectedEnvironment" data-ng-options="environment as environment for environment in testCtrl.environments" required>
+		    	<option value="">Select an Environment</option>
+		 	</select> 
+		 	
+			<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button>
+			</form>	
+		</div>
 	</div>
-	
 	<div class="testContainer">
 		
 		<!-- VIEW OF RUN -->
