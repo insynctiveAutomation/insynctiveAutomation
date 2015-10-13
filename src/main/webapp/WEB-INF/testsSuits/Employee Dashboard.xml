@@ -1,12 +1,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Test Suite" verbose="1" >
-	<test name="Person File Test">
+	<test name="Employee Dashboard Test">
 	  <classes>
 	    <class name="insynctive.tests.EmployeeDashboardInterfaceTest">
 	      <methods>
 			<!-- Initial Test -->
 	        <include name="loginTest" />
+	        <include name="isAllDataOK" />
 	        <include name="updatePersonalInformation" />
+	        <include name="electBenefits" />
+	        <include name="fillAndSignBenefit" />
 	      </methods>
 	    </class>
 	  </classes>

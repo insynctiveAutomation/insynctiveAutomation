@@ -11,10 +11,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,9 +52,12 @@ import insynctive.runnable.RunnableTest;
 import insynctive.utils.LoginForm;
 
 @Controller
-@Scope("session")
+@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
 public class TestController {
  
+	@Value("${local}")
+	private Boolean local;
+	
 	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
 	private final CreatePersonFormDao createPersonFormDao;
@@ -237,10 +243,8 @@ public class TestController {
 	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
 		account = accDao.incrementRunIDAndGetAcc(accID);
 		InsynctiveProperty properties = account.getAccountProperty();
-		if(!properties.getEnvironment().equals(environment)){
-			properties.setEnvironment(environment); 
-			propertyDao.update(properties);
-		}
+		properties.setEnvironment(environment);
+		propertyDao.update(properties);
 		
 		insynctive.utils.TestResults.resetResults();
 		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
@@ -263,7 +267,7 @@ public class TestController {
 		
 		return "{\"index\" : \""+(testListenenerIndex++)+"\"}";
 	}
-	
+
 	@RequestMapping(value = "/test/{testName}/{index}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String getTest(@PathVariable("testName") String testName, @PathVariable("index") Integer index) throws ConfigurationException{

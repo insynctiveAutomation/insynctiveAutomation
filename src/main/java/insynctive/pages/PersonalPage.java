@@ -104,12 +104,16 @@ public abstract class PersonalPage extends Page {
 	public WebElement streetAddressOptionalField;
 	@FindBy(id = "city")
 	public WebElement cityField;
-	@FindBy(css = "#state_dd_chosen > a")
+	@FindBy(id = "state-dd")
 	public WebElement stateCombo;
+	//TODO STATE COMBO
+	public WebElement californiaState;
 	@FindBy(id = "zip-code")
 	public WebElement zipCodeField;
-	@FindBy(css = "#county_dd_chosen > a")
+	@FindBy(id = "county-dd")
 	public WebElement countyCombo;
+	@FindBy(css = "#county-dd > option:nth-child(1)")
+	public WebElement firstCounty;
 	@FindBy(id = "is-mailing")
 	public WebElement sameAsHomeAddressCheck;
 	@FindBy(id = "save-address")
@@ -152,18 +156,23 @@ public abstract class PersonalPage extends Page {
 	public WebElement hasNotDependentsLabel;
 
 	// Add Phone Number
-	@FindBy(id = "addBtn")
-	public WebElement addPhoneNumberLink2;
-	@FindBy(id = "inputAddPhone")
-	public WebElement addPhoneNumberInput;
-	@FindBy(id = "btnAddPhone")
-	public WebElement buttonAddPhone;
-	@FindBy(id = "saveBtn")
-	public WebElement saveChangeAddPhoneNumber;
-	@FindBy(id = "mobile-phone")
-	public WebElement mobilePhoneNumber;
-	@FindBy(className = "delete-phone-btn")
-	public WebElement deletePhoneNumber;
+	@FindBy(id = "phone-type")
+	public WebElement phoneTypeInput;
+	@FindBy(id = "phone-country")
+	public WebElement phoneCountryInput;
+	@FindBy(css = "#content > div:nth-child(3) > div:nth-child(3) > input")
+	public WebElement phoneNumberInput;
+	@FindBy(css = "#phone-type > option:nth-child(1)")
+	public WebElement mobileType;
+	@FindBy(css = "#phone-type > option:nth-child(2)")
+	public WebElement workType;
+	@FindBy(css = "#phone-type > option:nth-child(1)")
+	public WebElement homeType;
+	@FindBy(css = "#phone-country > option")
+	public WebElement unitStatesType;
+	@FindBy(css = "#content > div.phone-edit-container > button")
+	public WebElement savePhoneNumber;
+
 	
 	// Links
 	@FindBy(css = "#statusesListHeader > li:nth-child(1)")
@@ -196,14 +205,14 @@ public abstract class PersonalPage extends Page {
 	public WebElement departamentLink;
 
 	//SSN
-	@FindBy(id = "ssnBtn")
-	WebElement ssnInsert;
 	@FindBy(id = "ssn-input")
-	WebElement ssnTextField;
+	public WebElement ssnTextField;
+	@FindBy(css = "body > div.popover-enumeration.bottom.in.popover-enumeration-ssn-itin > div.popover-enumeration-inner > div > div:nth-child(1)")
+	public WebElement addSSN;
 	@FindBy(id = "saveSSN")
-	WebElement saveSsn;
+	public WebElement saveSsn;
 	@FindBy(id = "no-results")
-	WebElement noResultCombo;
+	public WebElement noResultCombo;
 	
 	public PersonalPage(WebDriver driver) {
 		super(driver);
@@ -286,14 +295,12 @@ public abstract class PersonalPage extends Page {
 		waitPageIsLoad();
 		clickAButton(addPhoneNumberLink);
 		swichToIframe(editPhoneNumberiFrame);
-		waitUntilIsLoaded(addPhoneNumberLink2);
-		clickAButton(addPhoneNumberLink2);
-		waitUntilIsLoaded(addPhoneNumberInput);
-		waitUntilIsLoaded(buttonAddPhone);
-		setTextInField(addPhoneNumberInput, getPhoneNumber(phoneNumber, runID));
-		clickAButton(buttonAddPhone);
-		waitUntilIsLoaded(deletePhoneNumber);
-		clickAButton(saveChangeAddPhoneNumber);
+		clickAButton(phoneTypeInput);
+		Sleeper.sleep(1000, driver);
+		clickAButton(mobileType);
+		clickAButton(unitStatesType);
+		setTextInField(phoneNumberInput, getPhoneNumber(phoneNumber, runID));
+		clickAButton(savePhoneNumber);
 	}
 
 	public void addUsAddress(USAddress usAddress) throws Exception {
@@ -364,8 +371,8 @@ public abstract class PersonalPage extends Page {
 	public void addSocialSecurityNumber(String ssnNumber, String runID) throws Exception {
 		waitPageIsLoad();
 		clickAButton(addSocialSecurityNumber);
+		clickAButton(addSSN);
 		swichToIframe(socialSecurtyiFrame);
-		clickAButton(ssnInsert);
 		setTextInField(ssnTextField, getSSN(ssnNumber, runID));
 		clickAButton(saveSsn);
 	} 
@@ -405,7 +412,6 @@ public abstract class PersonalPage extends Page {
 		waitUntilIsLoaded(streetAddressField);
 		waitUntilIsLoaded(streetAddressOptionalField);
 		waitUntilIsLoaded(cityField);
-		waitUntilIsLoaded(stateCombo);
 		waitUntilIsLoaded(zipCodeField);
 		waitUntilIsLoaded(countyCombo);
 	}
@@ -415,9 +421,11 @@ public abstract class PersonalPage extends Page {
 		setTextInField(streetAddressField, usAddress.getStreet());
 		setTextInField(streetAddressOptionalField, usAddress.getSecondStreet());
 		setTextInField(cityField, usAddress.getCity());
-		setTextInCombo(stateCombo, usAddress.getState());
+		selectElementInComboOption(stateCombo, usAddress.getState());
 		setTextInField(zipCodeField, usAddress.getZipCode());
-		setTextInCombo(countyCombo, usAddress.getCounty());
+//		selectElementInComboOption(countyCombo, usAddress.getCounty());
+		clickAButton(countyCombo);
+		clickAButton(firstCounty);
 		if(usAddress.isSameAsHome()){
 			//TODO ADD BOX CKICK
 		}
@@ -537,5 +545,9 @@ public abstract class PersonalPage extends Page {
 		String phoneNumberRet = "";
 		phoneNumberRet = phoneNumber.substring(0,phoneNumber.length()-runID.length());
 		return phoneNumberRet+runID;
+	}
+	
+	public String parsePhoneNumber(String phoneNumber){
+		return "("+phoneNumber.substring(0,3)+")"+phoneNumber.substring(3,6)+"-"+phoneNumber.substring(6,phoneNumber.length());
 	}
 }

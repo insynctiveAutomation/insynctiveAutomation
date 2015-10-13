@@ -36,6 +36,9 @@
 			<!-- Tasks -->
 	        <include name="assignTask" />
 	        <include name="startChecklist" />
+	        
+			<!-- Job -->
+	        <include name="assignJob" />
 	      
 	      </methods>
 	    </class>

@@ -33,7 +33,7 @@ public class OpenEnrollmentTest extends TestMachine {
 	public void updatePersonalInformation(TestEnvironment testEnvironment) throws Throwable {
 		
 		startTest(testEnvironment);
-		login("InsynctiveTestNG+206@gmail.com", "password");
+		login("InsynctiveTestNG+206@gmail.com", "password", null);
 		
 		OpenEnrollmentPage openEnrollmentPage = new OpenEnrollmentPage(driver, properties.getEnvironment());
 		openEnrollmentPage.waitPageIsLoad();

@@ -35,12 +35,11 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 
 		long startTime = System.nanoTime();
 		try{ 
-			LoginPage loginPage = login();
-			boolean result = loginPage.isLoggedIn();
+			login("/Insynctive.Hub/Protected/Dashboard.aspx");
 			long endTime = System.nanoTime();
-			setResult(result, "Login Test", endTime - startTime);
-			Debugger.log("loginTest => "+result, isSaucelabs);
-			assertTrue(result);
+			setResult(true, "Login Test", endTime - startTime);
+			Debugger.log("loginTest => "+true, isSaucelabs);
+			assertTrue(true);
 		} catch(Exception ex){
 			long endTime = System.nanoTime();
 			failTest("Login",  ex, isSaucelabs, endTime - startTime);
@@ -48,13 +47,32 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers")
-	public void updatePersonalInformation(TestEnvironment testEnvironment) throws Exception {
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
+	public void isAllDataOK(TestEnvironment testEnvironment) throws Exception {
 
 		long startTime = System.nanoTime();
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeeDashboard.loadPage();
+			long endTime = System.nanoTime();
+			Boolean result = employeeDashboard.isAllDataOK(person);
+			
+			Debugger.log("isAllDataOK => "+result, isSaucelabs);
+			setResult(result, "Is all Data Ok in Dashboard?", endTime - startTime);
+			assertTrue(result);
+		
+		} catch(Exception ex){
+			long endTime = System.nanoTime();
+			failTest("Is all Data Ok in Dashboard?",  ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
+	public void updatePersonalInformation(TestEnvironment testEnvironment) throws Exception {
+		
+		long startTime = System.nanoTime();
+		try{ 
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
 			employeeDashboard.updatePersonalInformation(person, account.getRunIDString());
 			long endTime = System.nanoTime();
 			
@@ -65,6 +83,47 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		} catch(Exception ex){
 			long endTime = System.nanoTime();
 			failTest("Update Personal Information",  ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="updatePersonalInformation")
+	public void electBenefits(TestEnvironment testEnvironment) throws Exception {
+
+		long startTime = System.nanoTime();
+		try{ 
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			employeeDashboard.electBenefits(person, account.getRunIDString());
+			long endTime = System.nanoTime();
+			
+			setResult(true, "Elect Benefits", endTime - startTime);
+			Debugger.log("electBenefits => "+true, isSaucelabs);
+			assertTrue(true);
+			
+		} catch(Exception ex){
+			long endTime = System.nanoTime();
+			failTest("Elect Benefits",  ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="electBenefits")
+	public void fillAndSignBenefit(TestEnvironment testEnvironment) throws Exception {
+		
+		long startTime = System.nanoTime();
+		try{ 
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			
+			employeeDashboard.fillAndSignBenefit("Kaiser");
+			long endTime = System.nanoTime();
+			
+			setResult(true, "Fill and Sign Benefits", endTime - startTime);
+			Debugger.log("fillAndSignBenefit => "+true, isSaucelabs);
+			assertTrue(true);
+			
+		} catch(Exception ex){
+			long endTime = System.nanoTime();
+			failTest("Fill and Sign Benefits",  ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
 		}
 	}

@@ -64,7 +64,11 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	WebElement firstTaskLink;
 	@FindBy(id = "froalaEditor")
 	WebElement AdditionalInstructioniFrame;
+	@FindBy(id = "mobile-phone")
+	WebElement mobilePhoneNumber;
 
+	
+	
 	public PersonFilePage(WebDriver driver, String enviroment) {
 		super(driver);
 		this.enviroment = enviroment;

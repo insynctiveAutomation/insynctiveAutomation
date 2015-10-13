@@ -2,12 +2,17 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 
+import org.json.JSONException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import insynctive.exception.ConfigurationException;
 import insynctive.model.EmergencyContact;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
@@ -25,6 +30,12 @@ public class PersonFileTest extends TestMachine {
 	public void tearUp() throws Exception {
 		super.tearUp();
 		this.sessionName = "Person File Test ("+ person.getEmail()+")";
+	}
+	
+	@Override
+	@AfterClass(alwaysRun = true)
+	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
+		super.teardown();
 	}
 	
 	@DataProvider(name = "hardCodedBrowsers", parallel = true)

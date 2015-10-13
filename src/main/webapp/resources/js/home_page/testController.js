@@ -76,10 +76,9 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 				self.start = false;
 				self.loaderVisible = "hidden";
 				self.getTestsStatus();
-				self.runStatus = '';
+				self.runStatus = undefined;
 				self.videoLink = '';
 				self.tlaIndex = undefined;
-				self.getTestDetails($scope.testSuiteName);
 			}); 
 		}
 	}; this.clearTests();

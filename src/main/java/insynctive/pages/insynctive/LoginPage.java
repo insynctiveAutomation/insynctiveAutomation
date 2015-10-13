@@ -81,4 +81,8 @@ public class LoginPage extends Page implements PageInterface{
     public  boolean isNotLoggedIn() {
         return driver.findElements(By.xpath("//span[@class='js-auth-signin b-navbar__exit h-ml-10']")).size() > 0;
     }
+
+	public void setReturnURL(String returnURL) {
+		this.PAGE_URL = "http://"+ enviroment + ".insynctiveapps.com/Insynctive.Hub/Login.aspx?ReturnUrl="+returnURL+"?SkipGuide=True";
+	}
 }

@@ -166,15 +166,20 @@ public abstract class TestMachine {
 		homePage.openPersonFile(emailSearch);
 	}
 
-	public LoginPage login(String username, String password) throws Exception {
+	public LoginPage login(String username, String password, String returnURL) throws Exception {
 		LoginPage loginPage = new LoginPage(driver, properties.getEnvironment());
+		if(returnURL != null) loginPage.setReturnURL(returnURL);
 		loginPage.loadPage();
 		loginPage.login(username, password);
 		return loginPage;
 	}
 	
 	public LoginPage login() throws Exception {
-		return login(properties.getLoginUsername(),properties.getLoginPassword());
+		return login(properties.getLoginUsername(),properties.getLoginPassword(), null);
+	}
+	
+	public LoginPage login(String returnURL) throws Exception {
+		return login(properties.getLoginUsername(),properties.getLoginPassword(), returnURL);
 	}
 	
 	public LoginPage loginAsEmployee(String email, String password) throws Exception {
