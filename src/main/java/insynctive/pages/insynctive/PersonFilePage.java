@@ -1,6 +1,7 @@
 package insynctive.pages.insynctive;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -107,10 +108,12 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		openTaskTab();
 		swichToIframe(tabiFrame);
 		goToRunninChecklist();
-		clickOnStartChecklist();
+		Sleeper.sleep(3000, driver);
+		clickAButton(startChecklistButton);
 		swichToIframe(startChecklistiFrame);
-		waitUntilIsLoaded(checkListsCombo);
+		//TODO MOVE Test Template TO DB
 		setTextInCombo(checkListsCombo, "Test Template");
+		Sleeper.sleep(2000, driver);
 		clickAButton(assignChecklistButton);
 		Sleeper.sleep(8000, driver);
 	}
@@ -124,6 +127,35 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		setTextInField(departamentField, departament);
 		clickAButton(saveChangeTitle);
 		waitUntilnotVisibility(saveChangeTitle);
+	}
+
+	public void assignJob() throws Exception {
+		try{
+			swichToFirstFrame(driver);
+			clickAButton(employmentTab);
+			swichToIframe(tabiFrame);
+			swichToIframe(employmentFrm);
+			clickAButton(addJobButon);
+			clickAButton(datePicker);
+			setTextInField(dateInput, "10/05/2000");
+			clickAButton(saveBtn);
+			clickAButton(statesPicker);
+			Sleeper.sleep(1500, driver);
+			setTextInField(statesPickerSearch, "California");
+			Sleeper.sleep(3000, driver);
+			clickAButton(firstSearchJobState);
+			clickAButton(categoryPicker);
+			clickAButton(chefExecutives);
+			clickAButton(rateEditor);
+			setTextInField(rateInput, "1000");
+			clickAButton(saveRate);
+			clickAButton(paymentUnitKey);
+			clickAButton(findElementByText("div", "Year"));
+			Sleeper.sleep(1500, driver);
+			clickAButton(btnActivate);
+		} catch(Exception ex){
+			goToPersonalTab();
+		}
 	}
 
 	/* Check if is complete Methods */
@@ -155,13 +187,13 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		waitPageIsLoad();
 		
 		String assertTitleName = personData.getName()+ " " + personData.getLastName();
-				waitUntilIsLoaded(fullNameLink);
-				boolean fullNameAssert = fullNameLink.getText().equals(assertTitleName);
-				
-				swichToFirstFrame(driver);
-				boolean titleNameAssert = nameLink.getText().equals(assertTitleName);
-				
-				return fullNameAssert && titleNameAssert;
+		waitUntilIsLoaded(fullNameLink);
+		boolean fullNameAssert = fullNameLink.getText().equals(assertTitleName);
+		
+		swichToFirstFrame(driver);
+		boolean titleNameAssert = nameLink.getText().equals(assertTitleName);
+		
+		return fullNameAssert && titleNameAssert;
 	}
 
 	public boolean isChangeGender(Gender genderType) throws Exception {
@@ -231,11 +263,6 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		}
 		return result;
 	}
-	
-	public void goToPersonalTab() throws Exception{
-		swichToFirstFrame(driver);
-		clickAButton(personalLink);
-	}
 
 	public boolean isChecklistAssigned() throws Exception {
 		boolean result;
@@ -282,9 +309,43 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		Sleeper.sleep(5000, driver);
 		waitPageIsLoad();		
 		return this.getNumberOfEmergencyContacts() < count;
+	}
 
+	public boolean isChangePrimaryPhone(Map<String, String> resultsPhones) throws Exception {
+		Sleeper.sleep(4000, driver);
+		waitPageIsLoad();
+		return phoneNumberLink.getText().equals(resultsPhones.get("newPrimaryPhone")) && alternativePhoneLink.getText().equals(resultsPhones.get("oldPrimaryPhone"));
+	}
+
+	public Boolean isJobAdded() throws Exception {
+		try { } 
+		
+		catch (Exception ex){ throw ex;} 
+		
+		finally { goToPersonalTab();}
+		
+		return true;
 	}
 	
+	public boolean isThisPerson(PersonData personData) throws Exception {
+		boolean changeTitle = isChangeTitle(personData.getTitleOfEmployee(),
+				personData.getDepartamentOfEmployee());
+		boolean changeFullName = isChangePeronDetailBeforeCreatePerson(personData, Wait.NOWAIT);
+
+		return changeTitle && changeFullName;
+	}
+
+	public boolean isAddAlternativePhoneNumber(String primaryPhone, String runIDString) throws Exception {
+		Sleeper.sleep(4000, driver);
+		waitPageIsLoad();
+		List<WebElement> elements = driver.findElements(By.id("work-phone"));
+		for(WebElement element : elements){
+			if(element != null && element.getText().equals(parsePhoneNumber(getPhoneNumber(getSecondaryPhoneNumber(primaryPhone), runIDString)))){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/* Waits Methods */
 	public void waitTaskTabIsLoad() throws Exception {
@@ -297,76 +358,38 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 	
 	/* Utilities */
-	public int getNumberOfEmergencyContacts () throws Exception
-	{
+	public int getNumberOfEmergencyContacts () throws Exception {
 		waitPageIsLoad();
      	return driver.findElements(By.cssSelector("#content > div:nth-of-type(5) > div > div")).size();
-	
 	}
 
 	/* Private Methods */
-	private void openTaskTab() throws Exception {
+	public void openTaskTab() throws Exception {
 		swichToFirstFrame(driver);
 		clickAButton(tasksTab);
 	}
 
-	private void goToRunninChecklist() throws Exception {
+	public void goToRunninChecklist() throws Exception {
 		waitUntilIsLoaded(runningChecklist);
 		clickAButton(runningChecklist);
 	}
-
-	private void clickOnStartChecklist() throws Exception {
-		Sleeper.sleep(3000, driver);
-		waitUntilIsLoaded(startChecklistButton);
-		clickAButton(startChecklistButton);
+	
+	public void goToPersonalTab() throws Exception{
+		swichToFirstFrame(driver);
+		clickAButton(personalLink);
 	}
 
 	// TODO METHODS
 	@Override
 	public boolean isPageLoad() {
-		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isUpdateUsAddress(USAddress usAddress) {
 		return false;
 	}
 
 	public void updateUsAddress(USAddress usAddress) throws Exception {
 		// TODO Auto-generated method stub
-	}
-
-	public boolean isUpdateUsAddress(USAddress usAddress) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean isThisPerson(PersonData personData) throws Exception {
-		boolean changeTitle = isChangeTitle(personData.getTitleOfEmployee(),
-				personData.getDepartamentOfEmployee());
-		boolean changeFullName = isChangePeronDetailBeforeCreatePerson(personData, Wait.NOWAIT);
-
-		return changeTitle && changeFullName;
-	}
-
-	public void assignJob() throws Exception {
-		swichToFirstFrame(driver);
-		clickAButton(employmentTab);
-		swichToIframe(tabiFrame);
-		swichToIframe(employmentFrm);
-		clickAButton(addJobButon);
-		clickAButton(datePicker);
-		setTextInField(dateInput, "10/05/2000");
-		clickAButton(saveBtn);
-		clickAButton(statesPicker);
-		Sleeper.sleep(1500, driver);
-		setTextInField(statesPickerSearch, "California");
-		Sleeper.sleep(3000, driver);
-		clickAButton(firstSearchJobState);
-		clickAButton(categoryPicker);
-		clickAButton(chefExecutives);
-		clickAButton(rateEditor);
-		setTextInField(rateInput, "1000");
-		clickAButton(saveRate);
-		clickAButton(paymentUnitKey);
-		clickAButton(findElementByText("div", "Year"));
-		Sleeper.sleep(1500, driver);
-		clickAButton(btnActivate);
 	}
 }

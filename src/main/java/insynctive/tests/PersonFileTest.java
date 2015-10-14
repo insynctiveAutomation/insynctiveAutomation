@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.testng.annotations.AfterClass;
@@ -19,6 +20,7 @@ import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
+import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
@@ -64,17 +66,22 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
+//	//OPEN PERSON FILE NOT CREATE
 //	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-//	public void openPersonFile(TestEnvironment testEnvironment) throws Exception {
-//		try{ long startTime = System.nanoTime();
-//			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnviroment());
-//			homePage.createPersonTest(person.getSearchEmail());
-//			
+//	public void createPersonTest(TestEnvironment testEnvironment) throws Exception {
+//		long startTime = System.nanoTime();
+//		try{ 
+//			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+//			homePage.openPersonFile(person.getSearchEmail()+"+72");
+//
 //			boolean result = homePage.isPersonFileOpened();
+//			Sleeper.sleep(5000, driver);
+//			long endTime = System.nanoTime();
+//			setResult(result, "Open Person File", endTime - startTime);
 //			Debugger.log("createPersonTest => "+result, isSaucelabs);
-//			long endTime = System.nanoTime();setResult(result, "Open Person File");
 //			assertTrue(result);
 //		} catch(Exception ex){
+//			long endTime = System.nanoTime();
 //			failTest("Open Person File", ex, isSaucelabs, endTime - startTime);
 //			assertTrue(false);
 //		}
@@ -103,7 +110,6 @@ public class PersonFileTest extends TestMachine {
 			assertTrue(false);
 		}
 	}
-	
 
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
 	public void changePrimaryEmail(TestEnvironment testEnvironment) throws Exception {
@@ -279,6 +285,44 @@ public class PersonFileTest extends TestMachine {
 		}catch (Exception ex){
 			long endTime = System.nanoTime();
 			failTest("Add Phone Number", ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="addPhoneNumber")
+	public void addAlternativePhone(TestEnvironment testEnvironment) throws Exception{
+		long startTime = System.nanoTime();
+		try{ 
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			personFilePage.addSecondaryEmail(person.getPrimaryPhone(), account.getRunIDString());
+			
+			boolean result = personFilePage.isAddAlternativePhoneNumber(person.getPrimaryPhone(), account.getRunIDString());
+			Debugger.log("addAlternativePhone =>"+result, isSaucelabs);
+			long endTime = System.nanoTime();
+			setResult(result, "Add Alternative Number", endTime - startTime);
+			assertTrue(result);
+		}catch (Exception ex){
+			long endTime = System.nanoTime();
+			failTest("Add Alternative Number", ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="addAlternativePhone")
+	public void makePrimaryPhone(TestEnvironment testEnvironment) throws Exception{
+		long startTime = System.nanoTime();
+		try{ 
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			Map<String, String> resultsPhones = personFilePage.makeAsPrimary();
+			
+			boolean result = personFilePage.isChangePrimaryPhone(resultsPhones);
+			Debugger.log("makePrimaryPhone =>"+result, isSaucelabs);
+			long endTime = System.nanoTime();
+			setResult(result, "Make as Primary Phone", endTime - startTime);
+			assertTrue(result);
+		}catch (Exception ex){
+			long endTime = System.nanoTime();
+			failTest("makePrimaryPhone", ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
 		}
 	}
@@ -468,11 +512,13 @@ public class PersonFileTest extends TestMachine {
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-
 			personFilePage.assignJob();
 			
-			//TODO
-			assertTrue(true);
+			Boolean result = personFilePage.isJobAdded();
+			
+			Debugger.log("assignJob"+result, isSaucelabs);
+			setResult(result, "Assign Job");
+			assertTrue(result);
 		}catch (Exception ex){ 
 			long endTime = System.nanoTime();
 			failTest("Assign Job", ex, isSaucelabs, endTime - startTime);

@@ -34,6 +34,7 @@ import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.HibernateUtil;
+import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
 import insynctive.utils.data.TestEnvironment;
 
@@ -102,6 +103,7 @@ public abstract class TestMachine {
 			
 			person = account.getPerson();
 			properties = account.getAccountProperty();
+			Sleeper.setIsRemote(properties.isRemote());
 			
 			TestResults.addResult("<h2>"+sessionName+"</h2>");
 		} catch(Exception ex){
@@ -118,10 +120,9 @@ public abstract class TestMachine {
 	
 	@AfterClass(alwaysRun = true)
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		if(properties.isRemote()){
-			this.driver.quit();
-		}
-		setFinalResult();
+		try{ if(properties.isRemote()){this.driver.quit();}} 
+		catch(Exception ex) {}
+		finally{ setFinalResult();}
 	}
 	
 	public WebDriver createDriver(TestEnvironment testEnvironment) throws MalformedURLException {
@@ -138,6 +139,7 @@ public abstract class TestMachine {
 	    caps.setCapability("record_video", "true");
 	    caps.setCapability("record_network", "true");
 	    caps.setCapability("record_snapshot", "false");
+	    caps.setCapability("max_duration", 3600);
 
 	    ("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub").equals("http://eugenio.valeiras%2b9%40gmail.com:uca60139cbdf183b@hub.crossbrowsertesting.com:80/wd/hub");
 	    webDriver.set(new RemoteWebDriver(new URL("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub"), caps));
@@ -162,7 +164,7 @@ public abstract class TestMachine {
 	}
 	
 	public void openPersonFile(String emailSearch) throws Throwable{
-		HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+		HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment()); 
 		homePage.openPersonFile(emailSearch);
 	}
 

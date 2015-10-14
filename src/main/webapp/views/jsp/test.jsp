@@ -46,7 +46,7 @@
 <body data-ng-controller="TestController as testCtrl">
 	<div ng-if="testCtrl.isLogin">
 		<div class="top-right-corner h4"><a id="configurationLink" ng-click="testCtrl.openConfig()">Configuration</a></div>
-		<div class="bottom-right-corner h4"><a id="configurationLink" ng-click="testCtrl.logout()">Logout</a></div>
+		<div class="top-left-corner h4"><a id="configurationLink" ng-click="testCtrl.logout()">Logout</a></div>
 		<div ng-show="testCtrl.showPanel()" class="container">
 			<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
 		

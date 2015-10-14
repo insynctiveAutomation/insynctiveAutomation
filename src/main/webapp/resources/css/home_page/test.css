@@ -1,6 +1,7 @@
 a:hover {
  cursor:pointer;
 }
+
 .success {
 	color: green;
 }
@@ -42,6 +43,16 @@ a:hover {
 	position: absolute;
 	top: 0;
 	right: 0;
+}
+
+.top-left-corner {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.top-left-corner > a {
+	padding-left: 10px;
 }
 
 .bottom-right-corner {

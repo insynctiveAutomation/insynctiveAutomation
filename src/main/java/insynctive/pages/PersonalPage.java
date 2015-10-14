@@ -1,6 +1,8 @@
 package insynctive.pages;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -30,6 +32,8 @@ public abstract class PersonalPage extends Page {
 	public WebElement primaryEmailiFrame;
 	@FindBy(className = "phones-add-popover")
 	public WebElement editPhoneNumberiFrame;
+	@FindBy(css = "body > div.standard-popover.bottom.in.webui-no-padding > div.standard-popover-inner > div.standard-popover-content > iframe")
+	public WebElement editSecondaryPhoneNumberiFrame;
 	@FindBy(className = "ssn-popover")
 	public WebElement socialSecurtyiFrame;
 	@FindBy(className = "address-add-popover")
@@ -155,7 +159,7 @@ public abstract class PersonalPage extends Page {
 	@FindBy(css = "#dependents-grid > span.no-dependents")
 	public WebElement hasNotDependentsLabel;
 
-	// Add Phone Number
+	// Phone Number
 	@FindBy(id = "phone-type")
 	public WebElement phoneTypeInput;
 	@FindBy(id = "phone-country")
@@ -172,7 +176,12 @@ public abstract class PersonalPage extends Page {
 	public WebElement unitStatesType;
 	@FindBy(css = "#content > div.phone-edit-container > button")
 	public WebElement savePhoneNumber;
-
+	@FindBy(id = "work-phone")
+	public WebElement alternativePhoneLink;
+	@FindBy(className = "phones-edit-popover")
+	public WebElement phonesEditFrame;
+	@FindBy(css = "#content > div.phone-edit-container.input-row > div > button > span.ladda-label")
+	public WebElement makePrimaryBtn;
 	
 	// Links
 	@FindBy(css = "#statusesListHeader > li:nth-child(1)")
@@ -197,7 +206,7 @@ public abstract class PersonalPage extends Page {
 	WebElement removeAddressButton;
 	@FindBy(id = "addBtn")
 	public WebElement addSocialSecurityNumber;
-	@FindBy(id = "phone-text")
+	@FindBy(id = "mobile-phone")
 	public WebElement phoneNumberLink;
 	@FindBy(id = "title-text")
 	public WebElement titleLink;
@@ -290,17 +299,38 @@ public abstract class PersonalPage extends Page {
 		waitPageIsLoad();
 		clickAButton(hasNotDependentsLink);
 	}
-
-	public void addPhoneNumber(String phoneNumber, String runID) throws Exception {
+	
+	public void addPhoneNumber(String phoneNumber, String runID, WebElement iframe) throws Exception {
 		waitPageIsLoad();
 		clickAButton(addPhoneNumberLink);
-		swichToIframe(editPhoneNumberiFrame);
-		clickAButton(phoneTypeInput);
+		swichToIframe(iframe);
+		Sleeper.sleep(2500, driver);
+		selectElementInComboWithoutClickCombo(phoneTypeInput, "Work", "option");
 		Sleeper.sleep(1000, driver);
-		clickAButton(mobileType);
-		clickAButton(unitStatesType);
+		selectElementInComboWithoutClickCombo(phoneCountryInput, "United Stated", "option");
 		setTextInField(phoneNumberInput, getPhoneNumber(phoneNumber, runID));
+		Sleeper.sleep(1000, driver);
 		clickAButton(savePhoneNumber);
+	}
+
+	public void addPhoneNumber(String phoneNumber, String runID) throws Exception {
+		addPhoneNumber(phoneNumber, runID, editPhoneNumberiFrame);
+	}
+	
+	public void addSecondaryEmail(String phoneNumber, String runID) throws Exception {
+		addPhoneNumber(getSecondaryPhoneNumber(phoneNumber), runID, editSecondaryPhoneNumberiFrame);
+	}
+
+	public Map<String, String> makeAsPrimary() throws Exception{
+		Map<String, String> result = new HashMap<>();
+		waitPageIsLoad();
+		result.put("newPrimaryPhone", alternativePhoneLink.getText());
+		result.put("oldPrimaryPhone", phoneNumberLink.getText());
+		clickAButton(alternativePhoneLink);
+		swichToIframe(phonesEditFrame);
+		Sleeper.sleep(1500, driver);
+		clickAButton(makePrimaryBtn);
+		return result;
 	}
 
 	public void addUsAddress(USAddress usAddress) throws Exception {
@@ -320,7 +350,6 @@ public abstract class PersonalPage extends Page {
 		clickAButton(address);
 		swichToIframe(usAddressEditiFrame);
 		waitUsAddresFrameIsLoad();
-		waitUntilIsLoaded(removeAddressButton);
 		clickAButton(removeAddressButton);
 		waitPageIsLoad();
 	}
@@ -421,11 +450,9 @@ public abstract class PersonalPage extends Page {
 		setTextInField(streetAddressField, usAddress.getStreet());
 		setTextInField(streetAddressOptionalField, usAddress.getSecondStreet());
 		setTextInField(cityField, usAddress.getCity());
-		selectElementInComboOption(stateCombo, usAddress.getState());
+		selectElementInComboWithoutClickCombo(stateCombo, usAddress.getState(), "option");
 		setTextInField(zipCodeField, usAddress.getZipCode());
-//		selectElementInComboOption(countyCombo, usAddress.getCounty());
-		clickAButton(countyCombo);
-		clickAButton(firstCounty);
+		selectElementInComboWithoutClickCombo(countyCombo, usAddress.getCounty(), "option");
 		if(usAddress.isSameAsHome()){
 			//TODO ADD BOX CKICK
 		}
@@ -548,6 +575,10 @@ public abstract class PersonalPage extends Page {
 	}
 	
 	public String parsePhoneNumber(String phoneNumber){
-		return "("+phoneNumber.substring(0,3)+")"+phoneNumber.substring(3,6)+"-"+phoneNumber.substring(6,phoneNumber.length());
+		return "("+phoneNumber.substring(0,3)+") "+phoneNumber.substring(3,6)+"-"+phoneNumber.substring(6,phoneNumber.length());
+	}
+	
+	public String getSecondaryPhoneNumber(String phoneNumber) {
+		return "9"+phoneNumber.substring(1,phoneNumber.length());
 	}
 }

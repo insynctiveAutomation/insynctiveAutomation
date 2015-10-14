@@ -258,9 +258,21 @@ public class Page {
 		new Select(combo).selectByVisibleText(text);
 		return true;
 	}
+
 	public boolean selectElementInCombo(WebElement combo, String text, String typeOfContainer) throws Exception {
 		try{
 			clickAButton(combo);
+			clickAButton((driver.findElement(By.xpath("//"+typeOfContainer+"[contains(text(),'"+text+"')]" ))));
+			return true;
+		} catch (NullPointerException nEx){
+			throw new ElementNotFoundException(getMessageFromWebElement(combo)+" is not found",null);
+		} catch (org.openqa.selenium.NoSuchElementException nSEx){
+			return false;
+		}
+	}
+	
+	public boolean selectElementInComboWithoutClickCombo(WebElement combo, String text, String typeOfContainer) throws Exception {
+		try{
 			clickAButton((driver.findElement(By.xpath("//"+typeOfContainer+"[contains(text(),'"+text+"')]" ))));
 			return true;
 		} catch (NullPointerException nEx){

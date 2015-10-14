@@ -22,6 +22,8 @@
 
 			<!-- Contact -->
 	        <include name="addPhoneNumber" />
+	        <include name="addAlternativePhone" />
+	        <include name="makePrimaryPhone" />
 	        <include name="changePrimaryEmail" />
 	      
 	      	<!-- EMERGENCY CONTACT -->
