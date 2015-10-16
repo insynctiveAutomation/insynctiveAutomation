@@ -41,7 +41,6 @@
 	        
 			<!-- Job -->
 	        <include name="assignJob" />
-	      
 	      </methods>
 	    </class>
 	  </classes>

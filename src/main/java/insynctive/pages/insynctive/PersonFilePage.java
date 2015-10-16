@@ -99,7 +99,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 					task.getAdditionalInstruction());
 			swichToFirstFrame(driver);
 			clickAButton(btnAssignTask);
-			Sleeper.sleep(2500, driver);
+			Sleeper.sleep(5000, driver);
 		}
 	}
 
@@ -252,7 +252,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	public boolean isTaskAssigned() throws Exception {
 		boolean result;
 		try{
-			Sleeper.sleep(8000, driver);
+			Sleeper.sleep(2500, driver);
 			waitTaskTabIsLoad();
 			List<Task> tasks = Task.getTasks();
 			result = firstTaskLink.getText().equals(tasks.get(0).getDetail());

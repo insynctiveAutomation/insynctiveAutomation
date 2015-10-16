@@ -297,7 +297,7 @@ public abstract class TestMachine {
 	private String getEmailForCurl() {
 		String returnEmail = "";
 		String[] returnUsernameForCurl = username.split("\\+");
-		returnEmail += (returnUsernameForCurl.length == 2) ? returnUsernameForCurl[0]+"%2B"+returnUsernameForCurl[1] : "";
+		returnEmail += (returnUsernameForCurl.length == 2) ? returnUsernameForCurl[0]+"%2B"+returnUsernameForCurl[1] : returnUsernameForCurl[0];
 		returnUsernameForCurl = returnEmail.split("@");
 		return returnUsernameForCurl[0]+"%40"+returnUsernameForCurl[1];
 	}

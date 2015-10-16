@@ -1,5 +1,6 @@
 package insynctive.pages;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.model.PersonData;
 import insynctive.model.PersonData.Gender;
 import insynctive.model.PersonData.MaritalStatus;
@@ -190,29 +192,53 @@ public abstract class PersonalPage extends Page {
 	public WebElement fullNameLink;
 	@FindBy(id = "name")
 	public WebElement nameLink;
-	@FindBy(id = "date-picker")
-	public WebElement birthDateLink;
-	@FindBy(className = "gender-picker")
-	public WebElement genderLink;
-	@FindBy(className = "marital-picker")
-	public WebElement maritalLink;
+	
 	@FindBy(className = "email-primary")
 	public WebElement primaryEmailLink;
-	@FindBy(id = "addPhoneBtn")
-	public WebElement addPhoneNumberLink;
-	@FindBy(id = "add-address")
-	public WebElement addAddressLink;
-	@FindBy(id = "delete-addresses")
-	WebElement removeAddressButton;
+	
+	@FindBy(id = "date-picker")
+	public WebElement birthDateLink;
+	@FindBy(css = "#birth-date-field > div.field-text-container > div")
+	public WebElement birthDateRequired;
+	
+	@FindBy(className = "gender-picker")
+	public WebElement genderLink;
+	@FindBy(css = "#gender-field > div:nth-child(1) > div.pp_required_message")
+	public WebElement genderRequired;
+	
+	
+	@FindBy(className = "marital-picker")
+	public WebElement maritalLink;
+	@FindBy(css = "#marital-status-field > div:nth-child(1) > div.pp_required_message")
+	public WebElement maritalRequired;
+	
 	@FindBy(id = "addBtn")
 	public WebElement addSocialSecurityNumber;
+	@FindBy(css = "div.pp_required_message:nth-child(5)")
+	public WebElement socialSecurityNumberRequired;
+	
+	@FindBy(id = "addPhoneBtn")
+	public WebElement addPhoneNumberLink;
+	@FindBy(css = ".contact-info-container > div:nth-child(3) > div:nth-child(8) > div:nth-child(3) > div.pp_required_message")
+	public WebElement phoneRequired;
 	@FindBy(id = "mobile-phone")
 	public WebElement phoneNumberLink;
+	
+	@FindBy(id = "add-address")
+	public WebElement addAddressLink;
+	@FindBy(css = "#grid-address > div:nth-child(3) > div.pp_required_message")
+	public WebElement addressRequired;
+	@FindBy(id = "delete-addresses")
+	WebElement removeAddressButton;
+	
 	@FindBy(id = "title-text")
 	public WebElement titleLink;
 	@FindBy(id = "department-text")
 	public WebElement departamentLink;
 
+	@FindBy(css = "#dependentsDescription > div.pp_required_message")
+	public WebElement dependentRequired;
+	
 	//SSN
 	@FindBy(id = "ssn-input")
 	public WebElement ssnTextField;
@@ -580,5 +606,15 @@ public abstract class PersonalPage extends Page {
 	
 	public String getSecondaryPhoneNumber(String phoneNumber) {
 		return "9"+phoneNumber.substring(1,phoneNumber.length());
+	}
+
+	public boolean isPresent(WebElement element) throws Exception {
+		swichToTabiFrame();
+		return isElementPresent(element);
+	}
+
+	private void swichToTabiFrame() throws IOException, InterruptedException, ElementNotFoundException {
+		swichToFirstFrame(driver);
+		swichToIframe(tabiFrame);
 	}
 }

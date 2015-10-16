@@ -1,7 +1,10 @@
 package insynctive.pages.insynctive.employee;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Callable;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -108,6 +111,9 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 	private WebElement apllySignature;
 	@FindBy(id = "rappdf")
 	private WebElement rapPDFFrame;
+
+	@FindBy(css = "div#selectionpart > div > div > div > div > table > tbody > tr > td > div > div.leftproduct > span")
+	private List<WebElement> benefitsSpans;
 	
 	
 	public EmployeeDashboardPage(WebDriver driver, String enviroment) {
@@ -130,18 +136,26 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 	
 	public void updatePersonalInformation(PersonData person, String runID) throws Exception{
 		clickAButton(buttonFirstStep);
+		Sleeper.sleep(7000, driver);
+		
 		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
 		personalPage.tabiFrame = updateInformationFrame;
-		
-		personalPage.changeBirthDate(person.getBirthDate());
-		personalPage.changeGender(person.getGender());
-		personalPage.changeMaritalStatus(person.getMaritalStatus());
-		personalPage.addSocialSecurityNumber(person.getSsn(), runID);
-		personalPage.addPhoneNumber(person.getPrimaryPhone(), runID);
-		personalPage.addUsAddress(person.getUSAddress());
-		personalPage.addHasNotDependents();
+		if(personalPage.isPresent(personalPage.birthDateRequired))  personalPage.changeBirthDate(person.getBirthDate());
+		Sleeper.sleep(1500, driver);
+		if(personalPage.isPresent(personalPage.genderRequired)) personalPage.changeGender(person.getGender());
+		Sleeper.sleep(500, driver);
+		if(personalPage.isPresent(personalPage.maritalRequired)) personalPage.changeMaritalStatus(person.getMaritalStatus());
+		Sleeper.sleep(500, driver);
+		if(personalPage.isPresent(personalPage.socialSecurityNumberRequired)) personalPage.addSocialSecurityNumber(person.getSsn(), runID);
+		Sleeper.sleep(500, driver);
+		if(personalPage.isPresent(personalPage.phoneRequired)) personalPage.addPhoneNumber(person.getPrimaryPhone(), runID);
+		Sleeper.sleep(500, driver);
+		if(personalPage.isPresent(personalPage.addressRequired)) personalPage.addUsAddress(person.getUSAddress());
+		Sleeper.sleep(500, driver);
+		if(personalPage.isPresent(personalPage.dependentRequired)) personalPage.addHasNotDependents();
 		swichToFirstFrame(driver);
 		clickAButton(doneButton);
+		Sleeper.sleep(30000, driver); //<- This is to much
 	}
 
 	@Override
@@ -151,17 +165,19 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 
 	public void electBenefits(PersonData person, String runID) throws Exception {
 		//Elect Benefits
+		swichToFirstFrame(driver);
 		clickAButton(buttonSecondStep);
 		swichToIframe(formTaskFrame);
-		clickAButton(medicalSelectorFirst);
+		clickAButton(selectBenefit("Gold Full PPO 750 OffEx"));
 		Sleeper.sleep(1000, driver);
 		clickAButton(dentalPanel);
-		clickAButton(dentalSelectorFirst);
+		clickAButton(selectBenefit("Smile Plus Gold 50/1500/Ortho/U85"));
 		Sleeper.sleep(1000, driver);
 		clickAButton(visionPanel);
-		clickAButton(visionSelectorFirst);
+		clickAButton(selectBenefit("VSP Choice Plan"));
 		Sleeper.sleep(1000, driver);
 		clickAButton(btnSendInvite);
+		Sleeper.sleep(4500, driver);
 		
 		//Sign Benefits
 		clickAButton(signBtn);
@@ -173,12 +189,15 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		swichToFormTaskFrame();
 		clickAButton(doneBtn);
 		clickAButton(acknowledgeBtn);
+		Sleeper.sleep(30000, driver);//<- This is to much
 	}
 	
+//	div#selectionpart > div > div > div > div > table > tbody > tr > td > div > div.leftproduct > span
 	public void fillAndSignBenefit(String benefitName) throws Exception{
+		swichToFirstFrame(driver);
 		clickAButton(buttonThirdStep);
 		selectElementInCombo(benefitsToEnroll, benefitName, "div");
-		Sleeper.sleep(8000, driver);
+		Sleeper.sleep(12000, driver);
 		swichToFormTaskFrame();
 		clickAButton(signTaskBtn);
 		swichToIframe(rapPDFFrame);
@@ -189,11 +208,26 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		swichToFormTaskFrame();
 		clickAButton(doneButton);
 		swichToFirstFrame(driver);
+		Sleeper.sleep(10000, driver);
 	}
 	
 	public void swichToFormTaskFrame() throws IOException, InterruptedException, ElementNotFoundException{
 		swichToFirstFrame(driver);
 		swichToIframe(formTaskFrame);
+	}
+	
+	public WebElement selectBenefit(String benefitName){
+		for(WebElement benefitsSpan : benefitsSpans){
+			if(benefitsSpan.getText().contains(benefitName)){
+				return getButtonTuSelectBenefit(benefitsSpan);
+			}
+		}
+		return null;
+	}
+
+	private WebElement getButtonTuSelectBenefit(WebElement benefitsSpan) {
+		System.out.println(benefitsSpan.findElement(By.xpath("./../../../../td[1]/div[1]")).getAttribute("class"));
+		return benefitsSpan.findElement(By.xpath("./../../../../td[1]/div[1]"));
 	}
 	
 }

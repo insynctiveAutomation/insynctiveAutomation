@@ -66,7 +66,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-//	//OPEN PERSON FILE NOT CREATE
+////	//OPEN PERSON FILE NOT CREATE
 //	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
 //	public void createPersonTest(TestEnvironment testEnvironment) throws Exception {
 //		long startTime = System.nanoTime();
@@ -408,7 +408,7 @@ public class PersonFileTest extends TestMachine {
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
 			personFilePage.assignChecklist();
-			
+			Sleeper.sleep(5000, driver);
 			boolean result = personFilePage.isChecklistAssigned();
 			Debugger.log("startChecklist => "+result, isSaucelabs);
 			long endTime = System.nanoTime();
