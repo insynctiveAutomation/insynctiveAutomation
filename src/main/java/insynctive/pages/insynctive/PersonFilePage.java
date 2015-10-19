@@ -57,6 +57,8 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	WebElement startChecklistiFrame;
 	@FindBy(css = "#ddChecklist_chosen > a")
 	WebElement checkListsCombo;
+	@FindBy(id = "ddChecklist")
+	WebElement selectChecklist;
 	@FindBy(id = "btnStartChecklist")
 	WebElement assignChecklistButton;
 	@FindBy(css = "div.row:nth-child(3) > div:nth-child(1) > span:nth-child(1)")
@@ -108,11 +110,12 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		openTaskTab();
 		swichToIframe(tabiFrame);
 		goToRunninChecklist();
-		Sleeper.sleep(3000, driver);
 		clickAButton(startChecklistButton);
 		swichToIframe(startChecklistiFrame);
+		Sleeper.sleep(3000, driver);
 		//TODO MOVE Test Template TO DB
-		setTextInCombo(checkListsCombo, "Test Template");
+		clickAButton(checkListsCombo);
+		selectElementInComboWithoutClickCombo(selectChecklist, "Test Template", "li");
 		Sleeper.sleep(2000, driver);
 		clickAButton(assignChecklistButton);
 		Sleeper.sleep(8000, driver);

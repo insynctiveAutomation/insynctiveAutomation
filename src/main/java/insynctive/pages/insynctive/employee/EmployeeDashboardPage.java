@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import insynctive.exception.ElementNotFoundException;
+import insynctive.exception.MethodNoImplementedException;
 import insynctive.model.Account;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.PersonData;
@@ -108,12 +110,15 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 	@FindBy(id = "popupSign_panelSign_name")
 	WebElement typeHereField;
 	@FindBy(css = "#btnApplySig_CD > span")
-	private WebElement apllySignature;
+	WebElement apllySignature;
 	@FindBy(id = "rappdf")
-	private WebElement rapPDFFrame;
+	WebElement rapPDFFrame;
 
 	@FindBy(css = "div#selectionpart > div > div > div > div > table > tbody > tr > td > div > div.leftproduct > span")
-	private List<WebElement> benefitsSpans;
+	List<WebElement> benefitsSpans;
+	
+	@FindBy(css = "#hiddenContent > div.validation-box > div")
+	WebElement missingInformationDiv;
 	
 	
 	public EmployeeDashboardPage(WebDriver driver, String enviroment) {
@@ -134,33 +139,96 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 				&& equals(labelNameInHeader, personFullName);
 	}
 	
-	public void updatePersonalInformation(PersonData person, String runID) throws Exception{
+	public void updatePersonalInformationHappyPath(PersonData person, String runID) throws Exception{
 		clickAButton(buttonFirstStep);
 		Sleeper.sleep(7000, driver);
 		
 		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
 		personalPage.tabiFrame = updateInformationFrame;
+		
 		if(personalPage.isPresent(personalPage.birthDateRequired))  personalPage.changeBirthDate(person.getBirthDate());
 		Sleeper.sleep(1500, driver);
+		
 		if(personalPage.isPresent(personalPage.genderRequired)) personalPage.changeGender(person.getGender());
 		Sleeper.sleep(500, driver);
+		
 		if(personalPage.isPresent(personalPage.maritalRequired)) personalPage.changeMaritalStatus(person.getMaritalStatus());
 		Sleeper.sleep(500, driver);
+		
 		if(personalPage.isPresent(personalPage.socialSecurityNumberRequired)) personalPage.addSocialSecurityNumber(person.getSsn(), runID);
 		Sleeper.sleep(500, driver);
+		
 		if(personalPage.isPresent(personalPage.phoneRequired)) personalPage.addPhoneNumber(person.getPrimaryPhone(), runID);
 		Sleeper.sleep(500, driver);
+		
 		if(personalPage.isPresent(personalPage.addressRequired)) personalPage.addUsAddress(person.getUSAddress());
 		Sleeper.sleep(500, driver);
+		
 		if(personalPage.isPresent(personalPage.dependentRequired)) personalPage.addHasNotDependents();
-		swichToFirstFrame(driver);
-		clickAButton(doneButton);
+		clickDoneBtn();
+		
 		Sleeper.sleep(30000, driver); //<- This is to much
 	}
 
-	@Override
-	public boolean isPageLoad() {
-		return false;
+	public void updatePersonalInformationWithErrors(PersonData person, String runID) throws Exception {
+		Integer sleeperForMissingDisappear = 12000;
+		clickAButton(buttonFirstStep);
+		Sleeper.sleep(18000, driver);
+		
+		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
+		personalPage.tabiFrame = updateInformationFrame;
+		
+		personalPage.waitPageIsLoad();
+		clickDoneBtnAndWait(500);
+
+		if(personalPage.isPresent(personalPage.birthDateRequired)){
+			personalPage.changeBirthDate(person.getBirthDate());
+		}
+		
+		if(personalPage.isPresent(personalPage.genderRequired)){
+			checkIsPresent("Gender");
+			personalPage.changeGender(person.getGender());
+			checkIsNotPresent("Gender");
+		}
+
+		if(personalPage.isPresent(personalPage.maritalRequired)){
+			checkIsPresent("Marital");
+			personalPage.changeMaritalStatus(person.getMaritalStatus());
+			checkIsNotPresent("Marital");
+		}
+		
+		if(personalPage.isPresent(personalPage.socialSecurityNumberRequired)){
+			checkIsPresent("SSN");
+			personalPage.addSocialSecurityNumber(person.getSsn(), runID);
+			checkIsNotPresent("SSN");
+		}
+
+		if(personalPage.isPresent(personalPage.phoneRequired)){
+			checkIsPresent("Phone");
+			personalPage.addPhoneNumber(person.getPrimaryPhone(), runID);
+			checkIsNotPresent("Phone");
+		}
+		
+		if(personalPage.isPresent(personalPage.addressRequired)){
+			checkIsPresent("Address");
+			personalPage.addUsAddress(person.getUSAddress());
+			checkIsNotPresent("Address");
+		}
+
+		if(personalPage.isPresent(personalPage.dependentRequired)){
+			checkIsPresent("Dependents");
+			personalPage.addHasNotDependents();
+			checkIsNotPresent("Dependents");
+		}
+		
+		clickDoneBtn();
+		Sleeper.sleep(30000, driver); //<- This is to much but necesary.		
+	}
+
+	private void clickDoneBtnAndWait(Integer time) throws Exception {
+		Sleeper.sleep(time, driver);
+		clickDoneBtn();
+		Sleeper.sleep(time, driver);
 	}
 
 	public void electBenefits(PersonData person, String runID) throws Exception {
@@ -210,6 +278,11 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		swichToFirstFrame(driver);
 		Sleeper.sleep(10000, driver);
 	}
+
+	@Override
+	public boolean isPageLoad() {
+		return false;
+	}
 	
 	public void swichToFormTaskFrame() throws IOException, InterruptedException, ElementNotFoundException{
 		swichToFirstFrame(driver);
@@ -225,9 +298,39 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		return null;
 	}
 
-	private WebElement getButtonTuSelectBenefit(WebElement benefitsSpan) {
-		System.out.println(benefitsSpan.findElement(By.xpath("./../../../../td[1]/div[1]")).getAttribute("class"));
+	public WebElement getButtonTuSelectBenefit(WebElement benefitsSpan) {
 		return benefitsSpan.findElement(By.xpath("./../../../../td[1]/div[1]"));
 	}
 	
+	public WebElement getMissingRequiredElement(String nameOfField) throws IOException, InterruptedException, ElementNotFoundException{
+		swichToFirstFrame(driver);
+		swichToIframe(updateInformationFrame);
+		return missingInformationDiv.findElement(By.xpath("//div[@class='flex-item'][contains(text(),'"+nameOfField+"')]"));
+	}
+	
+	public boolean isPresentMissingrequired(String nameOfField) throws IOException, InterruptedException, ElementNotFoundException{
+		return isElementPresent(getMissingRequiredElement(nameOfField));
+	}
+
+	public void clickDoneBtn() throws Exception{
+		swichToFirstFrame(driver);
+		clickAButton(doneButton);
+	}
+	
+	public void checkIsNotPresent(String nameOfField) throws Exception{
+		int seconds = 30;
+		int count = 1;
+		while(count <= seconds){
+			try{
+				if(isPresentMissingrequired(nameOfField)){Sleeper.sleep(1000, driver);count++;};
+			} catch(NoSuchElementException ex){break;}
+		}
+		if(count > 30){throw new Exception("The Missing information: '"+nameOfField+"' Is Present");}
+	}
+	
+	public void checkIsPresent(String nameOfField) throws Exception{
+		if(!isPresentMissingrequired(nameOfField)){
+			throw new Exception("The Missing information: '"+nameOfField+"' Is Not Present");
+		}
+	}
 }

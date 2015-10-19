@@ -296,7 +296,7 @@ public class Page {
 		boolean notFound = true;
 		while(times <= 20 && notFound)
 			try{
-				element = driver.findElement(By.xpath("//"+tagName+"[contains(text(),'"+text+"')]" ));
+				element = driver.findElement(By.xpath("//"+tagName+"[contains(text(),'"+text+"')]"));
 				notFound = false;
 			} catch(Exception ex) {
 				times++;

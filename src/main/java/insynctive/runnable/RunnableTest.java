@@ -22,4 +22,4 @@ public class RunnableTest implements Runnable {
 	public void setTestNG(TestNG testNG) {
 		this.testNG = testNG;
 	}
-	}
+}

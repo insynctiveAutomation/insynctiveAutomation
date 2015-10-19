@@ -70,13 +70,35 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	}
 	
 	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void updatePersonalInformation(TestEnvironment testEnvironment) throws Exception {
+	public void updatePersonalInformationHappyPath(TestEnvironment testEnvironment) throws Exception {
 		
 		long startTime = System.nanoTime();
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
 			long endTime = System.nanoTime();
-			employeeDashboard.updatePersonalInformation(person, account.getRunIDString());
+			employeeDashboard.updatePersonalInformationHappyPath(person, account.getRunIDString());
+			
+			boolean result = true;
+			
+			setResult(result, "Update Personal Information", endTime - startTime);
+			Debugger.log("updatePersonalInformation => "+result, isSaucelabs);
+			assertTrue(result);
+			
+		} catch(Exception ex){
+			long endTime = System.nanoTime();
+			failTest("Update Personal Information",  ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+	
+	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
+	public void updatePersonalInformatioWithErrors(TestEnvironment testEnvironment) throws Exception {
+		
+		long startTime = System.nanoTime();
+		try{ 
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			long endTime = System.nanoTime();
+			employeeDashboard.updatePersonalInformationWithErrors(person, account.getRunIDString());
 			
 			boolean result = true;
 			
