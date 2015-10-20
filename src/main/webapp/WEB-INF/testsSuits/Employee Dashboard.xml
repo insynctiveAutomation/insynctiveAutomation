@@ -6,8 +6,7 @@
 	      <methods>
 			<!-- Initial Test -->
 	        <include name="loginTest" />
-	        <include name="isAllDataOK" />
-	        <include name="updatePersonalInformationHappyPath" />
+	        <include name="updatePersonalInformatioWithErrors" />
 	        <include name="electBenefits" />
 	        <include name="fillAndSignBenefit" />
 	      </methods>

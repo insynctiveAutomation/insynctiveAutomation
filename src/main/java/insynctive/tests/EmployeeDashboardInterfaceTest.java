@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.pages.insynctive.LoginPage;
@@ -17,21 +18,16 @@ import insynctive.utils.data.TestEnvironment;
 
 public class EmployeeDashboardInterfaceTest extends TestMachine {
 
-	@Override
 	@BeforeClass
-	public void tearUp() throws Exception {
-		super.tearUp();
+	@Parameters({"accountID", "bowser"})
+	public void tearUp(String accountID, String bowser) throws Exception {
+		testEnvironment = TestEnvironment.valueOf(bowser);
+		super.tearUp(Integer.valueOf(accountID));
 		this.sessionName = "Employee Dashboard Test";
 	}
 	
-	@DataProvider(name = "hardCodedBrowsers", parallel = true)
-	public static Object[][] sauceBrowserDataProvider(Method testMethod) {
-		return new Object[][] { new Object[] { TestEnvironment.CHROME }
-		};
-	}
-	
-	@Test(dataProvider = "hardCodedBrowsers")
-	public void loginTest(TestEnvironment testEnvironment)
+	@Test
+	public void loginTest()
 			throws Exception {
 		startTest(testEnvironment);
 
@@ -49,8 +45,8 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void isAllDataOK(TestEnvironment testEnvironment) throws Exception {
+	@Test(dependsOnMethods="loginTest")
+	public void isAllDataOK() throws Exception {
 
 		long startTime = System.nanoTime();
 		try{ 
@@ -69,8 +65,8 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void updatePersonalInformationHappyPath(TestEnvironment testEnvironment) throws Exception {
+	@Test(dependsOnMethods="loginTest")
+	public void updatePersonalInformationHappyPath() throws Exception {
 		
 		long startTime = System.nanoTime();
 		try{ 
@@ -91,8 +87,8 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void updatePersonalInformatioWithErrors(TestEnvironment testEnvironment) throws Exception {
+	@Test(dependsOnMethods="loginTest")
+	public void updatePersonalInformatioWithErrors() throws Exception {
 		
 		long startTime = System.nanoTime();
 		try{ 
@@ -113,8 +109,8 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void electBenefits(TestEnvironment testEnvironment) throws Exception {
+	@Test(dependsOnMethods="loginTest")
+	public void electBenefits() throws Exception {
 
 		long startTime = System.nanoTime();
 		try{ 
@@ -135,8 +131,8 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void fillAndSignBenefit(TestEnvironment testEnvironment) throws Exception {
+	@Test(dependsOnMethods="loginTest")
+	public void fillAndSignBenefit() throws Exception {
 		
 		long startTime = System.nanoTime();
 		try{ 

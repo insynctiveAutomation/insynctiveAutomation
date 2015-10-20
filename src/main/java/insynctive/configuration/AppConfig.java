@@ -26,6 +26,28 @@ public class AppConfig {
 	
 	@Value("${local}")
 	private Boolean local;
+	
+	@Value("${hibernate.auto}")
+	private String hibernateAuto;
+	
+	@Value("${hibernate.driver.class.name}")
+	private String driverClassName;
+	
+	@Value("${hibernate.db.uri}")
+	private String dbUri;
+	
+	@Value("${hibernate.db.username}")
+	private String dbUsername;
+	
+	@Value("${hibernate.db.password}")
+	private String dbPassword;
+	
+	
+	@Value("${hibernate.dialect}")
+	private String hibernateDialect;
+
+	@Value("${hibernate.showSQL}")
+	private Boolean showSQL;
 
 	@Bean
 	public SessionScope sessionScope(){
@@ -49,10 +71,10 @@ public class AppConfig {
 		if(local){
 		
 			/*LOCAL*/
-			dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-			dataSource.setUrl("jdbc:mysql://localhost:3306/insynctive");
-			dataSource.setUsername("root");
-			dataSource.setPassword("");
+			dataSource.setDriverClassName(driverClassName);
+			dataSource.setUrl(dbUri);
+			dataSource.setUsername(dbUsername);
+			dataSource.setPassword(dbPassword);
 			
 		} else {
 		
@@ -85,9 +107,9 @@ public class AppConfig {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put("hibernate.hbm2ddl.auto", "update");
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		properties.put("hibernate.show_sql", true);
+		properties.put("hibernate.hbm2ddl.auto", hibernateAuto);
+		properties.put("hibernate.dialect", hibernateDialect);
+		properties.put("hibernate.show_sql", showSQL);
 		return properties;
 	}
 	

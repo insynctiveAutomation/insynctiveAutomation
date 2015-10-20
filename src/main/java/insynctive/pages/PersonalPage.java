@@ -438,7 +438,6 @@ public abstract class PersonalPage extends Page {
 		swichToFirstFrame(driver);
 		waitUntilnotVisibility(loadingSpinner);
 		swichToIframe(tabiFrame);
-		waitUntilIsLoaded(genderLink);
 		waitUntilIsLoaded(maritalLink);
 		waitUntilIsLoaded(primaryEmailLink);
 		waitUntilIsLoaded(fullNameLink);

@@ -22,6 +22,7 @@ import insynctive.utils.process.I9;
 import insynctive.utils.process.PDFForm;
 import insynctive.utils.process.W4;
 
+@Deprecated
 public class ChecklistsTest extends TestMachine {
 
 	PersonData person;

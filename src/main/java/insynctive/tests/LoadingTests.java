@@ -2,10 +2,8 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Method;
-
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.pages.insynctive.LoginPage;
@@ -21,26 +19,20 @@ import insynctive.pages.insynctive.agent.settings.V3SettingsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.data.TestEnvironment;
 
-
 public class LoadingTests extends TestMachine {
 
 	int TIME_EXPECTED = 5000;
 	
-	@Override
 	@BeforeClass
-	public void tearUp() throws Exception {
-		super.tearUp();
+	@Parameters({"accountID", "bowser"})
+	public void tearUp(String accountID, String bowser) throws Exception {
+		super.tearUp(Integer.valueOf(accountID));
+		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Loading Tests";
 	}
 	
-	@DataProvider(name = "hardCodedBrowsers", parallel = true)
-	public static Object[][] sauceBrowserDataProvider(Method testMethod) {
-		return new Object[][] { new Object[] { TestEnvironment.CHROME }
-		};
-	}
-	
-	@Test(dataProvider = "hardCodedBrowsers")
-	public void loginTest(TestEnvironment testEnvironment)
+	@Test()
+	public void loginTest()
 			throws Exception {
 		startTest(testEnvironment);
 
@@ -59,8 +51,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void hrPeopleLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void hrPeopleLoadingTest() throws Throwable {
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			long timeToLoad = homePage.getTimeToLoad();
@@ -76,8 +68,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void hrTasksLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void hrTasksLoadingTest() throws Throwable {
 		try{ 
 			TaskPage taskPage = new TaskPage(driver, properties.getEnvironment());
 			long timeToLoad = taskPage.getTimeToLoad();
@@ -93,8 +85,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void hrChecklistLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void hrChecklistLoadingTest() throws Throwable {
 		try{ 
 			CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnvironment());
 			long timeToLoad = checkListPage.getTimeToLoad();
@@ -110,8 +102,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void hrHelpDeskLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void hrHelpDeskLoadingTest() throws Throwable {
 		try{ 
 			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, properties.getEnvironment());
 			long timeToLoad = helpDeskPage.getTimeToLoad();
@@ -127,8 +119,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void apptLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void apptLoadingTest() throws Throwable {
 		try{ 
 			AppsPage appPage = new AppsPage(driver, properties.getEnvironment());
 			long timeToLoad = appPage.getTimeToLoad();
@@ -144,8 +136,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void settingAccountLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void settingAccountLoadingTest() throws Throwable {
 		try{ 
 			AccountPage accPage = new AccountPage(driver, properties.getEnvironment());
 			long timeToLoad = accPage.getTimeToLoad();
@@ -161,8 +153,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void settingPeopleLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void settingPeopleLoadingTest() throws Throwable {
 		try{ 
 			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnvironment());
 			long timeToLoad = peoplePage.getTimeToLoad();
@@ -178,8 +170,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void settingOtherSettingsLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void settingOtherSettingsLoadingTest() throws Throwable {
 		try{ 
 			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnvironment());
 			long timeToLoad = otherSetting.getTimeToLoad();
@@ -195,8 +187,8 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void settingV3SettingsLoadingTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void settingV3SettingsLoadingTest() throws Throwable {
 		try{ 
 			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnvironment());
 			long timeToLoad = v3Setting.getTimeToLoad();

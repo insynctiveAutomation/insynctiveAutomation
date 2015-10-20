@@ -167,11 +167,10 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		if(personalPage.isPresent(personalPage.dependentRequired)) personalPage.addHasNotDependents();
 		clickDoneBtn();
 		
-		Sleeper.sleep(30000, driver); //<- This is to much
+		Sleeper.sleep(35000, driver); //<- This is to much
 	}
 
 	public void updatePersonalInformationWithErrors(PersonData person, String runID) throws Exception {
-		Integer sleeperForMissingDisappear = 12000;
 		clickAButton(buttonFirstStep);
 		Sleeper.sleep(18000, driver);
 		
@@ -222,7 +221,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		}
 		
 		clickDoneBtn();
-		Sleeper.sleep(30000, driver); //<- This is to much but necesary.		
+		Sleeper.sleep(35000, driver); //<- This is to much but necesary.		
 	}
 
 	private void clickDoneBtnAndWait(Integer time) throws Exception {
@@ -235,17 +234,18 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		//Elect Benefits
 		swichToFirstFrame(driver);
 		clickAButton(buttonSecondStep);
+		Sleeper.sleep(10000, driver);
 		swichToIframe(formTaskFrame);
 		clickAButton(selectBenefit("Gold Full PPO 750 OffEx"));
-		Sleeper.sleep(1000, driver);
+		Sleeper.sleep(2000, driver);
 		clickAButton(dentalPanel);
 		clickAButton(selectBenefit("Smile Plus Gold 50/1500/Ortho/U85"));
-		Sleeper.sleep(1000, driver);
+		Sleeper.sleep(2000, driver);
 		clickAButton(visionPanel);
 		clickAButton(selectBenefit("VSP Choice Plan"));
-		Sleeper.sleep(1000, driver);
+		Sleeper.sleep(2000, driver);
 		clickAButton(btnSendInvite);
-		Sleeper.sleep(4500, driver);
+		Sleeper.sleep(5000, driver);
 		
 		//Sign Benefits
 		clickAButton(signBtn);
@@ -257,7 +257,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		swichToFormTaskFrame();
 		clickAButton(doneBtn);
 		clickAButton(acknowledgeBtn);
-		Sleeper.sleep(30000, driver);//<- This is to much
+		Sleeper.sleep(35000, driver);//<- This is to much
 	}
 	
 //	div#selectionpart > div > div > div > div > table > tbody > tr > td > div > div.leftproduct > span

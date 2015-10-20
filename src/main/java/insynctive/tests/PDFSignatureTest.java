@@ -14,6 +14,7 @@ import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Sleeper;
 import insynctive.utils.data.TestEnvironment;
 
+@Deprecated
 public class PDFSignatureTest extends TestMachine {
 	
 	@BeforeClass(alwaysRun = true)

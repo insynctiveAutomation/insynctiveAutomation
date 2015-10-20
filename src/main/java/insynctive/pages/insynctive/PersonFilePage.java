@@ -110,7 +110,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			swichToFirstFrame(driver);
 			clickAButton(goToPerson);
 			goToPersonalTab();
-			throw new Exception("Assign Task Exception: "+ex);
+			throw ex;
 		}
 	}
 
@@ -167,6 +167,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			clickAButton(btnActivate);
 		} catch(Exception ex){
 			goToPersonalTab();
+			throw ex;
 		}
 	}
 
@@ -269,9 +270,9 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			List<Task> tasks = Task.getTasks();
 			result = firstTaskLink.getText().equals(tasks.get(0).getDetail());
 		} catch(Exception ex) {
-			result = false;
-		} finally {
 			goToPersonalTab();
+			throw ex;
+		} finally {
 		}
 		return result;
 	}
@@ -288,10 +289,9 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			waitUntilIsLoaded(firstChecklist);
 			result  =  firstChecklist.getText().equals("Test Template");
 		} catch(Exception ex){
-			throw ex;
-		} finally {
 			goToPersonalTab();
-		}
+			throw ex;
+		} 
 		return result;
 	}
 

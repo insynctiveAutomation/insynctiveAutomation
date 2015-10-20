@@ -48,13 +48,20 @@
 		<div class="top-right-corner h4"><a id="configurationLink" ng-click="testCtrl.openConfig()">Configuration</a></div>
 		<div class="top-left-corner h4"><a id="configurationLink" ng-click="testCtrl.logout()">Logout</a></div>
 		<div ng-show="testCtrl.showPanel()" class="container">
-			<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment)" class="form-signin" name="sendTest">
+			<form  ng-submit="testCtrl.startTest(testSuiteName, selectedEnvironment, selectedBrowser)" class="form-signin" name="sendTest">
 		
 		  	<select name="testSuite" ng-model="testSuiteName" data-ng-options="testSuite as testSuite for testSuite in testCtrl.testsSuites" ng-change="testCtrl.getTestDetails(testSuiteName)" required>
 		    	<option value="">Select a Test Suite</option>
 		 	</select>
 		  	<select name="environment" ng-model="selectedEnvironment" data-ng-options="environment as environment for environment in testCtrl.environments" required>
 		    	<option value="">Select an Environment</option>
+		 	</select> 
+		  	<select name="browser" ng-model="selectedBrowser" required>
+		    	<option value="">Select a browser</option>
+		    	<option value="FIREFOX">Firefox</option>
+		    	<option value="CHROME">Chrome</option>
+		    	<option value="IE">IE</option>
+		    	<option value="IPAD">iPad</option>
 		 	</select> 
 		 	
 			<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button>

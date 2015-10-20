@@ -42,12 +42,12 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	};
 	
 	/* On Start Button */
-	this.startTest = function(testSuiteValue, selectedEnvironment) {
+	this.startTest = function(testSuiteValue, selectedEnvironment, selectedBrowser) {
 		self.start = true;
 		self.runStatus = "Running..";
 		self.videoLink = "";
 		self.loaderVisible = "visible";
-		testService.startTest(testSuiteValue, selectedEnvironment, function(data) {
+		testService.startTest(testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
 			self.runStatus = "The test Start!";
 			self.tlaIndex = data.index;
 //			self.loaderVisible = "hidden";

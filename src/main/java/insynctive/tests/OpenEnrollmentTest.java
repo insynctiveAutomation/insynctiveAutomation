@@ -12,6 +12,7 @@ import insynctive.model.PersonData;
 import insynctive.pages.insynctive.OpenEnrollmentPage;
 import insynctive.utils.data.TestEnvironment;
 
+@Deprecated
 public class OpenEnrollmentTest extends TestMachine {
 
 	PersonData person;

@@ -13,6 +13,7 @@ import insynctive.pages.insynctive.MarketPage;
 import insynctive.utils.data.App;
 import insynctive.utils.data.TestEnvironment;
 
+@Deprecated
 public class InstallAppTest extends TestMachine {
 
 	PersonData person;

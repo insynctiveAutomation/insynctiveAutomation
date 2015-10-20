@@ -3,14 +3,13 @@ package insynctive.tests;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.exception.ConfigurationException;
@@ -24,13 +23,13 @@ import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
-
 public class PersonFileTest extends TestMachine {
 
-	@Override
 	@BeforeClass
-	public void tearUp() throws Exception {
-		super.tearUp();
+	@Parameters({"accountID", "bowser"})
+	public void tearUp(String accountID, String bowser) throws Exception {
+		super.tearUp(Integer.valueOf(accountID));
+		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Person File Test ("+ person.getEmail()+")";
 	}
 	
@@ -40,14 +39,8 @@ public class PersonFileTest extends TestMachine {
 		super.teardown();
 	}
 	
-	@DataProvider(name = "hardCodedBrowsers", parallel = true)
-	public static Object[][] sauceBrowserDataProvider(Method testMethod) {
-		return new Object[][] { new Object[] { TestEnvironment.IPAD }
-		};
-	}
-	
-	@Test(dataProvider = "hardCodedBrowsers")
-	public void loginTest(TestEnvironment testEnvironment)
+	@Test()
+	public void loginTest()
 			throws Exception {
 		startTest(testEnvironment);
 
@@ -67,15 +60,15 @@ public class PersonFileTest extends TestMachine {
 	}
 	
 ////	//OPEN PERSON FILE NOT CREATE
-//	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-//	public void createPersonTest(TestEnvironment testEnvironment) throws Exception {
+//	@Test(dependsOnMethods="loginTest")
+//	public void createPersonTest() throws Exception {
 //		long startTime = System.nanoTime();
 //		try{ 
 //			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 //			homePage.openPersonFile(person.getSearchEmail()+"+71");
 //
 //			boolean result = homePage.isPersonFileOpened();
-//			Sleeper.sleep(5000, driver);
+//			Sleeper.sleep(5000driver);
 //			long endTime = System.nanoTime();
 //			setResult(result, "Open Person File", endTime - startTime);
 //			Debugger.log("createPersonTest => "+result, isSaucelabs);
@@ -87,8 +80,8 @@ public class PersonFileTest extends TestMachine {
 //		}
 //	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="loginTest")
-	public void createPersonTest(TestEnvironment testEnvironment) throws Throwable {
+	@Test(dependsOnMethods="loginTest")
+	public void createPersonTest() throws Throwable {
 		long startTime = System.nanoTime();
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
@@ -111,8 +104,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void changePrimaryEmail(TestEnvironment testEnvironment) throws Exception {
+	@Test(dependsOnMethods="createPersonTest")
+	public void changePrimaryEmail() throws Exception {
 		long startTime = System.nanoTime();  
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -130,8 +123,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void changeMaritalStatus(TestEnvironment testEnvironment)
+	@Test(dependsOnMethods="createPersonTest")
+	public void changeMaritalStatus()
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
@@ -151,8 +144,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void changeName(TestEnvironment testEnvironment)
+	@Test(dependsOnMethods="createPersonTest")
+	public void changeName()
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
@@ -172,8 +165,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void changeName2(TestEnvironment testEnvironment)
+	@Test(dependsOnMethods="createPersonTest")
+	public void changeName2()
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
@@ -193,8 +186,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void changeGender(TestEnvironment testEnvironment)
+	@Test(dependsOnMethods="createPersonTest")
+	public void changeGender()
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
@@ -214,8 +207,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void changeBirthDate(TestEnvironment testEnvironment)
+	@Test(dependsOnMethods="createPersonTest")
+	public void changeBirthDate()
 			throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
@@ -235,8 +228,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void addTitle(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void addTitle() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -256,8 +249,8 @@ public class PersonFileTest extends TestMachine {
 	}
 
 	/**
-	 * @Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void hasNotDependents(TestEnvironment testEnvironment) throws IOException, InterruptedException, ConfigurationException{
+	 * @Test(dependsOnMethods="createPersonTest")
+	public void hasNotDependents() throws IOException, InterruptedException, ConfigurationException{
 		setResult(false, "Add Has Not Dependents");
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
 		
@@ -269,8 +262,8 @@ public class PersonFileTest extends TestMachine {
 		assertTrue(result);
 	} */
 
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void addPhoneNumber(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void addPhoneNumber() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -289,8 +282,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="addPhoneNumber")
-	public void addAlternativePhone(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="addPhoneNumber")
+	public void addAlternativePhone() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -308,8 +301,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="addAlternativePhone")
-	public void makePrimaryPhone(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="addAlternativePhone")
+	public void makePrimaryPhone() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -327,8 +320,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void addUSAddress(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void addUSAddress() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -347,8 +340,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="addUSAddress")
-	public void removeUSAddress(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="addUSAddress")
+	public void removeUSAddress() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -366,8 +359,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	/** @Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void updateUSAddress(TestEnvironment testEnvironment) throws Exception{
+	/** @Test(dependsOnMethods="createPersonTest")
+	public void updateUSAddress() throws Exception{
 		try{ long startTime = System.nanoTime();
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
 			personFilePage.updateUsAddress(person.getUSAddress());
@@ -382,8 +375,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	} */
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void assignTask(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void assignTask() throws Exception{
 		long startTime = System.nanoTime();
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
@@ -401,8 +394,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void startChecklist(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void startChecklist() throws Exception{
 		long startTime = System.nanoTime();
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
@@ -421,8 +414,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void addSocialSecurityNumber(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void addSocialSecurityNumber() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -441,8 +434,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void addEmergencyContact(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void addEmergencyContact() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -461,8 +454,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="addEmergencyContact")
-	public void changeEmergencyContact(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="addEmergencyContact")
+	public void changeEmergencyContact() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -486,8 +479,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="changeEmergencyContact")
-	public void removeEmergencyContact(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="changeEmergencyContact")
+	public void removeEmergencyContact() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -506,8 +499,8 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
-	public void assignJob(TestEnvironment testEnvironment) throws Exception{
+	@Test(dependsOnMethods="createPersonTest")
+	public void assignJob() throws Exception{
 		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());

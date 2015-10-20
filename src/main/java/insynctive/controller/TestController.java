@@ -238,9 +238,9 @@ public class TestController {
 		return testSuite;
 	}
 	
-	@RequestMapping(value = "/test/{xmlName}/{environment}" ,method = RequestMethod.POST)
+	@RequestMapping(value = "/test/{xmlName}/{environment}/{browser}" ,method = RequestMethod.POST)
 	@ResponseBody
-	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws ConfigurationException{
+	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws ConfigurationException{
 		account = accDao.incrementRunIDAndGetAcc(accID);
 		InsynctiveProperty properties = account.getAccountProperty();
 		properties.setEnvironment(environment);
@@ -252,6 +252,14 @@ public class TestController {
 		
 		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
 
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("accountID", accID.toString());
+		parameters.put("bowser", browser);
+		
+		for (XmlSuite suite : suites) {
+			suite.setParameters(parameters);
+		}
+		
 		TestNG testNG = new TestNG();
 		
 		testNG.setXmlSuites(suites);
