@@ -9,10 +9,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "USAddress")
 public class USAddress {
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "USAddress_id")
-	private int id;
+	private int usAddressID;
 	
 	@Column(name = "street")
 	private String street;
@@ -98,5 +99,13 @@ public class USAddress {
 	}
 	public void setShortDescription(String shortDescription) {
 		this.shortDescription = shortDescription;
+	}
+
+	public int getUsAddressID() {
+		return usAddressID;
+	}
+
+	public void setUsAddressID(int usAddressID) {
+		this.usAddressID = usAddressID;
 	}
 }

@@ -40,6 +40,11 @@ public class AccountDao {
 		return newID;
 	}
 	
+	public void save(Account acc){
+		openSession().update(acc);
+	}
+	
+	
 	public Account incrementRunIDAndGetAcc(int accID){
 		Account acc = (Account) openSession().get(Account.class, accID);
 		int newID = acc.getRunID()+1;

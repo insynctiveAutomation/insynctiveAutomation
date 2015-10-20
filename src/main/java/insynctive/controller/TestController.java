@@ -83,11 +83,31 @@ public class TestController {
 		this.createPersonFormDao = createPersonFormDao;
 	}
 	
-	@RequestMapping(value = "/login" ,method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginGet(HttpSession session){
 		ModelAndView model = new ModelAndView();
 		model.setViewName("login");
 		return model;
+	}
+	
+	@RequestMapping(value = "/configuration", method = RequestMethod.GET)
+	public ModelAndView configuration(HttpSession session){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("advancedConfiguration");
+		return model;
+	}
+	
+	@RequestMapping(value = "/configuration/{accID}", method = RequestMethod.GET)
+	@ResponseBody
+	public Account configuration(@PathVariable("accID") Integer accID){
+		return accDao.getAccountByID(accID);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/configuration/save", method = RequestMethod.POST)
+	public String save(@RequestBody Account formAcc){
+		accDao.save(formAcc);
+		return "{\"status\" : 200}";
 	}
 	
 	@RequestMapping(value = "/login" ,method = RequestMethod.POST)

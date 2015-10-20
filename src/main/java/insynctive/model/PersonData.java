@@ -17,19 +17,22 @@ import org.hibernate.annotations.CascadeType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import insynctive.exception.ConfigurationException;
 
 @Entity
 @Table(name = "Person")
 public class PersonData {
 	@Transient
+	@JsonIgnore
 	private String DEFAULT_FILE = "personFileData.json";
 	
 	// PROPERTIES PATH
 	@Id
 	@GeneratedValue
 	@Column(name = "person_data_id")
-	private int id;
+	private int peronID;
 
 	@Column(name = "name")
 	private String name;
@@ -115,6 +118,7 @@ public class PersonData {
 		addData(runID, DEFAULT_FILE);
 	}
 
+	@Deprecated
 	private void addData(String runID, String path) throws ConfigurationException {
 		try {
 			JSONParser parser = new JSONParser();
@@ -156,6 +160,7 @@ public class PersonData {
 		}
 	}
 	
+	@JsonIgnore
 	public String getEmailToChange(){
 		return email.split("@")[0] + "+test@" + email.split("@")[1];
 	}
@@ -264,6 +269,7 @@ public class PersonData {
 		this.titleOfEmployee = titleOfEmployee;
 	}
 
+	@JsonIgnore
 	public String getSearchEmail() {
 		return email.split("@")[0];
 	}
@@ -283,6 +289,14 @@ public class PersonData {
 	@Override
 	public String toString() {
 		return this.name + " "+this.lastName;
+	}
+
+	public int getPeronID() {
+		return peronID;
+	}
+
+	public void setPeronID(int peronID) {
+		this.peronID = peronID;
 	}
 
 }

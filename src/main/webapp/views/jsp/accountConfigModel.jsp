@@ -1,8 +1,6 @@
 <img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif" ng-if="accountCtrl.isLoading"><br/>
 <div ng-if="!accountCtrl.isLoading" ng class="lgContent">
-	<form ng-submit="accountCtrl.saveConfig()" class="form-signin"
-		name="sendTest">
-
+	<form ng-submit="accountCtrl.saveConfig()" class="form-signin" name="sendTest">
 		<label for="username">Login Username: </label>
 		<input ng-required="true" ng-model="accountCtrl.accountConfig.loginUsername" /><br/> 
 		<label for="password">Login Password: </label>
@@ -14,6 +12,7 @@
 		<button ng-disabled="" class="btn btn-lg btn-primary" type="submit">Save</button>
 		<span ng-bind="accountCtrl.saved"></span>
 	</form>
+	<a href="/configuration">Advanced Configuration</a>
 </div>
 
 <div class="alert alert-danger animate-repeat" ng-repeat="error in accountCtrl.errors">{{error}}</div>

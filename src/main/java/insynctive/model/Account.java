@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Account")
 public class Account {
@@ -22,7 +25,7 @@ public class Account {
 	private int accountID;
 	
 	@Column(name = "run_id")
-	private int run_id;
+	private int runID;
 
 	@Column(name = "username", unique = true)
 	private String username;
@@ -66,15 +69,16 @@ public class Account {
 	}
 
 	public int getRunID() {
-		return run_id;
+		return runID;
 	}
 	
+	@JsonIgnore
 	public String getRunIDString() {
-		return String.valueOf(run_id);
+		return String.valueOf(runID);
 	}
 
 	public void setRunID(int runID) {
-		this.run_id = runID;
+		this.runID = runID;
 	}
 
 	public PersonData getPerson() {
@@ -86,7 +90,7 @@ public class Account {
 	}
 	
 	public int incrementRunID(){
-		return this.run_id+=1;
+		return this.runID+=1;
 	}
 
 	public int getAccountID() {

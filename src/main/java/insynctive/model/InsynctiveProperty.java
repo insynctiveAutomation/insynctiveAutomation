@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import insynctive.utils.data.App;
 
 @Entity
@@ -36,11 +38,11 @@ public class InsynctiveProperty {
 	@Column(name = "remote")
 	private Boolean remote;
 
-	public int getId() {
+	public int getInsynctivePropertyID() {
 		return insynctivePropertyID;
 	}
 
-	public void setId(int id) {
+	public void setInsynctivePropertyID(int id) {
 		this.insynctivePropertyID = id;
 	}
 
@@ -91,7 +93,8 @@ public class InsynctiveProperty {
 	public void setNotification(Boolean notification) {
 		this.notification = notification;
 	}
-
+	
+	@JsonIgnore
 	public List<App> getApps() {
 		// TODO Auto-generated method stub
 		return null;

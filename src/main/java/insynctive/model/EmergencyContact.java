@@ -9,10 +9,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EmergencyContact")
 public class EmergencyContact {
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "emergency_contact_id")
-	private int id;
+	private int emergencyID;
 	
 	@Column(name = "name")
 	String name;
@@ -69,6 +70,14 @@ public class EmergencyContact {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public int getEmergencyID() {
+		return emergencyID;
+	}
+
+	public void setEmergencyID(int emergencyID) {
+		this.emergencyID = emergencyID;
 	}
 	
 	
