@@ -238,13 +238,13 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		clickAButton(buttonSecondStep);
 		Sleeper.sleep(10000, driver);
 		swichToIframe(formTaskFrame);
-		clickAButton(selectBenefit("Gold Full PPO 750 OffEx"));
+		clickAButton(selectBenefit(person.getMedicalBenefit()));
 		Sleeper.sleep(2000, driver);
 		clickAButton(dentalPanel);
-		clickAButton(selectBenefit("Smile Plus Gold 50/1500/Ortho/U85"));
+		clickAButton(selectBenefit(person.getDentalBenefit()));
 		Sleeper.sleep(2000, driver);
 		clickAButton(visionPanel);
-		clickAButton(selectBenefit("VSP Choice Plan"));
+		clickAButton(selectBenefit(person.getVisionBenefit()));
 		Sleeper.sleep(2000, driver);
 		clickAButton(btnSendInvite);
 		Sleeper.sleep(5000, driver);

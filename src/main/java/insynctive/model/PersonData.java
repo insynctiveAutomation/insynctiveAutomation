@@ -69,6 +69,15 @@ public class PersonData {
 	
 	@Column(name = "marital_status")
 	private MaritalStatus maritalStatus;
+	
+	@Column(name = "medical_benefit")
+	private String medicalBenefit;
+	
+	@Column(name = "dental_benefit")
+	private String dentalBenefit;
+	
+	@Column(name = "vision_benefit")
+	private String visionBenefit;
 
 	@NotNull
 	@OneToOne
@@ -297,6 +306,30 @@ public class PersonData {
 
 	public void setPeronID(int peronID) {
 		this.peronID = peronID;
+	}
+
+	public String getMedicalBenefit() {
+		return medicalBenefit;
+	}
+
+	public void setMedicalBenefit(String medicalBenefit) {
+		this.medicalBenefit = medicalBenefit;
+	}
+
+	public String getDentalBenefit() {
+		return dentalBenefit;
+	}
+
+	public void setDentalBenefit(String dentalBenefit) {
+		this.dentalBenefit = dentalBenefit;
+	}
+
+	public String getVisionBenefit() {
+		return visionBenefit;
+	}
+
+	public void setVisionBenefit(String visionBenefit) {
+		this.visionBenefit = visionBenefit;
 	}
 
 }

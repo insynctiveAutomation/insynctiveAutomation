@@ -139,6 +139,15 @@
 			<label for="">Same As Home: </label>
 			<select name="remote" ng-model="configCtl.configuration.person.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
 		</div>
+		<div>
+			<h4>SMB BENEFIT</h4>
+			<label for="">Medical Benefit Name: </label>
+			<input ng-required="true" ng-model="configCtl.configuration.person.medicalBenefit" /><br/>     
+			<label for="">Dental Benefit Name: </label>
+			<input ng-required="true" ng-model="configCtl.configuration.person.dentalBenefit" /><br/>     
+			<label for="">Vision Benefit Name: </label>
+			<input ng-required="true" ng-model="configCtl.configuration.person.visionBenefit" /><br/>     
+		</div>
 		<button class="btn btn-lg btn-primary" type="submit">Save</button>
     </form>
     </body>
