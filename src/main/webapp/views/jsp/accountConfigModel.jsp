@@ -3,14 +3,14 @@
 	<form ng-submit="accountCtrl.saveConfig()" class="form-signin"
 		name="sendTest">
 
-		<label for="lastname">Login Username: </label>
+		<label for="username">Login Username: </label>
 		<input ng-required="true" ng-model="accountCtrl.accountConfig.loginUsername" /><br/> 
-		<label for="lastname">Login Password: </label>
+		<label for="password">Login Password: </label>
 		<input ng-required="true" ng-model="accountCtrl.accountConfig.loginPassword" /><br/> 
-		<label for="lastname">Notification?</label> 
-		<select name="notification" ng-model="accountCtrl.accountConfig.notification" ng-options="o.v as o.n for o in [{ n: 'True', v: true }, { n: 'False', v: false }]" required></select><br/> 
-		<label for="lastname">Remote? </label> 
-		<select name="remote" ng-if="accountCtrl.isLocalhost" ng-model="accountCtrl.accountConfig.remote" ng-options="o.v as o.n for o in [{ n: 'True', v: true }, { n: 'False', v: false }]" required></select>
+		<label for="notification">Notification: </label> 
+		<select name="notification" ng-model="accountCtrl.accountConfig.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'No notify', v: false }]" required></select><br/> 
+		<label for="runIn">Run in:  </label> 
+		<select name="remote" ng-if="accountCtrl.isLocalhost" ng-model="accountCtrl.accountConfig.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>
 		<button ng-disabled="" class="btn btn-lg btn-primary" type="submit">Save</button>
 		<span ng-bind="accountCtrl.saved"></span>
 	</form>
