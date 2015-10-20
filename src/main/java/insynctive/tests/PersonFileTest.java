@@ -42,7 +42,7 @@ public class PersonFileTest extends TestMachine {
 	
 	@DataProvider(name = "hardCodedBrowsers", parallel = true)
 	public static Object[][] sauceBrowserDataProvider(Method testMethod) {
-		return new Object[][] { new Object[] { TestEnvironment.CHROME }
+		return new Object[][] { new Object[] { TestEnvironment.IPAD }
 		};
 	}
 	
@@ -72,7 +72,7 @@ public class PersonFileTest extends TestMachine {
 //		long startTime = System.nanoTime();
 //		try{ 
 //			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
-//			homePage.openPersonFile(person.getSearchEmail()+"+72");
+//			homePage.openPersonFile(person.getSearchEmail()+"+71");
 //
 //			boolean result = homePage.isPersonFileOpened();
 //			Sleeper.sleep(5000, driver);
@@ -395,7 +395,6 @@ public class PersonFileTest extends TestMachine {
 			setResult(result, "Assign Task", endTime - startTime);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			personFilePage.goToPersonalTab();
 			long endTime = System.nanoTime();
 			failTest("Assign Task", ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
@@ -516,7 +515,7 @@ public class PersonFileTest extends TestMachine {
 			
 			Boolean result = personFilePage.isJobAdded();
 			
-			Debugger.log("assignJob"+result, isSaucelabs);
+			Debugger.log("assignJob => "+result, isSaucelabs);
 			setResult(result, "Assign Job");
 			assertTrue(result);
 		}catch (Exception ex){ 

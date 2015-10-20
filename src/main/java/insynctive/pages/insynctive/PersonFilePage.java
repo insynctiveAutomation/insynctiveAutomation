@@ -70,6 +70,9 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	@FindBy(id = "mobile-phone")
 	WebElement mobilePhoneNumber;
 
+	@FindBy(id = "JQWindowBigOverlayBreadcrumbTitle")
+	private WebElement goToPerson;
+
 	
 	
 	public PersonFilePage(WebDriver driver, String enviroment) {
@@ -81,27 +84,33 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public void assignTask() throws Exception {
-		List<Task> tasks = Task.getTasks();
-		waitPageIsLoad();
-		for (Task task : tasks) {
+		try{
+			List<Task> tasks = Task.getTasks();
+			waitPageIsLoad();
+			for (Task task : tasks) {
+				swichToFirstFrame(driver);
+				clickAButton(tasksTab);
+				swichToIframe(tabiFrame);
+				clickAButton(assignTaskButton);
+				swichToFirstFrame(driver);
+				waitUntilIsLoaded(taskName);
+				clickAButton(taskName);
+				taskName.sendKeys(task.getDetail());
+				// taskName.sendKeys(Keys.TAB);
+				waitUntilIsLoaded(taskInstuctions);
+				setTextInField(taskInstuctions, task.getBasicTaskInstruction());
+				swichToIframe(AdditionalInstructioniFrame);
+				waitUntilIsLoaded(taskAdditionalInstructions);
+				setTextInField(taskAdditionalInstructions, task.getAdditionalInstruction());
+				swichToFirstFrame(driver);
+				clickAButton(btnAssignTask);
+				Sleeper.sleep(5000, driver);
+			}
+		} catch(Exception ex){
 			swichToFirstFrame(driver);
-			clickAButton(tasksTab);
-			swichToIframe(tabiFrame);
-			clickAButton(assignTaskButton);
-			swichToFirstFrame(driver);
-			waitUntilIsLoaded(taskName);
-			clickAButton(taskName);
-			taskName.sendKeys(task.getDetail());
-			// taskName.sendKeys(Keys.TAB);
-			waitUntilIsLoaded(taskInstuctions);
-			setTextInField(taskInstuctions, task.getBasicTaskInstruction());
-			swichToIframe(AdditionalInstructioniFrame);
-			waitUntilIsLoaded(taskAdditionalInstructions);
-			setTextInField(taskAdditionalInstructions,
-					task.getAdditionalInstruction());
-			swichToFirstFrame(driver);
-			clickAButton(btnAssignTask);
-			Sleeper.sleep(5000, driver);
+			clickAButton(goToPerson);
+			goToPersonalTab();
+			throw new Exception("Assign Task Exception: "+ex);
 		}
 	}
 

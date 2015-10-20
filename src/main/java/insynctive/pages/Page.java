@@ -217,7 +217,7 @@ public class Page {
     }
     
     public void swichToFirstFrame(WebDriver driver){
-    	driver.switchTo().window(driver.getWindowHandle());
+    	driver.switchTo().defaultContent();
     }
     
     public void clickAButton(WebElement element) throws Exception {
