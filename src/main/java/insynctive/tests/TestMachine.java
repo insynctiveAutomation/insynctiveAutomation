@@ -214,13 +214,13 @@ public abstract class TestMachine {
 
 		if(cause != null){
 //			nameAndCause = testName+" Cause Message: => " + cause.getMessage();
-			nameAndCause = testName+"[FAIL]";
+			nameAndCause = testName;
 		} else if(exMessage != null) {
 //			nameAndCause = testName+" Exception Message =>  "+exMessage;
-			nameAndCause = testName+"[FAIL]";
+			nameAndCause = testName;
 		} else {
 //			nameAndCause = testName+" => "+ (ex != null ? ex : "EXCEPTION");
-			nameAndCause = testName+"[FAIL]";
+			nameAndCause = testName;
 		}
 		
 		Debugger.log(nameAndCause, isSaucelabs);

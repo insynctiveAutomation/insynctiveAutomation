@@ -26,7 +26,7 @@ public class TaskTest extends TestMachine {
 	public void tearUp(String accountID, String bowser) throws Exception {
 		super.tearUp(Integer.valueOf(accountID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = "Person File Test ("+ person.getEmail()+")";
+		this.sessionName = "Assign Task Test ("+ person.getEmail()+")";
 	}
 	
 	@Override

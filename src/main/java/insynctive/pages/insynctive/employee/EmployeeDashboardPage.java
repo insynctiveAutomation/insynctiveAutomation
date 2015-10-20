@@ -181,7 +181,9 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		clickDoneBtnAndWait(500);
 
 		if(personalPage.isPresent(personalPage.birthDateRequired)){
+			checkIsPresent("Birth Date");
 			personalPage.changeBirthDate(person.getBirthDate());
+			checkIsNotPresent("Birth Date");
 		}
 		
 		if(personalPage.isPresent(personalPage.genderRequired)){
