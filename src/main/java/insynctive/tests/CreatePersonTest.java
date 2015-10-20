@@ -26,6 +26,7 @@ import insynctive.utils.data.TestEnvironment;
 public class CreatePersonTest extends TestMachine {
 
 	CreatePersonForm createPersonForm;
+	Integer personID;
 	
 	@Override
 	@BeforeClass
@@ -38,24 +39,31 @@ public class CreatePersonTest extends TestMachine {
 	@AfterClass
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		super.teardown();
+		Transaction transaction = openSession().beginTransaction();
+		Session session = openSession();
+		createPersonForm = (CreatePersonForm) session.get(CreatePersonForm.class, personID);
+		createPersonForm.setStatusOfTest(generalStatus);
+		createPersonForm.setEnvironment(TestEnvironment.FIREFOX.browser);
+		session.save(createPersonForm);
+		session.flush();
+		transaction.commit();
 	}
 	
 	@Parameters({"personID"})	
 	@Test
 	public void loginTest(@Optional("personID") Integer personID) throws Exception {
+		this.personID = personID;
 		if(personID.equals("personID")){
 			throw new Exception("No email added");
 		}
+
+		testEnvironment = TestEnvironment.FIREFOX;
 		
 		//Search for The Person Data
-		Transaction transaction = openSession().beginTransaction();
 		Session session = openSession();
 		createPersonForm = (CreatePersonForm) session.get(CreatePersonForm.class, personID);
-		session.flush();
-		transaction.commit();
 		
 		//Complete Data
-		testEnvironment = TestEnvironment.FIREFOX;
 		account.getAccountProperty().setRemote(true);
 		person.setEmail(createPersonForm.getEmail());
 		person.setName(createPersonForm.getName());

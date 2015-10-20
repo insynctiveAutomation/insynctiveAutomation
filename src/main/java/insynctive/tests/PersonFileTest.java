@@ -160,7 +160,7 @@ public class PersonFileTest extends TestMachine {
 			assertTrue(result);
 		} catch (Exception ex){
 			long endTime = System.nanoTime();
-			failTest("C hange name 1", ex, isSaucelabs, endTime - startTime);
+			failTest("Change name 1", ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
 		}
 	}

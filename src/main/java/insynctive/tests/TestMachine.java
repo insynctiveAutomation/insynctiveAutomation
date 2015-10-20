@@ -213,11 +213,14 @@ public abstract class TestMachine {
 		String nameAndCause = "";
 
 		if(cause != null){
-			nameAndCause = testName+"Cause Message: => " + cause.getMessage();
+//			nameAndCause = testName+" Cause Message: => " + cause.getMessage();
+			nameAndCause = testName+"[FAIL]";
 		} else if(exMessage != null) {
-			nameAndCause = testName+" Exception Message =>  "+exMessage;
+//			nameAndCause = testName+" Exception Message =>  "+exMessage;
+			nameAndCause = testName+"[FAIL]";
 		} else {
-			nameAndCause = testName+" => "+ (ex != null ? ex : "EXCEPTION");
+//			nameAndCause = testName+" => "+ (ex != null ? ex : "EXCEPTION");
+			nameAndCause = testName+"[FAIL]";
 		}
 		
 		Debugger.log(nameAndCause, isSaucelabs);
