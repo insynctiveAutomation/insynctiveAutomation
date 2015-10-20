@@ -20,8 +20,8 @@ app.service('testService', function($http) {
 		$http.get('status/'+tlaIndex).success(callback);
 	};
 	
-	this.getVideoLink = function(callback) {
-		$http.get('video').success(callback);
+	this.getVideoLink = function(index, callback) {
+		$http.get('video/'+index).success(callback);
 	};
 	
 	this.clearTests = function(tlaIndex, callback) {

@@ -172,15 +172,15 @@ public class TestController {
 		tla.remove(index);
 	}
 
-	@RequestMapping(value = "/video" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@RequestMapping(value = "/video/{testListenenerIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String getVideo() throws InterruptedException, ConfigurationException{
+	public String getVideo(@PathVariable("testListenenerIndex") Integer testListenenerIndex) throws InterruptedException, ConfigurationException{
 		if (account.getAccountProperty().isRemote()) {
 			int times = 1;
 			int sleep = 2000;
 			
 			while (times <= 30) {
-				String videoLink = insynctive.utils.TestResults.video;
+				String videoLink = insynctive.utils.TestResults.getVideo(testListenenerIndex);
 				if (videoLink != null) {
 					return videoLink;
 				}
@@ -275,6 +275,7 @@ public class TestController {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("accountID", accID.toString());
 		parameters.put("bowser", browser);
+		parameters.put("testID", testListenenerIndex.toString());
 		
 		for (XmlSuite suite : suites) {
 			suite.setParameters(parameters);

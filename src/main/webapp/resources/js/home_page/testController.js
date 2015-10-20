@@ -48,14 +48,17 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		self.videoLink = "";
 		self.loaderVisible = "visible";
 		testService.startTest(testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
+			
 			self.runStatus = "The test Start!";
 			self.tlaIndex = data.index;
 //			self.loaderVisible = "hidden";
+			
+			testService.getVideoLink(self.tlaIndex, function(data) {
+				self.videoLink = data;
+			});
+			
 		}, function(data){
 			data;
-		});
-		testService.getVideoLink(function(data) {
-			self.videoLink = data;
 		});
 	};
 	

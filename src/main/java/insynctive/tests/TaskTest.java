@@ -22,8 +22,9 @@ import insynctive.utils.data.TestEnvironment;
 public class TaskTest extends TestMachine {
 
 	@BeforeClass
-	@Parameters({"accountID", "bowser"})
-	public void tearUp(String accountID, String bowser) throws Exception {
+	@Parameters({"accountID", "bowser", "testID"})
+	public void tearUp(String accountID, String bowser, String testID) throws Exception {
+		super.testID = Integer.parseInt(testID);
 		super.tearUp(Integer.valueOf(accountID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Assign Task Test ("+ person.getEmail()+")";

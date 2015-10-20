@@ -19,8 +19,9 @@ import insynctive.utils.data.TestEnvironment;
 public class EmployeeDashboardInterfaceTest extends TestMachine {
 
 	@BeforeClass
-	@Parameters({"accountID", "bowser"})
-	public void tearUp(String accountID, String bowser) throws Exception {
+	@Parameters({"accountID", "bowser", "testID"})
+	public void tearUp(String accountID, String bowser, String testID) throws Exception {
+		super.testID = Integer.parseInt(testID);
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		super.tearUp(Integer.valueOf(accountID));
 		this.sessionName = "Employee Dashboard Test";

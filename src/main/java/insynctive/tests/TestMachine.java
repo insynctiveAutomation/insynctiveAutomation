@@ -49,7 +49,7 @@ public abstract class TestMachine {
 	public String suiteName = "Suite Name";
 	public boolean isSaucelabs;
 	public TestEnvironment testEnvironment;
-
+	
 	public InsynctiveProperty properties;
 	public Account account; 
 	public PersonData person;
@@ -64,6 +64,7 @@ public abstract class TestMachine {
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();
 	public String jobID;
+	public Integer testID;
 	
 	//SLACK
 	private String slackChannel = "https://hooks.slack.com/services/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";
@@ -160,7 +161,7 @@ public abstract class TestMachine {
 			driver = new FirefoxDriver(firefoxProfile);
 			driver.manage().window().maximize();
 		}
-		TestResults.setVideo(getJobURL());
+		TestResults.addVideo(testID, getJobURL());
 	}
 	
 	public void openPersonFile(String emailSearch) throws Throwable{
