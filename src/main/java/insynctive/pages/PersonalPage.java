@@ -219,7 +219,7 @@ public abstract class PersonalPage extends Page {
 	
 	@FindBy(id = "addPhoneBtn")
 	public WebElement addPhoneNumberLink;
-	@FindBy(css = ".contact-info-container > div:nth-child(3) > div:nth-child(8) > div:nth-child(3) > div.pp_required_message")
+	@FindBy(css = "#content > div:nth-child(3) > div.pp_required_message")
 	public WebElement phoneRequired;
 	@FindBy(id = "mobile-phone")
 	public WebElement phoneNumberLink;

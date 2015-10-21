@@ -1,5 +1,12 @@
-<img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif" ng-if="accountCtrl.isLoading"><br/>
-<div ng-if="!accountCtrl.isLoading" ng class="lgContent">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/account_config/accountConfig.css">
+<div id="panel" class="lgContent width-panel" ng-if="accountCtrl.isLoading">
+	 <div class="center-div">
+		<img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif" class="loading-img">
+		<span class="loading-span">Loading</span>
+	</div>
+</div>
+
+<div ng-if="!accountCtrl.isLoading" class="lgContent width-panel">
 	<form ng-submit="accountCtrl.saveConfig()" class="form-signin" name="sendTest">
 		<label for="username">Login Username: </label>
 		<input ng-required="true" ng-model="accountCtrl.accountConfig.loginUsername" /><br/> 

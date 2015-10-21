@@ -25,7 +25,6 @@
 	
 	<!-- MY CSS -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/account_config/accountConfig.css">
 	
 	<!-- MODAL -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>

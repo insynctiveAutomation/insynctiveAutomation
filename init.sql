@@ -1,6 +1,6 @@
 /**CROSS BROWSER TESTING DATA**/
-INSERT INTO CrossBrowserAccount VALUES(1, "eugenio.valeiras@gmail.com", "u88cf691bb46b53d");
-INSERT INTO CrossBrowserAccount VALUES(2, "rgonzalez@insynctive.com", "u89bf8bdf84b358d");
+INSERT INTO CrossBrowserAccount VALUES(1, "rgonzalez@insynctive.com", "u89bf8bdf84b358d");
+INSERT INTO CrossBrowserAccount VALUES(2, "eugenio.valeiras@gmail.com", "u88cf691bb46b53d");
 
 /**US Address**/
 INSERT INTO usaddress VALUES(1, 1423, "City Bell", "Orange", true, "Optional Street", "short description", "California", "5th Street", 12345);

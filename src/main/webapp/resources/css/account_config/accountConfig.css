@@ -4,3 +4,23 @@
 	padding-top: 10px;
 	padding-left: 10px;
 }
+
+.center-div {
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+    margin: 0 auto;
+    margin-top: 25%;
+    width: 32%;
+}
+
+.loading-img {
+	height: 20px;
+}
+
+.loading-span {
+	font-size: 18px;
+}
+
+.configuration-div {
+	margin-left: 10px;
+}

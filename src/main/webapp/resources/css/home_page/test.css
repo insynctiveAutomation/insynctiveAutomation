@@ -65,6 +65,10 @@ a:hover {
 	min-width: 315px;
 }
 
+.width-panel{
+	width: 313px;
+}
+
 #configurationLink {
 	padding-right: 10px;
 }
