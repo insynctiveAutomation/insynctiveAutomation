@@ -30,17 +30,17 @@ public class HibernateUtil {
 			
 //			if(local){
 			
-				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-				prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/insynctive");
-				prop.setProperty("hibernate.connection.username", "root");
-				prop.setProperty("hibernate.connection.password", "");				
+//				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+//				prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/insynctive");
+//				prop.setProperty("hibernate.connection.username", "root");
+//				prop.setProperty("hibernate.connection.password", "");				
 
 //			} else {
 //
-//				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-//				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
-//				prop.setProperty("hibernate.connection.username", "b797aea885e227");
-//				prop.setProperty("hibernate.connection.password", "503f6e18");
+				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
+				prop.setProperty("hibernate.connection.username", "b797aea885e227");
+				prop.setProperty("hibernate.connection.password", "503f6e18");
 //			
 //			}
 
@@ -48,6 +48,7 @@ public class HibernateUtil {
 			prop.setProperty("hibernate.show_sql", "true");
 			prop.setProperty("hibernate.hbm2ddl.auto", "update");
 			prop.setProperty("hibernate.current_session_context_class", "thread");
+			
 			org.hibernate.cfg.Configuration config = new org.hibernate.cfg.Configuration()
 			   .addProperties(prop)
 			   .addAnnotatedClass(Account.class)

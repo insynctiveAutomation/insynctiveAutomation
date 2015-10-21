@@ -38,7 +38,7 @@
 		<div class="top-left-corner h4"><a id="logoutLink" ng-click="testCtrl.logout()">Logout</a></div>
 		<br/>
 	    <form ng-submit="configCtl.saveConfiguration()" name="form">
-			<div>
+			<div class="col-xs-12 col-md-6">
 				<h3>Account Login</h3>
 				<label for="">RUN ID: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.runID" /><br/>     
@@ -49,7 +49,7 @@
 				<label for="">Password: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.password" /><br/>     
 			</div>
-			<div>
+			<div class="col-xs-12 col-md-6">
 				<h3>Insynctive Properties</h3>
 				<label for="">Login Username: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.accountProperty.loginUsername" /><br/>     
@@ -66,8 +66,11 @@
 				<label for="">Remote: </label>
 				<select name="remote" ng-model="configCtl.configuration.accountProperty.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>   <br/>   
 			</div>
-			<div>
-				<h3>Person Template</h3>
+			<div class="col-xs-12 col-md-12">
+				<h3 class="text-center">Person Template</h3>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<h4>Personal Info</h4>
 				<label for="">Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.name" /><br/>     
 				
@@ -115,7 +118,7 @@
 			    	<option value="PARTNER">Partner</option>
 		 		</select><br/>
 			</div>
-			<div>
+			<div class="col-xs-12 col-md-3">
 				<h4>Emergency Contact</h4>
 				<label for="">Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.name" /><br/>     
@@ -129,7 +132,7 @@
 				<label for="">Relationship: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.relationship" /><br/>     
 			</div>
-			<div>
+			<div class="col-xs-12 col-md-3">
 				<h4>US Address</h4>
 				<label for="">Street: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.street" /><br/>     
@@ -147,7 +150,7 @@
 				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.state" /><br/>     
 				
 				<label for="">Zip code: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.zipCode" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.zipCode" pattern=".{5}" title="Zip Code need 5 characters"/><br/>     
 				
 				<label for="">County: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.county" /><br/>     
@@ -158,7 +161,7 @@
 				<label for="">Same As Home: </label>
 				<select name="remote" ng-model="configCtl.configuration.person.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
 			</div>
-			<div>
+			<div class="col-md-3">
 				<h4>SMB BENEFIT</h4>
 				<label for="">Medical Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.medicalBenefit" /><br/>     
@@ -167,7 +170,7 @@
 				<label for="">Vision Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.visionBenefit" /><br/>     
 			</div>
-			<button class="btn btn-lg btn-primary" ng-disabled="form.$invalid" type="submit">Save</button>
+			<div class="col-md-12 center-block"><button class="btn btn-lg btn-primary" ng-disabled="form.$invalid" type="submit">Save</button></div>
 	    </form>
     </div>
     </body>
