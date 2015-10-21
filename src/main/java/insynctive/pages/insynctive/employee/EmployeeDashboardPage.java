@@ -236,7 +236,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		//Elect Benefits
 		swichToFirstFrame(driver);
 		clickAButton(buttonSecondStep);
-		Sleeper.sleep(10000, driver);
+		Sleeper.sleep(20000, driver);
 		swichToIframe(formTaskFrame);
 		clickAButton(selectBenefit(person.getMedicalBenefit()));
 		Sleeper.sleep(2000, driver);

@@ -21,6 +21,7 @@ import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
+import insynctive.utils.Sleeper;
 import insynctive.utils.data.TestEnvironment;
 
 public class CreatePersonTest extends TestMachine {
@@ -128,7 +129,28 @@ public class CreatePersonTest extends TestMachine {
 			assertTrue(false);
 		}
 	}
-		
+	
+	@Parameters({"personID"})
+	@Test(dependsOnMethods="createPersonTest")
+	public void startChecklist(@Optional("person_id") String personID) throws Exception{
+		long startTime = System.nanoTime();
+		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+		try{ 
+			personFilePage.assignChecklist("Employee Onboarding");
+			Sleeper.sleep(5000, driver);
+			boolean result = personFilePage.isChecklistAssigned();
+			Debugger.log("startChecklist => "+result, isSaucelabs);
+			long endTime = System.nanoTime();
+			setResult(result, "Start Checklist", endTime - startTime);
+			assertTrue(result);
+		}catch (Exception ex){ 
+			personFilePage.goToPersonalTab();
+			long endTime = System.nanoTime();
+			failTest("Start Checklist", ex, isSaucelabs, endTime - startTime);
+			assertTrue(false);
+		}
+	}
+	
 //	@Test(dataProvider = "hardCodedBrowsers", dependsOnMethods="createPersonTest")
 //	public void firstLogin(TestEnvironment testEnvironment)
 //			throws Exception {

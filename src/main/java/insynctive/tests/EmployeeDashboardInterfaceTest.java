@@ -24,7 +24,7 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		super.testID = Integer.parseInt(testID);
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		super.tearUp(Integer.valueOf(accountID));
-		this.sessionName = "Employee Dashboard Test";
+		this.sessionName = "Open Enrollment Test";
 	}
 	
 	@Test

@@ -115,6 +115,11 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public void assignChecklist() throws Exception {
+		assignChecklist("Test Template");
+	}
+	
+	
+	public void assignChecklist(String checklistName) throws Exception {
 		waitPageIsLoad();
 		openTaskTab();
 		swichToIframe(tabiFrame);
@@ -124,7 +129,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		Sleeper.sleep(3000, driver);
 		//TODO MOVE Test Template TO DB
 		clickAButton(checkListsCombo);
-		selectElementInComboWithoutClickCombo(selectChecklist, "Test Template", "li");
+		selectElementInComboWithoutClickCombo(selectChecklist, checklistName, "li");
 		Sleeper.sleep(2000, driver);
 		clickAButton(assignChecklistButton);
 		Sleeper.sleep(8000, driver);
