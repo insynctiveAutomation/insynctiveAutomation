@@ -6,16 +6,32 @@ app.controller('configurationController', function($cookies, $http, $window, $mo
 	
 	var self = this;
 	this.configuration;
+	this.configurationTemplate;
+	this.needToBeSave;
+	this.form;
+	
+	this.finalSSN = '';
+	this.finalPrimaryPhone = '';
+	this.finalPhoneEmergency = '';
+	this.finalEmail = '';
+	
 	this.isLoading = true;
 	
 	/* On Load Methods */
 	this.getConfiguration = function() {
 		configurationService.getConfiguration($cookies.get('userID'), function(data) {
 			self.configuration = data;
+			self.configurationTemplate = jQuery.extend({}, self.configuration);
+			self.addFinalsLabels();
+			self.haveChanges();
 			self.isLoading = false;
 		});
 	};
 	this.getConfiguration();
+	
+	this.haveChanges = function() {
+		self.needToBeSave = _.isEqual(self.configuration, self.configurationTemplate);
+	}
 	
 	this.saveConfiguration = function() {
 		configurationService.save(self.configuration, function(data) {
@@ -23,4 +39,28 @@ app.controller('configurationController', function($cookies, $http, $window, $mo
 		});
 	};
 	
+	this.addFinalsLabels = function() {
+		self.changeSSNLabel();
+		self.changeEmailLabel();
+		self.finalPrimaryPhone = self.changePrimaryPhoneLabel(self.finalPrimaryPhone, self.configuration.person.primaryPhone);
+		self.finalPhoneEmergency = self.changePrimaryPhoneLabel(self.finalPhoneEmergency, self.configuration.person.emergencyContact.phone);
+	}
+	
+	this.changeSSNLabel = function() {
+		var ssn = (self.configuration) ? self.configuration.person.ssn : undefined;
+		var runID = (self.configuration) ? self.configuration.runID : '';
+		self.finalSSN = (ssn) ? ssn.substring(0, ssn.length-runID.toString().length).concat(runID) : '-';
+	}
+	
+	this.changePrimaryPhoneLabel = function(label, phone) {
+		var runID = (self.configuration) ? self.configuration.runID : undefined;
+		label = (phone) ? phone.substring(0, phone.length-runID.toString().length).concat(runID) : '-';
+		return label;
+	}
+	
+	this.changeEmailLabel = function() {
+		var email = (self.configuration) ? self.configuration.person.email : undefined;
+		var runID = (self.configuration) ? self.configuration.runID : '';
+		self.finalEmail = email.split('@')[0].concat('+').concat(runID).concat('@').concat(email.split('@')[1]);
+	}
 });

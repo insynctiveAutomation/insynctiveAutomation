@@ -34,14 +34,15 @@
     	<span class="loading-span">Loading</span>
     </div>
     <div ng-show="!configCtl.isLoading" class="configuration-div">
-	    <div class="top-right-corner h4"><a href="/" id="configurationLink">Home</a></div>
-		<div class="top-left-corner h4"><a id="logoutLink" ng-click="testCtrl.logout()">Logout</a></div>
+	    <div class="col-xs-4 col-md-4 h4"><a href="/" id="configurationLink">Home</a></div>
+		<div class="col-xs-4 col-md-4 text-center h4"><span class="" id="have-changes"></span></div>
+		<div class="col-xs-4 col-md-4 text-right h4"><a id="logoutLink" ng-click="testCtrl.logout()">Logout</a></div>
 		<br/>
-	    <form ng-submit="configCtl.saveConfiguration()" name="form">
+	    <form ng-submit="configCtl.saveConfiguration()" name="form" ng-model="configCtl.form" ng-change="configCtl.haveChanges()" id="form">
 			<div class="col-xs-12 col-md-6">
 				<h3>Account Login</h3>
 				<label for="">RUN ID: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.runID" /><br/>     
+				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.runID" /><br/>     
 				
 				<label for="">Username: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.username" /><br/>     
@@ -69,7 +70,7 @@
 			<div class="col-xs-12 col-md-12">
 				<h3 class="text-center">Person Template</h3>
 			</div>
-			<div class="col-xs-12 col-md-3">
+			<div class="col-xs-12 col-md-6">
 				<h4>Personal Info</h4>
 				<label for="">Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.name" /><br/>     
@@ -94,7 +95,9 @@
 		 		</select><br/>
 				
 				<label for="">Email: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.email" /><br/>     
+				<input ng-change="configCtl.changeEmailLabel()" ng-required="true" ng-model="configCtl.configuration.person.email" />    
+				<span>Final Email:</span><span style="font-weight: bold;"> {{configCtl.finalEmail}}</span>
+				<br/> 
 				
 				<label for="">Title of Employee: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.titleOfEmployee" /><br/>     
@@ -103,10 +106,14 @@
 				<input ng-required="true" ng-model="configCtl.configuration.person.departamentOfEmployee" /><br/>     
 				
 				<label for="">Primary Phone: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.primaryPhone" pattern=".{10}" title="Phone (Person) need 10 characters"/><br/>     
+				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.person.primaryPhone" pattern=".{10}" title="Phone (Person) need 10 characters"/>
+				<span>Final Primary Phone:</span><span style="font-weight: bold;"> {{configCtl.finalPrimaryPhone}}</span>
+				<br/>     
 				
 				<label for="">SSN: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.ssn" pattern=".{9}" title="SSN need 9 characters"/><br/>     
+				<input ng-change="configCtl.changeSSNLabel()" ng-required="true" ng-model="configCtl.configuration.person.ssn" pattern=".{9}" title="SSN need 9 characters"/>
+				<span>Final SSN:</span><span style="font-weight: bold;"> {{configCtl.finalSSN}}</span>
+				<br/>     
 				
 				<label for="">Marital Status: </label>
 				<select name="marital-status" ng-model="configCtl.configuration.person.maritalStatus" required>
@@ -118,21 +125,24 @@
 			    	<option value="PARTNER">Partner</option>
 		 		</select><br/>
 			</div>
-			<div class="col-xs-12 col-md-3">
+			<div class="col-xs-12 col-md-6">
 				<h4>Emergency Contact</h4>
 				<label for="">Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.name" /><br/>     
 				
 				<label for="">Email: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.email" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.email" />
+				<br/>     
 				
 				<label for="">Phone Number: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.phone" pattern=".{10}" title="Phone (Emergency Contact) need 10 characters"/><br/>     
+				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.phone" pattern=".{10}" title="Phone (Emergency Contact) need 10 characters"/>
+				<span>Final Phone Number:</span><span style="font-weight: bold;"> {{configCtl.finalPhoneEmergency}}</span>
+				<br/>     
 				
 				<label for="">Relationship: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.relationship" /><br/>     
 			</div>
-			<div class="col-xs-12 col-md-3">
+			<div class="col-xs-12 col-md-6">
 				<h4>US Address</h4>
 				<label for="">Street: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.street" /><br/>     
@@ -161,7 +171,7 @@
 				<label for="">Same As Home: </label>
 				<select name="remote" ng-model="configCtl.configuration.person.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-6 col-md-offset-6">
 				<h4>SMB BENEFIT</h4>
 				<label for="">Medical Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.medicalBenefit" /><br/>     
@@ -170,7 +180,7 @@
 				<label for="">Vision Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.visionBenefit" /><br/>     
 			</div>
-			<div class="col-md-12 center-block"><button class="btn btn-lg btn-primary" ng-disabled="form.$invalid" type="submit">Save</button></div>
+			<div class="col-md-offset-5 col-md-2"><button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button></div>
 	    </form>
     </div>
     </body>
