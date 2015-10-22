@@ -238,13 +238,13 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		clickAButton(buttonSecondStep);
 		Sleeper.sleep(20000, driver);
 		swichToIframe(formTaskFrame);
-		clickAButton(selectBenefit(person.getMedicalBenefit()));
+		clickAButton(selectBenefit(person.getMedicalBenefit().getName()));
 		Sleeper.sleep(2000, driver);
 		clickAButton(dentalPanel);
-		clickAButton(selectBenefit(person.getDentalBenefit()));
+		clickAButton(selectBenefit(person.getDentalBenefit().getName()));
 		Sleeper.sleep(2000, driver);
 		clickAButton(visionPanel);
-		clickAButton(selectBenefit(person.getVisionBenefit()));
+		clickAButton(selectBenefit(person.getVisionBenefit().getName()));
 		Sleeper.sleep(2000, driver);
 		clickAButton(btnSendInvite);
 		Sleeper.sleep(5000, driver);

@@ -174,13 +174,43 @@
 			<div class="col-md-6 col-md-offset-6">
 				<h4>SMB BENEFIT</h4>
 				<label for="">Medical Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.medicalBenefit" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.person.medicalBenefit.name" />
+				<select name="marital-status" ng-model="configCtl.configuration.person.medicalBenefit.company" required>
+			    	<option value="">Company?</option>
+			    	<option value="Antherm">Antherm</option>
+			    	<option value="Blue Shield">Blue Shield</option>
+			    	<!-- <option value="Humana">Humana</option> -->
+			    	<option value="Kaise">Kaise</option>
+			    	<!-- <option value="Premier">Premier</option> -->
+			    	<option value="VSP">VPS</option>
+		 		</select>
+				<br/>     
 				<label for="">Dental Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.dentalBenefit" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.person.dentalBenefit.name" />
+				<select name="marital-status" ng-model="configCtl.configuration.person.dentalBenefit.company" required>
+			    	<option value="">Company?</option>
+			    	<option value="Antherm">Antherm</option>
+			    	<option value="Blue Shield">Blue Shield</option>
+			    	<!-- <option value="Humana">Humana</option> -->
+			    	<option value="Kaise">Kaise</option>
+			    	<!-- <option value="Premier">Premier</option> -->
+			    	<option value="VSP">VPS</option>
+		 		</select>
+		 		<br/>     
 				<label for="">Vision Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.visionBenefit" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.person.visionBenefit.name" />
+				<select name="marital-status" ng-model="configCtl.configuration.person.visionBenefit.company" required>
+			    	<option value="">Company?</option>
+			    	<option value="Antherm">Antherm</option>
+			    	<option value="Blue Shield">Blue Shield</option>
+			    	<!-- <option value="Humana">Humana</option> -->
+			    	<option value="Kaise">Kaise</option>
+			    	<!-- <option value="Premier">Premier</option> -->
+			    	<option value="VSP">VPS</option>
+		 		</select>
+		 		<br/>     
 			</div>
-			<div class="col-md-offset-5 col-md-2"><button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button></div>
+			<div class="col-md-offset-5 col-md-2" style="padding-top: 20px;"><button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button></div>
 	    </form>
     </div>
     </body>

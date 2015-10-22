@@ -4,7 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -139,9 +141,11 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
 			long endTime = System.nanoTime();
-			List<String> benefits = new ArrayList<>();
-			benefits.add("VSP");
-			benefits.add("Blue Shield");
+			Set<String> benefits = new HashSet<String>();
+			
+			benefits.add(person.getMedicalBenefit().getCompany());
+			benefits.add(person.getDentalBenefit().getCompany());
+			benefits.add(person.getVisionBenefit().getCompany());
 			
 			for(String benefitName : benefits){
 				employeeDashboard.fillAndSignBenefit(benefitName);

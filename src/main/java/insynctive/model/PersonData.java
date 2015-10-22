@@ -2,7 +2,10 @@ package insynctive.model;
 
 import java.io.FileReader;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -70,14 +73,26 @@ public class PersonData {
 	@Column(name = "marital_status")
 	private MaritalStatus maritalStatus;
 	
-	@Column(name = "medical_benefit")
-	private String medicalBenefit;
+	@AttributeOverrides({
+		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
+		@AttributeOverride(name="company",column=@Column(name="medicalBenefitCompany"))
+	})
+	@Embedded
+	private Benefit medicalBenefit;
 	
-	@Column(name = "dental_benefit")
-	private String dentalBenefit;
+	@AttributeOverrides({
+		@AttributeOverride(name="name",column=@Column(name="dentalBenefitName")),
+		@AttributeOverride(name="company",column=@Column(name="dentalBenefitCompany"))
+	})
+	@Embedded
+	private Benefit dentalBenefit;
 	
-	@Column(name = "vision_benefit")
-	private String visionBenefit;
+	@AttributeOverrides({
+		@AttributeOverride(name="name",column=@Column(name="visionBenefitName")),
+		@AttributeOverride(name="company",column=@Column(name="visionBenefitCompany"))
+	})
+	@Embedded
+	private Benefit visionBenefit;
 
 	@NotNull
 	@OneToOne
@@ -308,27 +323,27 @@ public class PersonData {
 		this.peronID = peronID;
 	}
 
-	public String getMedicalBenefit() {
+	public Benefit getMedicalBenefit() {
 		return medicalBenefit;
 	}
 
-	public void setMedicalBenefit(String medicalBenefit) {
+	public void setMedicalBenefit(Benefit medicalBenefit) {
 		this.medicalBenefit = medicalBenefit;
 	}
 
-	public String getDentalBenefit() {
+	public Benefit getDentalBenefit() {
 		return dentalBenefit;
 	}
 
-	public void setDentalBenefit(String dentalBenefit) {
+	public void setDentalBenefit(Benefit dentalBenefit) {
 		this.dentalBenefit = dentalBenefit;
 	}
 
-	public String getVisionBenefit() {
+	public Benefit getVisionBenefit() {
 		return visionBenefit;
 	}
 
-	public void setVisionBenefit(String visionBenefit) {
+	public void setVisionBenefit(Benefit visionBenefit) {
 		this.visionBenefit = visionBenefit;
 	}
 
