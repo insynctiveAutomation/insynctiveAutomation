@@ -364,8 +364,6 @@ public class InsynctivePropertiesReader {
 		InsynctiveProperty property = new InsynctiveProperty();
 		property.setEnvironment(properties.getEnviroment());
 		property.setGmailPassword(properties.getGmailPassword());
-		property.setLoginUsername(properties.getLoginUsername());
-		property.setLoginPassword(properties.getLoginPassword());
 		property.setNotification(properties.isNotification());
 		property.setRemote(Boolean.parseBoolean(properties.getRemote()));
 		

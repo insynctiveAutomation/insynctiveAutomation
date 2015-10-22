@@ -25,11 +25,6 @@ public class InsynctiveProperty {
 	@Column(name = "environment")
 	private String environment;
 
-	@Column(name = "loginUserName")
-	private String loginUsername;
-	@Column(name = "loginPassword")
-	private String loginPassword;
-
 	@Column(name = "gmailPassword")
 	private String gmailPassword;
 
@@ -60,22 +55,6 @@ public class InsynctiveProperty {
 
 	public void setRemote(Boolean remote) {
 		this.remote = remote;
-	}
-
-	public String getLoginUsername() {
-		return loginUsername;
-	}
-
-	public void setLoginUsername(String loginUsername) {
-		this.loginUsername = loginUsername;
-	}
-
-	public String getLoginPassword() {
-		return loginPassword;
-	}
-
-	public void setLoginPassword(String loginPassword) {
-		this.loginPassword = loginPassword;
 	}
 
 	public String getGmailPassword() {

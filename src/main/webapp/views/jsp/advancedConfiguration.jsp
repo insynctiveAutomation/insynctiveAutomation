@@ -52,12 +52,6 @@
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h3>Insynctive Properties</h3>
-				<label for="">Login Username: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.accountProperty.loginUsername" /><br/>     
-				
-				<label for="">Login Password: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.accountProperty.loginPassword" /><br/>     
-				
 				<label for="">Gmail Password: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.accountProperty.gmailPassword" /><br/>     
 				
@@ -72,6 +66,12 @@
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>Personal Info</h4>
+				<label for="">Login Username: </label>
+				<input ng-required="true" ng-model="configCtl.configuration.person.loginUsername" /><br/>     
+				
+				<label for="">Login Password: </label>
+				<input ng-required="true" ng-model="configCtl.configuration.person.loginPassword" /><br/>    
+				
 				<label for="">Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.person.name" /><br/>     
 				

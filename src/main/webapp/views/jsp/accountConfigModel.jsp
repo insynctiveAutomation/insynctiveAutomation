@@ -9,9 +9,9 @@
 <div ng-if="!accountCtrl.isLoading" class="lgContent width-panel">
 	<form ng-submit="accountCtrl.saveConfig()" class="form-signin" name="sendTest">
 		<label for="username">Login Username: </label>
-		<input ng-required="true" ng-model="accountCtrl.accountConfig.loginUsername" /><br/> 
+		<input ng-required="true" ng-model="accountCtrl.person.loginUsername" /><br/> 
 		<label for="password">Login Password: </label>
-		<input ng-required="true" ng-model="accountCtrl.accountConfig.loginPassword" /><br/> 
+		<input ng-required="true" ng-model="accountCtrl.person.loginPassword" /><br/> 
 		<label for="notification">Notification: </label> 
 		<select name="notification" ng-model="accountCtrl.accountConfig.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'No notify', v: false }]" required></select><br/> 
 		<label for="runIn">Run in:  </label> 

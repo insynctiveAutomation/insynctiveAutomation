@@ -178,11 +178,11 @@ public abstract class TestMachine {
 	}
 	
 	public LoginPage login() throws Exception {
-		return login(properties.getLoginUsername(),properties.getLoginPassword(), null);
+		return login(person.getLoginUsername(),person.getLoginPassword(), null);
 	}
 	
 	public LoginPage login(String returnURL) throws Exception {
-		return login(properties.getLoginUsername(),properties.getLoginPassword(), returnURL);
+		return login(person.getLoginUsername(),person.getLoginPassword(), returnURL);
 	}
 	
 	public LoginPage loginAsEmployee(String email, String password) throws Exception {

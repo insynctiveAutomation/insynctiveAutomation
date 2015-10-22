@@ -6,6 +6,7 @@ app.controller('AccountController', function($modalInstance, accountService) {
 
 	var self = this;
 	this.accountConfig;
+	this.person;
 	this.saved = '';
 	this.isLoading = false;
 	this.isLocalhost = true;
@@ -14,7 +15,8 @@ app.controller('AccountController', function($modalInstance, accountService) {
 	this.getConfig = function() {
 		self.isLoading = true;
 		accountService.getAccountConfig(function(data) {
-			self.accountConfig = data;
+			self.accountConfig = data.accountProperty;
+			self.person = data.person;
 			self.isLoading = false;
 		});
 	};

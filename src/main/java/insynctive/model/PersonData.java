@@ -73,6 +73,12 @@ public class PersonData {
 	@Column(name = "marital_status")
 	private MaritalStatus maritalStatus;
 	
+	@Column(name = "loginUserName")
+	private String loginUsername;
+	
+	@Column(name = "loginPassword")
+	private String loginPassword;
+	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
 		@AttributeOverride(name="company",column=@Column(name="medicalBenefitCompany"))
@@ -345,6 +351,22 @@ public class PersonData {
 
 	public void setVisionBenefit(Benefit visionBenefit) {
 		this.visionBenefit = visionBenefit;
+	}
+
+	public String getLoginUsername() {
+		return loginUsername;
+	}
+
+	public void setLoginUsername(String loginUsername) {
+		this.loginUsername = loginUsername;
+	}
+
+	public String getLoginPassword() {
+		return loginPassword;
+	}
+
+	public void setLoginPassword(String loginPassword) {
+		this.loginPassword = loginPassword;
 	}
 
 }

@@ -161,8 +161,8 @@ public class TestController {
 	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public InsynctiveProperty getAccountProperties() throws ConfigurationException {
-		return propertyDao.getPropertybyID(accID);
+	public Account getAccountProperties() throws ConfigurationException {
+		return accDao.getAccountByID(accID);
 	}
 
 	@RequestMapping(value = "/clearTest/{index}" ,method = RequestMethod.GET)
