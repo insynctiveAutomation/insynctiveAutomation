@@ -62,7 +62,7 @@
 				<select name="remote" ng-model="configCtl.configuration.accountProperty.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>   <br/>   
 			</div>
 			<div class="col-xs-12 col-md-12">
-				<h3 class="text-center">Person Template</h3>
+				<h3 class="text-center">Param Object</h3>
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>Personal Info</h4>

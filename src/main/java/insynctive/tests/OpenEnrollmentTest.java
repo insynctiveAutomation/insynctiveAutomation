@@ -8,19 +8,19 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 import insynctive.pages.insynctive.OpenEnrollmentPage;
 import insynctive.utils.data.TestEnvironment;
 
 @Deprecated
 public class OpenEnrollmentTest extends TestMachine {
 
-	PersonData person;
+	ParamObject person;
 
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
 		super.tearUp();
-		person = new PersonData(String.valueOf(account.getRunIDString()));
+		person = new ParamObject(String.valueOf(account.getRunIDString()));
 		this.sessionName = "Open Enrollment";
 	}
 

@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 import insynctive.pages.insynctive.agent.hr.CheckListsPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Checklist;
@@ -25,7 +25,7 @@ import insynctive.utils.process.W4;
 @Deprecated
 public class ChecklistsTest extends TestMachine {
 
-	PersonData person;
+	ParamObject person;
 
 	@Override
 	@BeforeClass

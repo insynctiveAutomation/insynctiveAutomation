@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import insynctive.exception.ConfigurationException;
 
 @Entity
-@Table(name = "Person")
-public class PersonData {
+@Table(name = "ParamObject")
+public class ParamObject {
 	@Transient
 	@JsonIgnore
 	private String DEFAULT_FILE = "personFileData.json";
@@ -34,7 +34,7 @@ public class PersonData {
 	// PROPERTIES PATH
 	@Id
 	@GeneratedValue
-	@Column(name = "person_data_id")
+	@Column(name = "param_object_id")
 	private int peronID;
 
 	@Column(name = "name")
@@ -130,21 +130,21 @@ public class PersonData {
 		}
 	}
 
-	public PersonData(){
+	public ParamObject(){
 	}
 	
-	public PersonData(String name, String lastname, String email){
+	public ParamObject(String name, String lastname, String email){
 		this.name = name;
 		this.lastName = lastname;
 		this.email = email;
 	}
 	
-	public PersonData(String runID, String filePath) throws ConfigurationException{
+	public ParamObject(String runID, String filePath) throws ConfigurationException{
 		DEFAULT_FILE = filePath;
 		addData(runID, DEFAULT_FILE);
 	}
 	
-	public PersonData(String runID) throws ConfigurationException {
+	public ParamObject(String runID) throws ConfigurationException {
 		addData(runID, DEFAULT_FILE);
 	}
 

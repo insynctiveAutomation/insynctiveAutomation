@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import insynctive.exception.ElementNotFoundException;
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.insynctive.ImportPersonPage;
@@ -96,7 +96,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 	}
 	
 	/* Actions **/
-	public void createPersonCheckingInviteSS(PersonData personData, CheckInApp checkInApp) throws Exception {
+	public void createPersonCheckingInviteSS(ParamObject personData, CheckInApp checkInApp) throws Exception {
 		openCreatePersonFrame();
 		setTextInField(firstNameTextBox, personData.getName());
 		setTextInField(lastNameTextBox, personData.getLastName());
@@ -117,7 +117,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 		waitAddPersonIsLoad();
 	}
 	
-	public void sendInviteEmail(PersonData personData, CheckInApp checkInApp) throws Exception {
+	public void sendInviteEmail(ParamObject personData, CheckInApp checkInApp) throws Exception {
 		waitUntilInvitePanelIsLoad();
 		setTextInField(inviteEmailField, personData.getEmail());
 		Sleeper.sleep(3500, driver);
@@ -178,7 +178,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 				&& personFIleIframe.isDisplayed();
 	}
 	
-	public boolean checkIfPersonIsCreated(PersonData personData) throws Exception {
+	public boolean checkIfPersonIsCreated(ParamObject personData) throws Exception {
 			PersonFilePage personFile = new PersonFilePage(driver, enviroment);
 			personFile.waitPageIsLoad();
 			return personFile.isThisPerson(personData);

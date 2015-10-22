@@ -11,9 +11,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import insynctive.exception.ElementNotFoundException;
-import insynctive.model.PersonData;
-import insynctive.model.PersonData.Gender;
-import insynctive.model.PersonData.MaritalStatus;
+import insynctive.model.ParamObject;
+import insynctive.model.ParamObject.Gender;
+import insynctive.model.ParamObject.MaritalStatus;
 import insynctive.model.USAddress;
 import insynctive.utils.Sleeper;
 
@@ -309,7 +309,7 @@ public abstract class PersonalPage extends Page {
 						+ status.status + "')]")));
 	}
 
-	public void changePrimaryEmail(PersonData person) throws Exception {
+	public void changePrimaryEmail(ParamObject person) throws Exception {
 		waitPageIsLoad();
 		Sleeper.sleep(1000, driver);
 		clickAButton(primaryEmailLink);
@@ -575,7 +575,7 @@ public abstract class PersonalPage extends Page {
 		}
 	}
 	
-	public Object getNameToAssertInPersonalDetails(PersonData personData) {
+	public Object getNameToAssertInPersonalDetails(ParamObject personData) {
 		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
 				+ " " + personData.getMiddleName(): personData.getName();
 		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";

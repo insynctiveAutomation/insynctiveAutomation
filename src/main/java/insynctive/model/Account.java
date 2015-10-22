@@ -41,8 +41,8 @@ public class Account {
 	
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
-	@JoinColumn(name = "person_data_id")
-	private PersonData person;
+	@JoinColumn(name = "param_object_id")
+	private ParamObject person;
 	
 	public String getUsername() {
 		return username;
@@ -81,11 +81,11 @@ public class Account {
 		this.runID = runID;
 	}
 
-	public PersonData getPerson() {
+	public ParamObject getPerson() {
 		return person;
 	}
 
-	public void setPerson(PersonData person) {
+	public void setPerson(ParamObject person) {
 		this.person = person;
 	}
 	

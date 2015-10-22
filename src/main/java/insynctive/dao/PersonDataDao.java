@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 
 @Repository
 @Transactional
@@ -24,8 +24,8 @@ private final SessionFactory sessionFactory;
 		return sessionFactory.getCurrentSession();
 	}
 	
-	public PersonData getAccountByID(int id){
-		return (PersonData) openSession().get(PersonData.class, id);
+	public ParamObject getAccountByID(int id){
+		return (ParamObject) openSession().get(ParamObject.class, id);
 	}
 	
 	

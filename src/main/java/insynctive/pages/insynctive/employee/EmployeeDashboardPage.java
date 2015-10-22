@@ -15,7 +15,7 @@ import insynctive.exception.ElementNotFoundException;
 import insynctive.exception.MethodNoImplementedException;
 import insynctive.model.Account;
 import insynctive.model.InsynctiveProperty;
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.PersonalPage;
@@ -129,7 +129,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		PageFactory.initElements(driver, this);
 	}
 	
-	public Boolean isAllDataOK(PersonData person){
+	public Boolean isAllDataOK(ParamObject person){
 		String personFullName = person.getName()+" "+person.getLastName();
 		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
 		
@@ -139,7 +139,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 				&& equals(labelNameInHeader, personFullName);
 	}
 	
-	public void updatePersonalInformationHappyPath(PersonData person, String runID) throws Exception{
+	public void updatePersonalInformationHappyPath(ParamObject person, String runID) throws Exception{
 		clickAButton(buttonFirstStep);
 		Sleeper.sleep(7000, driver);
 		
@@ -170,7 +170,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		Sleeper.sleep(35000, driver); //<- This is to much
 	}
 
-	public void updatePersonalInformationWithErrors(PersonData person, String runID) throws Exception {
+	public void updatePersonalInformationWithErrors(ParamObject person, String runID) throws Exception {
 		clickAButton(buttonFirstStep);
 		Sleeper.sleep(18000, driver);
 		
@@ -232,7 +232,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		Sleeper.sleep(time, driver);
 	}
 
-	public void electBenefits(PersonData person, String runID) throws Exception {
+	public void electBenefits(ParamObject person, String runID) throws Exception {
 		//Elect Benefits
 		swichToFirstFrame(driver);
 		clickAButton(buttonSecondStep);

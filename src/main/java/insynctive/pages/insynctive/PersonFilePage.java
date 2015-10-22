@@ -10,9 +10,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import insynctive.model.EmergencyContact;
-import insynctive.model.PersonData;
-import insynctive.model.PersonData.Gender;
-import insynctive.model.PersonData.MaritalStatus;
+import insynctive.model.ParamObject;
+import insynctive.model.ParamObject.Gender;
+import insynctive.model.ParamObject.MaritalStatus;
 import insynctive.model.USAddress;
 import insynctive.pages.PageInterface;
 import insynctive.pages.PersonalPage;
@@ -183,7 +183,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		return primaryEmailLink.getText().equals(email);
 	}
 
-	public boolean isChangeName(PersonData personData, Wait wait)
+	public boolean isChangeName(ParamObject personData, Wait wait)
 			throws Exception {
 		if (wait.isWait())
 			Sleeper.sleep(18000, driver);
@@ -199,7 +199,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		return fullNameAssert && titleNameAssert;
 	}
 
-	public boolean isChangePeronDetailBeforeCreatePerson(PersonData personData, Wait wait)
+	public boolean isChangePeronDetailBeforeCreatePerson(ParamObject personData, Wait wait)
 			throws Exception {
 		if (wait.isWait()) Sleeper.sleep(18000, driver);
 		waitPageIsLoad();
@@ -344,7 +344,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		return true;
 	}
 	
-	public boolean isThisPerson(PersonData personData) throws Exception {
+	public boolean isThisPerson(ParamObject personData) throws Exception {
 		boolean changeTitle = isChangeTitle(personData.getTitleOfEmployee(),
 				personData.getDepartamentOfEmployee());
 		boolean changeFullName = isChangePeronDetailBeforeCreatePerson(personData, Wait.NOWAIT);

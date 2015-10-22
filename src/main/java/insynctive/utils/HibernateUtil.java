@@ -15,7 +15,7 @@ import insynctive.model.CreatePersonForm;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.EmergencyContact;
 import insynctive.model.InsynctiveProperty;
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 import insynctive.model.USAddress;
 
 @PropertySource("classpath:application.properties")
@@ -57,7 +57,7 @@ public class HibernateUtil {
 			   .addAnnotatedClass(EmergencyContact.class)
 			   .addAnnotatedClass(USAddress.class)
 			   .addAnnotatedClass(CreatePersonForm.class)
-			   .addAnnotatedClass(PersonData.class);
+			   .addAnnotatedClass(ParamObject.class);
 			
 			ServiceRegistry serviceRegistry =  new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
 			sessionFactory = config.buildSessionFactory(serviceRegistry);;

@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import insynctive.model.PersonData;
+import insynctive.model.ParamObject;
 import insynctive.pages.insynctive.MarketPage;
 import insynctive.utils.data.App;
 import insynctive.utils.data.TestEnvironment;
@@ -16,7 +16,7 @@ import insynctive.utils.data.TestEnvironment;
 @Deprecated
 public class InstallAppTest extends TestMachine {
 
-	PersonData person;
+	ParamObject person;
 
 	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {

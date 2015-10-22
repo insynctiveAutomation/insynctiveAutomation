@@ -1,9 +1,9 @@
 package insynctive.utils.data;
 
 import insynctive.model.EmergencyContact;
-import insynctive.model.PersonData;
-import insynctive.model.PersonData.Gender;
-import insynctive.model.PersonData.MaritalStatus;
+import insynctive.model.ParamObject;
+import insynctive.model.ParamObject.Gender;
+import insynctive.model.ParamObject.MaritalStatus;
 import insynctive.model.USAddress;
 
 public enum Employee {
@@ -12,16 +12,16 @@ public enum Employee {
 	W2_EMPLOYEE(w2Employee(), "password"),
 	AGENT_OFFICER(agentOfficer(), "password");
 	
-	public final PersonData personData;
+	public final ParamObject personData;
 	public final String password;
 
-	private Employee(PersonData personData, String password){
+	private Employee(ParamObject personData, String password){
 		this.personData = personData;
 		this.password = password;
 	}
 	
-	private static PersonData noJobEmployee(){
-		PersonData person = new PersonData("Employee", "NoJob", "insynctiveapps+nojobemployee@gmail.com");
+	private static ParamObject noJobEmployee(){
+		ParamObject person = new ParamObject("Employee", "NoJob", "insynctiveapps+nojobemployee@gmail.com");
 			person.setMiddleName("");
 			person.setMaidenName("");
 			person.setBirthDate("03151992");
@@ -35,7 +35,7 @@ public enum Employee {
 		return person;
 	}
 	
-	private static PersonData w2Employee(){
+	private static ParamObject w2Employee(){
 		USAddress address = new USAddress();
 			address.setStreet("Street Example");
 			address.setApt("123");
@@ -45,7 +45,7 @@ public enum Employee {
 			address.setCounty("Orange");
 			address.setShortDescription("Description Example");
 			address.setSameAsHome(true);
-		PersonData person = new PersonData("Employee", "W2", "insynctiveapps+w2employee@gmail.com");
+		ParamObject person = new ParamObject("Employee", "W2", "insynctiveapps+w2employee@gmail.com");
 			person.setMiddleName("");
 			person.setMaidenName("");
 			person.setBirthDate("01111991");
@@ -59,8 +59,8 @@ public enum Employee {
 		return person;
 	}
 	
-	private static PersonData agentOfficer(){
-		PersonData person = new PersonData("Employee", "Agent", "insynctiveapps+agent@gmail.com");
+	private static ParamObject agentOfficer(){
+		ParamObject person = new ParamObject("Employee", "Agent", "insynctiveapps+agent@gmail.com");
 		person.setMiddleName("");
 		person.setMaidenName("");
 		person.setBirthDate("05121980");
