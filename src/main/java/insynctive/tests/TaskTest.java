@@ -24,10 +24,10 @@ public class TaskTest extends TestMachine {
 	@BeforeClass
 	@Parameters({"accountID", "bowser", "testID"})
 	public void tearUp(String accountID, String bowser, String testID) throws Exception {
-		super.testID = Integer.parseInt(testID);
+		super.testSuiteID = Integer.parseInt(testID);
 		super.tearUp(Integer.valueOf(accountID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = "Assign Task Test ("+ person.getEmail()+")";
+		this.sessionName = "Assign Task Test ("+ paramObject.getEmail()+")";
 	}
 	
 	@Override

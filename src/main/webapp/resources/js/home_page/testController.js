@@ -1,10 +1,11 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'accountApp']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'accountApp', 'parameterApp']);
 
-app.controller('TestController', function($cookies, $http, $window, $modal, $scope, $interval, testService) {
+app.controller('TestController', function($cookies, $http, $window, $modal, $scope, $interval, testService, accountService) {
 	var self = this;
 	this.isLogin = false;
+	this.paramObject = {};
 	this.tlaIndex;
 	this.errors = [];
 	this.testsSuites = [];
@@ -32,11 +33,16 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		});
 	};
 	this.getTestsSuites();
-
+	
+	this.addParamObject = function(includeMethod) {
+		includeMethod.paramObject = self.paramObject;
+	}
+	
 	/* On change TestSuite Combo */
 	this.getTestDetails = function(testSuiteValue){
 		testService.getTestDetails(testSuiteValue, function(data) {
 			self.testDetails = data;
+			_.map(self.testDetails.includeMethods, self.addParamObject);
 			self.getTestsStatus();
 		});
 	};
@@ -47,7 +53,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		self.runStatus = "Running..";
 		self.videoLink = "";
 		self.loaderVisible = "visible";
-		testService.startTest(testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
+		testService.startTest(self.testDetails, testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
 			
 			self.runStatus = "The test Start!";
 			self.tlaIndex = data.index;
@@ -144,7 +150,6 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 			templateUrl : 'accountConfigContent',
 			controller:  'AccountController',
 			controllerAs: 'accountCtrl',
-			
 			windowClass: 'app-modal-window',
 			backdrop: true,
 			
@@ -153,4 +158,37 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 			}
 		});
 	};
+	
+	this.getConfig = function() {
+		self.isLoading = true;
+		accountService.getAccountConfig(function(data) {
+			self.paramObject = data.paramObject;
+			self.paramObject.paramObjectID = null;
+		});
+	};
+	this.getConfig();
+	
+	this.openEditParameters = function(test) {
+		var modalInstance = $modal.open({
+			animation : true,
+			templateUrl : 'editParameters',
+			 controller: 'modalParametersController',
+			 controllerAs: 'parametersCtrl',
+			backdrop: true,
+			windowClass: 'edit-parameter-modal',
+			size : 'lg',
+			resolve : {
+				selectedTest: function () {
+			          return test
+			    },
+				defaulObject: function () {
+					return self.paramObject
+				},
+				className: function() {
+					return self.testDetails.className;
+				}
+	       }
+		});
+	}
+	
 });

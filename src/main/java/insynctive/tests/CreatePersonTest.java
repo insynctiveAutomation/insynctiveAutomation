@@ -14,6 +14,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import insynctive.annotation.ParametersFront;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.CreatePersonForm;
 import insynctive.pages.insynctive.LoginPage;
@@ -66,9 +67,9 @@ public class CreatePersonTest extends TestMachine {
 		
 		//Complete Data
 		account.getAccountProperty().setRemote(true);
-		person.setEmail(createPersonForm.getEmail());
-		person.setName(createPersonForm.getName());
-		person.setLastName(createPersonForm.getLastName());
+		paramObject.setEmail(createPersonForm.getEmail());
+		paramObject.setName(createPersonForm.getName());
+		paramObject.setLastName(createPersonForm.getLastName());
 		sessionName = "Crete person: "+createPersonForm.getEmail();
 		
 		startTest(testEnvironment);
@@ -95,10 +96,10 @@ public class CreatePersonTest extends TestMachine {
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			
-			homePage.createPersonCheckingInviteSS(person, CheckInApp.NO);
-			homePage.sendInviteEmail(person, CheckInApp.NO);
+			homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
+			homePage.sendInviteEmail(paramObject, CheckInApp.NO);
 			
-			boolean result = homePage.checkIfPersonIsCreated(person);
+			boolean result = homePage.checkIfPersonIsCreated(paramObject);
 			
 			long endTime = System.nanoTime();
 			setResult(result, "Create Person", endTime - startTime);

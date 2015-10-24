@@ -23,9 +23,11 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/configuration/configuration.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
 	
+	<!-- Advanced Modules -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+
 </head>
 
 	<body data-ng-controller="configurationController as configCtl">
@@ -34,9 +36,9 @@
     	<span class="loading-span">Loading</span>
     </div>
     <div ng-show="!configCtl.isLoading" class="configuration-div">
-	    <div class="col-xs-4 col-md-4 h4"><a href="/" id="configurationLink">Home</a></div>
+		<div class="col-xs-4 col-md-4 h4"><a id="logoutLink" ng-click="testCtrl.logout()">Logout</a></div>
 		<div class="col-xs-4 col-md-4 text-center h4"><span class="" id="have-changes"></span></div>
-		<div class="col-xs-4 col-md-4 text-right h4"><a id="logoutLink" ng-click="testCtrl.logout()">Logout</a></div>
+	    <div class="col-xs-4 col-md-4 text-right h4"><a href="/" id="configurationLink">Home</a></div>
 		<br/>
 	    <form ng-submit="configCtl.saveConfiguration()" name="form" ng-model="configCtl.form" ng-change="configCtl.haveChanges()" id="form">
 			<div class="col-xs-12 col-md-6">
@@ -62,132 +64,127 @@
 				<select name="remote" ng-model="configCtl.configuration.accountProperty.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>   <br/>   
 			</div>
 			<div class="col-xs-12 col-md-12">
-				<h3 class="text-center">Param Object</h3>
+				<h3 class="text-center">Param Object Template</h3>
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>Personal Info</h4>
 				<label for="">Login Username: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.loginUsername" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.loginUsername" /><br/>     
 				
 				<label for="">Login Password: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.loginPassword" /><br/>    
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.loginPassword" /><br/>    
 				
 				<label for="">Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.name" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.name" /><br/>     
 				
 				<label for="">Middle Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.middleName" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.middleName" /><br/>     
 				
 				<label for="">Last Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.lastName" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.lastName" /><br/>     
 				
 				<label for="">Maiden Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.maidenName" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.maidenName" /><br/>     
 				
 				<label for="">Birth Date: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.birthDate" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.birthDate" /><br/>     
 				
 				<label for="">Gender: </label>
-				<select name="gender" ng-model="configCtl.configuration.person.gender" required>
-			    	<option value="UNKNOWN">Unknown</option>
-			    	<option value="MALE">Male</option>
-			    	<option value="FEMALE">Female</option>
-		 		</select><br/>
+				<gender ng-model="configCtl.configuration.paramObject.gender"></gender></br>
 				
 				<label for="">Email: </label>
-				<input ng-change="configCtl.changeEmailLabel()" ng-required="true" ng-model="configCtl.configuration.person.email" />    
+				<input ng-change="configCtl.changeEmailLabel()" ng-required="true" ng-model="configCtl.configuration.paramObject.email" />    
 				<span>Final Email:</span><span style="font-weight: bold;"> {{configCtl.finalEmail}}</span>
 				<br/> 
 				
 				<label for="">Title of Employee: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.titleOfEmployee" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.titleOfEmployee" /><br/>     
 				
 				<label for="">Department of Employee: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.departamentOfEmployee" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.departamentOfEmployee" /><br/>     
 				
 				<label for="">Primary Phone: </label>
-				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.person.primaryPhone" pattern=".{10}" title="Phone (Person) need 10 characters"/>
+				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.paramObject.primaryPhone" pattern=".{10}" title="Phone (Person) need 10 characters"/>
 				<span>Final Primary Phone:</span><span style="font-weight: bold;"> {{configCtl.finalPrimaryPhone}}</span>
 				<br/>     
 				
 				<label for="">SSN: </label>
-				<input ng-change="configCtl.changeSSNLabel()" ng-required="true" ng-model="configCtl.configuration.person.ssn" pattern=".{9}" title="SSN need 9 characters"/>
+				<input ng-change="configCtl.changeSSNLabel()" ng-required="true" ng-model="configCtl.configuration.paramObject.ssn" pattern=".{9}" title="SSN need 9 characters"/>
 				<span>Final SSN:</span><span style="font-weight: bold;"> {{configCtl.finalSSN}}</span>
 				<br/>     
 				
 				<label for="">Marital Status: </label>
-				<select name="marital-status" ng-model="configCtl.configuration.person.maritalStatus" required>
-			    	<option value="UNKNOWN">Unknown</option>
-			    	<option value="SINGLE">Single</option>
-			    	<option value="MARRIED">Married</option>
-			    	<option value="DIVORCED">Divorced</option>
-			    	<option value="WIDOWER">Widower</option>
-			    	<option value="PARTNER">Partner</option>
-		 		</select><br/>
+				<marital-status ng-model="configCtl.configuration.paramObject.maritalStatus"></marital-status><br/>   
+
+				<label for="">Checklist Name</label>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.checklistName" /><br/> 
+
+				<label for="">Min loading Time (segs)</label>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.loadingTime" /><br/> 
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>Emergency Contact</h4>
 				<label for="">Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.name" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.emergencyContact.name" /><br/>     
 				
 				<label for="">Email: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.email" />
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.emergencyContact.email" />
 				<br/>     
 				
 				<label for="">Phone Number: </label>
-				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.phone" pattern=".{10}" title="Phone (Emergency Contact) need 10 characters"/>
+				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.paramObject.emergencyContact.phone" pattern=".{10}" title="Phone (Emergency Contact) need 10 characters"/>
 				<span>Final Phone Number:</span><span style="font-weight: bold;"> {{configCtl.finalPhoneEmergency}}</span>
 				<br/>     
 				
 				<label for="">Relationship: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.emergencyContact.relationship" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.emergencyContact.relationship" /><br/>    
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>US Address</h4>
 				<label for="">Street: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.street" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.street" /><br/>     
 				
 				<label for="">APT: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.apt" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.apt" /><br/>     
 				
 				<label for="">Second Street: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.secondStreet" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.secondStreet" /><br/>     
 				
 				<label for="">City: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.city" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.city" /><br/>     
 				
 				<label for="">State: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.state" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.state" /><br/>     
 				
 				<label for="">Zip code: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.zipCode" pattern=".{5}" title="Zip Code need 5 characters"/><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.zipCode" pattern=".{5}" title="Zip Code need 5 characters"/><br/>     
 				
 				<label for="">County: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.county" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.county" /><br/>     
 				
 				<label for="">Short Description: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.usaddress.shortDescription" /><br/>     
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.shortDescription" /><br/>     
 				
 				<label for="">Same As Home: </label>
-				<select name="remote" ng-model="configCtl.configuration.person.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
+				<select name="remote" ng-model="configCtl.configuration.paramObject.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
 			</div>
 			<div class="col-md-6 col-md-offset-6">
 				<h4>SMB BENEFIT</h4>
 				<label for="">Medical Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.medicalBenefit.name" />
-				<select name="marital-status" ng-model="configCtl.configuration.person.medicalBenefit.company" required>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.medicalBenefit.name" />
+				<select name="marital-status" ng-model="configCtl.configuration.paramObject.medicalBenefit.company" required>
 			    	<option value="">Company?</option>
 			    	<option value="Antherm">Antherm</option>
 			    	<option value="Blue Shield">Blue Shield</option>
 			    	<!-- <option value="Humana">Humana</option> -->
 			    	<option value="Kaise">Kaise</option>
 			    	<!-- <option value="Premier">Premier</option> -->
-			    	<option value="VSP">VPS</option>
+			    	<option value="VSP">VSP</option>
 		 		</select>
 				<br/>     
 				<label for="">Dental Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.dentalBenefit.name" />
-				<select name="marital-status" ng-model="configCtl.configuration.person.dentalBenefit.company" required>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.dentalBenefit.name" />
+				<select name="marital-status" ng-model="configCtl.configuration.paramObject.dentalBenefit.company" required>
 			    	<option value="">Company?</option>
 			    	<option value="Antherm">Antherm</option>
 			    	<option value="Blue Shield">Blue Shield</option>
@@ -198,8 +195,8 @@
 		 		</select>
 		 		<br/>     
 				<label for="">Vision Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.person.visionBenefit.name" />
-				<select name="marital-status" ng-model="configCtl.configuration.person.visionBenefit.company" required>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.visionBenefit.name" />
+				<select name="marital-status" ng-model="configCtl.configuration.paramObject.visionBenefit.company" required>
 			    	<option value="">Company?</option>
 			    	<option value="Antherm">Antherm</option>
 			    	<option value="Blue Shield">Blue Shield</option>

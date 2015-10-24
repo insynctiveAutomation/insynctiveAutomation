@@ -7,19 +7,19 @@ public class TestSuite {
 
 	private String testName;
 	private String className;
-	private List<Result> includeMethods;
+	private List<IncludeMethod> includeMethods;
 	
-	public TestSuite(String testName, String className, List<Result> includeMethods){
+	public TestSuite(String testName, String className, List<IncludeMethod> includeMethods){
 		this.setTestName(testName);
 		this.setClassName(className);
 		this.setIncludeMethods(includeMethods);
 	}
 	
 	public TestSuite(){
-		this.setIncludeMethods(new ArrayList<Result>());
+		this.setIncludeMethods(new ArrayList<IncludeMethod>());
 	}
 	
-	public void addMethod(Result method){
+	public void addMethod(IncludeMethod method){
 		getIncludeMethods().add(method);
 	}
 
@@ -39,11 +39,11 @@ public class TestSuite {
 		this.className = className;
 	}
 
-	public List<Result> getIncludeMethods() {
+	public List<IncludeMethod> getIncludeMethods() {
 		return includeMethods;
 	}
 
-	public void setIncludeMethods(List<Result> includeMethods) {
+	public void setIncludeMethods(List<IncludeMethod> includeMethods) {
 		this.includeMethods = includeMethods;
 	}
 	

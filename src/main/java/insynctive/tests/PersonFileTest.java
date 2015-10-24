@@ -9,9 +9,12 @@ import java.util.Map;
 import org.json.JSONException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import insynctive.annotation.ParametersFront;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.EmergencyContact;
 import insynctive.pages.insynctive.LoginPage;
@@ -19,19 +22,21 @@ import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
+import insynctive.utils.ParamObjectField;
 import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
 public class PersonFileTest extends TestMachine {
 
+	
 	@BeforeClass
 	@Parameters({"accountID", "bowser", "testID"})
-	public void tearUp(String accountID, String bowser, String testID) throws Exception {
-		super.testID = Integer.parseInt(testID);
+	public void tearUp(String accountID, String bowser, String testSuiteID) throws Exception {
+		super.testSuiteID = Integer.parseInt(testSuiteID);
 		super.tearUp(Integer.valueOf(accountID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = "Person File Test ("+ person.getEmail()+")";
+		this.sessionName = "Person File Test";
 	}
 	
 	@Override
@@ -40,211 +45,233 @@ public class PersonFileTest extends TestMachine {
 		super.teardown();
 	}
 	
+	@BeforeTest
+	@Parameters({"TestID"})
+	public void beforeTest(@Optional("TestID") String testID){
+		System.out.println("TESTID: "+testID);
+	}
+	
 	@Test()
-	public void loginTest()
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, labels={"Login Username", "Login Password"})
+	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
+		changeParamObject(testID);
+		
 		startTest(testEnvironment);
-
-		long startTime = System.nanoTime();
 		try{ 
 			LoginPage loginPage = login();
 			boolean result = loginPage.isLoggedIn();
-			long endTime = System.nanoTime();
-			setResult(result, "Login Test", endTime - startTime);
 			Debugger.log("loginTest => "+result, isSaucelabs);
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Login",  ex, isSaucelabs, endTime - startTime);
 			assertTrue(false);
 		}
 	}
 	
 ////	//OPEN PERSON FILE NOT CREATE
 //	@Test(dependsOnMethods="loginTest")
-//	public void createPersonTest() throws Exception {
-//		long startTime = System.nanoTime();
+//	@Parameters({"TestID"})
+//	@ParametersFront(
+//			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, ParamObjectField.TITLE_OF_EMPLOYEE}, 
+//			labels={"Email", "Name:", "Last Name", "Department", "Title"})
+//	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
+//		changeParamObject(testID);
 //		try{ 
 //			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 //			homePage.openPersonFile(person.getSearchEmail()+"+71");
 //
 //			boolean result = homePage.isPersonFileOpened();
 //			Sleeper.sleep(5000driver);
-//			long endTime = System.nanoTime();
-//			setResult(result, "Open Person File", endTime - startTime);
+//			setResult(result, "Open Person File");
 //			Debugger.log("createPersonTest => "+result, isSaucelabs);
 //			assertTrue(result);
 //		} catch(Exception ex){
-//			long endTime = System.nanoTime();
-//			failTest("Open Person File", ex, isSaucelabs, endTime - startTime);
+//			failTest("Open Person File", ex, isSaucelabs);
 //			assertTrue(false);
 //		}
 //	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void createPersonTest() throws Throwable {
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, ParamObjectField.TITLE_OF_EMPLOYEE}, 
+			labels={"Email", "Name:", "Last Name", "Department", "Title"})
+	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			
-			person.setName(person.getName() + " " + account.getRunIDString());
-			person.setEmail(person.getEmailWithRunID(account));
-			homePage.createPersonCheckingInviteSS(person, CheckInApp.NO);
-			homePage.sendInviteEmail(person, CheckInApp.NO);
+			paramObject.setName(paramObject.getName() + " " + account.getRunIDString());
+			paramObject.setEmail(paramObject.getEmailWithRunID(account));
+			homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
+			homePage.sendInviteEmail(paramObject, CheckInApp.NO);
 			
-			boolean result = homePage.checkIfPersonIsCreated(person);
+			boolean result = homePage.checkIfPersonIsCreated(paramObject);
 			
-			long endTime = System.nanoTime();
-			setResult(result, "Create Person", endTime - startTime);
+			setResult(result, "Create Person");
 			Debugger.log("createPerson => "+result, isSaucelabs);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Create Person", ex, isSaucelabs, endTime - startTime);
+			failTest("Create Person", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 
 	@Test(dependsOnMethods="createPersonTest")
-	public void changePrimaryEmail() throws Exception {
-		long startTime = System.nanoTime();  
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"Email (The test will add +test)"})
+	public void changePrimaryEmail(@Optional("TestID") Integer testID) throws Exception {
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.changePrimaryEmail(person);
+			personFilePage.changePrimaryEmail(paramObject);
 			
-			boolean result = personFilePage.isChangePrimaryEmail(person.getEmailToChange());
+			boolean result = personFilePage.isChangePrimaryEmail(paramObject.getEmailToChange());
 			Debugger.log("changePrimaryEmail => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change Primary Email", endTime - startTime);
+			setResult(result, "Change Primary Email");
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Change Primary Email", ex, isSaucelabs, endTime - startTime);
+			failTest("Change Primary Email", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void changeMaritalStatus()
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.MARITAL_STATUS}, 
+			labels={"Marital Status"})
+	public void changeMaritalStatus(@Optional("TestID") Integer testID)
 			throws Exception {
-		long startTime = System.nanoTime();
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.changeMaritalStatus(person.getMaritalStatus());
+			personFilePage.changeMaritalStatus(paramObject.getMaritalStatus());
 			
-			boolean result = personFilePage.isChangeMaritalStatus(person.getMaritalStatus());
+			boolean result = personFilePage.isChangeMaritalStatus(paramObject.getMaritalStatus());
 			Debugger.log("changeMaritalStatus => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change Marital Status", endTime - startTime);
+			setResult(result, "Change Marital Status");
 			assertTrue(result);
 		} catch (Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Change Marital Status", ex, isSaucelabs, endTime - startTime);
+			failTest("Change Marital Status", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void changeName()
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME}, 
+			labels={"Email", "Name:", "Last Name"})
+	public void changeName(@Optional("TestID") Integer testID)
 			throws Exception {
-		long startTime = System.nanoTime();
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.changeName(person.getName(), person.getLastName(), person.getMiddleName(), person.getMaidenName());
+			personFilePage.changeName(paramObject.getName(), paramObject.getLastName(), paramObject.getMiddleName(), paramObject.getMaidenName());
 			
-			boolean result = personFilePage.isChangeName(person, Wait.WAIT);
+			boolean result = personFilePage.isChangeName(paramObject, Wait.WAIT);
 			Debugger.log("changeName => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change name 1", endTime - startTime);
+			setResult(result, "Change name 1");
 			assertTrue(result);
 		} catch (Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Change name 1", ex, isSaucelabs, endTime - startTime);
+			failTest("Change name 1", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void changeName2()
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME}, 
+			labels={"Email", "Name:", "Last Name"})
+	public void changeName2(@Optional("TestID") Integer testID)
 			throws Exception {
-		long startTime = System.nanoTime();
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.changeNameIntoTitle(person.getName(), person.getLastName(), person.getMiddleName(), person.getMaidenName());
+			personFilePage.changeNameIntoTitle(paramObject.getName(), paramObject.getLastName(), paramObject.getMiddleName(), paramObject.getMaidenName());
 			
-			boolean result = personFilePage.isChangeName(person, Wait.WAIT);
+			boolean result = personFilePage.isChangeName(paramObject, Wait.WAIT);
 			Debugger.log("changeName2 =>"+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change name from Title", endTime - startTime);
+			setResult(result, "Change name from Title");
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Change name 2", ex, isSaucelabs, endTime - startTime);
+			failTest("Change name 2", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void changeGender()
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.GENDER}, 
+			labels={"Gender"})
+	public void changeGender(@Optional("TestID") Integer testID)
 			throws Exception {
-		long startTime = System.nanoTime();
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.changeGender(person.getGender());
+			personFilePage.changeGender(paramObject.getGender());
 			
-			boolean result = personFilePage.isChangeGender(person.getGender());
+			boolean result = personFilePage.isChangeGender(paramObject.getGender());
 			Debugger.log("changeGender => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change Gender", endTime - startTime);
+			setResult(result, "Change Gender");
 			assertTrue(result);
 		} catch (Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Change Gender", ex, isSaucelabs, endTime - startTime);
+			failTest("Change Gender", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void changeBirthDate()
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.BIRTH_DATE}, 
+			labels={"Birth Date"})
+	public void changeBirthDate(@Optional("TestID") Integer testID)
 			throws Exception {
-		long startTime = System.nanoTime();
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.changeBirthDate(person.getBirthDate());
+			personFilePage.changeBirthDate(paramObject.getBirthDate());
 			
-			boolean result = personFilePage.isChangeBirthDate(person.getBirthDate());
+			boolean result = personFilePage.isChangeBirthDate(paramObject.getBirthDate());
 			Debugger.log("changeBirthDate => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change Birth Date", endTime - startTime);
+			setResult(result, "Change Birth Date");
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Change Birth Date", ex, isSaucelabs, endTime - startTime);
+			failTest("Change Birth Date", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void addTitle() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.TITLE_OF_EMPLOYEE, ParamObjectField.DEPARTMENT_OF_EMPLYEE}, 
+			labels={"Title", "Department"})
+	public void addTitle(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.changeTitle(person.getTitleOfEmployee(), person.getDepartamentOfEmployee());
+			personFilePage.changeTitle(paramObject.getTitleOfEmployee(), paramObject.getDepartamentOfEmployee());
 			
-			boolean result = personFilePage.isChangeTitle(person.getTitleOfEmployee(), person.getDepartamentOfEmployee());
+			boolean result = personFilePage.isChangeTitle(paramObject.getTitleOfEmployee(), paramObject.getDepartamentOfEmployee());
 			Debugger.log("addTitle => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add Title", endTime - startTime);
+			setResult(result, "Add Title");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Add Title", ex, isSaucelabs, endTime - startTime);
+			failTest("Add Title", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
@@ -264,105 +291,115 @@ public class PersonFileTest extends TestMachine {
 	} */
 
 	@Test(dependsOnMethods="createPersonTest")
-	public void addPhoneNumber() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.PRIMARY_PHONE}, 
+			labels={"Primary Phone"})
+	public void addPhoneNumber(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.addPhoneNumber(person.getPrimaryPhone(), account.getRunIDString());
+			personFilePage.addPhoneNumber(paramObject.getPrimaryPhone(), account.getRunIDString());
 
-			boolean result = personFilePage.isAddPhoneNumber(person.getPrimaryPhone(), account.getRunIDString());
+			boolean result = personFilePage.isAddPhoneNumber(paramObject.getPrimaryPhone(), account.getRunIDString());
 			Debugger.log("addPhoneNumber =>"+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add Phone Number", endTime - startTime);
+			setResult(result, "Add Phone Number");
 			assertTrue(result);
 		}catch (Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Add Phone Number", ex, isSaucelabs, endTime - startTime);
+			failTest("Add Phone Number", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 
 	@Test(dependsOnMethods="addPhoneNumber")
-	public void addAlternativePhone() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.PRIMARY_PHONE}, 
+			labels={"Add the same as Primary Phone and the test will change the first number to a 9"})
+	public void addAlternativePhone(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.addSecondaryEmail(person.getPrimaryPhone(), account.getRunIDString());
+			personFilePage.addSecondaryEmail(paramObject.getPrimaryPhone(), account.getRunIDString());
 			
-			boolean result = personFilePage.isAddAlternativePhoneNumber(person.getPrimaryPhone(), account.getRunIDString());
+			boolean result = personFilePage.isAddAlternativePhoneNumber(paramObject.getPrimaryPhone(), account.getRunIDString());
 			Debugger.log("addAlternativePhone =>"+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add Alternative Number", endTime - startTime);
+			setResult(result, "Add Alternative Number");
 			assertTrue(result);
 		}catch (Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Add Alternative Number", ex, isSaucelabs, endTime - startTime);
+			failTest("Add Alternative Number", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 
 	@Test(dependsOnMethods="addAlternativePhone")
-	public void makePrimaryPhone() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.PRIMARY_PHONE}, 
+			labels={"Add the same as Primary Phone"})
+	public void makePrimaryPhone(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			Map<String, String> resultsPhones = personFilePage.makeAsPrimary();
 			
 			boolean result = personFilePage.isChangePrimaryPhone(resultsPhones);
 			Debugger.log("makePrimaryPhone =>"+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Make as Primary Phone", endTime - startTime);
+			setResult(result, "Make as Primary Phone");
 			assertTrue(result);
 		}catch (Exception ex){
-			long endTime = System.nanoTime();
-			failTest("makePrimaryPhone", ex, isSaucelabs, endTime - startTime);
+			failTest("makePrimaryPhone", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void addUSAddress() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+	public void addUSAddress(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.addUsAddress(person.getUSAddress());
+			personFilePage.addUsAddress(paramObject.getUSAddress());
 			
-			boolean result = personFilePage.isAddUSAddress(person.getUSAddress());
+			boolean result = personFilePage.isAddUSAddress(paramObject.getUSAddress());
 			Debugger.log("addUSAddress => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add US Address", endTime - startTime);
+			setResult(result, "Add US Address");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Add US Address", ex, isSaucelabs, endTime - startTime);
+			failTest("Add US Address", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="addUSAddress")
-	public void removeUSAddress() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+	public void removeUSAddress(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.removeUsAddress(person.getUSAddress());
+			personFilePage.removeUsAddress(paramObject.getUSAddress());
 
-			boolean result = personFilePage.isRemoveUsAddress(person.getUSAddress());
+			boolean result = personFilePage.isRemoveUsAddress(paramObject.getUSAddress());
 			Debugger.log("removeUSAddress => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Remove US Address", endTime - startTime);
+			setResult(result, "Remove US Address");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Remove US Address", ex, isSaucelabs, endTime - startTime);
+			failTest("Remove US Address", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	/** @Test(dependsOnMethods="createPersonTest")
 	public void updateUSAddress() throws Exception{
-		try{ long startTime = System.nanoTime();
+		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
 			personFilePage.updateUsAddress(person.getUSAddress());
 
@@ -371,96 +408,108 @@ public class PersonFileTest extends TestMachine {
 			long endTime = System.nanoTime();setResult(result, "Update USAddress");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Update USAddress", ex, isSaucelabs, endTime - startTime);
+			failTest("Update USAddress", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	} */
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void assignTask() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using the a hardcode task)"})
+	public void assignTask(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
 			personFilePage.assignTask();
 			
 			boolean result = personFilePage.isTaskAssigned();
 			Debugger.log("asssignTask => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Assign Task", endTime - startTime);
+			setResult(result, "Assign Task");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Assign Task", ex, isSaucelabs, endTime - startTime);
+			failTest("Assign Task", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void startChecklist() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.CHECKLIST_NAME}, 
+			labels={"Checklist Name"})
+	public void startChecklist(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
-			personFilePage.assignChecklist();
+			personFilePage.assignChecklist(paramObject.getChecklistName());
 			Sleeper.sleep(5000, driver);
 			boolean result = personFilePage.isChecklistAssigned();
 			Debugger.log("startChecklist => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Start Checklist", endTime - startTime);
+			setResult(result, "Start Checklist");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			personFilePage.goToPersonalTab();
-			long endTime = System.nanoTime();
-			failTest("Start Checklist", ex, isSaucelabs, endTime - startTime);
+			failTest("Start Checklist", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void addSocialSecurityNumber() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.SSN}, 
+			labels={"SSN (The test will change the last digits for the runID)"})
+	public void addSocialSecurityNumber(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
-			personFilePage.addSocialSecurityNumber(person.getSsn(), account.getRunIDString());
+			personFilePage.addSocialSecurityNumber(paramObject.getSsn(), account.getRunIDString());
 			
-			boolean result = personFilePage.isSocialSecurityNumberAdded(person.getSsn(), account.getRunIDString());
+			boolean result = personFilePage.isSocialSecurityNumberAdded(paramObject.getSsn(), account.getRunIDString());
 			Debugger.log("Add Social Security Number => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add Social Security Number", endTime - startTime);
+			setResult(result, "Add Social Security Number");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Add Social Security Number", ex, isSaucelabs, endTime - startTime);
+			failTest("Add Social Security Number", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void addEmergencyContact() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+	public void addEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			EmergencyContact emg = person.getEmergencyContact();
+			EmergencyContact emg = paramObject.getEmergencyContact();
 			personFilePage.addEmergencyContact(emg.getName(), emg.getRelationship(), emg.getPhone(), emg.getEmail());
 			
 			boolean result = personFilePage.isEmergencyContactAdded(emg);
 			Debugger.log("Add Emergency Contact => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add Emergency Contact", endTime - startTime);
+			setResult(result, "Add Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Add Emergency Contact", ex, isSaucelabs, endTime - startTime);
+			failTest("Add Emergency Contact", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="addEmergencyContact")
-	public void changeEmergencyContact() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+	public void changeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			EmergencyContact emg = person.getEmergencyContact();
+			EmergencyContact emg = paramObject.getEmergencyContact();
 			personFilePage.editEmergencyContact(emg.getName()+"Test", emg.getRelationship(), emg.getPhone(), emg.getEmail());
 			
 			String name = emg.getName();
@@ -470,19 +519,21 @@ public class PersonFileTest extends TestMachine {
 			emg.setName(name); //return the default name
 			
 			Debugger.log("Change Emergency Contact => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Change Emergency Contact", endTime - startTime);
+			setResult(result, "Change Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Change Emergency Contact", ex, isSaucelabs, endTime - startTime);
+			failTest("Change Emergency Contact", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="changeEmergencyContact")
-	public void removeEmergencyContact() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+	public void removeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			int count = personFilePage.getNumberOfEmergencyContacts();
@@ -490,19 +541,21 @@ public class PersonFileTest extends TestMachine {
 		
 			boolean result = personFilePage.isEmergencyContactRemoved(count);
 			Debugger.log("Remove Emergency Contact => "+result, isSaucelabs);
-			long endTime = System.nanoTime();
-			setResult(result, "Add Emergency Contact", endTime - startTime);
+			setResult(result, "Add Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Remove Emergency Contact", ex, isSaucelabs, endTime - startTime);
+			failTest("Remove Emergency Contact", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="createPersonTest")
-	public void assignJob() throws Exception{
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No implemented (Using a hardcode Job)"})
+	public void assignJob(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			personFilePage.assignJob();
@@ -513,8 +566,7 @@ public class PersonFileTest extends TestMachine {
 			setResult(result, "Assign Job");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Assign Job", ex, isSaucelabs, endTime - startTime);
+			failTest("Assign Job", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}

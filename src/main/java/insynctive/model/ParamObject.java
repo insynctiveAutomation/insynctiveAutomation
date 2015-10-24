@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -21,11 +20,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.exception.ConfigurationException;
 
 @Entity
 @Table(name = "ParamObject")
+@JsonIgnoreProperties(ignoreUnknown = true) 
 public class ParamObject {
 	@Transient
 	@JsonIgnore
@@ -35,7 +36,7 @@ public class ParamObject {
 	@Id
 	@GeneratedValue
 	@Column(name = "param_object_id")
-	private int peronID;
+	private Integer paramObjectID;
 
 	@Column(name = "name")
 	private String name;
@@ -78,6 +79,12 @@ public class ParamObject {
 	
 	@Column(name = "loginPassword")
 	private String loginPassword;
+
+	@Column(name = "checklistName")
+	private String checklistName;
+	
+	@Column(name = "loadingTime")
+	private Integer loadingTime;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
@@ -100,13 +107,11 @@ public class ParamObject {
 	@Embedded
 	private Benefit visionBenefit;
 
-	@NotNull
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "emergency_contact_id")
 	private EmergencyContact emergencyContact;
 
-	@NotNull
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "USAddress_id")
@@ -320,15 +325,7 @@ public class ParamObject {
 	public String toString() {
 		return this.name + " "+this.lastName;
 	}
-
-	public int getPeronID() {
-		return peronID;
-	}
-
-	public void setPeronID(int peronID) {
-		this.peronID = peronID;
-	}
-
+	
 	public Benefit getMedicalBenefit() {
 		return medicalBenefit;
 	}
@@ -367,6 +364,30 @@ public class ParamObject {
 
 	public void setLoginPassword(String loginPassword) {
 		this.loginPassword = loginPassword;
+	}
+
+	public Integer getParamObjectID() {
+		return paramObjectID;
+	}
+
+	public void setParamObjectID(Integer paramObjectID) {
+		this.paramObjectID = paramObjectID;
+	}
+
+	public String getChecklistName() {
+		return checklistName;
+	}
+
+	public void setChecklistName(String checklistName) {
+		this.checklistName = checklistName;
+	}
+
+	public Integer getLoadingTime() {
+		return loadingTime;
+	}
+
+	public void setLoadingTime(Integer loadingTime) {
+		this.loadingTime = loadingTime;
 	}
 
 }

@@ -16,6 +16,7 @@ import insynctive.model.CrossBrowserAccount;
 import insynctive.model.EmergencyContact;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
+import insynctive.model.Test;
 import insynctive.model.USAddress;
 
 @PropertySource("classpath:application.properties")
@@ -30,17 +31,17 @@ public class HibernateUtil {
 			
 //			if(local){
 			
-//				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-//				prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/insynctive");
-//				prop.setProperty("hibernate.connection.username", "root");
-//				prop.setProperty("hibernate.connection.password", "");				
+				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+				prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/insynctive");
+				prop.setProperty("hibernate.connection.username", "root");
+				prop.setProperty("hibernate.connection.password", "");				
 
 //			} else {
 //
-				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
-				prop.setProperty("hibernate.connection.username", "b797aea885e227");
-				prop.setProperty("hibernate.connection.password", "503f6e18");
+//				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+//				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
+//				prop.setProperty("hibernate.connection.username", "b797aea885e227");
+//				prop.setProperty("hibernate.connection.password", "503f6e18");
 //			
 //			}
 
@@ -57,7 +58,8 @@ public class HibernateUtil {
 			   .addAnnotatedClass(EmergencyContact.class)
 			   .addAnnotatedClass(USAddress.class)
 			   .addAnnotatedClass(CreatePersonForm.class)
-			   .addAnnotatedClass(ParamObject.class);
+			   .addAnnotatedClass(ParamObject.class)
+			   .addAnnotatedClass(Test.class);
 			
 			ServiceRegistry serviceRegistry =  new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
 			sessionFactory = config.buildSessionFactory(serviceRegistry);;

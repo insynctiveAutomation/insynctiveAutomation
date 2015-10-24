@@ -13,7 +13,7 @@ public class USAddress {
 	@Id
 	@GeneratedValue
 	@Column(name = "USAddress_id")
-	private int usAddressID;
+	private Integer usAddressID;
 	
 	@Column(name = "street")
 	private String street;

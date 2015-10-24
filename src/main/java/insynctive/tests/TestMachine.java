@@ -30,6 +30,7 @@ import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
+import insynctive.model.Test;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
@@ -52,7 +53,7 @@ public abstract class TestMachine {
 	
 	public InsynctiveProperty properties;
 	public Account account; 
-	public ParamObject person;
+	public ParamObject paramObject;
 	
 	public WebDriver driver;
 	
@@ -64,7 +65,7 @@ public abstract class TestMachine {
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();
 	public String jobID;
-	public Integer testID;
+	public Integer testSuiteID;
 	
 	//SLACK
 	private String slackChannel = "https://hooks.slack.com/services/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";
@@ -102,7 +103,7 @@ public abstract class TestMachine {
 			account = (Account) openSession().get(Account.class, accountID);
 			account.incrementRunID();
 			
-			person = account.getPerson();
+			paramObject = account.getParamObject();
 			properties = account.getAccountProperty();
 			Sleeper.setIsRemote(properties.isRemote());
 			
@@ -161,7 +162,7 @@ public abstract class TestMachine {
 			driver = new FirefoxDriver(firefoxProfile);
 			driver.manage().window().maximize();
 		}
-		TestResults.addVideo(testID, getJobURL());
+		TestResults.addVideo(testSuiteID, getJobURL());
 	}
 	
 	public void openPersonFile(String emailSearch) throws Throwable{
@@ -178,11 +179,11 @@ public abstract class TestMachine {
 	}
 	
 	public LoginPage login() throws Exception {
-		return login(person.getLoginUsername(),person.getLoginPassword(), null);
+		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), null);
 	}
 	
 	public LoginPage login(String returnURL) throws Exception {
-		return login(person.getLoginUsername(),person.getLoginPassword(), returnURL);
+		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), returnURL);
 	}
 	
 	public LoginPage loginAsEmployee(String email, String password) throws Exception {
@@ -359,6 +360,11 @@ public abstract class TestMachine {
 		}
 		
 		return results;
+	}
+	
+	public void changeParamObject(Integer testID){
+		Test test = (Test) openSession().get(Test.class, testID);
+		paramObject = test.getParamObject();
 	}
 	
 	/* RUNNABLE TEST */

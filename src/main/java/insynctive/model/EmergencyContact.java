@@ -13,7 +13,7 @@ public class EmergencyContact {
 	@Id
 	@GeneratedValue
 	@Column(name = "emergency_contact_id")
-	private int emergencyID;
+	private Integer emergencyID;
 	
 	@Column(name = "name")
 	String name;

@@ -2,20 +2,18 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import insynctive.pages.insynctive.LoginPage;
+import insynctive.annotation.ParametersFront;
 import insynctive.pages.insynctive.employee.EmployeeDashboardPage;
 import insynctive.utils.Debugger;
+import insynctive.utils.ParamObjectField;
 import insynctive.utils.data.TestEnvironment;
 
 public class EmployeeDashboardInterfaceTest extends TestMachine {
@@ -23,129 +21,135 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	@BeforeClass
 	@Parameters({"accountID", "bowser", "testID"})
 	public void tearUp(String accountID, String bowser, String testID) throws Exception {
-		super.testID = Integer.parseInt(testID);
+		super.testSuiteID = Integer.parseInt(testID);
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		super.tearUp(Integer.valueOf(accountID));
 		this.sessionName = "Open Enrollment Test";
 	}
 	
 	@Test
-	public void loginTest()
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, labels={"Login Username", "Login Password"})
+	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
+		changeParamObject(testID);
 		startTest(testEnvironment);
 
-		long startTime = System.nanoTime();
 		try{ 
 			login("/Insynctive.Hub/Protected/Dashboard.aspx");
-			long endTime = System.nanoTime();
-			setResult(true, "Login Test", endTime - startTime);
+			setResult(true, "Login Test");
 			Debugger.log("loginTest => "+true, isSaucelabs);
 			assertTrue(true);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Login",  ex, isSaucelabs, endTime - startTime);
+			failTest("Login",  ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void isAllDataOK() throws Exception {
-
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.EMAIL, ParamObjectField.PRIMARY_PHONE}, 
+			labels={"Employee Name", "Employee Last Name", "Employee Email", "Employee Primary Phone"})
+	public void isAllDataOK(@Optional("TestID") Integer testID) throws Exception {
+		changeParamObject(testID);
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			long endTime = System.nanoTime();
-			Boolean result = employeeDashboard.isAllDataOK(person);
+			Boolean result = employeeDashboard.isAllDataOK(paramObject);
 			
 			Debugger.log("isAllDataOK => "+result, isSaucelabs);
-			setResult(result, "Is all Data Ok in Dashboard?", endTime - startTime);
+			setResult(result, "Is all Data Ok in Dashboard?");
 			assertTrue(result);
 		
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Is all Data Ok in Dashboard?",  ex, isSaucelabs, endTime - startTime);
+			failTest("Is all Data Ok in Dashboard?",  ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void updatePersonalInformationHappyPath() throws Exception {
-		
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.BIRTH_DATE, ParamObjectField.GENDER, ParamObjectField.MARITAL_STATUS, ParamObjectField.SSN, ParamObjectField.PRIMARY_PHONE, ParamObjectField.US_ADDRESS}, 
+			labels={"Birth Date", "Gender", "Marital Status", "SSN", "Primary Phone", "US Address"})
+	public void updatePersonalInformationHappyPath(@Optional("TestID") Integer testID) throws Exception {
+		changeParamObject(testID);
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			long endTime = System.nanoTime();
-			employeeDashboard.updatePersonalInformationHappyPath(person, account.getRunIDString());
+			employeeDashboard.updatePersonalInformationHappyPath(paramObject, account.getRunIDString());
 			
 			boolean result = true;
 			
-			setResult(result, "Update Personal Information", endTime - startTime);
+			setResult(result, "Update Personal Information");
 			Debugger.log("updatePersonalInformation => "+result, isSaucelabs);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Update Personal Information",  ex, isSaucelabs, endTime - startTime);
+			failTest("Update Personal Information",  ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void updatePersonalInformatioWithErrors() throws Exception {
-		
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.BIRTH_DATE, ParamObjectField.GENDER, ParamObjectField.MARITAL_STATUS, ParamObjectField.SSN, ParamObjectField.PRIMARY_PHONE, ParamObjectField.US_ADDRESS}, 
+			labels={"Birth Date", "Gender", "Marital Status", "SSN", "Primary Phone", "US Address"})
+	public void updatePersonalInformatioWithErrors(@Optional("TestID") Integer testID) throws Exception {
+		changeParamObject(testID);
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			long endTime = System.nanoTime();
-			employeeDashboard.updatePersonalInformationWithErrors(person, account.getRunIDString());
+			employeeDashboard.updatePersonalInformationWithErrors(paramObject, account.getRunIDString());
 			
 			boolean result = true;
 			
-			setResult(result, "Update Personal Information", endTime - startTime);
+			setResult(result, "Update Personal Information");
 			Debugger.log("updatePersonalInformation => "+result, isSaucelabs);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Update Personal Information",  ex, isSaucelabs, endTime - startTime);
+			failTest("Update Personal Information",  ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void electBenefits() throws Exception {
-
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.MEDICAL_BENEFIT_NAME, ParamObjectField.DENTAL_BENEFIT_NAME, ParamObjectField.VISION_BENEFIT_NAME}, 
+			labels={"Medica Benefit Name", "Dental Benefit Name", "Vision Benefit Name"})
+	public void electBenefits(@Optional("TestID") Integer testID) throws Exception {
+		changeParamObject(testID);
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			long endTime = System.nanoTime();
-			employeeDashboard.electBenefits(person, account.getRunIDString());
+			employeeDashboard.electBenefits(paramObject, account.getRunIDString());
 			
 			boolean result = true;
 			
-			setResult(result, "Elect Benefits", endTime - startTime);
+			setResult(result, "Elect Benefits");
 			Debugger.log("electBenefits => "+result, isSaucelabs);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Elect Benefits",  ex, isSaucelabs, endTime - startTime);
+			failTest("Elect Benefits",  ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void fillAndSignBenefit() throws Exception {
-		
-		long startTime = System.nanoTime();
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.MEDICAL_BENEFIT_COMPANY, ParamObjectField.DENTAL_BENEFIT_COMPANY, ParamObjectField.VISION_BENEFIT_COMPANY}, 
+			labels={"Medican Benefit Company", "Dental Benefit Company", "Vision Benefit Company"})
+	public void fillAndSignBenefit(@Optional("TestID") Integer testID) throws Exception {
+		changeParamObject(testID);
 		try{ 
 			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			long endTime = System.nanoTime();
 			Set<String> benefits = new HashSet<String>();
 			
-			benefits.add(person.getMedicalBenefit().getCompany());
-			benefits.add(person.getDentalBenefit().getCompany());
-			benefits.add(person.getVisionBenefit().getCompany());
+			benefits.add(paramObject.getMedicalBenefit().getCompany());
+			benefits.add(paramObject.getDentalBenefit().getCompany());
+			benefits.add(paramObject.getVisionBenefit().getCompany());
 			
 			for(String benefitName : benefits){
 				employeeDashboard.fillAndSignBenefit(benefitName);
@@ -153,13 +157,12 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 			
 			boolean result = true;
 			
-			setResult(result, "Fill and Sign Benefits", endTime - startTime);
+			setResult(result, "Fill and Sign Benefits");
 			Debugger.log("fillAndSignBenefit => "+result, isSaucelabs);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Fill and Sign Benefits",  ex, isSaucelabs, endTime - startTime);
+			failTest("Fill and Sign Benefits",  ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}

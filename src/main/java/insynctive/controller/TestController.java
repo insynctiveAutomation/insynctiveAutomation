@@ -2,16 +2,19 @@ package insynctive.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -37,19 +40,24 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.xml.sax.SAXException;
 
+import insynctive.annotation.ParametersFront;
 import insynctive.dao.AccountDao;
 import insynctive.dao.CreatePersonFormDao;
 import insynctive.dao.CrossBrowserAccountDao;
 import insynctive.dao.InsynctivePropertyDao;
+import insynctive.dao.TestDao;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
 import insynctive.model.InsynctiveProperty;
-import insynctive.results.Result;
+import insynctive.model.Test;
+import insynctive.results.IncludeMethod;
 import insynctive.results.TestResultsTestNG;
 import insynctive.results.TestSuite;
 import insynctive.runnable.RunnableTest;
 import insynctive.utils.LoginForm;
+import insynctive.utils.ParamObjectField;
+import insynctive.utils.ParametersFrontObject;
 
 @Controller
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
@@ -62,7 +70,8 @@ public class TestController {
 	private final AccountDao accDao;
 	private final CreatePersonFormDao createPersonFormDao;
 	private final CrossBrowserAccountDao crossDao;
-
+	private final TestDao testDao;
+	
 	private final ServletContext servletContext;
 
 	private Integer accID;//NOW IM USING THIS BECAUSE WE DONT HAVE LOGIN
@@ -75,12 +84,13 @@ public class TestController {
 	private Map<Integer, TestListenerAdapter> tla = new HashMap<>();
 	
 	@Inject
-	public TestController(InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao) {
+	public TestController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao) {
 		this.servletContext = servletContext;
 		this.propertyDao = propertyDao;
 		this.accDao = accDao;
 		this.crossDao = crossDao;
 		this.createPersonFormDao = createPersonFormDao;
+		this.testDao = testDao;
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -108,6 +118,20 @@ public class TestController {
 	public String save(@RequestBody Account formAcc){
 		accDao.save(formAcc);
 		return "{\"status\" : 200}";
+	}
+	
+	@RequestMapping(value = "/gender_template", method = RequestMethod.GET)
+	public ModelAndView getGender() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("template/gender");
+		return model;
+	}
+	
+	@RequestMapping(value = "/marital_status", method = RequestMethod.GET)
+	public ModelAndView getMaritalStatus() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("template/maritalStatus");
+		return model;
 	}
 	
 	@RequestMapping(value = "/login" ,method = RequestMethod.POST)
@@ -156,6 +180,40 @@ public class TestController {
 		ModelAndView model = new ModelAndView();
 		model.setViewName(modelName);
 		return model;
+	}
+	
+	@RequestMapping(value = "/editParameters" ,method = RequestMethod.GET)
+	public ModelAndView modelParameters() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("parametersModel");
+		return model;
+	}
+	
+	@RequestMapping(value = "/parameter/{className}/{testName}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public ParametersFrontObject modelParameters(@PathVariable("className") String className, @PathVariable("testName") String testName) throws ConfigurationException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("parametersModel");
+		
+		Class<?> aClass = Class.forName(className);
+		Method testMethod = aClass.getMethod(testName, Integer.class);
+		Annotation[] annotations = testMethod.getAnnotationsByType(ParametersFront.class);
+		List<ParamObjectField> params = new ArrayList<>();
+		List<String> labels = new ArrayList<>();;
+		ParametersFrontObject parametersFrontObject = new ParametersFrontObject();
+		
+		for(Annotation annotation : annotations){
+		    	ParametersFront parameters = (ParametersFront) annotation;
+		    	
+		    	Collections.addAll(params, parameters.attrs()); 
+		    	Collections.addAll(labels, parameters.labels()); 
+		    	
+		    	parametersFrontObject.setParams(params.stream().map(param -> param.getValue()).collect(Collectors.toList()));
+		    	parametersFrontObject.setLabels(labels);
+		}
+		
+		
+		return parametersFrontObject;
 	}
 
 	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
@@ -211,26 +269,26 @@ public class TestController {
 	@RequestMapping(value = "/status/{index}" ,method = RequestMethod.GET)
 	@ResponseBody
 	public TestResultsTestNG getStatus(@PathVariable("index") Integer index){
-		List<Result> resultsAux = new ArrayList<Result>();
+		List<IncludeMethod> resultsAux = new ArrayList<IncludeMethod>();
 		TestResultsTestNG testResults = new TestResultsTestNG();
 		
 		for(ITestResult testResult : tla.get(index).getPassedTests()){
-			resultsAux.add(new Result(testResult.getName(),"SUCCESS"));
+			resultsAux.add(new IncludeMethod(testResult.getName(),"SUCCESS"));
 		}
 		testResults.setPassedTests(resultsAux);
-		resultsAux = new ArrayList<Result>();
+		resultsAux = new ArrayList<IncludeMethod>();
 		
 		for(ITestResult testResult : tla.get(index).getFailedTests()){
-			resultsAux.add(new Result(testResult.getName(),"FAILED"));
+			resultsAux.add(new IncludeMethod(testResult.getName(),"FAILED"));
 		}
 		testResults.setFailedTests(resultsAux);
-		resultsAux = new ArrayList<Result>();
+		resultsAux = new ArrayList<IncludeMethod>();
 		
 		for(ITestResult testResult : tla.get(index).getSkippedTests()){
-			resultsAux.add(new Result(testResult.getName(),"SKIPPED"));
+			resultsAux.add(new IncludeMethod(testResult.getName(),"SKIPPED"));
 		}
 		testResults.setSkipedTests(resultsAux);
-		resultsAux = new ArrayList<Result>();
+		resultsAux = new ArrayList<IncludeMethod>();
 		
 		return testResults;
 	} 
@@ -248,10 +306,10 @@ public class TestController {
 				for(XmlClass classes : test.getClasses()){
 					testSuite.setClassName(classes.getName());
 					for(XmlInclude includeMethods: classes.getIncludedMethods()){
-						testSuite.addMethod(new Result(includeMethods.getName(), "-"));
+						testSuite.addMethod(new IncludeMethod(includeMethods.getName(), "-"));
 					}
 				}
-			}
+			} 
 		} catch(Exception ex) {
 			
 		}
@@ -260,7 +318,37 @@ public class TestController {
 	
 	@RequestMapping(value = "/test/{xmlName}/{environment}/{browser}" ,method = RequestMethod.POST)
 	@ResponseBody
-	public String runTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws ConfigurationException{
+	public String runTest(@RequestBody TestSuite form, @PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws ConfigurationException{
+		
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("accountID", accID.toString());
+		parameters.put("bowser", browser);
+		parameters.put("testID", testListenenerIndex.toString());
+		
+		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
+		for (XmlSuite suite : suites) {
+			suite.setParameters(parameters);
+		}
+		
+		
+		List<IncludeMethod> includeMethods = form.getIncludeMethods();
+		for(IncludeMethod includeMethod : includeMethods){
+			Test newTest = new Test();
+			newTest.setParamObject(includeMethod.getParamObject());
+			newTest.setTestName(includeMethod.getName());
+			
+			for(XmlTest test : suites.get(0).getTests()){
+				for(XmlClass classes : test.getClasses()){
+					for(XmlInclude methodsInXML: classes.getIncludedMethods()){
+						if(methodsInXML.getName().equals(includeMethod.getName())){
+							Integer testID = testDao.save(newTest);
+							methodsInXML.addParameter("TestID", testID.toString());
+						}
+					}
+				}
+			}
+		}
+		
 		account = accDao.incrementRunIDAndGetAcc(accID);
 		InsynctiveProperty properties = account.getAccountProperty();
 		properties.setEnvironment(environment);
@@ -269,17 +357,6 @@ public class TestController {
 		insynctive.utils.TestResults.resetResults();
 		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
 		tla.put(testListenenerIndex, testListenerAdapter);
-		
-		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
-
-		Map<String, String> parameters = new HashMap<>();
-		parameters.put("accountID", accID.toString());
-		parameters.put("bowser", browser);
-		parameters.put("testID", testListenenerIndex.toString());
-		
-		for (XmlSuite suite : suites) {
-			suite.setParameters(parameters);
-		}
 		
 		TestNG testNG = new TestNG();
 		

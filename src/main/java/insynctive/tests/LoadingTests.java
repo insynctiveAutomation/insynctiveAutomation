@@ -3,9 +3,11 @@ package insynctive.tests;
 import static org.junit.Assert.assertTrue;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import insynctive.annotation.ParametersFront;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.agent.apps.AppsPage;
 import insynctive.pages.insynctive.agent.hr.CheckListsPage;
@@ -17,6 +19,7 @@ import insynctive.pages.insynctive.agent.settings.OtherSettingPage;
 import insynctive.pages.insynctive.agent.settings.PeoplePage;
 import insynctive.pages.insynctive.agent.settings.V3SettingsPage;
 import insynctive.utils.Debugger;
+import insynctive.utils.ParamObjectField;
 import insynctive.utils.data.TestEnvironment;
 
 public class LoadingTests extends TestMachine {
@@ -26,15 +29,18 @@ public class LoadingTests extends TestMachine {
 	@BeforeClass
 	@Parameters({"accountID", "bowser", "testID"})
 	public void tearUp(String accountID, String bowser, String testID) throws Exception {
-		super.testID = Integer.parseInt(testID);
+		super.testSuiteID = Integer.parseInt(testID);
 		super.tearUp(Integer.valueOf(accountID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Loading Tests";
 	}
 	
 	@Test()
-	public void loginTest()
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, labels={"Login Username", "Login Password"})
+	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
+		changeParamObject(testID);
 		startTest(testEnvironment);
 
 		long startTime = System.nanoTime();
@@ -53,7 +59,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void hrPeopleLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void hrPeopleLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			long timeToLoad = homePage.getTimeToLoad();
@@ -70,7 +82,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void hrTasksLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void hrTasksLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			TaskPage taskPage = new TaskPage(driver, properties.getEnvironment());
 			long timeToLoad = taskPage.getTimeToLoad();
@@ -87,7 +105,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void hrChecklistLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void hrChecklistLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnvironment());
 			long timeToLoad = checkListPage.getTimeToLoad();
@@ -104,7 +128,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void hrHelpDeskLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void hrHelpDeskLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, properties.getEnvironment());
 			long timeToLoad = helpDeskPage.getTimeToLoad();
@@ -121,7 +151,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void apptLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void apptLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			AppsPage appPage = new AppsPage(driver, properties.getEnvironment());
 			long timeToLoad = appPage.getTimeToLoad();
@@ -138,7 +174,13 @@ public class LoadingTests extends TestMachine {
 	}
 
 	@Test(dependsOnMethods="loginTest")
-	public void settingAccountLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void settingAccountLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			AccountPage accPage = new AccountPage(driver, properties.getEnvironment());
 			long timeToLoad = accPage.getTimeToLoad();
@@ -155,7 +197,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void settingPeopleLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void settingPeopleLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnvironment());
 			long timeToLoad = peoplePage.getTimeToLoad();
@@ -172,7 +220,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void settingOtherSettingsLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void settingOtherSettingsLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnvironment());
 			long timeToLoad = otherSetting.getTimeToLoad();
@@ -189,7 +243,13 @@ public class LoadingTests extends TestMachine {
 	}
 	
 	@Test(dependsOnMethods="loginTest")
-	public void settingV3SettingsLoadingTest() throws Throwable {
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.LOADING_TIME}, 
+			labels={"Loading time (segs)"})
+	public void settingV3SettingsLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
+		changeParamObject(testID);
+		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
 			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnvironment());
 			long timeToLoad = v3Setting.getTimeToLoad();

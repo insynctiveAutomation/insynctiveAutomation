@@ -42,12 +42,12 @@ app.controller('configurationController', function($cookies, $http, $window, $mo
 	this.addFinalsLabels = function() {
 		self.changeSSNLabel();
 		self.changeEmailLabel();
-		self.finalPrimaryPhone = self.changePrimaryPhoneLabel(self.finalPrimaryPhone, self.configuration.person.primaryPhone);
-		self.finalPhoneEmergency = self.changePrimaryPhoneLabel(self.finalPhoneEmergency, self.configuration.person.emergencyContact.phone);
+		self.finalPrimaryPhone = self.changePrimaryPhoneLabel(self.finalPrimaryPhone, self.configuration.paramObject.primaryPhone);
+		self.finalPhoneEmergency = self.changePrimaryPhoneLabel(self.finalPhoneEmergency, self.configuration.paramObject.emergencyContact.phone);
 	}
 	
 	this.changeSSNLabel = function() {
-		var ssn = (self.configuration) ? self.configuration.person.ssn : undefined;
+		var ssn = (self.configuration) ? self.configuration.paramObject.ssn : undefined;
 		var runID = (self.configuration) ? self.configuration.runID : '';
 		self.finalSSN = (ssn) ? ssn.substring(0, ssn.length-runID.toString().length).concat(runID) : '-';
 	}
@@ -59,7 +59,7 @@ app.controller('configurationController', function($cookies, $http, $window, $mo
 	}
 	
 	this.changeEmailLabel = function() {
-		var email = (self.configuration) ? self.configuration.person.email : undefined;
+		var email = (self.configuration) ? self.configuration.paramObject.email : undefined;
 		var runID = (self.configuration) ? self.configuration.runID : '';
 		self.finalEmail = email.split('@')[0].concat('+').concat(runID).concat('@').concat(email.split('@')[1]);
 	}

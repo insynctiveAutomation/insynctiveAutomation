@@ -26,14 +26,25 @@
 	<!-- MY CSS -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
 	
-	<!-- MODAL -->
+	<!-- Advanced module -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+	
+	<!-- Configuration modal -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountService.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
+
+	<!-- Parameters Modal -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersDirectives.js"></script>
 	
 	<!-- Test Page -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
@@ -77,10 +88,12 @@
 				<tbody ng-if="testCtrl.testDetails">
 					<tr>
 						<th>Methods</th>
+						<th>Test Parameters</th>
 						<th>Status</th>
 					</tr>
 					<tr data-ng-repeat="method in testCtrl.testDetails.includeMethods" class="animate-repeat">
 						<td class="col-sm-5"><span ng-bind="method.name"></span></td>
+						<td class="col-sm-5"><a id="editParameters" ng-click="testCtrl.openEditParameters(method)">View/Edit Parameters</a></td>
 						<td class="col-sm-2"><result ng-model="method.status" bind="method.status" value="{{method.status}}"/></td>
 					</tr>
 				</tbody>
