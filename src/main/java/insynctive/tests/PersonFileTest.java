@@ -417,7 +417,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
-			labels={"No implemented (Using the a hardcode task)"})
+			labels={"No implemented (Using a hardcode task)"})
 	public void assignTask(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());

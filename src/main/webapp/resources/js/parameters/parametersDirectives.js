@@ -9,13 +9,15 @@ app.directive("parameter", function($compile, $cookies){
 		},
 		link: function(scope, elm, attrs){
 			if(scope.param === 'gender'){
-				debugger
-				elm.replaceWith($compile('<gender ng-model="model">' + elm.html() + '</gender>')(scope));
+				elm.replaceWith($compile('<gender ng-required="true" ng-model="model">' + elm.html() + '</gender>')(scope));
 			} else if(scope.param === 'maritalStatus'){
-				debugger
-				elm.replaceWith($compile('<marital-status ng-model="model">' + elm.html() + '</marital-status>')(scope));
+				elm.replaceWith($compile('<marital-status ng-required="true" ng-model="model">' + elm.html() + '</marital-status>')(scope));
+			} else if(scope.param === 'falta el de us addres same as home TODO'){
+				elm.replaceWith($compile('<select ng-model="model" ng-options="o.v as o.n for o in [{ n: "Yes", v: true }, { n: "No", v: false }]">' + elm.html() + '</select>')(scope));
+			} else if(scope.param === 'falta el de los benefits'){
+
 			} else {
-				elm.replaceWith($compile('<input type="text" ng-model="model">' + elm.html() + '</input>')(scope));
+				elm.replaceWith($compile('<input ng-required="true" type="text" ng-model="model">' + elm.html() + '</input>')(scope));
 			};
 		},
 		transclude: true,

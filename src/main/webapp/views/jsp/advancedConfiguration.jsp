@@ -166,7 +166,7 @@
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.shortDescription" /><br/>     
 				
 				<label for="">Same As Home: </label>
-				<select name="remote" ng-model="configCtl.configuration.paramObject.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
+				<select name="same as home" ng-model="configCtl.configuration.paramObject.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
 			</div>
 			<div class="col-md-6 col-md-offset-6">
 				<h4>SMB BENEFIT</h4>
