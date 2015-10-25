@@ -42,7 +42,6 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	this.getTestDetails = function(testSuiteValue){
 		testService.getTestDetails(testSuiteValue, function(data) {
 			self.testDetails = data;
-			_.map(self.testDetails.includeMethods, self.addParamObject);
 			self.getTestsStatus();
 		});
 	};

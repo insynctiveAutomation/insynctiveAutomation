@@ -3,6 +3,7 @@ package insynctive.controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -50,6 +51,7 @@ import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
 import insynctive.model.InsynctiveProperty;
+import insynctive.model.ParamObject;
 import insynctive.model.Test;
 import insynctive.results.IncludeMethod;
 import insynctive.results.TestResultsTestNG;
@@ -194,26 +196,7 @@ public class TestController {
 	public ParametersFrontObject modelParameters(@PathVariable("className") String className, @PathVariable("testName") String testName) throws ConfigurationException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("parametersModel");
-		
-		Class<?> aClass = Class.forName(className);
-		Method testMethod = aClass.getMethod(testName, Integer.class);
-		Annotation[] annotations = testMethod.getAnnotationsByType(ParametersFront.class);
-		List<ParamObjectField> params = new ArrayList<>();
-		List<String> labels = new ArrayList<>();;
-		ParametersFrontObject parametersFrontObject = new ParametersFrontObject();
-		
-		for(Annotation annotation : annotations){
-		    	ParametersFront parameters = (ParametersFront) annotation;
-		    	
-		    	Collections.addAll(params, parameters.attrs()); 
-		    	Collections.addAll(labels, parameters.labels()); 
-		    	
-		    	parametersFrontObject.setParams(params.stream().map(param -> param.getValue()).collect(Collectors.toList()));
-		    	parametersFrontObject.setLabels(labels);
-		}
-		
-		
-		return parametersFrontObject;
+		return getParams(className, testName);
 	}
 
 	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
@@ -305,13 +288,23 @@ public class TestController {
 				testSuite.setTestName(test.getName());
 				for(XmlClass classes : test.getClasses()){
 					testSuite.setClassName(classes.getName());
-					for(XmlInclude includeMethods: classes.getIncludedMethods()){
-						testSuite.addMethod(new IncludeMethod(includeMethods.getName(), "-"));
+					for(XmlInclude includeMethod: classes.getIncludedMethods()){
+						IncludeMethod newIncludeMethod = new IncludeMethod(includeMethod.getName(), "-");
+						ParametersFrontObject params = getParams(classes.getName(), includeMethod.getName());
+						ParamObject paramObject = new ParamObject();
+						for(String param : params.getParams()){
+							Field fieldByName = paramObject.getFieldByName(param);
+							fieldByName.set(paramObject, account.getParamObject().getValueByName(param));
+						}
+						
+						newIncludeMethod.setParamObject(paramObject);
+						
+						testSuite.addMethod(newIncludeMethod);
 					}
 				}
 			} 
 		} catch(Exception ex) {
-			
+			System.out.println(ex);
 		}
 		return testSuite;
 	}
@@ -509,5 +502,25 @@ public class TestController {
 			}
 		}
 		return "{\"status\": false}";
+	}
+	
+	private ParametersFrontObject getParams(String className, String testName) throws ClassNotFoundException, NoSuchMethodException, SecurityException{
+		Class<?> aClass = Class.forName(className);
+		Method testMethod = aClass.getMethod(testName, Integer.class);
+		Annotation[] annotations = testMethod.getAnnotationsByType(ParametersFront.class);
+		List<ParamObjectField> params = new ArrayList<>();
+		List<String> labels = new ArrayList<>();;
+		ParametersFrontObject parametersFrontObject = new ParametersFrontObject();
+		
+		for(Annotation annotation : annotations){
+		    	ParametersFront parameters = (ParametersFront) annotation;
+		    	
+		    	Collections.addAll(params, parameters.attrs()); 
+		    	Collections.addAll(labels, parameters.labels()); 
+		    	
+		    	parametersFrontObject.setParams(params.stream().map(param -> param.getValue()).collect(Collectors.toList()));
+		    	parametersFrontObject.setLabels(labels);
+		}
+		return parametersFrontObject;
 	}
 }

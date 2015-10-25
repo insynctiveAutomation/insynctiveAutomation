@@ -270,7 +270,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	public boolean isTaskAssigned() throws Exception {
 		boolean result;
 		try{
-			Sleeper.sleep(2500, driver);
+			Sleeper.sleep(5000, driver);
 			waitTaskTabIsLoad();
 			List<Task> tasks = Task.getTasks();
 			result = firstTaskLink.getText().equals(tasks.get(0).getDetail());
@@ -285,7 +285,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	public boolean isChecklistAssigned() throws Exception {
 		boolean result;
 		try {
-			Sleeper.sleep(3000, driver);
+			Sleeper.sleep(5000, driver);
 			waitUntilnotVisibility(loadingSpinner);
 			swichToFirstFrame(driver);
 			clickAButton(tasksTab);
@@ -345,11 +345,9 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 	
 	public boolean isThisPerson(ParamObject personData) throws Exception {
-		boolean changeTitle = isChangeTitle(personData.getTitleOfEmployee(),
-				personData.getDepartamentOfEmployee());
 		boolean changeFullName = isChangePeronDetailBeforeCreatePerson(personData, Wait.NOWAIT);
 
-		return changeTitle && changeFullName;
+		return changeFullName;
 	}
 
 	public boolean isAddAlternativePhoneNumber(String primaryPhone, String runIDString) throws Exception {

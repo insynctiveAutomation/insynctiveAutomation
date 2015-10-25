@@ -17,7 +17,7 @@ app.controller('modalParametersController', function(defaulObject, selectedTest,
 			self.parameters = data.params;
 			data.params.forEach(function(params) {
 				var param = params.split('.')[0]
-				selectedTest.paramObject[param] = selectedTest.paramObject[param] || defaulObject[param]
+				selectedTest.paramObject[param] = selectedTest.paramObject[param]
 			});
 			self.labels = data.labels;
 			self.loading = false;

@@ -1,6 +1,7 @@
 package insynctive.model;
 
 import java.io.FileReader;
+import java.lang.reflect.Field;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -30,92 +31,92 @@ import insynctive.exception.ConfigurationException;
 public class ParamObject {
 	@Transient
 	@JsonIgnore
-	private String DEFAULT_FILE = "personFileData.json";
+	public String DEFAULT_FILE = "personFileData.json";
 	
 	// PROPERTIES PATH
 	@Id
 	@GeneratedValue
 	@Column(name = "param_object_id")
-	private Integer paramObjectID;
+	public Integer paramObjectID;
 
 	@Column(name = "name")
-	private String name;
+	public String name;
 
 	@Column(name = "middle_name")
-	private String middleName;
+	public String middleName;
 	
 	@Column(name = "lastname")
-	private String lastName;
+	public String lastName;
 
 	@Column(name = "maiden_name")
-	private String maidenName;
+	public String maidenName;
 
 	@Column(name = "birthdate")
-	private String birthDate;
+	public String birthDate;
 
 	@Column(name = "gender")
-	private Gender gender;
+	public Gender gender;
 
 	@Column(name = "email")
-	private String email;
+	public String email;
 
 	@Column(name = "title_of_employee")
-	private String titleOfEmployee;
+	public String titleOfEmployee;
 
 	@Column(name = "departament")
-	private String departamentOfEmployee;
+	public String departamentOfEmployee;
 
 	@Column(name = "primary_phone")
-	private String primaryPhone;
+	public String primaryPhone;
 	
 	@Column(name = "ssn")
-	private String ssn;
+	public String ssn;
 	
 	@Column(name = "marital_status")
-	private MaritalStatus maritalStatus;
+	public MaritalStatus maritalStatus;
 	
 	@Column(name = "loginUserName")
-	private String loginUsername;
+	public String loginUsername;
 	
 	@Column(name = "loginPassword")
-	private String loginPassword;
+	public String loginPassword;
 
 	@Column(name = "checklistName")
-	private String checklistName;
+	public String checklistName;
 	
 	@Column(name = "loadingTime")
-	private Integer loadingTime;
+	public Integer loadingTime;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
 		@AttributeOverride(name="company",column=@Column(name="medicalBenefitCompany"))
 	})
 	@Embedded
-	private Benefit medicalBenefit;
+	public Benefit medicalBenefit;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="dentalBenefitName")),
 		@AttributeOverride(name="company",column=@Column(name="dentalBenefitCompany"))
 	})
 	@Embedded
-	private Benefit dentalBenefit;
+	public Benefit dentalBenefit;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="visionBenefitName")),
 		@AttributeOverride(name="company",column=@Column(name="visionBenefitCompany"))
 	})
 	@Embedded
-	private Benefit visionBenefit;
+	public Benefit visionBenefit;
 
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "emergency_contact_id")
-	private EmergencyContact emergencyContact;
+	public EmergencyContact emergencyContact;
 
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "USAddress_id")
-	private USAddress usAddress;
+	public USAddress usAddress;
 	
 	public enum Gender{
 		MALE("Male"), FEMALE("Female"), UNKNOWN("Unknown"); 
@@ -389,5 +390,18 @@ public class ParamObject {
 	public void setLoadingTime(Integer loadingTime) {
 		this.loadingTime = loadingTime;
 	}
-
+	
+	@JsonIgnore
+	public Field getFieldByName(String name) throws NoSuchFieldException, SecurityException {
+		Class<?> aClass = this.getClass();
+		Field field = aClass.getField(name);
+		return field;
+	}
+	
+	@JsonIgnore
+	public Object getValueByName(String name) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Class<?> aClass = this.getClass();
+		Field field = aClass.getField(name);
+		return (Object)field.get(this);
+	}
 }

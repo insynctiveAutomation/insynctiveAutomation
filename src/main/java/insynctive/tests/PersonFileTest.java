@@ -73,16 +73,16 @@ public class PersonFileTest extends TestMachine {
 //	@Test(dependsOnMethods="loginTest")
 //	@Parameters({"TestID"})
 //	@ParametersFront(
-//			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, ParamObjectField.TITLE_OF_EMPLOYEE}, 
-//			labels={"Email", "Name:", "Last Name", "Department", "Title"})
+//			attrs={ParamObjectField.EMAIL}, 
+//			labels={"Email"})
 //	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 //		changeParamObject(testID);
 //		try{ 
 //			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
-//			homePage.openPersonFile(person.getSearchEmail()+"+71");
+//			homePage.openPersonFile(paramObject.getSearchEmail());
 //
 //			boolean result = homePage.isPersonFileOpened();
-//			Sleeper.sleep(5000driver);
+//			Sleeper.sleep(5000, driver);
 //			setResult(result, "Open Person File");
 //			Debugger.log("createPersonTest => "+result, isSaucelabs);
 //			assertTrue(result);
@@ -165,8 +165,8 @@ public class PersonFileTest extends TestMachine {
 	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME}, 
-			labels={"Email", "Name:", "Last Name"})
+			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
+			labels={"Name:", "Last Name", "Middle Name", "Maiden Name"})
 	public void changeName(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
@@ -188,8 +188,8 @@ public class PersonFileTest extends TestMachine {
 	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME}, 
-			labels={"Email", "Name:", "Last Name"})
+			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
+			labels={"Name:", "Last Name", "Middle Name", "Maiden Name"})
 	public void changeName2(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
@@ -360,7 +360,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No implemented (Using the object you have in Advanced Configuration)"})
 	public void addUSAddress(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			
@@ -375,14 +375,14 @@ public class PersonFileTest extends TestMachine {
 			assertTrue(false);
 		}
 	}
-	
+
 	@Test(dependsOnMethods="addUSAddress")
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
 			labels={"No implemented (Using the object you have in Advanced Configuration)"})
 	public void removeUSAddress(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			personFilePage.removeUsAddress(paramObject.getUSAddress());
@@ -419,7 +419,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No implemented (Using a hardcode task)"})
 	public void assignTask(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
 			personFilePage.assignTask();
@@ -484,7 +484,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No implemented (Using the object you have in Advanced Configuration)"})
 	public void addEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			EmergencyContact emg = paramObject.getEmergencyContact();
@@ -506,7 +506,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No implemented (Using the object you have in Advanced Configuration)"})
 	public void changeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			EmergencyContact emg = paramObject.getEmergencyContact();
@@ -533,7 +533,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No implemented (Using the object you have in Advanced Configuration)"})
 	public void removeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			int count = personFilePage.getNumberOfEmergencyContacts();
@@ -555,7 +555,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No implemented (Using a hardcode Job)"})
 	public void assignJob(@Optional("TestID") Integer testID) throws Exception{
-		changeParamObject(testID);
+		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			personFilePage.assignJob();
