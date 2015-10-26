@@ -136,6 +136,27 @@ public class TestController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/us_address", method = RequestMethod.GET)
+	public ModelAndView getUsAddress() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("template/us_address");
+		return model;
+	}
+	
+	@RequestMapping(value = "/benefit_company" ,method = RequestMethod.GET)
+	public ModelAndView modelBenefitCompany() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("template/benefit_company");
+		return model;
+	}
+	
+	@RequestMapping(value = "/yes_no" ,method = RequestMethod.GET)
+	public ModelAndView getYesNo() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("template/yes_no");
+		return model;
+	}
+	
 	@RequestMapping(value = "/login" ,method = RequestMethod.POST)
 	@ResponseBody
 	public String loginPost(@RequestBody LoginForm form) throws Exception{
@@ -293,8 +314,8 @@ public class TestController {
 						ParametersFrontObject params = getParams(classes.getName(), includeMethod.getName());
 						ParamObject paramObject = new ParamObject();
 						for(String param : params.getParams()){
-							Field fieldByName = paramObject.getFieldByName(param);
-							fieldByName.set(paramObject, account.getParamObject().getValueByName(param));
+							Field fieldByName = paramObject.getFieldByName(param.split("\\.")[0]);
+							fieldByName.set(paramObject, account.getParamObject().getValueByName(param.split("\\.")[0]));
 						}
 						if(params.getParams().size() > 0){
 							newIncludeMethod.setParamObject(paramObject);

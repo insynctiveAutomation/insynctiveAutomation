@@ -53,7 +53,8 @@ public class PersonFileTest extends TestMachine {
 	
 	@Test()
 	@Parameters({"TestID"})
-	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, labels={"Login Username", "Login Password"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username", "Login Password"})
 	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
@@ -72,7 +73,9 @@ public class PersonFileTest extends TestMachine {
 	@Test(dependsOnMethods="loginTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, ParamObjectField.TITLE_OF_EMPLOYEE}, 
+			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
+					ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, 
+					ParamObjectField.TITLE_OF_EMPLOYEE}, 
 			labels={"Create OR Open Person?", "Email", "Name:", "Last Name", "Department", "Title"})
 	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
@@ -339,8 +342,10 @@ public class PersonFileTest extends TestMachine {
 	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={}, 
-			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+			attrs={ParamObjectField.US_ADDRESS_STREET, ParamObjectField.US_ADDRESS_SECOND_STREET, ParamObjectField.US_ADDRESS_CITY, 
+					ParamObjectField.US_ADDRESS_STATE, ParamObjectField.US_ADDRESS_ZIP_CODE, ParamObjectField.US_ADDRESS_COUNTY, 
+					ParamObjectField.US_ADDRESS_SAME_AS_HOME}, 
+			labels={"Street", "Second Street", "City", "State", "Zip Copde", "County", "Same As Home"})
 	public void addUSAddress(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		try{ 
@@ -362,7 +367,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
-			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+			labels={"Remove the US Address that is in the person File."})
 	public void removeUSAddress(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		try{ 
@@ -399,7 +404,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
-			labels={"No implemented (Using a hardcode task)"})
+			labels={"Not implemented yet (Using a hardcoded task until final parameters implementation)"})
 	public void assignTask(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
@@ -463,8 +468,9 @@ public class PersonFileTest extends TestMachine {
 	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={}, 
-			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+			attrs={ParamObjectField.EMERGENCY_CONTACT_NAME, ParamObjectField.EMERGENCY_CONTACT_RELATIONSHIP, 
+					ParamObjectField.EMERGENCY_CONTACT_EMAIL, ParamObjectField.EMERGENCY_CONTACT_PHONE}, 
+			labels={"Name", "Relationship", "Email", "Phone"})
 	public void addEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		try{ 
@@ -485,8 +491,9 @@ public class PersonFileTest extends TestMachine {
 	@Test(dependsOnMethods="addEmergencyContact")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={}, 
-			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+			attrs={ParamObjectField.EMERGENCY_CONTACT_NAME, ParamObjectField.EMERGENCY_CONTACT_RELATIONSHIP, 
+					ParamObjectField.EMERGENCY_CONTACT_EMAIL, ParamObjectField.EMERGENCY_CONTACT_PHONE}, 
+			labels={"Name", "Relationship", "Email", "Phone"})
 	public void changeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		try{ 
@@ -513,7 +520,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
-			labels={"No implemented (Using the object you have in Advanced Configuration)"})
+			labels={"Remove last Emergency Contact"})
 	public void removeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		try{ 
@@ -535,7 +542,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
-			labels={"No implemented (Using a hardcode Job)"})
+			labels={"Not implemented yet (Using a hardcoded Job until final parameters implementation)"})
 	public void assignJob(@Optional("TestID") Integer testID) throws Exception{
 		setparamObjectAsAccount(testID);
 		try{ 

@@ -166,45 +166,21 @@
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.usaddress.shortDescription" /><br/>     
 				
 				<label for="">Same As Home: </label>
-				<select name="same as home" ng-model="configCtl.configuration.paramObject.usaddress.sameAsHome" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" required></select><br/>  
+				<yes-no name="same as home" ng-model="configCtl.configuration.paramObject.usaddress.sameAsHome"></yes-no>
 			</div>
 			<div class="col-md-6 col-md-offset-6">
 				<h4>SMB BENEFIT</h4>
 				<label for="">Medical Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.medicalBenefit.name" />
-				<select name="marital-status" ng-model="configCtl.configuration.paramObject.medicalBenefit.company" required>
-			    	<option value="">Company?</option>
-			    	<option value="Antherm">Antherm</option>
-			    	<option value="Blue Shield">Blue Shield</option>
-			    	<!-- <option value="Humana">Humana</option> -->
-			    	<option value="Kaise">Kaise</option>
-			    	<!-- <option value="Premier">Premier</option> -->
-			    	<option value="VSP">VSP</option>
-		 		</select>
+				<benefit-company ng-model="configCtl.configuration.paramObject.medicalBenefit.company" required></benefit-company>
 				<br/>     
 				<label for="">Dental Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.dentalBenefit.name" />
-				<select name="marital-status" ng-model="configCtl.configuration.paramObject.dentalBenefit.company" required>
-			    	<option value="">Company?</option>
-			    	<option value="Antherm">Antherm</option>
-			    	<option value="Blue Shield">Blue Shield</option>
-			    	<!-- <option value="Humana">Humana</option> -->
-			    	<option value="Kaise">Kaise</option>
-			    	<!-- <option value="Premier">Premier</option> -->
-			    	<option value="VSP">VPS</option>
-		 		</select>
+				<benefit-company ng-model="configCtl.configuration.paramObject.dentalBenefit.company" required></benefit-company>
 		 		<br/>     
 				<label for="">Vision Benefit Name: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.visionBenefit.name" />
-				<select name="marital-status" ng-model="configCtl.configuration.paramObject.visionBenefit.company" required>
-			    	<option value="">Company?</option>
-			    	<option value="Antherm">Antherm</option>
-			    	<option value="Blue Shield">Blue Shield</option>
-			    	<!-- <option value="Humana">Humana</option> -->
-			    	<option value="Kaise">Kaise</option>
-			    	<!-- <option value="Premier">Premier</option> -->
-			    	<option value="VSP">VPS</option>
-		 		</select>
+				<benefit-company ng-model="configCtl.configuration.paramObject.visionBenefit.company" required></benefit-company>
 		 		<br/>     
 			</div>
 			<div class="col-md-offset-5 col-md-2" style="padding-top: 20px;"><button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button></div>

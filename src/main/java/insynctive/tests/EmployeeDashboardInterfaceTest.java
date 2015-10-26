@@ -70,8 +70,14 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	@Test(dependsOnMethods="loginTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.BIRTH_DATE, ParamObjectField.GENDER, ParamObjectField.MARITAL_STATUS, ParamObjectField.SSN, ParamObjectField.PRIMARY_PHONE, ParamObjectField.US_ADDRESS}, 
-			labels={"Birth Date", "Gender", "Marital Status", "SSN", "Primary Phone", "US Address"})
+			attrs={ParamObjectField.BIRTH_DATE, ParamObjectField.GENDER, ParamObjectField.MARITAL_STATUS, 
+					ParamObjectField.SSN, ParamObjectField.PRIMARY_PHONE, 
+					ParamObjectField.US_ADDRESS_STREET, ParamObjectField.US_ADDRESS_SECOND_STREET, ParamObjectField.US_ADDRESS_CITY, 
+					ParamObjectField.US_ADDRESS_STATE, ParamObjectField.US_ADDRESS_ZIP_CODE, ParamObjectField.US_ADDRESS_COUNTY, 
+					ParamObjectField.US_ADDRESS_SAME_AS_HOME}, 
+			labels={"Birth Date", "Gender", "Marital Status", "SSN", "Primary Phone", 
+					"US Address Street", "US Address Second Street", "US Address City", 
+					"US Address State", "US Address Zip Copde", "US Address County", "US Address Same As Home"})
 	public void updatePersonalInformationHappyPath(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
@@ -93,8 +99,14 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	@Test(dependsOnMethods="loginTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.BIRTH_DATE, ParamObjectField.GENDER, ParamObjectField.MARITAL_STATUS, ParamObjectField.SSN, ParamObjectField.PRIMARY_PHONE, ParamObjectField.US_ADDRESS}, 
-			labels={"Birth Date", "Gender", "Marital Status", "SSN", "Primary Phone", "US Address"})
+			attrs={ParamObjectField.BIRTH_DATE, ParamObjectField.GENDER, ParamObjectField.MARITAL_STATUS, 
+					ParamObjectField.SSN, ParamObjectField.PRIMARY_PHONE, 
+					ParamObjectField.US_ADDRESS_STREET, ParamObjectField.US_ADDRESS_SECOND_STREET, ParamObjectField.US_ADDRESS_CITY, 
+					ParamObjectField.US_ADDRESS_STATE, ParamObjectField.US_ADDRESS_ZIP_CODE, ParamObjectField.US_ADDRESS_COUNTY, 
+					ParamObjectField.US_ADDRESS_SAME_AS_HOME}, 
+			labels={"Birth Date", "Gender", "Marital Status", "SSN", "Primary Phone", 
+					"US Address Street", "US Address Second Street", "US Address City", 
+					"US Address State", "US Address Zip Copde", "US Address County", "US Address Same As Home"})
 	public void updatePersonalInformatioWithErrors(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 

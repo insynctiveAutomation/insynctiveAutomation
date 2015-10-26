@@ -14,7 +14,8 @@
 		<div ng-if="parametersCtrl.parameters.length > 0" class="col-xs-3 col-md-3">
 			<div style="height: 25px; margin-bottom: 5px;" ng-repeat="param in parametersCtrl.parameters track by $index">
 				<!-- <input type="text" ng-model="parametersCtrl.selectedTest.paramObject[param]"/> -->
-				<parameter param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param]"></parameter>
+				<parameter ng-if="param.split('.').length == 2" param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param.split('.')[0]][param.split('.')[1]]"></parameter>
+				<parameter ng-if="param.split('.').length == 1" param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param.split('.')[0]]"></parameter>
 			</div>
 		</div>
 </div>

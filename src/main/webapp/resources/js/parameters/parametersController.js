@@ -25,4 +25,19 @@ app.controller('modalParametersController', function(defaulObject, selectedTest,
 	};
 	this.getParameters();
 	
+	this.openUsAddressModal = function(usAddress) {
+		var modalInstance = $modal.open({
+			animation : true,
+			template : '<us-address ng-required="true" ng-model="usAddress"></us-address>',
+			backdrop: true,
+			windowClass: 'edit-parameter-modal',
+			size : 'lg',
+			resolve : {
+				usAddress: function () {
+			          return usAddress
+			    }
+	       }
+		});
+	}
+	
 });
