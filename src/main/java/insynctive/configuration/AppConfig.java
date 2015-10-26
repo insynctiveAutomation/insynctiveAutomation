@@ -2,6 +2,7 @@ package insynctive.configuration;
 
 import java.util.Properties;
 
+import javax.naming.ConfigurationException;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +25,8 @@ import insynctive.utils.SessionScope;
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 	
-	@Value("${local}")
-	private Boolean local;
+	@Value("${environment}")
+	private Integer environment;
 	
 	@Value("${hibernate.auto}")
 	private String hibernateAuto;
@@ -60,37 +61,45 @@ public class AppConfig {
 	}
 
 	@Bean
-	public JdbcTemplate jdbcTemplate() {
+	public JdbcTemplate jdbcTemplate() throws ConfigurationException {
 		return new JdbcTemplate(dataSource());
 	}
 
 	@Bean
-	public DataSource dataSource() {
+	public DataSource dataSource() throws ConfigurationException {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-		if(local){
 		
+		switch(environment){
 			/*LOCAL*/
-			dataSource.setDriverClassName(driverClassName);
-			dataSource.setUrl(dbUri);
-			dataSource.setUsername(dbUsername);
-			dataSource.setPassword(dbPassword);
-			
-		} else {
-		
-			/*HEROKU*/
-			dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-			dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
-			dataSource.setUsername("b797aea885e227");
-			dataSource.setPassword("503f6e18");
-			
+			case 1 :
+				dataSource.setDriverClassName(driverClassName);
+				dataSource.setUrl(dbUri);
+				dataSource.setUsername(dbUsername);
+				dataSource.setPassword(dbPassword);
+				break;
+			/*HEROKU insynctiveautomation*/
+			case 2 :
+				dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+				dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
+				dataSource.setUsername("b797aea885e227");
+				dataSource.setPassword("503f6e18");
+				break;
+			/*HEROKU alpha-insynctiveautomation*/
+			case 3 :
+				dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+				dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_f468d9bec36d8ec");
+				dataSource.setUsername("b808518710f57f");
+				dataSource.setPassword("3d6e38cf");
+				break;
+			default :
+				throw new ConfigurationException(environment == null ? "No environment added in application.properties" : "Wrong environment added in application.properties");
 		}
-
+		
 		return dataSource;
 	}
 
 	@Bean(name = "sessionFactory")
-	public LocalSessionFactoryBean sessionFactory() {
+	public LocalSessionFactoryBean sessionFactory() throws ConfigurationException {
 		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 		sessionFactoryBean.setDataSource(dataSource());
 		sessionFactoryBean.setPackagesToScan("insynctive.model");
@@ -99,7 +108,7 @@ public class AppConfig {
 	}
 
 	@Bean
-	public HibernateTransactionManager transactionManager() {
+	public HibernateTransactionManager transactionManager() throws ConfigurationException {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(sessionFactory().getObject());
 		return transactionManager;

@@ -65,8 +65,8 @@ import insynctive.utils.ParametersFrontObject;
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
 public class TestController {
  
-	@Value("${local}")
-	private Boolean local;
+	@Value("${environment}")
+	private Integer environment;
 	
 	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
