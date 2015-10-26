@@ -8,10 +8,13 @@ app.directive("parameter", function($compile, $cookies){
 			param: '@'
 		},
 		link: function(scope, elm, attrs){
+			debugger
 			if(scope.param === 'gender'){
 				elm.replaceWith($compile('<gender ng-required="true" ng-model="model">' + elm.html() + '</gender>')(scope));
 			} else if(scope.param === 'maritalStatus'){
 				elm.replaceWith($compile('<marital-status ng-required="true" ng-model="model">' + elm.html() + '</marital-status>')(scope));
+			} else if(scope.param === 'booleanParam'){
+				elm.replaceWith($compile('<select ng-model="model" ng-options="o.v as o.n for o in [{ n: \'Open Person File\', v: true }, { n: \'Create Person\', v: false }]">' + elm.html() + '</select>')(scope));
 			} else if(scope.param === 'falta el de us addres same as home TODO'){
 				elm.replaceWith($compile('<select ng-model="model" ng-options="o.v as o.n for o in [{ n: "Yes", v: true }, { n: "No", v: false }]">' + elm.html() + '</select>')(scope));
 			} else if(scope.param === 'falta el de los benefits'){

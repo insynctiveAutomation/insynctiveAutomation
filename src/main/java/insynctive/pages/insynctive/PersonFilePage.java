@@ -129,6 +129,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		Sleeper.sleep(3000, driver);
 		//TODO MOVE Test Template TO DB
 		clickAButton(checkListsCombo);
+		Sleeper.sleep(1500, driver);
 		selectElementInComboWithoutClickCombo(selectChecklist, checklistName, "li");
 		Sleeper.sleep(2000, driver);
 		clickAButton(assignChecklistButton);

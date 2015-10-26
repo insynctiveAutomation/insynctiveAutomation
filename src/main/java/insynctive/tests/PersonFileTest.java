@@ -69,45 +69,27 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-////	//OPEN PERSON FILE NOT CREATE
-//	@Test(dependsOnMethods="loginTest")
-//	@Parameters({"TestID"})
-//	@ParametersFront(
-//			attrs={ParamObjectField.EMAIL}, 
-//			labels={"Email"})
-//	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
-//		changeParamObject(testID);
-//		try{ 
-//			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
-//			homePage.openPersonFile(paramObject.getSearchEmail());
-//
-//			boolean result = homePage.isPersonFileOpened();
-//			Sleeper.sleep(5000, driver);
-//			setResult(result, "Open Person File");
-//			Debugger.log("createPersonTest => "+result, isSaucelabs);
-//			assertTrue(result);
-//		} catch(Exception ex){
-//			failTest("Open Person File", ex, isSaucelabs);
-//			assertTrue(false);
-//		}
-//	}
-	
 	@Test(dependsOnMethods="loginTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, ParamObjectField.TITLE_OF_EMPLOYEE}, 
-			labels={"Email", "Name:", "Last Name", "Department", "Title"})
+			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, ParamObjectField.TITLE_OF_EMPLOYEE}, 
+			labels={"Create OR Open Person?", "Email", "Name:", "Last Name", "Department", "Title"})
 	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
-			
-			paramObject.setName(paramObject.getName() + " " + account.getRunIDString());
-			paramObject.setEmail(paramObject.getEmailWithRunID(account));
-			homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
-			homePage.sendInviteEmail(paramObject, CheckInApp.NO);
-			
-			boolean result = homePage.checkIfPersonIsCreated(paramObject);
+			boolean result;
+			if(paramObject.getBooleanParam()){//True = Open Person file > False = Create Person.
+				homePage.openPersonFile(paramObject.getSearchEmail());
+				result = homePage.isPersonFileOpened();
+				Sleeper.sleep(5000, driver);
+			} else {
+				paramObject.setName(paramObject.getName() + " " + account.getRunIDString());
+				paramObject.setEmail(paramObject.getEmailWithRunID(account));
+				homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
+				homePage.sendInviteEmail(paramObject, CheckInApp.NO);
+				result = homePage.checkIfPersonIsCreated(paramObject);
+			}
 			
 			setResult(result, "Create Person");
 			Debugger.log("createPerson => "+result, isSaucelabs);

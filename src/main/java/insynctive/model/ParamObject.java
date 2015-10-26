@@ -86,6 +86,9 @@ public class ParamObject {
 	
 	@Column(name = "loadingTime")
 	public Integer loadingTime;
+
+	@Column(name = "boolean_param")
+	public Boolean booleanParam;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
@@ -403,5 +406,13 @@ public class ParamObject {
 		Class<?> aClass = this.getClass();
 		Field field = aClass.getField(name);
 		return (Object)field.get(this);
+	}
+
+	public Boolean getBooleanParam() {
+		return booleanParam;
+	}
+
+	public void setBooleanParam(Boolean booleanParam) {
+		this.booleanParam = booleanParam;
 	}
 }

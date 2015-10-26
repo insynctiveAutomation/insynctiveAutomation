@@ -296,8 +296,9 @@ public class TestController {
 							Field fieldByName = paramObject.getFieldByName(param);
 							fieldByName.set(paramObject, account.getParamObject().getValueByName(param));
 						}
-						
-						newIncludeMethod.setParamObject(paramObject);
+						if(params.getParams().size() > 0){
+							newIncludeMethod.setParamObject(paramObject);
+						}
 						
 						testSuite.addMethod(newIncludeMethod);
 					}

@@ -17,11 +17,11 @@ INSERT INTO emergencycontact VALUES(4, "bpetrovski@insynctive.com", "Bojan Petro
 INSERT INTO emergencycontact VALUES(5, "bpetrovski@insynctive.com", "Bojan Petrovski", 3892246133, "colleague");
 
 /**Person**/
-INSERT INTO person VALUES(1, "01/05/1970","" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test","password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 1, 1);
-INSERT INTO person VALUES(2, "01/05/1970","" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test","password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 2, 2);
-INSERT INTO person VALUES(3, "01/05/1970","" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test","password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 3, 3);
-INSERT INTO person VALUES(4, "01/05/1970","" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test","password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 4, 4);
-INSERT INTO person VALUES(5, "01/05/1970","" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test","password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 5, 5);
+INSERT INTO paramobject VALUES(1, "01/05/1970", true, "Test Template", "" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test", 5, "password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 1, 1);
+INSERT INTO paramobject VALUES(2, "01/05/1970", true, "Test Template", "" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test", 5,"password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 2, 2);
+INSERT INTO paramobject VALUES(3, "01/05/1970", true, "Test Template", "" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test", 5,"password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 3, 3);
+INSERT INTO paramobject VALUES(4, "01/05/1970", true, "Test Template", "" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test", 5,"password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 4, 4);
+INSERT INTO paramobject VALUES(5, "01/05/1970", true, "Test Template", "" ,"" ,"QA Department", "InsynctiveTestNG@gmail.com", 1, "Test", 5,"password","evaleiras@insynctive.com", "Browser", 1, "", "", "CrossBrowsing", "Automated", "2015555554", "111223333", "QA", "", "", 5, 5);
 
 /**Insynctive Properties**/
 INSERT INTO insynctiveproperty VALUES(1,"staging","benefits123", false, false);
