@@ -65,8 +65,10 @@ public class PersonFileTest extends TestMachine {
 			LoginPage loginPage = login();
 			boolean result = loginPage.isLoggedIn();
 			Debugger.log("loginTest => "+result, isSaucelabs);
+			setResult(result, "Login Test");
 			assertTrue(result);
 		} catch(Exception ex){
+			failTest("Login Test", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}

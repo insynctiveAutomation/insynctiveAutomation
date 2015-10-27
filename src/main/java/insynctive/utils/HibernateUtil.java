@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javax.naming.ConfigurationException;
 
 import org.dom4j.tree.AbstractEntity;
+import org.hibernate.ConnectionReleaseMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -69,6 +70,7 @@ public class HibernateUtil {
 			prop.setProperty("hibernate.show_sql", "true");
 			prop.setProperty("hibernate.hbm2ddl.auto", "update");
 			prop.setProperty("hibernate.current_session_context_class", "thread");
+			prop.setProperty("hibernate.connection.release_mode", ConnectionReleaseMode.AFTER_TRANSACTION.name());
 			
 			org.hibernate.cfg.Configuration config = new org.hibernate.cfg.Configuration()
 			   .addProperties(prop)
@@ -112,13 +114,6 @@ public class HibernateUtil {
 		tx.commit();
 	}
 	
-	public static Object get(Class<?> clazz, Integer id, Session session){
-		Transaction tx = session.beginTransaction();
-		Object obj = session.get(clazz, id);
-		tx.commit();
-		return obj;
-	}
-	
 	public static void saverOrUpdate(AbstractEntity entity){
 		save(entity);
 	}
@@ -127,5 +122,19 @@ public class HibernateUtil {
 		Session session = openSession();
 		save(entity, session);
 		session.close();
+	}
+	
+	public static Object get(Class<?> clazz, Integer id, Session session){
+		session.beginTransaction();
+		Object obj = session.get(clazz, id);
+		session.getTransaction().commit();
+		return obj;
+	}
+	
+	public static Object get(Class<?> clazz, Integer id){
+		Session session = openSession();
+		Object obj = get(clazz, id, session);
+		session.close();
+		return obj;
 	}
 }
