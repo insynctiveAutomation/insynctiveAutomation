@@ -100,7 +100,8 @@ public abstract class TestMachine {
 			username = crossBrowserAccount.getEmail();
 			password = crossBrowserAccount.getPassword();
 			
-			account = (Account) openSession().get(Account.class, accountID);
+		
+			account = (Account) HibernateUtil.get(Account.class, accountID, getCurrentSession());
 			account.incrementRunID();
 			
 			paramObject = account.getParamObject();
@@ -115,6 +116,9 @@ public abstract class TestMachine {
 		}
 	}
 	
+	public Session getCurrentSession(){
+		return sessionFactory.getCurrentSession();
+	}
 	
 	public Session openSession(){
 		return sessionFactory.openSession();
@@ -124,7 +128,10 @@ public abstract class TestMachine {
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		try{ if(properties.isRemote()){this.driver.quit();}} 
 		catch(Exception ex) {}
-		finally{ setFinalResult();}
+		finally{ 
+			setFinalResult();
+			HibernateUtil.closeCurrentSession();
+		}
 	}
 	
 	public WebDriver createDriver(TestEnvironment testEnvironment) throws MalformedURLException {
@@ -363,7 +370,7 @@ public abstract class TestMachine {
 	}
 	
 	public void changeParamObject(Integer testID){
-		Test test = (Test) openSession().get(Test.class, testID);
+		Test test = (Test) HibernateUtil.get(Test.class, testID, getCurrentSession());
 		paramObject = test.getParamObject();
 	}
 	

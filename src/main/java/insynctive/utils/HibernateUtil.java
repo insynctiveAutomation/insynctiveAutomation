@@ -105,17 +105,27 @@ public class HibernateUtil {
 		getSessionFactory().getCurrentSession().close();
 	}
 	
-	
-	public static void save(AbstractEntity entity) {
-		Session session = openSession();
+	public static void save(AbstractEntity entity, Session session){
 		Transaction tx = session.beginTransaction();
 		session.evict(entity);
 		session.saveOrUpdate(entity);
 		tx.commit();
-		session.close();
+	}
+	
+	public static Object get(Class<?> clazz, Integer id, Session session){
+		Transaction tx = session.beginTransaction();
+		Object obj = session.get(clazz, id);
+		tx.commit();
+		return obj;
 	}
 	
 	public static void saverOrUpdate(AbstractEntity entity){
 		save(entity);
+	}
+	
+	public static void save(AbstractEntity entity) {
+		Session session = openSession();
+		save(entity, session);
+		session.close();
 	}
 }

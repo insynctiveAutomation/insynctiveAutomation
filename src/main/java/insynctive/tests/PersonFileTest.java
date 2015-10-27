@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 import insynctive.annotation.ParametersFront;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.EmergencyContact;
+import insynctive.model.USAddress;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
@@ -28,8 +29,8 @@ import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
 public class PersonFileTest extends TestMachine {
+	private USAddress usaddress = null;
 
-	
 	@BeforeClass
 	@Parameters({"accountID", "bowser", "testID"})
 	public void tearUp(String accountID, String bowser, String testSuiteID) throws Exception {
@@ -347,10 +348,10 @@ public class PersonFileTest extends TestMachine {
 					ParamObjectField.US_ADDRESS_SAME_AS_HOME}, 
 			labels={"Street", "Second Street", "City", "State", "Zip Copde", "County", "Same As Home"})
 	public void addUSAddress(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			
+			this.usaddress = paramObject.getUSAddress();
 			personFilePage.addUsAddress(paramObject.getUSAddress());
 			
 			boolean result = personFilePage.isAddUSAddress(paramObject.getUSAddress());
@@ -372,7 +373,7 @@ public class PersonFileTest extends TestMachine {
 		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.removeUsAddress(paramObject.getUSAddress());
+			personFilePage.removeUsAddress(usaddress);
 
 			boolean result = personFilePage.isRemoveUsAddress(paramObject.getUSAddress());
 			Debugger.log("removeUSAddress => "+result, isSaucelabs);
@@ -406,7 +407,6 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"Not implemented yet (Using a hardcoded task until final parameters implementation)"})
 	public void assignTask(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 		try{ 
 			personFilePage.assignTask();
@@ -472,7 +472,7 @@ public class PersonFileTest extends TestMachine {
 					ParamObjectField.EMERGENCY_CONTACT_EMAIL, ParamObjectField.EMERGENCY_CONTACT_PHONE}, 
 			labels={"Name", "Relationship", "Email", "Phone"})
 	public void addEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			EmergencyContact emg = paramObject.getEmergencyContact();
@@ -495,7 +495,7 @@ public class PersonFileTest extends TestMachine {
 					ParamObjectField.EMERGENCY_CONTACT_EMAIL, ParamObjectField.EMERGENCY_CONTACT_PHONE}, 
 			labels={"Name", "Relationship", "Email", "Phone"})
 	public void changeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
+		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			EmergencyContact emg = paramObject.getEmergencyContact();
@@ -522,7 +522,6 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"Remove last Emergency Contact"})
 	public void removeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			int count = personFilePage.getNumberOfEmergencyContacts();
@@ -544,7 +543,6 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"Not implemented yet (Using a hardcoded Job until final parameters implementation)"})
 	public void assignJob(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
 			personFilePage.assignJob();
