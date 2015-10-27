@@ -87,7 +87,6 @@ public abstract class TestMachine {
 		return sessionId.get();
 	}
 	
-	@BeforeClass(alwaysRun = true)
 	public void tearUp() throws Exception {
 		tearUp(1);
 	}
@@ -333,7 +332,7 @@ public abstract class TestMachine {
 		JSONObject field = new JSONObject();
 		field.put("title", sessionName);
 		System.out.println(getStatusMessageOfTests(tags));
-		field.put("value", (generalStatus ? "PASS" : "FAIL")+" = \n"+getStatusMessageOfTests(tags));
+		field.put("value", (generalStatus ? "PASS" : "FAIL")+"\n"+getStatusMessageOfTests(tags));
 		field.put("short", false);
 		fields.add(field);
 		attachment.put("fields", fields);
