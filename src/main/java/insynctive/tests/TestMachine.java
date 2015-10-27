@@ -222,14 +222,14 @@ public abstract class TestMachine {
 		String nameAndCause = "";
 
 		if(cause != null){
-			nameAndCause = testName+" Cause Message: => " + cause.getMessage();
-//			nameAndCause = testName;
+//			nameAndCause = testName+" Cause Message: => " + cause.getMessage();
+			nameAndCause = testName;
 		} else if(exMessage != null) {
-			nameAndCause = testName+" Exception Message =>  "+exMessage;
-//			nameAndCause = testName;
+//			nameAndCause = testName+" Exception Message =>  "+exMessage;
+			nameAndCause = testName;
 		} else {
-			nameAndCause = testName+" => "+ (ex != null ? ex : "EXCEPTION");
-//			nameAndCause = testName;
+//			nameAndCause = testName+" => "+ (ex != null ? ex : "EXCEPTION");
+			nameAndCause = testName;
 		}
 		
 		Debugger.log(nameAndCause, isSaucelabs);
