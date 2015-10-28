@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -55,6 +56,8 @@ public abstract class TestMachine {
 	public Account account; 
 	public ParamObject paramObject;
 	
+	public Session session = null;
+	
 	public WebDriver driver;
 	
 	/** TAGS => Add tests result test.*/
@@ -95,12 +98,13 @@ public abstract class TestMachine {
 		try{
 			sessionFactory = HibernateUtil.getSessionFactory();
 			
-			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) HibernateUtil.get(CrossBrowserAccount.class, 1);
+			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) get(CrossBrowserAccount.class, 1);
+
 			username = crossBrowserAccount.getEmail();
 			password = crossBrowserAccount.getPassword();
 			
 		
-			account = (Account) HibernateUtil.get(Account.class, accountID);
+			account = (Account) get(Account.class, accountID);
 			account.incrementRunID();
 			
 			paramObject = account.getParamObject();
@@ -109,9 +113,28 @@ public abstract class TestMachine {
 			
 			TestResults.addResult("<h2>"+sessionName+"</h2>");
 		} catch(Exception ex){
+			System.out.println(ex);
 			throw new Exception("Fail on TearUp "+ex);
 		} finally {
 
+		}
+	}
+	
+	public Object get(Class<?> clazz, Integer id){
+		Session session = openSession();
+		try {
+			final Transaction transaction =  session.beginTransaction();;
+			try {
+				Object obj = session.get(clazz, id);
+				transaction.commit();
+				return obj;
+			} catch(RuntimeException ex){
+				System.out.println(ex);
+				transaction.rollback();
+				throw ex;
+			}
+		}  finally {
+			session.close();
 		}
 	}
 	
@@ -127,10 +150,7 @@ public abstract class TestMachine {
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		try{ if(properties.isRemote()){this.driver.quit();}} 
 		catch(Exception ex) {}
-		finally{ 
-			setFinalResult();
-			HibernateUtil.closeCurrentSession();
-		}
+		setFinalResult();
 	}
 	
 	public WebDriver createDriver(TestEnvironment testEnvironment) throws MalformedURLException {
@@ -368,7 +388,7 @@ public abstract class TestMachine {
 	}
 	
 	public void changeParamObject(Integer testID){
-		Test test = (Test) HibernateUtil.get(Test.class, testID);
+		Test test = (Test) get(Test.class, testID);
 		paramObject = test.getParamObject();
 	}
 	

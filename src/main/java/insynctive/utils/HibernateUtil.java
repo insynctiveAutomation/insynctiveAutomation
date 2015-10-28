@@ -14,7 +14,6 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
 
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
@@ -51,14 +50,15 @@ public class HibernateUtil {
 			/*HEROKU insynctiveautomation*/
 			case 2 :
 				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31");
+				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_359ecbd25784b31?autoReconnect=true");
 				prop.setProperty("hibernate.connection.username", "b797aea885e227");
 				prop.setProperty("hibernate.connection.password", "503f6e18");
 				break;
 			/*HEROKU alpha-insynctiveautomation*/
 			case 3 :
+				
 				prop.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_f468d9bec36d8ec");
+				prop.setProperty("hibernate.connection.url", "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net:3306/heroku_f468d9bec36d8ec?autoReconnect=true");
 				prop.setProperty("hibernate.connection.username", "b808518710f57f");
 				prop.setProperty("hibernate.connection.password", "3d6e38cf");
 				break;
@@ -70,7 +70,7 @@ public class HibernateUtil {
 			prop.setProperty("hibernate.show_sql", "true");
 			prop.setProperty("hibernate.hbm2ddl.auto", "update");
 			prop.setProperty("hibernate.current_session_context_class", "thread");
-			prop.setProperty("hibernate.connection.release_mode", ConnectionReleaseMode.AFTER_TRANSACTION.name());
+			prop.setProperty("hibernate.connection.pool_size", "100");
 			
 			org.hibernate.cfg.Configuration config = new org.hibernate.cfg.Configuration()
 			   .addProperties(prop)
@@ -105,36 +105,5 @@ public class HibernateUtil {
 
 	public static void closeCurrentSession() {
 		getSessionFactory().getCurrentSession().close();
-	}
-	
-	public static void save(AbstractEntity entity, Session session){
-		Transaction tx = session.beginTransaction();
-		session.evict(entity);
-		session.saveOrUpdate(entity);
-		tx.commit();
-	}
-	
-	public static void saverOrUpdate(AbstractEntity entity){
-		save(entity);
-	}
-	
-	public static void save(AbstractEntity entity) {
-		Session session = openSession();
-		save(entity, session);
-		session.close();
-	}
-	
-	public static Object get(Class<?> clazz, Integer id, Session session){
-		session.beginTransaction();
-		Object obj = session.get(clazz, id);
-		session.getTransaction().commit();
-		return obj;
-	}
-	
-	public static Object get(Class<?> clazz, Integer id){
-		Session session = openSession();
-		Object obj = get(clazz, id, session);
-		session.close();
-		return obj;
 	}
 }

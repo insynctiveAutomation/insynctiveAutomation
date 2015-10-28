@@ -40,12 +40,6 @@ public class PersonFileTest extends TestMachine {
 		this.sessionName = "Person File Test";
 	}
 	
-	@Override
-	@AfterClass(alwaysRun = true)
-	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		super.teardown();
-	}
-	
 	@BeforeTest
 	@Parameters({"TestID"})
 	public void beforeTest(@Optional("TestID") String testID){
@@ -79,7 +73,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
 					ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, 
 					ParamObjectField.TITLE_OF_EMPLOYEE}, 
-			labels={"Create OR Open Person?", "Email", "Name:", "Last Name", "Department", "Title"})
+			labels={"Create OR Open Person?", "Email (+RunID will be add by the test)", "Name", "Last Name", "Department", "Title"})
 	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		try{ 
