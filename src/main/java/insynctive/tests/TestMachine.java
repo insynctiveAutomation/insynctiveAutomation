@@ -122,7 +122,6 @@ public abstract class TestMachine {
 	
 	public Object get(Class<?> clazz, Integer id){
 		Session session = openSession();
-		try {
 			final Transaction transaction =  session.beginTransaction();;
 			try {
 				Object obj = session.get(clazz, id);
@@ -133,9 +132,6 @@ public abstract class TestMachine {
 				transaction.rollback();
 				throw ex;
 			}
-		}  finally {
-			session.close();
-		}
 	}
 	
 	public Session getCurrentSession(){
