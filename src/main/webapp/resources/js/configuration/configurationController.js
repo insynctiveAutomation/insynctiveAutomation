@@ -63,4 +63,11 @@ app.controller('configurationController', function($cookies, $http, $window, $mo
 		var runID = (self.configuration) ? self.configuration.runID : '';
 		self.finalEmail = email.split('@')[0].concat('+').concat(runID).concat('@').concat(email.split('@')[1]);
 	}
+	
+	this.logout = function(){
+		testService.logout(function(data) {
+			$cookies.remove('userID');
+			$window.location.href = '/login';
+		});
+	}
 });

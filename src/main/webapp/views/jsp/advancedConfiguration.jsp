@@ -36,15 +36,15 @@
     	<span class="loading-span">Loading</span>
     </div>
     <div ng-show="!configCtl.isLoading" class="configuration-div">
-		<div class="col-xs-4 col-md-4 h4"><a id="logoutLink" ng-click="testCtrl.logout()">Logout</a></div>
+		<div class="col-xs-4 col-md-4 h4"><a id="logoutLink" ng-click="configCtl.logout()">Logout</a></div>
 		<div class="col-xs-4 col-md-4 text-center h4"><span class="" id="have-changes"></span></div>
 	    <div class="col-xs-4 col-md-4 text-right h4"><a href="/" id="configurationLink">Home</a></div>
 		<br/>
 	    <form ng-submit="configCtl.saveConfiguration()" name="form" ng-model="configCtl.form" ng-change="configCtl.haveChanges()" id="form">
 			<div class="col-xs-12 col-md-6">
 				<h3>Account Login</h3>
-				<label for="">RUN ID: </label>
-				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.runID" /><br/>     
+				<!-- <label for="">RUN ID: </label>
+				<input ng-change="configCtl.addFinalsLabels()" ng-required="true" ng-model="configCtl.configuration.runID" /><br/> -->     
 				
 				<label for="">Username: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.username" /><br/>     
@@ -58,13 +58,13 @@
 				<input ng-required="true" ng-model="configCtl.configuration.accountProperty.gmailPassword" /><br/>     
 				
 				<label for="">Notification: </label>
-				<select name="notification" ng-model="configCtl.configuration.accountProperty.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'No notify', v: false }]" required></select><br/><br/>      
+				<select name="notification" ng-model="configCtl.configuration.accountProperty.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'Do not notify', v: false }]" required></select><br/><br/>      
 				
 				<label for="">Remote: </label>
 				<select name="remote" ng-model="configCtl.configuration.accountProperty.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>   <br/>   
 			</div>
 			<div class="col-xs-12 col-md-12">
-				<h3 class="text-center">Param Object Template</h3>
+				<h3 class="text-center">Parameters Object Template</h3>
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>Personal Info</h4>
@@ -97,10 +97,10 @@
 				<span>Final Email:</span><span style="font-weight: bold;"> {{configCtl.finalEmail}}</span>
 				<br/> 
 				
-				<label for="">Title of Employee: </label>
+				<label for="">Employee's title: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.titleOfEmployee" /><br/>     
 				
-				<label for="">Department of Employee: </label>
+				<label for="">Employee's department: </label>
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.departamentOfEmployee" /><br/>     
 				
 				<label for="">Primary Phone: </label>
@@ -121,6 +121,9 @@
 
 				<label for="">Min loading Time (segs)</label>
 				<input ng-required="true" ng-model="configCtl.configuration.paramObject.loadingTime" /><br/> 
+
+				<label for="">Time to wait for elements to be present (segs)</label>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.waitTime" /><br/> 
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<h4>Emergency Contact</h4>
@@ -169,18 +172,18 @@
 				<yes-no name="same as home" ng-model="configCtl.configuration.paramObject.usaddress.sameAsHome"></yes-no>
 			</div>
 			<div class="col-md-6 col-md-offset-6">
-				<h4>SMB BENEFIT</h4>
+				<h4>SMB BENEFITS</h4>
 				<label for="">Medical Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.paramObject.medicalBenefit.name" />
-				<benefit-company ng-model="configCtl.configuration.paramObject.medicalBenefit.company" required></benefit-company>
+				<input ng-model="configCtl.configuration.paramObject.medicalBenefit.name" />
+				<benefit-company ng-model="configCtl.configuration.paramObject.medicalBenefit.company"></benefit-company>
 				<br/>     
 				<label for="">Dental Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.paramObject.dentalBenefit.name" />
-				<benefit-company ng-model="configCtl.configuration.paramObject.dentalBenefit.company" required></benefit-company>
+				<input ng-model="configCtl.configuration.paramObject.dentalBenefit.name" />
+				<benefit-company ng-model="configCtl.configuration.paramObject.dentalBenefit.company"></benefit-company>
 		 		<br/>     
 				<label for="">Vision Benefit Name: </label>
-				<input ng-required="true" ng-model="configCtl.configuration.paramObject.visionBenefit.name" />
-				<benefit-company ng-model="configCtl.configuration.paramObject.visionBenefit.company" required></benefit-company>
+				<input ng-model="configCtl.configuration.paramObject.visionBenefit.name" />
+				<benefit-company ng-model="configCtl.configuration.paramObject.visionBenefit.company"></benefit-company>
 		 		<br/>     
 			</div>
 			<div class="col-md-offset-5 col-md-2" style="padding-top: 20px;"><button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button></div>

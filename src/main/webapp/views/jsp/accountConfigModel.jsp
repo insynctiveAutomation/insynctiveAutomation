@@ -13,7 +13,7 @@
 		<label for="password">Login Password: </label>
 		<input ng-required="true" ng-model="accountCtrl.paramObject.loginPassword" /><br/> 
 		<label for="notification">Notification: </label> 
-		<select name="notification" ng-model="accountCtrl.accountConfig.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'No notify', v: false }]" required></select><br/> 
+		<select name="notification" ng-model="accountCtrl.accountConfig.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'Do not notify', v: false }]" required></select><br/> 
 		<label for="runIn">Run in:  </label> 
 		<select name="remote" ng-if="accountCtrl.isLocalhost" ng-model="accountCtrl.accountConfig.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>
 		<button ng-disabled="" class="btn btn-lg btn-primary" type="submit">Save</button>

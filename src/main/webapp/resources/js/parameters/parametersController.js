@@ -15,6 +15,7 @@ app.controller('modalParametersController', function(defaulObject, selectedTest,
 	this.getParameters = function() {
 		parameterService.getParameters(className, selectedTest.name, function(data) {
 			self.parameters = data.params;
+			debugger
 			data.params.forEach(function(params) {
 				var param = params.split('.')[0]
 				selectedTest.paramObject[param] = selectedTest.paramObject[param]

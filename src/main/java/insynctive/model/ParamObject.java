@@ -39,6 +39,9 @@ public class ParamObject {
 	@Column(name = "param_object_id")
 	public Integer paramObjectID;
 
+	@Column(name = "wait_time")
+	public Integer waitTime;
+
 	@Column(name = "name")
 	public String name;
 
@@ -414,5 +417,13 @@ public class ParamObject {
 
 	public void setBooleanParam(Boolean booleanParam) {
 		this.booleanParam = booleanParam;
+	}
+
+	public Integer getWaitTime() {
+		return waitTime;
+	}
+
+	public void setWaitTime(Integer waitTime) {
+		this.waitTime = waitTime;
 	}
 }

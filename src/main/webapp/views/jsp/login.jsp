@@ -6,7 +6,7 @@
  
 <head>
 <meta charset="utf-8">
-<title>Automated Tests Projectr</title>
+<title>Automated Tests Project</title>
 <head>
 
 <!-- JQUERY -->
@@ -39,7 +39,7 @@
 <body data-ng-controller="LoginController as loginController">
 	<div>
 		<form  ng-submit="loginController.login()" class="form-signin" name="sendTest">
-		<h2 class="form-signin-heading">Please, sign in.</h2>
+		<h2 class="form-signin-heading">Sign in</h2>
 		 	<label for="username" class="sr-only">Username: </label>
 			<input ng-required="true" ng-model="loginController.username" class="form-control" placeholder="Username"/><br/> 
 		 	<label for="username" class="sr-only">Password: </label>

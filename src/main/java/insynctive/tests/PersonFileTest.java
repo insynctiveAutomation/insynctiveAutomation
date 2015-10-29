@@ -73,7 +73,7 @@ public class PersonFileTest extends TestMachine {
 			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
 					ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, 
 					ParamObjectField.TITLE_OF_EMPLOYEE}, 
-			labels={"Create OR Open Person?", "Email (+RunID will be add by the test)", "Name", "Last Name", "Department", "Title"})
+			labels={"Create OR Open Person?", "Email (+RunID is automatically added)", "Name", "Last Name", "Department", "Title"})
 	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		try{ 
@@ -172,7 +172,7 @@ public class PersonFileTest extends TestMachine {
 	@ParametersFront(
 			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
 			labels={"Name:", "Last Name", "Middle Name", "Maiden Name"})
-	public void changeName2(@Optional("TestID") Integer testID)
+	public void ChangeNameInTitle(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
@@ -294,7 +294,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="addPhoneNumber")
+	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.PRIMARY_PHONE}, 
@@ -315,7 +315,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="addAlternativePhone")
+	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.PRIMARY_PHONE}, 
@@ -360,7 +360,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="addUSAddress")
+	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
@@ -484,7 +484,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="addEmergencyContact")
+	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.EMERGENCY_CONTACT_NAME, ParamObjectField.EMERGENCY_CONTACT_RELATIONSHIP, 
@@ -512,7 +512,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="changeEmergencyContact")
+	@Test(dependsOnMethods="createPersonTest")
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 

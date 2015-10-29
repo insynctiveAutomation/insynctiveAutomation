@@ -54,7 +54,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		self.loaderVisible = "visible";
 		testService.startTest(self.testDetails, testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
 			
-			self.runStatus = "The test Start!";
+			self.runStatus = "The Test is Running...";
 			self.tlaIndex = data.index;
 //			self.loaderVisible = "hidden";
 			

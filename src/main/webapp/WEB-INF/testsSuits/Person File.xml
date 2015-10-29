@@ -10,7 +10,7 @@
 	        <include name="createPersonTest" />
 
 			<!-- HEADER TEST-->	
-	        <include name="changeName2" />
+	        <include name="ChangeNameInTitle" />
 	        <include name="addTitle" />
 	        
 	        <!-- Personal Details -->

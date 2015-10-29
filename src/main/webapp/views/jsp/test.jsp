@@ -6,7 +6,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>Automated Tests Projectr</title>
+<title>Automated Tests Project</title>
 <head>
 	<!-- JQUERY -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/jquery/dist/jquery.min.js"></script>
@@ -65,14 +65,14 @@
 		    	<option value="">Select an Environment</option>
 		 	</select> 
 		  	<select name="browser" ng-model="selectedBrowser" required>
-		    	<option value="">Select a browser</option>
+		    	<option value="">Select a Browser</option>
 		    	<option value="FIREFOX">Firefox</option>
 		    	<option value="CHROME">Chrome</option>
 		    	<option value="IE">IE</option>
 		    	<option value="IPAD">iPad</option>
 		 	</select> 
 		 	
-			<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Start Test!</button>
+			<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Run Test</button>
 			</form>	
 		</div>
 	</div>
