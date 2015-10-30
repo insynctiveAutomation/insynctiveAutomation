@@ -5,6 +5,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -16,14 +19,16 @@ import insynctive.utils.Debugger;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.data.TestEnvironment;
 
+@TransactionConfiguration
+@Transactional
 public class EmployeeDashboardInterfaceTest extends TestMachine {
 
 	@BeforeClass
-	@Parameters({"accountID", "bowser", "testID"})
-	public void tearUp(String accountID, String bowser, String testID) throws Exception {
-		super.testSuiteID = Integer.parseInt(testID);
+	@Parameters({"accountID", "runID", "bowser", "testID"})
+	public void tearUp(String accountID, String runID, String bowser, String testSuiteID) throws Exception {
+		super.testSuiteID = Integer.parseInt(testSuiteID);
+		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
-		super.tearUp(Integer.valueOf(accountID));
 		this.sessionName = "Open Enrollment Test";
 	}
 	

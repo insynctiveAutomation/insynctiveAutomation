@@ -44,6 +44,9 @@ public class AccountDao {
 		openSession().update(acc);
 	}
 	
+	public void update(Account acc){
+		openSession().update(acc);
+	}
 	
 	public Account incrementRunIDAndGetAcc(int accID){
 		Account acc = (Account) openSession().get(Account.class, accID);

@@ -33,7 +33,7 @@ public class CreatePersonTest extends TestMachine {
 	@Override
 	@BeforeClass
 	public void tearUp() throws Exception {
-		super.tearUp(2);//This is the ID of the Account who user the http://usertestingstepone.herokuapp.com/ Application 
+		super.tearUp(2, null);//This is the ID of the Account who user the http://usertestingstepone.herokuapp.com/ Application 
 		this.sessionName = "Create Person Test";
 	}
 

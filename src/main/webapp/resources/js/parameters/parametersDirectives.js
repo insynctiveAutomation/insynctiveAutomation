@@ -8,10 +8,6 @@ app.directive("parameter", function($compile, $cookies){
 			param: '@'
 		},
 		link: function(scope, elm, attrs){
-			if(scope.param.split('.').length == 2){
-				scope.model = scope.model[(scope.param.split('.')[1])]
-			}
-			console.log(scope.model);
 			if(scope.param === 'gender'){
 				elm.replaceWith($compile('<gender ng-required="true" ng-model="model">' + elm.html() + '</gender>')(scope));
 			} else if(scope.param === 'maritalStatus'){

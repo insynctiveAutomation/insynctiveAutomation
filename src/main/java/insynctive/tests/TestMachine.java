@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -91,21 +92,23 @@ public abstract class TestMachine {
 	}
 	
 	public void tearUp() throws Exception {
-		tearUp(1);
+		tearUp(1, null);
 	}
 	
-	public void tearUp(Integer accountID) throws Exception{
+	Semaphore mutex = new Semaphore(1);
+	public void tearUp(Integer accountID, Integer runID) throws Exception{
+		mutex.acquire();
 		try{
 			sessionFactory = HibernateUtil.getSessionFactory();
 			
-			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) get(CrossBrowserAccount.class, 1);
+			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) HibernateUtil.get(CrossBrowserAccount.class, 1);
 
 			username = crossBrowserAccount.getEmail();
 			password = crossBrowserAccount.getPassword();
 			
 		
-			account = (Account) get(Account.class, accountID);
-			account.incrementRunID();
+			account = (Account) HibernateUtil.get(Account.class, accountID);
+			account.setRunID(runID != null ? runID : account.getRunID());
 			
 			paramObject = account.getParamObject();
 			properties = account.getAccountProperty();
@@ -116,22 +119,8 @@ public abstract class TestMachine {
 			System.out.println(ex);
 			throw new Exception("Fail on TearUp "+ex);
 		} finally {
-
+			mutex.release();
 		}
-	}
-	
-	public Object get(Class<?> clazz, Integer id){
-		Session session = openSession();
-			final Transaction transaction =  session.beginTransaction();;
-			try {
-				Object obj = session.get(clazz, id);
-				transaction.commit();
-				return obj;
-			} catch(RuntimeException ex){
-				System.out.println(ex);
-				transaction.rollback();
-				throw ex;
-			}
 	}
 	
 	public Session getCurrentSession(){
@@ -383,9 +372,18 @@ public abstract class TestMachine {
 		return results;
 	}
 	
-	public void changeParamObject(Integer testID){
-		Test test = (Test) get(Test.class, testID);
-		paramObject = test.getParamObject();
+	Semaphore changeObjectMutex = new Semaphore(1);
+	public void changeParamObject(Integer testID) throws Exception{
+		try{
+			changeObjectMutex.acquire();
+			Test test = (Test) HibernateUtil.get(Test.class, testID);
+			paramObject = test.getParamObject();
+		} catch(Exception ex) {
+			System.out.println(ex);
+			throw new Exception("Fail on changeObject "+ex);
+		} finally {
+			changeObjectMutex.release();
+		}
 	}
 	
 	public void setparamObjectAsAccount(Integer testID) {

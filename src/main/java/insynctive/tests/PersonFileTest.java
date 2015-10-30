@@ -6,7 +6,15 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.hibernate.SessionFactory;
 import org.json.JSONException;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
@@ -28,14 +36,20 @@ import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
+@TransactionConfiguration
+@Transactional
 public class PersonFileTest extends TestMachine {
 	private USAddress usaddress = null;
-
+	
+	@Resource
+	protected SessionFactory sessionFactory;
+	
+	
 	@BeforeClass
-	@Parameters({"accountID", "bowser", "testID"})
-	public void tearUp(String accountID, String bowser, String testSuiteID) throws Exception {
+	@Parameters({"accountID", "runID", "bowser", "testID"})
+	public void tearUp(String accountID, String runID, String bowser, String testSuiteID) throws Exception {
 		super.testSuiteID = Integer.parseInt(testSuiteID);
-		super.tearUp(Integer.valueOf(accountID));
+		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Person File Test";
 	}
