@@ -27,10 +27,7 @@ import insynctive.model.USAddress;
 @ImportResource("classpath:application.properties")
 public class HibernateUtil {
 
-	@Value("${local}")
-	private Boolean local;
-
-	private static SessionFactory INSTANCE_SESSION_FACTORY = null;
+	private static volatile SessionFactory INSTANCE_SESSION_FACTORY = null;
 
 	public enum Common {
 		SUCCESS, ROLLBACK
@@ -94,9 +91,8 @@ public class HibernateUtil {
 					.addAnnotatedClass(USAddress.class).addAnnotatedClass(CreatePersonForm.class)
 					.addAnnotatedClass(ParamObject.class).addAnnotatedClass(Test.class);
 
-			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(config.getProperties())
-					.buildServiceRegistry();
-			INSTANCE_SESSION_FACTORY = config.buildSessionFactory(serviceRegistry);
+			ServiceRegistryBuilder builder = new ServiceRegistryBuilder().applySettings(config.getProperties());
+			INSTANCE_SESSION_FACTORY = config.buildSessionFactory(builder.buildServiceRegistry());
 		} catch (Throwable ex) {
 			System.err.println("Initial SessionFactory creation failed." + ex);
 			throw new ExceptionInInitializerError(ex);
