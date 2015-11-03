@@ -79,9 +79,9 @@ public class HibernateUtil {
 			prop.setProperty("hibernate.current_session_context_class", "thread");
 			prop.setProperty("hibernate.connection.pool_size", "100");
 
-			prop.setProperty("hibernate.c3p0.minPoolSize", "5");
-			prop.setProperty("hibernate.c3p0.maxPoolSize", "100");
-			prop.setProperty("hibernate.c3p0.initialPoolSize", "10");
+			prop.setProperty("hibernate.c3p0.minPoolSize", "1");
+			prop.setProperty("hibernate.c3p0.maxPoolSize", "9");
+			prop.setProperty("hibernate.c3p0.initialPoolSize", "1");
 			prop.setProperty("hibernate.c3p0.timeout", "1800");
 			prop.setProperty("hibernate.c3p0.max_statements=", "50");
 

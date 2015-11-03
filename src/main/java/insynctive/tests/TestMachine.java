@@ -127,9 +127,15 @@ public abstract class TestMachine {
 	
 	@AfterClass(alwaysRun = true)
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		try{ if(properties.isRemote()){this.driver.quit();}} 
-		catch(Exception ex) {}
-		setFinalResult();
+		try{
+			HibernateUtil.closeSession();
+			if(properties.isRemote()){this.driver.quit();}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			System.out.println("Fail On TearDown");
+		} finally {
+			setFinalResult();
+		}
 	}
 	
 	public WebDriver createDriver(TestEnvironment testEnvironment) throws MalformedURLException {
