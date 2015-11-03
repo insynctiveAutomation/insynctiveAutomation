@@ -76,10 +76,10 @@ public class TestController {
 	private final TestDao testDao;
 	
 	private final ServletContext servletContext;
+	private Account account;
 
 	//SESSION SCOPES
 	private Integer logedAccID;
-	private Account account;
 	private Integer threadIndex = 0;
 	private Map<Integer, Thread> workers = new HashMap<>();
 	private Integer testListenenerIndex = 0;
@@ -179,8 +179,12 @@ public class TestController {
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
 	public ModelAndView root(HttpSession session){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("test");
-		account = logedAccID != null ? accDao.getAccountByID(logedAccID) : null;
+		if(logedAccID != null){
+			model.setViewName("test");
+			account = logedAccID != null ? accDao.getAccountByID(logedAccID) : null;
+		} else {
+			model.setViewName("login");
+		}
 		return model;
 	}
 	
@@ -237,7 +241,7 @@ public class TestController {
 	@RequestMapping(value = "/video/{testListenenerIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String getVideo(@PathVariable("testListenenerIndex") Integer testListenenerIndex) throws InterruptedException, ConfigurationException{
-		if (account.getAccountProperty().isRemote()) {
+		if (account != null && account.getAccountProperty().isRemote()) {
 			int times = 1;
 			int sleep = 2000;
 			
@@ -335,7 +339,7 @@ public class TestController {
 	@ResponseBody
 	public String runTest(@RequestBody TestSuite form, @PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws ConfigurationException{
 		
-		return "{\"index\" : \""+(runTest(form, account, xmlName, browser, environment))+"\"}";
+		return "{\"index\" : \""+(runTest(form, accDao.getAccountByID(logedAccID), xmlName, browser, environment))+"\"}";
 	}
 	
 	@RequestMapping(value = "/nightly/{environment}/{xmlName}/{browser}", method = RequestMethod.POST)

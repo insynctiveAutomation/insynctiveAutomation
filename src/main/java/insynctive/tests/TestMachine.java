@@ -95,12 +95,8 @@ public abstract class TestMachine {
 		tearUp(1, null);
 	}
 	
-	Semaphore mutex = new Semaphore(1);
 	public void tearUp(Integer accountID, Integer runID) throws Exception{
-		mutex.acquire();
 		try{
-			sessionFactory = HibernateUtil.getSessionFactory();
-			
 			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) HibernateUtil.get(CrossBrowserAccount.class, 1);
 
 			username = crossBrowserAccount.getEmail();
@@ -118,8 +114,6 @@ public abstract class TestMachine {
 		} catch(Exception ex){
 			System.out.println(ex);
 			throw new Exception("Fail on TearUp "+ex);
-		} finally {
-			mutex.release();
 		}
 	}
 	
@@ -372,17 +366,14 @@ public abstract class TestMachine {
 		return results;
 	}
 	
-	Semaphore changeObjectMutex = new Semaphore(1);
 	public void changeParamObject(Integer testID) throws Exception{
 		try{
-			changeObjectMutex.acquire();
 			Test test = (Test) HibernateUtil.get(Test.class, testID);
 			paramObject = test.getParamObject();
+			System.out.println("Param Object Changes to: "+testID+" ID");
 		} catch(Exception ex) {
 			System.out.println(ex);
 			throw new Exception("Fail on changeObject "+ex);
-		} finally {
-			changeObjectMutex.release();
 		}
 	}
 	

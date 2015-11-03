@@ -106,9 +106,29 @@ public class HibernateUtil {
 		return INSTANCE_SESSION_FACTORY;
 	}
 
-	public static Session getCurrentSession() {
-		return getSessionFactory().getCurrentSession();
-	}
+	public static final ThreadLocal<Session> session = new ThreadLocal<Session>();
+
+	  public static Session getCurrentSession() {
+	    Session s = (Session) session.get();
+	    // Open a new Session, if this thread has none yet
+	    if (s == null) {
+	    	System.out.println("Open a session...");
+	      s = getSessionFactory().openSession();
+	      session.set(s);
+	    } else {
+	    	System.out.println("The session was open.");
+	    }
+	    return s;
+	  }
+
+	  public static void closeSession() {
+	    Session s = (Session) session.get();
+	    if (s != null)
+	      s.close();
+	    session.set(null);
+	    System.out.println("The session is closed.");
+	  }
+
 
 	public static Session openSession() {
 		return getSessionFactory().openSession();
@@ -126,11 +146,10 @@ public class HibernateUtil {
 			transaction.commit();
 			return obj;
 		} catch (RuntimeException ex) {
-			System.out.println(ex);
+			ex.printStackTrace();
 			transaction.rollback();
 			throw ex;
 		} finally {
-
 		}
 	}
 

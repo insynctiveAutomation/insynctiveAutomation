@@ -18,4 +18,5 @@ target/
 # Test
 test-output/
 
-*.properties
+# Properties
+src/main/resources/*.properties
