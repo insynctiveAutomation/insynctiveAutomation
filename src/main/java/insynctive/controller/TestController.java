@@ -425,6 +425,7 @@ public class TestController {
 		parameters.put("runID", acc.getRunIDString());
 		parameters.put("bowser", browser);
 		parameters.put("testID", testListenenerIndex.toString());
+		parameters.put("testName", xmlName);
 		
 		//Add to Test Suite
 		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);

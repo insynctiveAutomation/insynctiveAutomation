@@ -218,8 +218,8 @@ public class ParamObject {
 	}
 	
 	@JsonIgnore
-	public String getEmailToChange(){
-		return email.split("@")[0] + "+test@" + email.split("@")[1];
+	public String getEmailToChange(String runID){
+		return email.split("@")[0] +"+"+runID+ "+test@" + email.split("@")[1];
 	}
 	
 	public String getName() {
@@ -339,8 +339,8 @@ public class ParamObject {
 		this.ssn = ssn;
 	}
 	
-	public String getEmailWithRunID(Account acc){
-		return (email.split("@")[0] + "+" + acc.getRunID() + "@" + email.split("@")[1]);
+	public String getEmailWithRunID(String runID){
+		return (email.split("@")[0] + "+" + runID + "@" + email.split("@")[1]);
 	}
 	
 	@Override

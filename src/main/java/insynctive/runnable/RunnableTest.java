@@ -12,6 +12,7 @@ public class RunnableTest implements Runnable {
 	
 	@Override
 	public void run() {
+		testNG.setPreserveOrder(true);
 		testNG.run();
 	}
 

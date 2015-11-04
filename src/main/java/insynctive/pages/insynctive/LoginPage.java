@@ -74,8 +74,7 @@ public class LoginPage extends Page implements PageInterface{
     
     public boolean isLoggedIn() throws Exception{
     	HomeForAgentsPage homePage = new HomeForAgentsPage(driver, enviroment);
-    	homePage.waitPageIsLoad();
-    	return driver.getTitle().equals(homePage.PAGE_TITLE);
+    	return !driver.getTitle().equals("Login");
     }
     
     public  boolean isNotLoggedIn() {

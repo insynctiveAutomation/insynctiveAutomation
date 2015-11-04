@@ -4,6 +4,12 @@
 	  <classes>
 	    <class name="insynctive.tests.PersonFileTest">
 	      <methods>
+	        <include name="loginTest" />
+	        <include name="createPersonTest" />
+	        <include name="firstLogin" />
+	        <include name="changePrimaryEmailFromEmployee"/>
+	        <include name="logOut" />
+	        <include name="loginAfterEmailChangeInEmail" />
 	        <include name="checkIfChangeEmailIsSending" />
 	      </methods>
 	    </class>

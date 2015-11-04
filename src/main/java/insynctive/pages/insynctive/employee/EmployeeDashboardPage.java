@@ -19,6 +19,7 @@ import insynctive.model.ParamObject;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.PersonalPage;
+import insynctive.pages.insynctive.UpdateInfoPage;
 import insynctive.utils.Sleeper;
 
 public class EmployeeDashboardPage extends Page implements PageInterface {
@@ -119,6 +120,12 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 	
 	@FindBy(css = "#hiddenContent > div.validation-box > div")
 	WebElement missingInformationDiv;
+	
+	//Personal Tab
+	@FindBy(id = "linkMyInfo")
+	WebElement persoanlTab;
+	@FindBy(id = "tds_body_myinfopersonal")
+	WebElement personaliFrame;
 	
 	
 	public EmployeeDashboardPage(WebDriver driver, String enviroment) {
@@ -334,5 +341,15 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		if(!isPresentMissingrequired(nameOfField)){
 			throw new Exception("The Missing information: '"+nameOfField+"' Is Not Present");
 		}
+	}
+
+	public void changeEmail(String newEmail) throws Exception {
+		clickAButton(persoanlTab);
+		swichToIframe(personaliFrame);
+		
+		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
+		personalPage.tabiFrame = personaliFrame;
+		
+		personalPage.changePrimaryEmail(newEmail);
 	}
 }

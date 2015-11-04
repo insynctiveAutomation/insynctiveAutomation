@@ -2,20 +2,12 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.hibernate.SessionFactory;
-import org.json.JSONException;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -23,14 +15,17 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.annotation.ParametersFront;
-import insynctive.exception.ConfigurationException;
 import insynctive.model.EmergencyContact;
 import insynctive.model.USAddress;
+import insynctive.pages.Page;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
+import insynctive.pages.insynctive.ResetPasswordPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.employee.EmployeeDashboardPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
+import insynctive.utils.MailManager;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
@@ -46,12 +41,12 @@ public class PersonFileTest extends TestMachine {
 	
 	
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID) throws Exception {
+	@Parameters({"accountID", "runID", "bowser", "testID", "testName"})
+	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName) throws Exception {
 		super.testSuiteID = Integer.parseInt(testSuiteID);
 		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = "Person File Test";
+		this.sessionName = testName;
 	}
 	
 	@BeforeTest
@@ -60,7 +55,7 @@ public class PersonFileTest extends TestMachine {
 		System.out.println("TESTID: "+testID);
 	}
 	
-	@Test()
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
 	labels={"Login Username", "Login Password"})
@@ -81,7 +76,47 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username", "Login Password"})
+	public void loginAsEmployeeTest(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		
+		startTest(testEnvironment);
+		try{ 
+			LoginPage loginPage = loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
+			boolean result = loginPage.isLoggedIn();
+			Debugger.log("loginTest => "+result, isSaucelabs);
+			setResult(result, "Login Test");
+			assertTrue(result);
+		} catch(Exception ex){
+			failTest("Login Test", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.EMAIL, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username (The test will add +RunID+test)", "Login Password"})
+	public void loginAfterEmailChangeInEmail(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		try{ 
+			LoginPage loginPage = loginAsEmployee(paramObject.getEmailToChange(account.getRunIDString()), paramObject.loginPassword);
+			boolean result = loginPage.isLoggedIn();
+			Debugger.log("loginTest => "+result, isSaucelabs);
+			setResult(result, "Login Test");
+			assertTrue(result);
+		} catch(Exception ex){
+			failTest("Login Test", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
@@ -99,7 +134,7 @@ public class PersonFileTest extends TestMachine {
 				Sleeper.sleep(5000, driver);
 			} else {
 				paramObject.setName(paramObject.getName() + " " + account.getRunIDString());
-				paramObject.setEmail(paramObject.getEmailWithRunID(account));
+				paramObject.setEmail(paramObject.getEmailWithRunID(account.getRunIDString()));
 				homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
 				homePage.sendInviteEmail(paramObject, CheckInApp.NO);
 				result = homePage.checkIfPersonIsCreated(paramObject);
@@ -114,7 +149,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.EMAIL}, 
@@ -123,9 +158,9 @@ public class PersonFileTest extends TestMachine {
 		changeParamObject(testID);
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.changePrimaryEmail(paramObject);
+			personFilePage.changePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
 			
-			boolean result = personFilePage.isChangePrimaryEmail(paramObject.getEmailToChange());
+			boolean result = personFilePage.isChangePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
 			Debugger.log("changePrimaryEmail => "+result, isSaucelabs);
 			setResult(result, "Change Primary Email");
 			assertTrue(result);
@@ -135,7 +170,29 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"The test will add +RunID+Test to the email."})
+	public void changePrimaryEmailFromEmployee(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		try {
+			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			employeePage.changeEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			
+			boolean result = true;
+			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
+			setResult(result, "changePrimaryEmailFromEmployee");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Change Primary Email From Employee", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.MARITAL_STATUS}, 
@@ -158,7 +215,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
@@ -181,7 +238,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
@@ -204,7 +261,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.GENDER}, 
@@ -227,7 +284,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.BIRTH_DATE}, 
@@ -250,7 +307,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.TITLE_OF_EMPLOYEE, ParamObjectField.DEPARTMENT_OF_EMPLYEE}, 
@@ -273,7 +330,7 @@ public class PersonFileTest extends TestMachine {
 	}
 
 	/**
-	 * @Test(dependsOnMethods="createPersonTest")
+	 * @Test
 	public void hasNotDependents() throws IOException, InterruptedException, ConfigurationException{
 		setResult(false, "Add Has Not Dependents");
 		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
@@ -286,7 +343,7 @@ public class PersonFileTest extends TestMachine {
 		assertTrue(result);
 	} */
 
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.PRIMARY_PHONE}, 
@@ -308,7 +365,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.PRIMARY_PHONE}, 
@@ -329,7 +386,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.PRIMARY_PHONE}, 
@@ -350,7 +407,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.US_ADDRESS_STREET, ParamObjectField.US_ADDRESS_SECOND_STREET, ParamObjectField.US_ADDRESS_CITY, 
@@ -374,7 +431,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
@@ -395,7 +452,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	/** @Test(dependsOnMethods="createPersonTest")
+	/** @Test
 	public void updateUSAddress() throws Exception{
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnviroment());
@@ -411,7 +468,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	} */
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
@@ -431,7 +488,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.CHECKLIST_NAME}, 
@@ -453,7 +510,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.SSN}, 
@@ -475,7 +532,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.EMERGENCY_CONTACT_NAME, ParamObjectField.EMERGENCY_CONTACT_RELATIONSHIP, 
@@ -498,7 +555,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.EMERGENCY_CONTACT_NAME, ParamObjectField.EMERGENCY_CONTACT_RELATIONSHIP, 
@@ -526,7 +583,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
@@ -547,7 +604,7 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="createPersonTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
@@ -565,6 +622,79 @@ public class PersonFileTest extends TestMachine {
 		}catch (Exception ex){ 
 			failTest("Assign Job", ex, isSaucelabs);
 			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No parameters needed"})
+	public void logOut(@Optional("TestID") Integer testID) throws Exception{
+		try{ 
+			Page page = new Page(driver);
+			page.logout();
+			Sleeper.sleep(2000, driver);
+		}catch (Exception ex){ 
+			failTest("log out fail", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL, ParamObjectField.LOGIN_PASSWORD}, 
+			labels={"Gmail Email", "New Password"})
+	public void firstLogin(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		try {
+			makeFirstLogin(paramObject.email, properties.getGmailPassword(), paramObject.loginPassword);//Re utilize EMAIL param because is a String
+			boolean result = true;
+			Debugger.log("First Login  => "+result, isSaucelabs);
+			setResult(result, "Change Emergency Contact");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("First Login ", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	public boolean makeFirstLogin(String gmailEmail, String gmailPassword, String newPassword) throws Exception{
+		String firstLoginToken = MailManager.getAuthLink(gmailEmail, gmailPassword, account.getRunIDString());
+		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver, properties.getEnvironment(), firstLoginToken);
+		
+		resetPasswordPage.loadPage();
+		resetPasswordPage.changePassword(newPassword);
+		
+		return resetPasswordPage.checkIfEmployeePasswordWasChange();
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"Base Email (After change email will add '+runID+test' and Before change email will add '+runID')"})
+	public void checkIfChangeEmailIsSending(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		try {
+			boolean result = checkIfChangeEmailIsSending(paramObject.getEmailToChange(account.getRunIDString()), properties.getGmailPassword(), paramObject.getEmailWithRunID(account.getRunIDString()));//Re utilize lastname param because is a String
+			Debugger.log("checkIfChangeEmailIsSending  => "+result, isSaucelabs);
+			setResult(result, "Check If Change Email is Sending");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Check If Change Email is Sending", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	public boolean checkIfChangeEmailIsSending(String gmailEmail, String gmailPassword, String beforeEmail) throws Exception{
+		try {
+			return MailManager.checkIfChangeEmailIsSending(gmailEmail, gmailPassword, beforeEmail);
+		} catch(Exception ex) {
+			return false;
 		}
 	}
 }

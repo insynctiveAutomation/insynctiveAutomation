@@ -1,23 +1,34 @@
 package insynctive.utils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.search.BodyTerm;
+import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 
 public class MailManager {
 
-	public static String getAuthLink(String username, String password,
-			String subject) throws Exception {
+	public static String getAuthLink(String username, String password, String runID) throws Exception {
 
-		String registationToken;
+		StringBuffer buffer = getEmailByBody(username, password, runID);
+		String[] splitHref = buffer.toString().split(">Create Password Now")[0].split("href=\"");
+		String registationUrl = splitHref[splitHref.length - 1].split("\"")[0];
 
+		System.out.println(registationUrl);
+
+		return registationUrl;
+	}
+
+	public static StringBuffer getEmailByBody(String username, String password, String containsMsg) throws Exception {
 		Properties props = System.getProperties();
 		props.setProperty("mail.store.protocol", "imaps");
 
@@ -38,8 +49,7 @@ public class MailManager {
 
 		// Search for mail MAX 10 runs
 		for (int i = 0; i < 10; i++) {
-			messages = folder.search(new SubjectTerm(subject),
-					folder.getMessages());
+			messages = folder.search(new BodyTerm(containsMsg), folder.getMessages());
 			// wait for 3 seconds if message is not found
 			if (messages.length == 0) {
 				Thread.sleep(3000);
@@ -47,15 +57,14 @@ public class MailManager {
 		}
 
 		// Search latests for unread mail
-		for (int index = messages.length - 1; index != 0; index--) {
-			Message mail = messages[index];
-			if (!mail.isSet(Flags.Flag.SEEN)) {
-				confirmationMAil = mail;
+		for(Message message : messages){
+			if (!message.isSet(Flags.Flag.SEEN)) {
+				confirmationMAil = message;
 				isMailFound = true;
 				break;
 			}
 		}
-
+		
 		// Test fails if no unread mail was found from God
 		if (!isMailFound) {
 			throw new Exception("Could not find email");
@@ -69,13 +78,14 @@ public class MailManager {
 			while ((line = reader.readLine()) != null) {
 				buffer.append(line);
 			}
-
-			registationToken = buffer.toString().split("logintoken=")[1]
-					.split("\"")[0];
-
-			return registationToken;
+			return buffer;
 		}
-
 	}
+	
+	public static boolean checkIfChangeEmailIsSending(String username, String password, String beforeEmail) throws Exception {
 
+			StringBuffer buffer = getEmailByBody(username, password, "Your login was changed from "+beforeEmail+" to "+username);
+			
+			return buffer!=null;
+		}
 }

@@ -309,14 +309,14 @@ public abstract class PersonalPage extends Page {
 						+ status.status + "')]")));
 	}
 
-	public void changePrimaryEmail(ParamObject person) throws Exception {
+	public void changePrimaryEmail(String newEmail) throws Exception {
 		waitPageIsLoad();
 		Sleeper.sleep(1000, driver);
 		clickAButton(primaryEmailLink);
 		waitUntilnotVisibility(loadingSpinner);
 		swichToIframe(primaryEmailiFrame);
 		waitUntilIsLoaded(primaryEmailField);
-		setTextInField(primaryEmailField, person.getEmailToChange());
+		setTextInField(primaryEmailField, newEmail);
 		waitUntilIsLoaded(saveChangePrimaryEmail);
 		clickAButton(saveChangePrimaryEmail);
 	}

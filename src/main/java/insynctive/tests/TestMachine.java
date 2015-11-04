@@ -236,7 +236,7 @@ public abstract class TestMachine {
 			nameAndCause = testName;
 		}
 		
-		Debugger.log(nameAndCause, isSaucelabs);
+		Debugger.log(nameAndCause +" => false", isSaucelabs);
 		
 		setResult(false, nameAndCause, duration);
 	}

@@ -21,7 +21,7 @@ public class ResetPasswordPage extends Page implements PageInterface{
 	
 	public ResetPasswordPage(WebDriver driver, String enviroment, String loginToken) {
 		super(driver);
-		this.PAGE_URL = "https://"+enviroment+".insynctiveapps.com/Insynctive.Hub/Login.aspx?logintoken="+loginToken;
+		this.PAGE_URL = loginToken;
 		this.PAGE_TITLE = "Reset Password";
 		PageFactory.initElements(driver, this);
 	}
