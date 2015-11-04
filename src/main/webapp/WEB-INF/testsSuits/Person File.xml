@@ -4,7 +4,6 @@
 	  <classes>
 	    <class name="insynctive.tests.PersonFileTest">
 	      <methods>
-
 			<!-- Initial Test -->
 	        <include name="loginTest" />
 	        <include name="createPersonTest" />
@@ -14,7 +13,7 @@
 	        <include name="addTitle" />
 	        
 	        <!-- Personal Details -->
-	        <include name="changeName" />
+	        <include name="changeNameInPersonalInfo" />
 	        <include name="changeMaritalStatus" />
 	        <include name="changeBirthDate" />
 	        <include name="changeGender" />

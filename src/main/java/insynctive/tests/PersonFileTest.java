@@ -195,6 +195,48 @@ public class PersonFileTest extends TestMachine {
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"The test will add +RunID+Test"})
+	public void addAlternativeEmailFromEmployee(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
+		try {
+			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			employeePage.addAlternateiveEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			
+			boolean result = true;
+			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
+			setResult(result, "changePrimaryEmailFromEmployee");
+			assertTrue(result);
+		} catch (Exception ex){ 
+			failTest("Change Primary Email From Employee", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"The test will add +RunID+Test"})
+	public void makePrimaryEmail(@Optional("TestID") Integer testID) throws Exception{
+		changeParamObject(testID);
+		try {
+			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			employeePage.makePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			
+			boolean result = true;
+			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
+			setResult(result, "changePrimaryEmailFromEmployee");
+			assertTrue(result);
+		} catch (Exception ex){ 
+			failTest("Change Primary Email From Employee", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
 			attrs={ParamObjectField.MARITAL_STATUS}, 
 			labels={"Marital Status"})
 	public void changeMaritalStatus(@Optional("TestID") Integer testID)
@@ -220,7 +262,7 @@ public class PersonFileTest extends TestMachine {
 	@ParametersFront(
 			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
 			labels={"Name:", "Last Name", "Middle Name", "Maiden Name"})
-	public void changeName(@Optional("TestID") Integer testID)
+	public void changeNameInPersonalInfo(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
@@ -228,12 +270,12 @@ public class PersonFileTest extends TestMachine {
 			
 			personFilePage.changeName(paramObject.getName(), paramObject.getLastName(), paramObject.getMiddleName(), paramObject.getMaidenName());
 			
-			boolean result = personFilePage.isChangeName(paramObject, Wait.WAIT);
+			boolean result = personFilePage.isChangeNameInPersonalDetails(paramObject, Wait.WAIT);
 			Debugger.log("changeName => "+result, isSaucelabs);
-			setResult(result, "Change name 1");
+			setResult(result, "Change name in Personal Info");
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Change name 1", ex, isSaucelabs);
+			failTest("Change name in Personal Info", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
@@ -251,7 +293,7 @@ public class PersonFileTest extends TestMachine {
 			
 			personFilePage.changeNameIntoTitle(paramObject.getName(), paramObject.getLastName(), paramObject.getMiddleName(), paramObject.getMaidenName());
 			
-			boolean result = personFilePage.isChangeName(paramObject, Wait.WAIT);
+			boolean result = personFilePage.isChangeNameInTitle(paramObject, Wait.WAIT);
 			Debugger.log("changeName2 =>"+result, isSaucelabs);
 			setResult(result, "Change name from Title");
 			assertTrue(result);
@@ -499,7 +541,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			personFilePage.assignChecklist(paramObject.getChecklistName());
 			Sleeper.sleep(5000, driver);
-			boolean result = personFilePage.isChecklistAssigned();
+			boolean result = personFilePage.isChecklistAssigned(paramObject.getChecklistName());
 			Debugger.log("startChecklist => "+result, isSaucelabs);
 			setResult(result, "Start Checklist");
 			assertTrue(result);

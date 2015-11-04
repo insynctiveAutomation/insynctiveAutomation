@@ -31,7 +31,9 @@ public abstract class PersonalPage extends Page {
 	@FindBy(className = "date-picker-popover")
 	public WebElement birthDateiFrame;
 	@FindBy(className = "emails-edit-popover")
-	public WebElement primaryEmailiFrame;
+	public WebElement editEmailiFrame;
+	@FindBy(className = "emails-add-popover")
+	public WebElement addNewEmailiFrame;
 	@FindBy(className = "phones-add-popover")
 	public WebElement editPhoneNumberiFrame;
 	@FindBy(css = "body > div.standard-popover.bottom.in.webui-no-padding > div.standard-popover-inner > div.standard-popover-content > iframe")
@@ -154,6 +156,10 @@ public abstract class PersonalPage extends Page {
 	public WebElement savePrimaryEmailChange;
 	@FindBy(css = ".error-msg")
 	public WebElement errorMessageEmail;
+	@FindBy(id = "addEmailBtn")
+	public WebElement addAlternativeEmail;
+	@FindBy(className = "make-primary-email")
+	public WebElement makePrimaryEmailBtn;
 
 	// Has Not Dependents 
 	@FindBy(css = "#dependents-grid > span.no-dependents")
@@ -183,7 +189,7 @@ public abstract class PersonalPage extends Page {
 	@FindBy(className = "phones-edit-popover")
 	public WebElement phonesEditFrame;
 	@FindBy(css = "#content > div.phone-edit-container.input-row > div > button > span.ladda-label")
-	public WebElement makePrimaryBtn;
+	public WebElement makePrimaryPhoneBtn;
 	
 	// Links
 	@FindBy(css = "#statusesListHeader > li:nth-child(1)")
@@ -314,13 +320,31 @@ public abstract class PersonalPage extends Page {
 		Sleeper.sleep(1000, driver);
 		clickAButton(primaryEmailLink);
 		waitUntilnotVisibility(loadingSpinner);
-		swichToIframe(primaryEmailiFrame);
-		waitUntilIsLoaded(primaryEmailField);
+		swichToIframe(editEmailiFrame);
 		setTextInField(primaryEmailField, newEmail);
-		waitUntilIsLoaded(saveChangePrimaryEmail);
 		clickAButton(saveChangePrimaryEmail);
 	}
-
+	
+	public void addAlternativeEmail(String newEmail) throws Exception {
+		waitPageIsLoad();
+		Sleeper.sleep(1000, driver);
+		clickAButton(addAlternativeEmail);
+		waitUntilnotVisibility(loadingSpinner);
+		swichToIframe(addNewEmailiFrame);
+		setTextInField(primaryEmailField, newEmail);
+		clickAButton(saveChangePrimaryEmail);
+	}
+	
+	public void makeEmailPrimaryEmail(String email) throws Exception {
+		waitPageIsLoad();
+		Sleeper.sleep(1000, driver);
+		clickAButton(findElementByText("span", email));
+		waitUntilnotVisibility(loadingSpinner);
+		swichToIframe(editEmailiFrame);
+		clickAButton(makePrimaryEmailBtn);
+		Sleeper.sleep(4000, driver);
+	}
+	
 	public void addHasNotDependents() throws Exception {
 		waitPageIsLoad();
 		clickAButton(hasNotDependentsLink);
@@ -355,7 +379,7 @@ public abstract class PersonalPage extends Page {
 		clickAButton(alternativePhoneLink);
 		swichToIframe(phonesEditFrame);
 		Sleeper.sleep(1500, driver);
-		clickAButton(makePrimaryBtn);
+		clickAButton(makePrimaryPhoneBtn);
 		return result;
 	}
 
@@ -575,12 +599,12 @@ public abstract class PersonalPage extends Page {
 		}
 	}
 	
-	public Object getNameToAssertInPersonalDetails(ParamObject personData) {
+	public String getNameToAssertInPersonalDetails(ParamObject personData) {
 		String assertFullName = (personData.getName() != null && personData.getMiddleName() != null) ? personData.getName()
 				+ " " + personData.getMiddleName(): personData.getName();
 		assertFullName += (personData.getMaidenName() != null) ? " (" + personData.getMaidenName() + ") " : " ";
 		assertFullName += personData.getLastName();
-		if(assertFullName.length() <= 35){
+		if(assertFullName.length() < 39){
 			return assertFullName;
 		} else {
 			return assertFullName.substring(0,35)+"...";

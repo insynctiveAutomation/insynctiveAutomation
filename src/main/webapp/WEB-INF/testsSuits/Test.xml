@@ -1,10 +1,18 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Test Suite" verbose="1" preserve-order="true">
-	<test name="Test" >
+<suite name="Test Suite" verbose="1" >
+	<test name="Test">
 	  <classes>
 	    <class name="insynctive.tests.PersonFileTest">
 	      <methods>
-	        <include name="checkIfChangeEmailIsSending" />
+	       <!-- Initial Test -->
+	        <include name="loginTest" />
+	        <include name="createPersonTest" />
+
+			<!-- HEADER TEST-->	
+	        <include name="changeNameInPersonalInfo" />
+	        <include name="assignTask" />
+	        <include name="startChecklist" />
+	        
 	      </methods>
 	    </class>
 	  </classes>

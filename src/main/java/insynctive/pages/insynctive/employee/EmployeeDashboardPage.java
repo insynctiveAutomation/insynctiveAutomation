@@ -344,6 +344,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 	}
 
 	public void changeEmail(String newEmail) throws Exception {
+		swichToFirstFrame(driver);
 		clickAButton(persoanlTab);
 		swichToIframe(personaliFrame);
 		
@@ -351,5 +352,27 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		personalPage.tabiFrame = personaliFrame;
 		
 		personalPage.changePrimaryEmail(newEmail);
+	}
+
+	public void addAlternateiveEmail(String newEmail) throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(persoanlTab);
+		swichToIframe(personaliFrame);
+		
+		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
+		personalPage.tabiFrame = personaliFrame;
+		
+		personalPage.addAlternativeEmail(newEmail);
+	}
+
+	public void makePrimaryEmail(String emailToMakePrimary) throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(persoanlTab);
+		swichToIframe(personaliFrame);
+		
+		PersonalPage personalPage = new EmployeePersonalPage(driver, enviroment);
+		personalPage.tabiFrame = personaliFrame;
+		
+		personalPage.makeEmailPrimaryEmail(emailToMakePrimary);
 	}
 }
