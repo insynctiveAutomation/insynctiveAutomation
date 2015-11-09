@@ -64,8 +64,8 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	
 	/* Get Status of the Test */
 	this.getTestsStatus = function(){
-		if(self.testDetails && self.testSuiteValue){
-			testService.getTestsStatus(self.testSuiteValue, function(data) {
+		if(self.testDetails && self.tlaIndex && self.isOneInNotRun()){
+			testService.getTestsStatus(self.tlaIndex, function(data) {
 				self.testStatus = data;
 				self.updateStatus();
 			});
@@ -130,7 +130,6 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	/* Intervar 3 segs */
 	this.getTestsStatus();
 	$interval(function() {
-		
 		if(self.testDetails && self.tlaIndex && self.isOneInNotRun()) {
 			testService.getTestsStatus(self.tlaIndex, function(data) {
 				self.testStatus = data;

@@ -162,7 +162,7 @@ public class TestSuite {
 			newTest.setTestID(null);
 			newTest.setTestName(test.getTestName());
 			newTest.setTestSuiteID(null);
-			test.getParamObject().setParamObjectID(null);
+			if(test.getParamObject() != null) test.getParamObject().setParamObjectID(null);
 			newTest.setParamObject(test.getParamObject());
 			
 			newTestSuite.addMethod(newTest);

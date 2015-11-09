@@ -210,11 +210,10 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		waitPageIsLoad();
 		
 		String assertTitleName = personData.getName()+ " " + personData.getLastName();
-		waitUntilIsLoaded(fullNameLink);
-		boolean fullNameAssert = fullNameLink.getText().equals(assertTitleName);
+		boolean fullNameAssert = isElementTextEquals(fullNameLink, assertTitleName);
 		
 		swichToFirstFrame(driver);
-		boolean titleNameAssert = nameLink.getText().equals(assertTitleName);
+		boolean titleNameAssert = isElementTextEquals(nameLink, assertTitleName);
 		
 		return fullNameAssert && titleNameAssert;
 	}

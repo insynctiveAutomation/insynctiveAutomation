@@ -305,6 +305,12 @@ public class TestController {
 		return testResults;
 	} 
 	
+	@RequestMapping(value = "/getTestSuite/{ID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestSuite getTestsRuns(@PathVariable("ID") Integer id) {
+		return testSuiteDao.getTestSuiteByID(id);
+	}
+	
 	@RequestMapping(value = "/get/{xmlName}" ,method = RequestMethod.GET)
 	@ResponseBody
 	public TestSuite getTestsRuns(@PathVariable("xmlName") String xmlName) {
