@@ -453,19 +453,69 @@ public class ParamObject {
 	}
 	
 	@JsonIgnore
-	public Field getFieldByName(String name) throws NoSuchFieldException, SecurityException {
-		Class<?> aClass = this.getClass();
-		Field field = aClass.getField(name);
-		return field;
+	public Field getFieldByName(String name) throws Exception {
+		try {
+			String[] splitName = name.split("\\.");
+			Class<?> aClass = this.getClass();
+			switch(splitName.length){
+				case 1:
+					return aClass.getField(splitName[0]);
+				case 2:
+					return aClass.getField(splitName[0]).getType().getField(splitName[1]);
+				case 3:
+					return aClass.getField(splitName[0]).getType().getField(splitName[1]).getType().getField(splitName[2]);
+				default: 
+					throw new Exception();
+			}
+		} catch(Exception ex){
+			ex.printStackTrace();
+			throw new Exception("Error on getFieldByName("+name+")");
+		}
 	}
 	
 	@JsonIgnore
-	public Object getValueByName(String name) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Class<?> aClass = this.getClass();
-		Field field = aClass.getField(name);
-		return (Object)field.get(this);
+	public Object getValueByName(String name) throws Exception {
+		try{
+			String[] splitName = name.split("\\.");
+			switch(splitName.length){
+				case 1:
+					return getFieldByName(name).get(this);
+				case 2:
+					return getFieldByName(name).get(getFieldByName(splitName[0]).get(this));
+				case 3:
+					return getFieldByName(name).get(getFieldByName(splitName[1]).get(getFieldByName(splitName[0]).get(this)));
+				default:
+					throw new Exception();
+			}
+		} catch(Exception ex){
+			ex.printStackTrace();
+			throw new Exception("Error on getValueByName("+name+")");
+		}
 	}
 
+	public Object getFieldToSet(String name) throws Exception {
+		try{
+			String[] splitName = name.split("\\.");
+			switch(splitName.length){
+				case 1:
+					return this;
+				case 2:
+					if(getFieldByName(splitName[0]).get(this) == null){
+						Field field = getFieldByName(splitName[0]);
+						field.set(this, field.getType().newInstance()); 
+					}
+					return getFieldByName(splitName[0]).get(this);
+				case 3:
+					
+				default:
+					throw new Exception();
+			}
+		} catch(Exception ex){
+			ex.printStackTrace();
+			throw new Exception("Error on getValueByName("+name+")"); 
+		}
+	}
+	
 	public Boolean getBooleanParam() {
 		return booleanParam;
 	}

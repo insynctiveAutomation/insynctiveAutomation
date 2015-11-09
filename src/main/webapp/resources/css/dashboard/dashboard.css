@@ -1,0 +1,74 @@
+a:hover {
+ cursor:pointer;
+}
+
+.success {
+	color: green;
+}
+
+.failed {
+	color: red;
+}
+
+.skiped {
+	color: yellow
+}
+
+.started {
+	color: red;
+	font-size: large;
+}
+
+.testContainer {
+	padding: 0px 30%;
+}
+
+.testResult {color = red;
+	
+}
+
+.container {
+	padding: 0px 10%;
+}
+
+.centered {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	/* bring your own prefixes */
+	transform: translate(-50%, -50%);
+}
+
+.top-right-corner {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.top-left-corner {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.top-left-corner > a {
+	padding-left: 10px;
+}
+
+.bottom-right-corner {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.modal-sm {
+	min-width: 315px;
+}
+
+.width-panel{
+	width: 313px;
+}
+
+#configurationLink {
+	padding-right: 10px;
+}

@@ -32,4 +32,12 @@ public class TestDao {
 		return (Integer) openSession().save(test);
 	}
 	
+	public void saveOrUpdate(Test test){
+		openSession().saveOrUpdate(test);
+	}
+
+	public void update(Test test) {
+		openSession().update(test);
+	}
+	
 }

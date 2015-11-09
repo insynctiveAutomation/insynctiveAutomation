@@ -6,41 +6,45 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "USAddress")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class USAddress {
 	
 	@Id
 	@GeneratedValue
 	@Column(name = "USAddress_id")
-	private Integer usAddressID;
+	public Integer usAddressID;
 	
 	@Column(name = "street")
-	private String street;
+	public String street;
 	
 	@Column(name = "apt")
-	private String apt;
+	public String apt;
 	
 	@Column(name = "second_street")
-	private String secondStreet;
+	public String secondStreet;
 	
 	@Column(name = "city")
-	private String city;
+	public String city;
 	
 	@Column(name = "state")
-	private String state;
+	public String state;
 	
 	@Column(name = "zip_code")
-	private String zipCode;
+	public String zipCode;
 	
 	@Column(name = "county")
-	private String county;
+	public String county;
 	
 	@Column(name = "short_description")
-	private String shortDescription;
+	public String shortDescription;
 	
 	@Column(name = "same_as_home")
-	private boolean sameAsHome;
+	public Boolean sameAsHome;
 	
 	public USAddress() {
 
@@ -101,11 +105,11 @@ public class USAddress {
 		this.shortDescription = shortDescription;
 	}
 
-	public int getUsAddressID() {
+	public Integer getUsAddressID() {
 		return usAddressID;
 	}
 
-	public void setUsAddressID(int usAddressID) {
+	public void setUsAddressID(Integer usAddressID) {
 		this.usAddressID = usAddressID;
 	}
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('parameterApp',  [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'configuration']);
+var app = angular.module('parameterApp',  [ 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
 
 app.controller('modalParametersController', function(defaulObject, selectedTest, className, $cookies, $http, $window, $modal, $scope, $interval, parameterService) {
 	
@@ -13,11 +13,11 @@ app.controller('modalParametersController', function(defaulObject, selectedTest,
 	
 	/* On Load Methods */
 	this.getParameters = function() {
-		parameterService.getParameters(className, selectedTest.name, function(data) {
+		parameterService.getParameters(className, selectedTest.testName, function(data) {
 			self.parameters = data.params;
 			data.params.forEach(function(params) {
-				var param = params.split('.')[0]
-				selectedTest.paramObject[param] = selectedTest.paramObject[param]
+				var paramSplit = params.split('.')[0]
+				selectedTest.paramObject[paramSplit] = selectedTest.paramObject[paramSplit]
 			});
 			self.labels = data.labels;
 			self.loading = false;

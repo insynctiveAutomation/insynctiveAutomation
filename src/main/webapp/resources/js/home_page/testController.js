@@ -34,10 +34,6 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	};
 	this.getTestsSuites();
 	
-	this.addParamObject = function(includeMethod) {
-		includeMethod.paramObject = self.paramObject;
-	}
-	
 	/* On change TestSuite Combo */
 	this.getTestDetails = function(testSuiteValue){
 		testService.getTestDetails(testSuiteValue, function(data) {
@@ -56,7 +52,6 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 			
 			self.runStatus = "The Test is Running...";
 			self.tlaIndex = data.index;
-//			self.loaderVisible = "hidden";
 			
 			testService.getVideoLink(self.tlaIndex, function(data) {
 				self.videoLink = data;
@@ -108,29 +103,35 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	};
 	
 	this.updateStatus = function(){
-		_.map(self.testDetails.includeMethods, self.getMethodStatus)
+		_.map(self.testDetails.tests, self.getMethodStatus)
 	};
 	
 	this.getMethodStatus = function(method){
-		var passedTestsNames = self.testStatus.passedTests.map(function(test){return test.name});
-		var failedTestsNames = self.testStatus.failedTests.map(function(test){return test.name});
-		var skipedTestsNames = self.testStatus.skipedTests.map(function(test){return test.name});
+		var passedTestsNames = self.testStatus.passedTests.map(function(test){return test.testName});
+		var failedTestsNames = self.testStatus.failedTests.map(function(test){return test.testName});
+		var skipedTestsNames = self.testStatus.skipedTests.map(function(test){return test.testName});
 		
-		if(passedTestsNames.indexOf(method.name) != -1){
+		if(passedTestsNames.indexOf(method.testName) != -1){
 			method.status = "SUCCESS"
-		} else if(failedTestsNames.indexOf(method.name) != -1){
+		} else if(failedTestsNames.indexOf(method.testName) != -1){
 			method.status = "FAILED"
-		} else if(skipedTestsNames.indexOf(method.name) != -1){
+		} else if(skipedTestsNames.indexOf(method.testName) != -1){
 			method.status = "SKIPED"
 		} else {
 			method.status = "NOT RUN"
 		}
 	};
 
+	this.isOneInNotRun = function(){
+		var statuses = self.testDetails.tests.map(function(test){return test.status})
+		return statuses.indexOf("NOT RUN") != -1 || statuses.indexOf("-") != -1
+	}
+	
 	/* Intervar 3 segs */
 	this.getTestsStatus();
 	$interval(function() {
-		if(self.testDetails && self.tlaIndex) {
+		
+		if(self.testDetails && self.tlaIndex && self.isOneInNotRun()) {
 			testService.getTestsStatus(self.tlaIndex, function(data) {
 				self.testStatus = data;
 				self.updateStatus();
@@ -167,6 +168,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	};
 	this.getConfig();
 	
+	//On View/Edit Parameters click
 	this.openEditParameters = function(test) {
 		var modalInstance = $modal.open({
 			animation : true,
@@ -189,5 +191,4 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	       }
 		});
 	}
-	
 });

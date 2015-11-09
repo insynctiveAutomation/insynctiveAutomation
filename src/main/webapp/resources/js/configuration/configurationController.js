@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('configuration', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', ]);
+var app = angular.module('configuration', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
 
 app.controller('configurationController', function($cookies, $http, $window, $modal, $scope, $interval, configurationService) {
 	

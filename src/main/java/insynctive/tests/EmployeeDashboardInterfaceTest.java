@@ -134,7 +134,7 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.MEDICAL_BENEFIT_NAME, ParamObjectField.DENTAL_BENEFIT_NAME, ParamObjectField.VISION_BENEFIT_NAME}, 
-			labels={"Medica Benefit Name", "Dental Benefit Name", "Vision Benefit Name"})
+			labels={"Medical Benefit Name", "Dental Benefit Name", "Vision Benefit Name"})
 	public void electBenefits(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 

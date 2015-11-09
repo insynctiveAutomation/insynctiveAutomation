@@ -1,6 +1,6 @@
 function TestDetail() {
-	this.className = '';
 	this.testName = '';
+	this.className = '';
 	this.includeMethods = [];
 }
 

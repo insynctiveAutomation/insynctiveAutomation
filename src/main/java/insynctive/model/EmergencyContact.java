@@ -6,26 +6,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "EmergencyContact")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EmergencyContact {
 	
 	@Id
 	@GeneratedValue
 	@Column(name = "emergency_contact_id")
-	private Integer emergencyID;
+	public Integer emergencyID;
 	
 	@Column(name = "name")
-	String name;
+	public String name;
 	
 	@Column(name = "relationship")
-	String relationship;
+	public String relationship;
 	
 	@Column(name = "email")
-	String email;
+	public String email;
 	
 	@Column(name = "phone")
-	String phone;
+	public String phone;
 	
 	public EmergencyContact() {
 
@@ -72,11 +75,11 @@ public class EmergencyContact {
 		this.phone = phone;
 	}
 
-	public int getEmergencyID() {
+	public Integer getEmergencyID() {
 		return emergencyID;
 	}
 
-	public void setEmergencyID(int emergencyID) {
+	public void setEmergencyID(Integer emergencyID) {
 		this.emergencyID = emergencyID;
 	}
 	

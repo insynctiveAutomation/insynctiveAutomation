@@ -63,7 +63,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -86,7 +86,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -109,7 +109,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -132,7 +132,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -155,7 +155,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -178,7 +178,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -201,7 +201,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -224,7 +224,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 
@@ -247,7 +247,7 @@ public class LoadingTests extends TestMachine {
 		}
 	}
 	
-	@Test(dependsOnMethods="loginTest")
+	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.LOADING_TIME}, 

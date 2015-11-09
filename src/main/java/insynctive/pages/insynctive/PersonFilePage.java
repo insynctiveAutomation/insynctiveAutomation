@@ -94,8 +94,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 				clickAButton(assignTaskButton);
 				swichToFirstFrame(driver);
 				waitUntilIsLoaded(taskName);
-				clickAButton(taskName);
-				taskName.sendKeys(task.getDetail());
+				setTextInField(taskName, task.getDetail());
 				// taskName.sendKeys(Keys.TAB);
 				waitUntilIsLoaded(taskInstuctions);
 				setTextInField(taskInstuctions, task.getBasicTaskInstruction());
@@ -286,6 +285,10 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		}
 	}
 
+	public boolean isChecklistAssigned() throws Exception {
+		return isChecklistAssigned("Employee Onboarding");
+	}
+	
 	public boolean isChecklistAssigned(String checklistName) throws Exception {
 		try {
 			Sleeper.sleep(5000, driver);

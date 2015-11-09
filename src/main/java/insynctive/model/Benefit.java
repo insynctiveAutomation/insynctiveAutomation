@@ -7,10 +7,10 @@ import javax.persistence.Embeddable;
 public class Benefit {
 
 	@Column(name = "name")
-	private String name = "";
+	public String name = "";
 	
 	@Column(name = "company")
-	private String company = "";
+	public String company = "";
 	
 	public String getName() {
 		return name;

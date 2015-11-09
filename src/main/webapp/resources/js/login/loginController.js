@@ -15,7 +15,7 @@ app.controller('LoginController', function($cookies, $scope, $window, loginServi
 		$scope.disabled = true;
 		loginService.login({username : self.username, password : self.password}, function(data) {
 			$cookies.put('userID', data.accID);
-			$window.location.href = '/';
+			$window.location.href = $window.location.pathname === '/login' ? '/' : $window.location.href;
 		}, function(data){
 			self.loginNotification = 'Error on log in'
 			self.notification = data;

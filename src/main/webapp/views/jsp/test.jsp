@@ -49,6 +49,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
 </head>
 
 <body data-ng-controller="TestController as testCtrl">
@@ -80,28 +81,13 @@
 		
 		<!-- VIEW OF RUN -->
 		<div class="testRunning">
-			<h3>{{testCtrl.testDetails.testName}} <small>{{testCtrl.testDetails.className}}</small></h3>
+			<h3>{{testDetails.testSuiteName}} <small>{{testDetails.className}}</small></h3>
 			<span class="started"> {{testCtrl.runStatus}}</span>
 			<img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif" ng-class="[testCtrl.loaderVisible]"><br/>
 			<a ng-if="testCtrl.videoLink" ng-href="{{testCtrl.videoLink}}" class="video" target="_blank"> Watch Video </a>
-			<table class="table table-striped table-hover table-condensed">
-				<tbody ng-if="testCtrl.testDetails">
-					<tr>
-						<th>Methods</th>
-						<th>Test Parameters</th>
-						<th>Status</th>
-					</tr>
-					<tr data-ng-repeat="method in testCtrl.testDetails.includeMethods" class="animate-repeat">
-						<td class="col-sm-5"><span ng-bind="method.name"></span></td>
-						<td class="col-sm-5"><a id="editParameters" ng-click="testCtrl.openEditParameters(method)">View/Edit Parameters</a></td>
-						<td class="col-sm-2"><result ng-model="method.status" bind="method.status" value="{{method.status}}"/></td>
-					</tr>
-				</tbody>
-			</table>
-			<button ng-if="testCtrl.runStatus" ng-click="testCtrl.clearTests()" class="btn btn-lg btn-primary">Clear Test!</button>
+			<vew-of-run model="testCtrl.testDetails" controller="testCtrl"></vew-of-run>
+			<button ng-if="testCtrl.runStatus" ng-click="testCtrl.clearTests()" class="btn btn-lg btn-primary">Clear Test!</button>	
 		</div>
-	</div>
-	
 	<div class="alert alert-danger animate-repeat" ng-repeat="error in testCtrl.errors">{{error}}</div>
 </body>
 </html>

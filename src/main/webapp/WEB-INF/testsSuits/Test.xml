@@ -4,15 +4,11 @@
 	  <classes>
 	    <class name="insynctive.tests.PersonFileTest">
 	      <methods>
-	       <!-- Initial Test -->
-	        <include name="loginTest" />
+	      	<include name="loginTest" />
 	        <include name="createPersonTest" />
-
-			<!-- HEADER TEST-->	
-	        <include name="changeNameInPersonalInfo" />
+	        <include name="addEmergencyContact" />
 	        <include name="assignTask" />
-	        <include name="startChecklist" />
-	        
+	        <include name="assignJob" />
 	      </methods>
 	    </class>
 	  </classes>
