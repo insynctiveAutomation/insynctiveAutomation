@@ -2,11 +2,13 @@
 
 var app = angular.module('dashboardApp');
 
-app.controller('TestSuiteController', function($cookies, $http, $window, $modal, $scope, $interval, testDetails, refreshGrid, testService) {
+app.controller('TestSuiteController', function($cookies, $http, $window, $modal, $scope, $interval, testDetails, refreshGrid, testService, testParameterText, editable) {
 	var self = this;
 	this.testDetails = testDetails;
 	this.refreshGrid = refreshGrid;
+	this.editable = editable;
 	$scope.testDetails = testDetails;
+	$scope.testParameterText = testParameterText;
 	
 	
 	//On View/Edit Parameters click
@@ -28,6 +30,9 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 				},
 				className: function() {
 					return self.testDetails.className;
+				},
+				editable: function() {
+					return self.editable;
 				}
 	       }
 		});
@@ -59,16 +64,24 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 	this.isOneInNotRun = function(){
 		var statuses = self.testDetails.tests.map(function(test){return test.status})
 		return statuses.indexOf("NOT RUN") != -1 || statuses.indexOf("-") != -1
+//		return true
 	}
 	
+	this.checkStatus = function(){
+		testService.getTestsStatus(self.testDetails.testSuiteID, function(data) {
+			self.testStatus = data;
+			self.updateStatus();
+	}
+		
+	this.getTestsStatus = function(){
+		if(self.refreshGrid && self.isOneInNotRun()){
+			self.checkStatus();
+		}
+	};
+		
 	/* Intervar 3 segs DUPLICATED CODE*/
 	$interval(function() {
-		if(self.refreshGrid && self.isOneInNotRun()) {
-			testService.getTestsStatus(self.testDetails.testSuiteID, function(data) {
-				self.testStatus = data;
-				self.updateStatus();
-			})
-		}
+		self.getTestsStatus();
 	}, 3000);
 	
 });

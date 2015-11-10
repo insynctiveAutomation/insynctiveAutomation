@@ -19,6 +19,15 @@ public class Sleeper {
 		}
 	}
 	
+	public static void threadSleep(int time){
+		try{
+			Thread.sleep(time); //This is for LOCAL
+		} catch(Exception cE) {
+			cE.printStackTrace();
+			System.out.println(cE);
+		}
+	}
+	
 	public static void setIsRemote(boolean value){
 		Sleeper.isRemote = value;
 	}

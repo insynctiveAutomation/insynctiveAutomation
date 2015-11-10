@@ -69,9 +69,15 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	WebElement AdditionalInstructioniFrame;
 	@FindBy(id = "mobile-phone")
 	WebElement mobilePhoneNumber;
+	@FindBy(id = "work-phone")
+	List<WebElement> phones;
 
 	@FindBy(id = "JQWindowBigOverlayBreadcrumbTitle")
-	private WebElement goToPerson;
+	WebElement goToPerson;
+
+	
+	@FindBy(css = "#content > div:nth-of-type(5) > div > div")
+	List<WebElement> emergencyContacts;
 
 	
 	
@@ -357,7 +363,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	public boolean isAddAlternativePhoneNumber(String primaryPhone, String runIDString) throws Exception {
 		Sleeper.sleep(4000, driver);
 		waitPageIsLoad();
-		List<WebElement> elements = driver.findElements(By.id("work-phone"));
+		List<WebElement> elements = phones;
 		for(WebElement element : elements){
 			if(element != null && element.getText().equals(parsePhoneNumber(getPhoneNumber(getSecondaryPhoneNumber(primaryPhone), runIDString)))){
 				return true;
@@ -379,7 +385,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	/* Utilities */
 	public int getNumberOfEmergencyContacts () throws Exception {
 		waitPageIsLoad();
-     	return driver.findElements(By.cssSelector("#content > div:nth-of-type(5) > div > div")).size();
+     	return emergencyContacts.size();
 	}
 
 	/* Private Methods */

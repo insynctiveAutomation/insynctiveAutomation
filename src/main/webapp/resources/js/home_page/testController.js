@@ -52,6 +52,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 			
 			self.runStatus = "The Test is Running...";
 			self.tlaIndex = data.index;
+			self.resetTestsStatus();
 			
 			testService.getVideoLink(self.tlaIndex, function(data) {
 				self.videoLink = data;
@@ -60,16 +61,6 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		}, function(data){
 			data;
 		});
-	};
-	
-	/* Get Status of the Test */
-	this.getTestsStatus = function(){
-		if(self.testDetails && self.tlaIndex && self.isOneInNotRun()){
-			testService.getTestsStatus(self.tlaIndex, function(data) {
-				self.testStatus = data;
-				self.updateStatus();
-			});
-		}
 	};
 	
 	/* On Clear Button */
@@ -122,20 +113,35 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		}
 	};
 
+	this.resetTestsStatus = function(){
+		_.map(self.testDetails.tests, function(test){
+			test.status = "-";
+		})
+	}
+	
 	this.isOneInNotRun = function(){
 		var statuses = self.testDetails.tests.map(function(test){return test.status})
 		return statuses.indexOf("NOT RUN") != -1 || statuses.indexOf("-") != -1
 	}
 	
+	this.checkStatus = function(){
+		testService.getTestsStatus(self.tlaIndex, function(data) {
+			self.testStatus = data;
+			self.updateStatus();
+		})
+	}
+	
+	/* Get Status of the Test */
+	this.getTestsStatus = function(){
+		if(self.testDetails && self.tlaIndex && self.isOneInNotRun()){
+			self.checkStatus();
+		}
+	};
+	
 	/* Intervar 3 segs */
 	this.getTestsStatus();
 	$interval(function() {
-		if(self.testDetails && self.tlaIndex && self.isOneInNotRun()) {
-			testService.getTestsStatus(self.tlaIndex, function(data) {
-				self.testStatus = data;
-				self.updateStatus();
-			})
-		}
+		self.getTestsStatus();
 	}, 3000);
 	
 	this.showPanel = function(){
@@ -186,6 +192,9 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 				},
 				className: function() {
 					return self.testDetails.className;
+				},
+				editable: function() {
+					return true;
 				}
 	       }
 		});

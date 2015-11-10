@@ -22,6 +22,7 @@ import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
+import insynctive.utils.HibernateUtil;
 import insynctive.utils.Sleeper;
 import insynctive.utils.data.TestEnvironment;
 
@@ -41,14 +42,11 @@ public class CreatePersonTest extends TestMachine {
 	@AfterClass
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		super.teardown();
-		Transaction transaction = openSession().beginTransaction();
-		Session session = openSession();
-		createPersonForm = (CreatePersonForm) session.get(CreatePersonForm.class, personID);
+		createPersonForm = HibernateUtil.createPersonFormDao.getAccountByID(personID);
 		createPersonForm.setStatusOfTest(generalStatus);
 		createPersonForm.setEnvironment(TestEnvironment.FIREFOX.browser);
-		session.save(createPersonForm);
-		session.flush();
-		transaction.commit();
+		
+		HibernateUtil.createPersonFormDao.saveCreatePersonForm(createPersonForm);
 	}
 	
 	@Parameters({"personID"})	
@@ -62,8 +60,7 @@ public class CreatePersonTest extends TestMachine {
 		testEnvironment = TestEnvironment.FIREFOX;
 		
 		//Search for The Person Data
-		Session session = openSession();
-		createPersonForm = (CreatePersonForm) session.get(CreatePersonForm.class, personID);
+		createPersonForm = HibernateUtil.createPersonFormDao.getAccountByID(personID);
 		
 		//Complete Data
 		account.getAccountProperty().setRemote(true);

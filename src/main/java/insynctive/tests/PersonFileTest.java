@@ -31,14 +31,8 @@ import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
-@TransactionConfiguration
-@Transactional
 public class PersonFileTest extends TestMachine {
 	private USAddress usaddress = null;
-	
-	@Resource
-	protected SessionFactory sessionFactory;
-	
 	
 	@BeforeClass
 	@Parameters({"accountID", "runID", "bowser", "testID", "testName"})

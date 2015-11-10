@@ -2,7 +2,7 @@
 
 var app = angular.module('parameterApp',  [ 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
 
-app.controller('modalParametersController', function(defaulObject, selectedTest, className, $cookies, $http, $window, $modal, $scope, $interval, parameterService) {
+app.controller('modalParametersController', function(defaulObject, selectedTest, className, $cookies, $http, $window, $modal, $scope, $interval, parameterService, editable) {
 	
 	var self = this;
 	this.parameters = [];
@@ -10,6 +10,7 @@ app.controller('modalParametersController', function(defaulObject, selectedTest,
 	this.loading = true;
 	this.selectedTest = selectedTest;
 	this.testName = selectedTest.name;
+	this.editable = editable;
 	
 	/* On Load Methods */
 	this.getParameters = function() {

@@ -7,11 +7,13 @@ import insynctive.dao.TestDao;
 import insynctive.dao.TestSuiteDao;
 import insynctive.model.Test;
 import insynctive.model.TestSuite;
+import insynctive.utils.Sleeper;
+import insynctive.utils.TestResults;
  
 public class RunnableTest implements Runnable {
 
 	private TestNG testNG;
-	private TestSuite testSuite;;
+	private TestSuite testSuite;
 	private TestListenerAdapter testListenerAdapter;  
 	private TestSuiteDao testSuiteDao;
 	private TestDao testDao;
@@ -33,7 +35,8 @@ public class RunnableTest implements Runnable {
 		testNG.setPreserveOrder(true);
 		testNG.run();
 		setResult();
-		
+		Sleeper.threadSleep(3500);
+		TestResults.removeScopeVars(testSuite.getTestSuiteID());
 	}
 
 	private void setResult() {

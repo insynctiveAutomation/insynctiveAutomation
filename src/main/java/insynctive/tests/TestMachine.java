@@ -12,17 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -41,10 +51,14 @@ import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
 import insynctive.utils.data.TestEnvironment;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
 public abstract class TestMachine {
 
-	//Hibernate connection
-	public SessionFactory sessionFactory;
+	@Autowired
+	private ApplicationContext applicationContext;
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	//Session Name
 	public String sessionName = "Insynctive Session";
@@ -56,8 +70,6 @@ public abstract class TestMachine {
 	public InsynctiveProperty properties;
 	public Account account; 
 	public ParamObject paramObject;
-	
-	public Session session = null;
 	
 	public WebDriver driver;
 	
@@ -97,38 +109,30 @@ public abstract class TestMachine {
 	
 	public void tearUp(Integer accountID, Integer runID) throws Exception{
 		try{
-			CrossBrowserAccount crossBrowserAccount = (CrossBrowserAccount) HibernateUtil.get(CrossBrowserAccount.class, 1);
+			System.out.println(applicationContext);
+			System.out.println(sessionFactory);
+			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);
 
 			username = crossBrowserAccount.getEmail();
 			password = crossBrowserAccount.getPassword();
 			
 		
-			account = (Account) HibernateUtil.get(Account.class, accountID);
+			account = HibernateUtil.accDao.getAccountByID(accountID);
 			account.setRunID(runID != null ? runID : account.getRunID());
 			
 			paramObject = account.getParamObject();
 			properties = account.getAccountProperty();
 			Sleeper.setIsRemote(properties.isRemote());
 			
-			TestResults.addResult("<h2>"+sessionName+"</h2>");
 		} catch(Exception ex){
-			System.out.println(ex);
+			ex.printStackTrace();
 			throw new Exception("Fail on TearUp "+ex);
 		}
-	}
-	
-	public Session getCurrentSession(){
-		return sessionFactory.getCurrentSession();
-	}
-	
-	public Session openSession(){
-		return sessionFactory.openSession();
 	}
 	
 	@AfterClass(alwaysRun = true)
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		try{
-			HibernateUtil.closeSession();
 			if(properties.isRemote()){this.driver.quit();}
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -249,12 +253,6 @@ public abstract class TestMachine {
 		
 		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
 
-		if(duration != null){
-			TestResults.addResult(result+" (Duration: "+duration/1000000+" ms)"); 
-		} else {
-			TestResults.addResult(result); 
-		}
-		
 		if (!status){
 			tags.add(result);
 			generalStatus = status;
@@ -263,7 +261,6 @@ public abstract class TestMachine {
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		if(properties.isRemote()){
-			TestResults.addResult("<a href=\""+getPublicVideoLinkOfJob()+"\">Watch Video</a>");
 			makeCurlToChangeStatus();
 		}
 		if(properties.isNotification()) {sendSlack();}
@@ -374,7 +371,7 @@ public abstract class TestMachine {
 	
 	public void changeParamObject(Integer testID) throws Exception{
 		try{
-			Test test = (Test) HibernateUtil.get(Test.class, testID);
+			Test test = HibernateUtil.testDao.getTestByID(testID);
 			paramObject = test.getParamObject();
 			System.out.println("Param Object Changes to: "+testID+" ID");
 		} catch(Exception ex) {

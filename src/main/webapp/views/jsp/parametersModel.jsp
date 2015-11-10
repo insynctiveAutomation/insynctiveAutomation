@@ -16,9 +16,8 @@
 		
 		<div ng-if="parametersCtrl.parameters.length > 0" class="col-xs-5 col-md-5">
 			<div style="height: 25px; margin-bottom: 10px;" ng-repeat="param in parametersCtrl.parameters track by $index">
-				<!-- <input type="text" ng-model="parametersCtrl.selectedTest.paramObject[param]"/> -->
-				<parameter style="text-align: left" ng-if="param.split('.').length == 2" param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param.split('.')[0]][param.split('.')[1]]"></parameter>
-				<parameter style="text-align: left" ng-if="param.split('.').length == 1" param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param.split('.')[0]]"></parameter>
+				<parameter editable="parametersCtrl.editable" style="text-align: left" ng-if="param.split('.').length == 2" param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param.split('.')[0]][param.split('.')[1]]"></parameter>
+				<parameter editable="parametersCtrl.editable" style="text-align: left" ng-if="param.split('.').length == 1" param="{{param}}" model="parametersCtrl.selectedTest.paramObject[param.split('.')[0]]"></parameter>
 			</div>
 		</div>
 </div>

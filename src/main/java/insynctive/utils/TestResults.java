@@ -5,25 +5,58 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.TestListenerAdapter;
+import org.testng.annotations.Listeners;
+
 public class TestResults {
 
-	public static List<String> results = new ArrayList<String>();
-	public static Map<Integer, String> video = new HashMap<>();
-	
-	public static void resetResults(){
-		results = new ArrayList<String>();
-	}
+	public static Map<Integer, String> videos = new HashMap<>();
+	public static Map<Integer, TestListenerAdapter> listeners = new HashMap<>();
+	public static Map<Integer, Thread> workers = new HashMap<>();
 
-	public static void addResult(String result) {
-		results.add(result);
-	}
-
+	//Video Utils
 	public static void addVideo(Integer id, String jobURL) {
-		video.put(id, jobURL);
+		videos.put(id, jobURL);
+	}
+	
+	public static void removeVideo(Integer id){
+		videos.remove(id);
 	}
 	
 	public static String  getVideo(Integer id) {
-		return video.get(id);
+		return videos.get(id);
+	}
+	
+	//Listener Utils
+	public static void addListener(Integer id, TestListenerAdapter listener) {
+		listeners.put(id, listener);
+	}
+	
+	public static void removeListener(Integer id) {
+		listeners.remove(id);
+	}
+	
+	public static TestListenerAdapter getListener(Integer id){
+		return listeners.get(id);
+	}
+	
+	//Worker Utils
+	public static void addWorker(Integer id, Thread worker){
+		workers.put(id, worker);
+	}
+	
+	public static void removeWorker(Integer id) {
+		workers.remove(id);
+	}
+	
+	public Thread getWorker(Integer id){
+		return workers.get(id);
+	}
+	
+	public static void removeScopeVars(Integer id) {
+		removeListener(id);
+		removeVideo(id);
+		removeWorker(id);
 	}
 	
 	

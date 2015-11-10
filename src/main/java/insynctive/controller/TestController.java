@@ -57,9 +57,11 @@ import insynctive.model.Test;
 import insynctive.model.TestSuite;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
+import insynctive.utils.HibernateUtil;
 import insynctive.utils.LoginForm;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
+import insynctive.utils.TestResults;
 
 @Controller
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
@@ -78,13 +80,14 @@ public class TestController {
 	private final TestDao testDao;
 	private final TestSuiteDao testSuiteDao;
 	
+	//Servlet Context Helper
 	private final ServletContext servletContext;
-	private Account account;
 
 	//SESSION SCOPES
+	private Account account;
 	private Integer logedAccID;
-	private Map<Integer, Thread> workers = new HashMap<>();
-	private Map<Integer, TestListenerAdapter> tla = new HashMap<>();
+	
+	
 
 	@Inject
 	public TestController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao, TestSuiteDao testSuiteDao) {
@@ -95,6 +98,7 @@ public class TestController {
 		this.createPersonFormDao = createPersonFormDao;
 		this.testDao = testDao;
 		this.testSuiteDao = testSuiteDao;
+		HibernateUtil.init(testDao, propertyDao, servletContext, accDao, crossDao, createPersonFormDao, testSuiteDao);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -281,6 +285,8 @@ public class TestController {
 	@RequestMapping(value = "/status/{index}" ,method = RequestMethod.GET)
 	@ResponseBody
 	public TestResultsTestNG getStatus(@PathVariable("index") Integer index){
+		Map<Integer, TestListenerAdapter> tla = TestResults.listeners;
+		
 		List<Test> resultsAux = new ArrayList<Test>();
 		TestResultsTestNG testResults = new TestResultsTestNG();
 		
@@ -429,6 +435,8 @@ public class TestController {
 	@RequestMapping(value = "/test/{testName}/{index}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String getTest(@PathVariable("testName") String testName, @PathVariable("index") Integer index) throws ConfigurationException{
+		Map<Integer, TestListenerAdapter> tla = TestResults.listeners;
+		
 		tla.get(index).getPassedTests().forEach(failTest -> System.out.println(failTest));
 		tla.get(index).getSkippedTests().forEach(failTest -> System.out.println(failTest));
 		tla.get(index).getFailedTests().forEach(failTest -> System.out.println(failTest));
@@ -451,7 +459,6 @@ public class TestController {
 			}
 		}
 		
-		insynctive.utils.TestResults.resetResults();
 		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
 		
 		TestNG testNG = new TestNG();
@@ -481,7 +488,6 @@ public class TestController {
 			}
 		}
 		
-		insynctive.utils.TestResults.resetResults();
 		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
 		
 		TestNG testNG = new TestNG();
@@ -519,7 +525,7 @@ public class TestController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public void clearTestResult(@PathVariable("index") Integer index) throws ConfigurationException {
-		tla.remove(index);
+		TestResults.removeListener(index);
 	}
 
 	/*Private Methods*/
@@ -582,13 +588,13 @@ public class TestController {
 	}
 	
 	private String checkStatusOfMethodInTLA(Integer tlaIndex, String nameOfTest) throws Exception {
-		List<ITestResult> passedTests = tla.get(tlaIndex).getPassedTests();
+		List<ITestResult> passedTests = TestResults.listeners.get(tlaIndex).getPassedTests();
 		for(ITestResult test : passedTests){
 			if(test.getMethod().getMethodName().equals("createPersonTest")){
 				return "{\"status\": true}";
 			}
 		}
-		List<ITestResult> failedTests = tla.get(tlaIndex).getFailedTests();
+		List<ITestResult> failedTests = TestResults.listeners.get(tlaIndex).getFailedTests();
 		for(ITestResult test : failedTests){
 			if(test.getMethod().getMethodName().equals("createPersonTest")){
 				throw new Exception("The Methods Create Job Fails");
@@ -621,6 +627,7 @@ public class TestController {
 		TestSuite testSuite = new TestSuite();
 		testSuite.setEnvironment(environment);
 		testSuite.setBrowser(browser);
+		testSuite.setTestSuiteName(testSuiteName);
 		List<XmlSuite> suites = getXmlTestSuiteForUI(testSuiteName);
 		List<Test> listIncMethod = new ArrayList<Test>();
 		for (XmlSuite suite : suites) {
@@ -689,11 +696,10 @@ public class TestController {
 		}
 		
 		//Is not using now.
-		insynctive.utils.TestResults.resetResults();
 		
 		//Create Test listener and add it.
 		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
-		tla.put(testSuite.getTestSuiteID(), testListenerAdapter);
+		TestResults.addListener(testSuite.getTestSuiteID(), testListenerAdapter);
 		
 		//Make test and run the thread.
 		TestNG testNG = new TestNG();
@@ -703,7 +709,7 @@ public class TestController {
 		
 		//START TEST IN OTHER THREAD
 		Thread thread = new Thread(new RunnableTest(testNG, testSuite, testListenerAdapter, testSuiteDao, testDao));
-		workers.put(testSuite.getTestSuiteID(), thread);
+		TestResults.addWorker(testSuite.getTestSuiteID(), thread);
 		thread.start();
 		
 		return testSuite.getTestSuiteID();

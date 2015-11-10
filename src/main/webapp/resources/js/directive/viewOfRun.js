@@ -5,7 +5,8 @@ app.directive("vewOfRun", function($compile, $cookies){
 		restrict: "E",
 		scope: {
 			testDetails: '=model',
-			controller: '='
+			controller: '=',
+			testParameterText: '@'
 		},
 		templateUrl: '/testSuite',
 		transclude: true,

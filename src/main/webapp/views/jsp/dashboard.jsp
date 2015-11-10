@@ -63,7 +63,6 @@
 				<th>Status</th>
 				<th>Browsers</th>
 				<th>Environment</th>
-				<th>Remote</th>
 				<th>Tester</th>
 				<th>View</th>
 				<th>Retry</th>
@@ -74,9 +73,8 @@
 				<td class="col-sm-1"><result ng-model="testSuite.status" bind="testSuite.status" value="{{testSuite.status}}" /></td>
 				<td class="col-sm-1"><span ng-bind="testSuite.browser"></span></td>
 				<td class="col-sm-1"><span ng-bind="testSuite.environment"></span></td>
-				<td class="col-sm-1"><span ng-bind="testSuite.remote"></span></td>
 				<td class="col-sm-1"><span ng-bind="testSuite.tester"></span></td>
-				<td class="col-sm-3"><a id="" ng-click="testCtrl.openTestSuite(testSuite)">View TestSuite</a></td>
+				<td class="col-sm-3"><a id="" ng-click="testCtrl.openTestSuite(testSuite, $event)">View TestSuite</a></td>
 				<td ng-if="!testSuite.isLoadingRetry && !testSuite.error" class="col-sm-3"><a id="" ng-click="testCtrl.retry(testSuite)">Retry</a></td>
 				<td ng-if="testSuite.error" class="col-sm-3">ERROR ON SERVER</td>
 				<td ng-if="testSuite.isLoadingRetry" class="col-sm-3"><img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif"></td>

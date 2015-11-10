@@ -28,7 +28,7 @@ public class CreatePersonFormDao {
 			return (CreatePersonForm) openSession().get(CreatePersonForm.class, id);
 		}
 		
-		public Integer saveCreatePersonForm(CreatePersonForm form){
-			return (Integer) openSession().save(form);
+		public Integer saveCreatePersonForm(CreatePersonForm createPersonForm){
+			return (Integer) openSession().save(createPersonForm);
 		}
 }
