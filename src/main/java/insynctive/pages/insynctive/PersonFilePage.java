@@ -114,7 +114,6 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		} catch(Exception ex){
 			swichToFirstFrame(driver);
 			clickAButton(goToPerson);
-			goToPersonalTab();
 			throw ex;
 		}
 	}
@@ -125,24 +124,20 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	
 	
 	public void assignChecklist(String checklistName) throws Exception {
-		try {
-			waitPageIsLoad();
-			openTaskTab();
-			swichToIframe(tabiFrame);
-			goToRunninChecklist();
-			clickAButton(startChecklistButton);
-			swichToIframe(startChecklistiFrame);
-			Sleeper.sleep(3000, driver);
-			//TODO MOVE Test Template TO DB
-			clickAButton(checkListsCombo);
-			Sleeper.sleep(1500, driver);
-			selectElementInComboWithoutClickCombo(selectChecklist, checklistName, "li");
-			Sleeper.sleep(2000, driver);
-			clickAButton(assignChecklistButton);
-			Sleeper.sleep(8000, driver);
-		} finally {
-			goToPersonalTab();
-		}
+		waitPageIsLoad();
+		openTaskTab();
+		swichToIframe(tabiFrame);
+		goToRunninChecklist();
+		clickAButton(startChecklistButton);
+		swichToIframe(startChecklistiFrame);
+		Sleeper.sleep(3000, driver);
+		//TODO MOVE Test Template TO DB
+		clickAButton(checkListsCombo);
+		Sleeper.sleep(1500, driver);
+		selectElementInComboWithoutClickCombo(selectChecklist, checklistName, "li");
+		Sleeper.sleep(2000, driver);
+		clickAButton(assignChecklistButton);
+		Sleeper.sleep(8000, driver);
 	}
 
 	public void changeTitle(String title, String departament) throws Exception {
@@ -188,7 +183,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 
 	/* Check if is complete Methods */
 	public boolean isChangePrimaryEmail(String email) throws Exception {
-		Sleeper.sleep(4000, driver);
+		Sleeper.sleep(6000, driver);
 		waitPageIsLoad();
 		return primaryEmailLink.getText().equals(email);
 	}
@@ -285,8 +280,6 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			return isElementTextEquals(firstTaskLink, tasks.get(0).getDetail());
 		} catch(Exception ex) {
 			throw ex;
-		} finally {
-			goToPersonalTab();
 		}
 	}
 
@@ -296,17 +289,9 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	
 	public boolean isChecklistAssigned(String checklistName) throws Exception {
 		try {
-			Sleeper.sleep(5000, driver);
-			waitUntilnotVisibility(loadingSpinner);
-			swichToFirstFrame(driver);
-			clickAButton(tasksTab);
-			swichToIframe(tabiFrame);
-			goToRunninChecklist();
 			return isElementTextEquals(firstChecklist, checklistName);
 		} catch(Exception ex){
 			throw ex;
-		} finally {
-			goToPersonalTab();
 		}
 	}
 

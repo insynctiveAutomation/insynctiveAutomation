@@ -22,7 +22,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +56,6 @@ import insynctive.model.Test;
 import insynctive.model.TestSuite;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
-import insynctive.utils.HibernateUtil;
 import insynctive.utils.LoginForm;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
@@ -98,7 +96,6 @@ public class TestController {
 		this.createPersonFormDao = createPersonFormDao;
 		this.testDao = testDao;
 		this.testSuiteDao = testSuiteDao;
-		HibernateUtil.init(testDao, propertyDao, servletContext, accDao, crossDao, createPersonFormDao, testSuiteDao);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -416,17 +413,17 @@ public class TestController {
 		//Person File RUN
 		TestSuite form = createTestSuite(paramObject,"Person File", environment, "FIREFOX");
 		runTest(form, nightlyAcc);
-		form.setBrowser("CHROME");
+		form = createTestSuite(paramObject,"Person File", environment, "CHROME");
 		runTest(form, nightlyAcc);
-		form.setBrowser("IPAD");
+		form = createTestSuite(paramObject,"Person File", environment, "IPAD");
 		runTest(form, nightlyAcc);
 		
 		//Loading Page RUN
 		TestSuite loadingForm = createTestSuite(paramObject,"Loading Page", environment, "FIREFOX");
 		runTest(loadingForm, nightlyAcc);
-		loadingForm.setBrowser("CHROME");
+		loadingForm = createTestSuite(paramObject, "Loading Page", environment, "CHROME");
 		runTest(loadingForm, nightlyAcc);
-		loadingForm.setBrowser("IPAD");
+		loadingForm = createTestSuite(paramObject, "Loading Page", environment, "IPAD");
 		runTest(loadingForm, nightlyAcc);
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";

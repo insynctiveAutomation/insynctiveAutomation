@@ -65,13 +65,14 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 		var statuses = self.testDetails.tests.map(function(test){return test.status})
 		return statuses.indexOf("NOT RUN") != -1 || statuses.indexOf("-") != -1
 //		return true
-	}
+	};
 	
 	this.checkStatus = function(){
 		testService.getTestsStatus(self.testDetails.testSuiteID, function(data) {
 			self.testStatus = data;
 			self.updateStatus();
-	}
+		}
+	)};
 		
 	this.getTestsStatus = function(){
 		if(self.refreshGrid && self.isOneInNotRun()){

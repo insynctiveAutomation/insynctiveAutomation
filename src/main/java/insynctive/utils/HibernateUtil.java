@@ -21,8 +21,7 @@ public class HibernateUtil {
 	public static TestDao testDao;
 	public static TestSuiteDao testSuiteDao;
 	
-	
-	public static void init(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao, TestSuiteDao testSuiteDao){
+	public static synchronized void init(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao, TestSuiteDao testSuiteDao){
 		HibernateUtil.propertyDao = propertyDao;
 		HibernateUtil.accDao = accDao;
 		HibernateUtil.crossDao = crossDao;

@@ -60,6 +60,7 @@ public class PersonFileTest extends TestMachine {
 		startTest(testEnvironment);
 		try{ 
 			LoginPage loginPage = login();
+			Sleeper.sleep(1500, driver);
 			boolean result = loginPage.isLoggedIn();
 			Debugger.log("loginTest => "+result, isSaucelabs);
 			setResult(result, "Login Test");
@@ -521,6 +522,8 @@ public class PersonFileTest extends TestMachine {
 		}catch (Exception ex){ 
 			failTest("Assign Task", ex, isSaucelabs);
 			assertTrue(false);
+		} finally {
+			personFilePage.goToPersonalTab();
 		}
 	}
 	
@@ -543,6 +546,8 @@ public class PersonFileTest extends TestMachine {
 			personFilePage.goToPersonalTab();
 			failTest("Start Checklist", ex, isSaucelabs);
 			assertTrue(false);
+		} finally {
+			personFilePage.goToPersonalTab();
 		}
 	}
 	
