@@ -123,7 +123,22 @@ public class ParamObject {
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "USAddress_id")
 	public USAddress usAddress;
-	
+
+	@Column(name = "doc_name")
+	public String docName = "";
+
+	@Column(name = "doc_category")
+	public String docCategory = "";
+
+	@Column(name = "doc_process")
+	public String docProcess = "";
+
+	@Column(name = "doc_plan_name")
+	public String docPlanName = "";
+
+	@Column(name = "doc_keyword")
+	public String docKeyword = "";
+
 	public enum Gender{
 		MALE("Male"), FEMALE("Female"), UNKNOWN("Unknown"); 
 		public final String name;
@@ -387,6 +402,46 @@ public class ParamObject {
 
 	public void setChecklistName(String checklistName) {
 		this.checklistName = checklistName;
+	}
+
+	public String getDocName() {
+		return docName;
+	}
+
+	public void setDocName(String docName) {
+		this.docName = docName;
+	}
+
+	public String getDocCategory() {
+		return docCategory;
+	}
+
+	public void setDocCategory(String docCategory) {
+		this.docCategory = docCategory;
+	}
+
+	public String getDocProcess() {
+		return docCategory;
+	}
+
+	public void setDocProcess(String doc_process) {
+		this.docProcess = docProcess;
+	}
+
+	public String getDocPlanName() {
+		return docPlanName;
+	}
+
+	public void setDocPlanName(String doc_plan_name) {
+		this.docPlanName = docPlanName;
+	}
+
+	public String getDocKeyword() {
+		return docKeyword;
+	}
+
+	public void setDocKeyword(String docKeyword) {
+		this.docKeyword = docKeyword;
 	}
 
 	public Integer getLoadingTime() {

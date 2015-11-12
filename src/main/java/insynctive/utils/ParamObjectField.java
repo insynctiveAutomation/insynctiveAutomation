@@ -1,7 +1,7 @@
 package insynctive.utils;
 
 public enum ParamObjectField {
-	
+
 	PERSON_ID("param_object_id"), BOOLEAN_PARAM("booleanParam"), 
 	NAME("name"), MIDDLE_NAME("middleName"),
 	LAST_NAME("lastName"), MAIDEN_NAME("maidenName"), BIRTH_DATE("birthDate"),
@@ -19,8 +19,11 @@ public enum ParamObjectField {
 	
 	MEDICAL_BENEFIT_NAME("medicalBenefit.name"),MEDICAL_BENEFIT_COMPANY("medicalBenefit.company"),
 	DENTAL_BENEFIT_NAME("dentalBenefit.name"), DENTAL_BENEFIT_COMPANY("dentalBenefit.company"),
-	VISION_BENEFIT_NAME("visionBenefit.name"), VISION_BENEFIT_COMPANY("visionBenefit.company");
-	
+	VISION_BENEFIT_NAME("visionBenefit.name"), VISION_BENEFIT_COMPANY("visionBenefit.company"),
+
+	DOC_NAME("docName"), DOC_CATEGORY("docCategory"), DOC_PROCESS("docProcess"), DOC_PLAN_NAME("docPlanName"), DOC_KEYWORD("docKeyword");
+
+
 	private String value;
 	
 	ParamObjectField(String value){

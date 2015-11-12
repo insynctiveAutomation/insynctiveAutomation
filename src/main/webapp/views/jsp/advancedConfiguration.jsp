@@ -186,6 +186,16 @@
 				<benefit-company ng-model="configCtl.configuration.paramObject.visionBenefit.company"></benefit-company>
 		 		<br/>     
 			</div>
+
+			<div class="col-md-6 col-md-offset-6">
+				<h4>Documents</h4>
+				<label for="">Document Name: </label>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.docName" /><br/>
+
+				<label for="">Document Category: </label>
+				<input ng-required="true" ng-model="configCtl.configuration.paramObject.docCategory" />	<br/>
+			</div>
+
 			<div class="col-md-offset-5 col-md-2" style="padding-top: 20px;"><button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button></div>
 	    </form>
     </div>
