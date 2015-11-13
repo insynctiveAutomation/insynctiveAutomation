@@ -3,6 +3,9 @@ package insynctive.pages.insynctive.employee;
 import insynctive.model.ParamObject;
 import insynctive.pages.PersonalPage;
 import insynctive.utils.Sleeper;
+
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,6 +34,9 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 	WebElement documentIFrame;
 	@FindBy(xpath = "//*[@id='viewer1']]")
 	WebElement docViewer;
+	
+	@FindBy(id = "pcc-pageList-viewer1")
+	WebElement documentElement;
 
 
 
@@ -48,16 +54,25 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 		return false;
 	}
 
-	public Boolean getDocument(ParamObject document) throws Exception{
-		WebElement docTitle = findElementByText("div", document.docName);
-		WebElement docCategory = findElementByText("div", document.docCategory);
-		return equals(docTitle, document.getDocName()) && equals(docCategory, document.getDocCategory()) ;
+	public Boolean isDocumentInGrid(String documentName, String documentCategory) throws Exception{
+		WebElement docTitle = findElementByText("div", documentName);
+		WebElement docCategory = findElementByText("div", documentCategory);
+		return equals(docTitle, documentName) && equals(docCategory, documentCategory) ;
 	}
 
-	public void viewDocument(ParamObject document) throws Exception{
-		clickAButton(getViewButton(document.getDocName()));
-		Sleeper.sleep(8000, driver);
+	public void viewDocument(String documentName) throws Exception{
+		clickAButton(getViewButton(documentName));
 		swichToIframe(documentIFrame);
+	}
+	
+	//TODO Duplicate code
+	public boolean isOpenDocument() throws Exception {
+		Sleeper.sleep(3000, driver);
+		swichToFirstFrame(driver);
+		swichToIframe(documentIFrame);
+		waitUntilIsLoaded(documentElement);
+		List<WebElement> pageInDocument = documentElement.findElements(By.xpath(".//div[contains(@class, 'igAnchor')]"));
+		return pageInDocument.size() > 0;
 	}
 
 	public void searchKeyword(String benefitName) throws Exception {

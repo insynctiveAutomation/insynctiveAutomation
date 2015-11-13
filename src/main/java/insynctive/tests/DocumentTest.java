@@ -22,12 +22,12 @@ import static org.junit.Assert.assertTrue;
 public class DocumentTest extends TestMachine{
 
     @BeforeClass
-    @Parameters({"accountID", "runID", "bowser", "testID"})
-    public void tearUp(String accountID, String runID, String bowser, String testSuiteID) throws Exception {
+    @Parameters({"accountID", "runID", "bowser", "testID", "testName"})
+    public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName) throws Exception {
         super.testSuiteID = Integer.parseInt(testSuiteID);
         super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
         testEnvironment = TestEnvironment.valueOf(bowser);
-        this.sessionName = "Document Test";
+        this.sessionName = testName;
     }
 
     @Test
@@ -52,17 +52,27 @@ public class DocumentTest extends TestMachine{
     @Test(dependsOnMethods="loginTest")
     @Parameters({"TestID"})
     @ParametersFront(
-            attrs={ParamObjectField.DOC_NAME, ParamObjectField.DOC_CATEGORY, ParamObjectField.DOC_KEYWORD},
-            labels={"Document Name", "Document Category", "Document Keyword"})
+            attrs={ParamObjectField.DOC_NAME, ParamObjectField.DOC_CATEGORY, ParamObjectField.DOC_KEYWORD, ParamObjectField.LOADING_TIME},
+            labels={"Document Name", "Document Category", "Document Keyword", "Documents count"})
     public void getDocuments(@Optional("TestID") Integer testID) throws Exception {
         changeParamObject(testID);
         try{
             EmployeeDocumentsPage employeeDocuments = new EmployeeDocumentsPage(driver, properties.getEnvironment());
-            Boolean result = employeeDocuments.getDocument(paramObject);
+            Boolean result = true;
+            
+            for(int index = 1; index <= paramObject.loadingTime; index++){
+            	result = result && employeeDocuments.isDocumentInGrid(paramObject.docName+" "+index, paramObject.docCategory);
+            	employeeDocuments.viewDocument(paramObject.docName+" "+index);
+            	result = result && employeeDocuments.isOpenDocument();
+            	employeeDocuments.closeBigOverlay();
+            }
+
             Debugger.log("getDocuments => "+result, isSaucelabs);
             setResult(result, "Documents displayed");
             assertTrue(result);
-            employeeDocuments.viewDocument(paramObject);
+            
+            
+            
         } catch(Exception ex){
             failTest("No Documents displayed",  ex, isSaucelabs);
             assertTrue(false);

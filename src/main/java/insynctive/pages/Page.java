@@ -57,7 +57,10 @@ public class Page {
 	public WebElement imgPhotoInHeader;
 	
 	@FindBy(id = "popupAccount_linkLogout")
-	public WebElement singoutLink; 
+	public WebElement singoutLink;
+	
+	@FindBy(xpath = "//div[contains(@id, 'JQWindowBigOverlay')]//div[contains(@class, 'jqx-window-close-button-background')]//div[contains(@class, 'jqx-window-close-button')]")
+	public WebElement closeOverlayBtn; 
     
     public Page(){
     	
@@ -396,6 +399,11 @@ public class Page {
 		waitPageIsLoad();
 		long endTime = System.nanoTime();
 		return (endTime-startTime)/1000000;
+	}
+	
+	public void closeBigOverlay() throws Exception{
+		swichToFirstFrame(driver);
+		clickAButton(closeOverlayBtn);
 	}
 
 
