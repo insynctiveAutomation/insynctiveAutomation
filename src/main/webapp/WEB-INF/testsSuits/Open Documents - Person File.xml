@@ -6,11 +6,6 @@
 	      <methods>
 	      	<include name="loginTest" />
 	        <include name="openPersonFIle" />
-	        <include name="goToDocuments" />
-	        <include name="openDocuments" />
-	        <include name="openDocuments" />
-	        <include name="openDocuments" />
-	        <include name="openDocuments" />
 	        <include name="openDocuments" />
 	      </methods>
 	    </class>

@@ -55,11 +55,6 @@ import insynctive.utils.data.TestEnvironment;
 @ContextConfiguration
 public abstract class TestMachine {
 
-	@Autowired
-	private ApplicationContext applicationContext;
-	@Autowired
-	private SessionFactory sessionFactory;
-	
 	//Session Name
 	public String sessionName = "Insynctive Session";
 	public String testName = "Test Name";
@@ -109,8 +104,6 @@ public abstract class TestMachine {
 	
 	public void tearUp(Integer accountID, Integer runID) throws Exception{
 		try{
-			System.out.println(applicationContext);
-			System.out.println(sessionFactory);
 			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);
 
 			username = crossBrowserAccount.getEmail();

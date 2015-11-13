@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -294,15 +295,66 @@ public class Page {
 		WebElement element = null;
 		int times = 1;
 		boolean notFound = true;
-		while(times <= 20 && notFound)
+		while(times <= 20 && notFound){
 			try{
-				element = driver.findElement(By.xpath("//"+tagName+"[contains(text(),'"+text+"')]"));
+				element = driver.findElement(By.xpath("//"+tagName+"[contains(text(), '"+text+"')]"));
 				notFound = false;
 			} catch(Exception ex) {
 				times++;
+				Sleeper.sleep(500, driver);
 			}
-		if(element == null){throw new ElementNotFoundException(getMessageFromWebElement(element)+" is not found", null);}
+		}
+		if(element == null){throw new ElementNotFoundException("<"+tagName+"> "+ text + " <"+tagName+"> is not found", null);}
 		return element;
+	}
+	
+	public WebElement findElementByTextInList(List<WebElement> elements, String text) throws ElementNotFoundException{
+		WebElement returnElement = null;
+		for(WebElement element : elements){
+			try{ 
+				returnElement = element.findElement(By.xpath("./div[contains(text(), '"+text+"')]"));
+				break;
+			} catch(Exception ex){ }
+		}
+		if(returnElement == null){throw new ElementNotFoundException("Text:"+text+ "in "+elements+" is not found", null);}
+		return returnElement;
+		
+	}
+
+	
+	public WebElement findElementByTagAndClass(String tagName, String clazz) throws ElementNotFoundException{
+		WebElement element = null;
+		int times = 1;
+		boolean notFound = true;
+		while(times <= 20 && notFound){
+			try{
+				//div[contains(concat(' ', text(), ' '), ' File ')]
+				element = driver.findElement(By.xpath("//"+tagName+"[contains(@class, '"+clazz+"')]"));
+				notFound = false;
+			} catch(Exception ex) {
+				times++;
+				Sleeper.sleep(500, driver);
+			}
+		}
+		if(element == null){throw new ElementNotFoundException("<"+tagName+"class="+clazz+"> is not found", null);}
+		return element;
+	}
+	
+	public List<WebElement> findElementsWithTag(String tagName) throws ElementNotFoundException{
+		List<WebElement> elements = null;
+		int times = 1;
+		boolean notFound = true;
+		while(times <= 20 && notFound){
+			try{
+				elements = driver.findElements(By.xpath("//"+tagName));
+				notFound = false;
+			} catch(Exception ex) {
+				times++;
+				Sleeper.sleep(500, driver);
+			}
+		}
+		if(elements == null){throw new ElementNotFoundException(tagName+"elements are not found", null);}
+		return elements;
 	}
 	
 	public String getMessageFromWebElement(WebElement element){

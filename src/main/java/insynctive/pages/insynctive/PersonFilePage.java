@@ -1,5 +1,6 @@
 package insynctive.pages.insynctive;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.model.EmergencyContact;
 import insynctive.model.ParamObject;
 import insynctive.model.ParamObject.Gender;
@@ -39,6 +41,9 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	WebElement tasksTab;
 	@FindBy(css = "#statusesListHeader > li:nth-child(4)")
 	WebElement employmentTab;
+	@FindBy(css = "#statusesListHeader > li:nth-child(6)")
+	WebElement documentTab;
+	
 	@FindBy(css = "#btnAssignTask > span")
 	WebElement assignTaskButton;
 	@FindBy(id = "lName")
@@ -71,14 +76,20 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	WebElement mobilePhoneNumber;
 	@FindBy(id = "work-phone")
 	List<WebElement> phones;
-
 	@FindBy(id = "JQWindowBigOverlayBreadcrumbTitle")
 	WebElement goToPerson;
 
-	
 	@FindBy(css = "#content > div:nth-of-type(5) > div > div")
 	List<WebElement> emergencyContacts;
 
+	@FindBy(id = "pcc-pageList-viewer1")
+	WebElement documentElement;
+	@FindBy(id = "bigoverlayiframe")
+	WebElement documentiFrame;
+
+	
+	@FindBy(className = "doc-name")
+	List<WebElement> docRows;
 	
 	
 	public PersonFilePage(WebDriver driver, String enviroment) {
@@ -112,8 +123,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 				Sleeper.sleep(5000, driver);
 			}
 		} catch(Exception ex){
-			swichToFirstFrame(driver);
-			clickAButton(goToPerson);
+			returnToPerson();
 			throw ex;
 		}
 	}
@@ -383,10 +393,42 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		waitUntilIsLoaded(runningChecklist);
 		clickAButton(runningChecklist);
 	}
+
+	public void openDocument(String documentName) throws Exception {
+		clickAButton(findViewDocumentBtn(documentName));
+	}
+
+	public WebElement findViewDocumentBtn(String documentName) throws ElementNotFoundException, Exception {
+		swichToFirstFrame(driver);
+		swichToIframe(tabiFrame);
+		WebElement docWithText = findElementByTextInList(docRows, documentName);
+		WebElement viewBtn = docWithText.findElement(By.xpath("./../../..//div[@class = 'doc-view']")); 
+				
+		return viewBtn;
+	}
+	
+	public boolean isOpenDocument() throws Exception {
+		Sleeper.sleep(3000, driver);
+		swichToFirstFrame(driver);
+		swichToIframe(documentiFrame);
+		waitUntilIsLoaded(documentElement);
+		List<WebElement> pageInDocument = documentElement.findElements(By.xpath(".//div[contains(@class, 'igAnchor')]"));
+		return pageInDocument.size() > 0;
+	}
+	
+	public void returnToPerson() throws Exception{
+		swichToFirstFrame(driver);
+		clickAButton(goToPerson);
+	}
 	
 	public void goToPersonalTab() throws Exception{
 		swichToFirstFrame(driver);
-		clickAButton(personalLink);
+		clickAButton(personalTab);
+	}
+
+	public void goToDocumentsTab() throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(documentTab);
 	}
 
 	// TODO METHODS

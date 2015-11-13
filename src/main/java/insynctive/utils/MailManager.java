@@ -83,9 +83,12 @@ public class MailManager {
 	}
 	
 	public static boolean checkIfChangeEmailIsSending(String username, String password, String beforeEmail) throws Exception {
-
+		try {
 			StringBuffer buffer = getEmailByBody(username, password, "Your login was changed from "+beforeEmail+" to "+username);
-			
 			return buffer!=null;
+		} catch(Exception ex){
+			return false;
+		}
+			
 		}
 }

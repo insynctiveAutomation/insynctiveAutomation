@@ -143,7 +143,30 @@ public class PersonFileTest extends TestMachine {
 			assertTrue(false);
 		}
 	}
-
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"Email to search"})
+	public void openPersonFIle(@Optional("TestID") Integer testID) throws Throwable {
+		try{ 
+			changeParamObject(testID);
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+			boolean result;
+				homePage.openPersonFile(paramObject.getSearchEmail());
+				result = homePage.isPersonFileOpened();
+				Sleeper.sleep(5000, driver);
+			
+			setResult(result, "Open Person File" + paramObject.getSearchEmail());
+			Debugger.log("openPersonFIle => "+result, isSaucelabs);
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Open Person File", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
@@ -177,7 +200,7 @@ public class PersonFileTest extends TestMachine {
 			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
 			employeePage.changeEmail(paramObject.getEmailToChange(account.getRunIDString()));
 			
-			boolean result = true;
+			boolean result = true; //TODO
 			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
 			setResult(result, "changePrimaryEmailFromEmployee");
 			assertTrue(result);
@@ -198,7 +221,7 @@ public class PersonFileTest extends TestMachine {
 			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
 			employeePage.addAlternateiveEmail(paramObject.getEmailToChange(account.getRunIDString()));
 			
-			boolean result = true;
+			boolean result = true; //TODO
 			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
 			setResult(result, "changePrimaryEmailFromEmployee");
 			assertTrue(result);
@@ -219,7 +242,7 @@ public class PersonFileTest extends TestMachine {
 			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
 			employeePage.makePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
 			
-			boolean result = true;
+			boolean result = true; //TODO
 			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
 			setResult(result, "changePrimaryEmailFromEmployee");
 			assertTrue(result);
@@ -676,6 +699,7 @@ public class PersonFileTest extends TestMachine {
 			Page page = new Page(driver);
 			page.logout();
 			Sleeper.sleep(2000, driver);
+			//Assertation
 		}catch (Exception ex){ 
 			failTest("log out fail", ex, isSaucelabs);
 			assertTrue(false);
@@ -692,12 +716,58 @@ public class PersonFileTest extends TestMachine {
 		changeParamObject(testID);
 		try {
 			makeFirstLogin(paramObject.email, properties.getGmailPassword(), paramObject.loginPassword);//Re utilize EMAIL param because is a String
-			boolean result = true;
+			boolean result = true; //TODO
 			Debugger.log("First Login  => "+result, isSaucelabs);
 			setResult(result, "Change Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("First Login ", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.EMAIL}, 
+			labels={"Base Email (After change email will add '+runID+test' and Before change email will add '+runID')"})
+	public void checkIfChangeEmailIsSending(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		try {
+			boolean result = MailManager.checkIfChangeEmailIsSending(paramObject.getEmailToChange(account.getRunIDString()), properties.getGmailPassword(), paramObject.getEmailWithRunID(account.getRunIDString()));//Re utilize lastname param because is a String
+			Debugger.log("checkIfChangeEmailIsSending  => "+result, isSaucelabs);
+			setResult(result, "Check If Change Email is Sending");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Check If Change Email is Sending", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.NAME, ParamObjectField.LOADING_TIME}, 
+			labels={"Document name", "Documents count"})
+	public void openDocuments(@Optional("TestID") Integer testID) throws Exception {
+		Boolean result = true;
+		try {
+			changeParamObject(testID);
+			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			personFilePage.goToDocumentsTab();
+			
+			for(int index = 1 ; index <= paramObject.loadingTime ; index++){
+				personFilePage.openDocument(paramObject.name + " " + index);
+				result = result && personFilePage.isOpenDocument(); 
+				personFilePage.returnToPerson();
+			}
+			
+			Debugger.log("openDocuments  => "+result, isSaucelabs);
+			setResult(result, "Open document and check for content");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Open document and check for content", ex, isSaucelabs);
 			assertTrue(false);
 		}
 	}
@@ -712,32 +782,6 @@ public class PersonFileTest extends TestMachine {
 		return resetPasswordPage.checkIfEmployeePasswordWasChange();
 	}
 	
-	@Test
-	@Parameters({"TestID"})
-	@ParametersFront(
-			attrs={ParamObjectField.EMAIL}, 
-			labels={"Base Email (After change email will add '+runID+test' and Before change email will add '+runID')"})
-	public void checkIfChangeEmailIsSending(@Optional("TestID") Integer testID)
-			throws Exception {
-		changeParamObject(testID);
-		try {
-			boolean result = checkIfChangeEmailIsSending(paramObject.getEmailToChange(account.getRunIDString()), properties.getGmailPassword(), paramObject.getEmailWithRunID(account.getRunIDString()));//Re utilize lastname param because is a String
-			Debugger.log("checkIfChangeEmailIsSending  => "+result, isSaucelabs);
-			setResult(result, "Check If Change Email is Sending");
-			assertTrue(result);
-		}catch (Exception ex){ 
-			failTest("Check If Change Email is Sending", ex, isSaucelabs);
-			assertTrue(false);
-		}
-	}
-	
-	public boolean checkIfChangeEmailIsSending(String gmailEmail, String gmailPassword, String beforeEmail) throws Exception{
-		try {
-			return MailManager.checkIfChangeEmailIsSending(gmailEmail, gmailPassword, beforeEmail);
-		} catch(Exception ex) {
-			return false;
-		}
-	}
 }
 
 
