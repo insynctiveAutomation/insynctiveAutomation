@@ -62,7 +62,7 @@ public class DocumentTest extends TestMachine{
             Debugger.log("getDocuments => "+result, isSaucelabs);
             setResult(result, "Documents displayed");
             assertTrue(result);
-
+            employeeDocuments.viewDocument(paramObject);
         } catch(Exception ex){
             failTest("No Documents displayed",  ex, isSaucelabs);
             assertTrue(false);

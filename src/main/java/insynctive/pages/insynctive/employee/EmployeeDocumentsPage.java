@@ -2,6 +2,7 @@ package insynctive.pages.insynctive.employee;
 
 import insynctive.model.ParamObject;
 import insynctive.pages.PersonalPage;
+import insynctive.utils.Sleeper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,6 +27,13 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 	WebElement docName;
 	@FindBy(xpath = "//div[@class='doc-name']/div[2]")
 	WebElement docCategory;
+	@FindBy(id = "bigoverlayiframe")
+	WebElement documentIFrame;
+	@FindBy(xpath = "//*[@id='viewer1']]")
+	WebElement docViewer;
+
+
+
 
 	public EmployeeDocumentsPage(WebDriver driver, String enviroment) {
 		super(driver);
@@ -46,8 +54,10 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 		return equals(docTitle, document.getDocName()) && equals(docCategory, document.getDocCategory()) ;
 	}
 
-	public void openDocument(ParamObject document){
-//		return equals(docName, document.getDocName());
+	public void viewDocument(ParamObject document) throws Exception{
+		clickAButton(getViewButton(document.getDocName()));
+		Sleeper.sleep(8000, driver);
+		swichToIframe(documentIFrame);
 	}
 
 	public void searchKeyword(String benefitName) throws Exception {
@@ -58,7 +68,11 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 //		waitUntilIsLoaded(Dashboard);
 //		clickAButton(Documents);
 	}
-
+	public WebElement getViewButton (String text){
+		String sel = "//div[contains(text(), '"+text+"')]/ancestor::div[3]/div[@class='col-view']//img";
+		WebElement element = driver.findElement(By.xpath(sel));
+		return element;
+	}
 
 
 }
