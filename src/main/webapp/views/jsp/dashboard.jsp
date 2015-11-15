@@ -28,35 +28,44 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/dashboard/dashboard.css">
 
+<!-- Entities -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
+
 <!-- Configuration modal -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountService.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
 
+<!-- Advanced module -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+	
 <!-- Parameters Modal -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersService.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersDirectives.js"></script>
  	
-<!-- Test Entities -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
-
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
-
+<!-- Account Modal -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountService.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
 
+<!-- Test -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
+
+<!-- Dashboard -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/testSuiteController.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/viewTestSuite/viewController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardService.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardDirectives.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/viewTestSuite/viewController.js"></script>
 
 </head>
 <body data-ng-controller="DashboardController as testCtrl">
