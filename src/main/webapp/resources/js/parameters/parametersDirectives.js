@@ -14,8 +14,9 @@ app.directive("parameter", function($compile, $cookies){
 					elm.replaceWith($compile('<gender ng-required="true" ng-model="model">' + elm.html() + '</gender>')(scope));
 				} else if(scope.param === 'maritalStatus'){
 					elm.replaceWith($compile('<marital-status ng-required="true" ng-model="model">' + elm.html() + '</marital-status>')(scope));
-				} else if(scope.param === 'usAddress.sameAsHome'){
+				} else if(scope.param === 'usAddress.sameAsHome' || scope.param === 'booleanParamOne' || scope.param === 'booleanParamTwo'){
 					elm.replaceWith($compile('<yes-no ng-model="model">' + elm.html() + '</yes-no>')(scope));
+//					elm.replaceWith($compile('<input ng-required="true" type="text" ng-model="model">' + elm.html() + '</input>')(scope));
 				} else if(scope.param === 'booleanParam'){
 					elm.replaceWith($compile('<select ng-model="model" ng-options="o.v as o.n for o in [{ n: \'Open Person File\', v: true }, { n: \'Create Person\', v: false }]">' + elm.html() + '</select>')(scope));
 				} else if(scope.param === 'medicalBenefit.company' || scope.param === 'dentalBenefit.company' || scope.param === 'visionBenefit.company'){

@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Test Suite" verbose="1" >
+	<test name="Test">
+	  <classes>
+	    <class name="insynctive.tests.PersonFileTest">
+	      <methods>
+	      	<include name="loginTest" />
+	      	<include name="config2FAOn" />
+	      	<include name="logOut" />
+	      	<include name="loginWith2FAPhone" />
+	      	<include name="config2FAOff" />
+	      </methods>
+	    </class>
+	  </classes>
+	</test>
+</suite>

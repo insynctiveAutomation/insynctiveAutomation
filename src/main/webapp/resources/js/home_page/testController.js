@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'accountApp', 'parameterApp']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'accountApp', 'parameterApp', 'configuration']);
 
 app.controller('TestController', function($cookies, $http, $window, $modal, $scope, $interval, testService, accountService) {
 	var self = this;

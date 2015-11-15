@@ -21,7 +21,9 @@ import insynctive.pages.Page;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.ResetPasswordPage;
+import insynctive.pages.insynctive.TwoFAPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
+import insynctive.pages.insynctive.agent.settings.PeoplePage;
 import insynctive.pages.insynctive.employee.EmployeeDashboardPage;
 import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
@@ -71,16 +73,37 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
+	//TODO DUPLICATED CODE
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username", "Login Password"})
+	public void loginAsAgentTest(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+
+		try{ 
+			LoginPage loginPage = login();
+			Sleeper.sleep(1500, driver);
+			boolean result = loginPage.isLoggedIn();
+			Debugger.log("loginTest => "+result, isSaucelabs);
+			setResult(result, "Login Test");
+			assertTrue(result);
+		} catch(Exception ex){
+			failTest("Login Test", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
 	labels={"Login Username", "Login Password"})
 	public void loginAsEmployeeTest(@Optional("TestID") Integer testID)
 			throws Exception {
-		changeParamObject(testID);
-		
 		startTest(testEnvironment);
 		try{ 
+			changeParamObject(testID);
 			LoginPage loginPage = loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
 			boolean result = loginPage.isLoggedIn();
 			Debugger.log("loginTest => "+result, isSaucelabs);
@@ -113,8 +136,57 @@ public class PersonFileTest extends TestMachine {
 	
 	@Test
 	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username", "Login Password"})
+	public void loginWith2FAEmail(@Optional("TestID") Integer testID)
+			throws Exception {
+		try{ 
+			changeParamObject(testID);
+			loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
+			
+			TwoFAPage twoFAPage = new TwoFAPage(driver, properties.getEnvironment());
+			twoFAPage.sendViaPrimaryEmail(paramObject.loginUsername, properties.getGmailPassword());
+			Sleeper.sleep(7000, driver);
+			
+			boolean result = true; //TODO 
+			Debugger.log("loginWith2FAEmail => "+result, isSaucelabs);
+			setResult(result, "Login With 2FA Email");
+			assertTrue(result);
+		} catch(Exception ex){
+			failTest("Login With 2FA Email", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username", "Login Password"})
+	public void loginWith2FAPhone(@Optional("TestID") Integer testID)
+			throws Exception {
+		try{ 
+			changeParamObject(testID);
+			loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
+			
+			TwoFAPage twoFAPage = new TwoFAPage(driver, properties.getEnvironment());
+			//TODO
+			twoFAPage.sendViaPhone();
+			
+			Sleeper.sleep(7000, driver);
+			boolean result = true; //TODO 
+			Debugger.log("loginWith2FAPhone => "+result, isSaucelabs);
+			setResult(result, "Login With 2FA Phone");
+			assertTrue(result);
+		} catch(Exception ex){
+			failTest("Login With 2FA Phone", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.BOOLEAN_PARAM ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
+			attrs={ParamObjectField.BOOLEAN_PARAM_ONE ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
 					ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, 
 					ParamObjectField.TITLE_OF_EMPLOYEE}, 
 			labels={"Create OR Open Person?", "Email (+RunID is automatically added)", "Name", "Last Name", "Department", "Title"})
@@ -123,7 +195,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			boolean result;
-			if(paramObject.getBooleanParam()){//True = Open Person file > False = Create Person.
+			if(paramObject.getBooleanParamOne()){//True = Open Person file > False = Create Person.
 				homePage.openPersonFile(paramObject.getSearchEmail());
 				result = homePage.isPersonFileOpened();
 				Sleeper.sleep(5000, driver);
@@ -695,6 +767,30 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"No parameters needed"})
 	public void logOut(@Optional("TestID") Integer testID) throws Exception{
+		logOut();
+	}
+
+	//TODO DUPLICATED CODE
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No parameters needed"})
+	public void logOut2(@Optional("TestID") Integer testID) throws Exception{
+		logOut();
+	}
+	
+	//TODO DUPLICATED CODE
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={}, 
+			labels={"No parameters needed"})
+	public void logOut3(@Optional("TestID") Integer testID) throws Exception{
+		logOut();
+	}
+
+	private void logOut() throws Exception {
 		try{ 
 			Page page = new Page(driver);
 			page.logout();
@@ -705,6 +801,7 @@ public class PersonFileTest extends TestMachine {
 			assertTrue(false);
 		}
 	}
+	
 	
 	@Test
 	@Parameters({"TestID"})
@@ -770,6 +867,85 @@ public class PersonFileTest extends TestMachine {
 			failTest("Open document and check for content", ex, isSaucelabs);
 			assertTrue(false);
 		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.BOOLEAN_PARAM_ONE, ParamObjectField.BOOLEAN_PARAM_TWO}, 
+			labels={"Configure 2FA For Agent", "Configure 2FA For Employee"})
+	public void config2FAOn(@Optional("TestID") Integer testID) throws Exception {
+		try {
+			changeParamObject(testID);
+			
+			PeoplePage peoplePage = goTo2FAConfig();;
+			if(paramObject.booleanParamOne){ peoplePage.configure2FaForAgent(true, "Email, Text or Voice Callback"); }
+			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(true, "Email, Text or Voice Callback"); }
+			peoplePage.save2FA();
+			
+			Boolean result = true;
+			
+			Debugger.log("config2FAOn  => "+result, isSaucelabs);
+			setResult(result, "Config 2FA On");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Config 2FA On", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.BOOLEAN_PARAM_ONE, ParamObjectField.BOOLEAN_PARAM_TWO}, 
+			labels={"Configure 2FA For Agent", "Configure 2FA For Employee"})
+	public void config2FAOff(@Optional("TestID") Integer testID) throws Exception {
+		try {
+			changeParamObject(testID);
+
+			PeoplePage peoplePage = goTo2FAConfig();
+			if(paramObject.booleanParamOne){ peoplePage.configure2FaForAgent(false, "Email, Text or Voice Callback"); }
+			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(false, "Email, Text or Voice Callback"); }
+			peoplePage.save2FA();
+			
+			Boolean result = true;
+			
+			Debugger.log("config2FAOff  => "+result, isSaucelabs);
+			setResult(result, "Config 2FA Off");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Config 2FA Off", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(
+			attrs={ParamObjectField.BOOLEAN_PARAM_ONE, ParamObjectField.BOOLEAN_PARAM_TWO}, 
+			labels={"Configure 2FA For Agent", "Configure 2FA For Employee"})
+	public void goTo2FAConfig(@Optional("TestID") Integer testID) throws Exception {
+		try {
+			changeParamObject(testID);
+			goTo2FAConfig();
+			Boolean result = true;
+			
+			Debugger.log("config2FAOff  => "+result, isSaucelabs);
+			setResult(result, "Config 2FA Off");
+			assertTrue(result);
+		}catch (Exception ex){ 
+			failTest("Config 2FA Off", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+
+	private PeoplePage goTo2FAConfig() throws Exception {
+		PeoplePage peoplePage = new PeoplePage(driver, properties.getEnvironment());
+		peoplePage.loadPage();
+		
+		HomeForAgentsPage home = new HomeForAgentsPage(driver, properties.getEnvironment());
+		home.goToSecurityTabInSettingPeople();
+		return peoplePage;
 	}
 	
 	public boolean makeFirstLogin(String gmailEmail, String gmailPassword, String newPassword) throws Exception{

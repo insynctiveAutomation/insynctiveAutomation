@@ -2,7 +2,7 @@ package insynctive.utils;
 
 public enum ParamObjectField {
 
-	PERSON_ID("param_object_id"), BOOLEAN_PARAM("booleanParam"), 
+	PERSON_ID("param_object_id"), BOOLEAN_PARAM_ONE("booleanParamOne"), BOOLEAN_PARAM_TWO("booleanParamTwo"),
 	NAME("name"), MIDDLE_NAME("middleName"),
 	LAST_NAME("lastName"), MAIDEN_NAME("maidenName"), BIRTH_DATE("birthDate"),
 	GENDER("gender"), EMAIL("email"), TITLE_OF_EMPLOYEE("titleOfEmployee"),

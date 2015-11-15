@@ -90,8 +90,11 @@ public class ParamObject {
 	@Column(name = "loadingTime")
 	public Integer loadingTime;
 
-	@Column(name = "boolean_param")
-	public Boolean booleanParam;
+	@Column(name = "boolean_param_one")
+	public Boolean booleanParamOne;
+	
+	@Column(name = "boolean_param_two")
+	public Boolean booleanParamTwo;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
@@ -516,12 +519,20 @@ public class ParamObject {
 		}
 	}
 	
-	public Boolean getBooleanParam() {
-		return booleanParam;
+	public Boolean getBooleanParamOne() {
+		return booleanParamOne;
 	}
 
-	public void setBooleanParam(Boolean booleanParam) {
-		this.booleanParam = booleanParam;
+	public void setBooleanParamOne(Boolean booleanParamOne) {
+		this.booleanParamOne = booleanParamOne;
+	}
+	
+	public Boolean getBooleanParamTwo() {
+		return booleanParamTwo;
+	}
+	
+	public void setBooleanParamOneTwo(Boolean booleanParamTwo) {
+		this.booleanParamTwo = booleanParamTwo;
 	}
 
 	public Integer getWaitTime() {

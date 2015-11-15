@@ -86,7 +86,15 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 	/* Template Page */
 	@FindBy(id = "tab_Apps")
 	WebElement tabApp;
+	@FindBy(id = "tab_Settings")
+	WebElement settingTab;
+	
+	@FindBy(id = "linkPeopleSettings")
+	WebElement peopleSettingTab;
 
+	@FindBy(id = "SecurityTab")
+	WebElement securityTab;
+	
 	public HomeForAgentsPage(WebDriver driver, String enviroment) {
 		super(driver);
 		this.enviroment = enviroment;
@@ -145,8 +153,23 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 	}
 	
 	public void goToApps() throws Exception{
-		waitUntilIsLoaded(tabApp);
-		tabApp.click();
+		swichToFirstFrame(driver);
+		clickAButton(tabApp);
+	}
+
+	public void goToSettings() throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(settingTab);
+	}
+
+	public void goPeopleSettings() throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(peopleSettingTab);
+	}
+	
+	public void goToSecurityTabInSettingPeople() throws Exception {
+		swichToFirstFrame(driver);
+		clickAButton(securityTab);
 	}
 	
 	/* Waits **/

@@ -128,7 +128,13 @@
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
-			<version>${javax-mail-version}</version>
+			<version>1.4.7</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.2</version>
 		</dependency>
 
 		<!-- JSON READER -->
@@ -270,6 +276,14 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
+
+		<!-- Twilio SDK-->
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio-java-sdk</artifactId>
+			<version>5.4.0</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
