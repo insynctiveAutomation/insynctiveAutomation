@@ -15,9 +15,9 @@ import insynctive.utils.TwilioUtil;
 
 public class TwoFAPage extends Page implements PageInterface {
 
-	@FindBy(css = "#FirstStep > div.channels > input[type='radio']:nth-child(3)")
+	@FindBy(id = "SendOneTimeCodeViaEmail")
 	WebElement sendViaPrimaryEmailBox;
-	@FindBy(css = "#FirstStep > div.channels > input[type='radio']:nth-child(1)")
+	@FindBy(css = "SendOneTimeCodeViaText")
 	WebElement sendViaPhone;
 
 	@FindBy(id = "txtVerificationCode")

@@ -879,8 +879,8 @@ public class PersonFileTest extends TestMachine {
 			changeParamObject(testID);
 			
 			PeoplePage peoplePage = goTo2FAConfig();;
-			if(paramObject.booleanParamOne){ peoplePage.configure2FaForAgent(true, "Email, Text or Voice Callback"); }
-			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(true, "Email, Text or Voice Callback"); }
+			if(paramObject.booleanParamOne){ peoplePage.configure2FaForAgent(true, "Email or Text"); }
+			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(true, "Email or Text"); }
 			peoplePage.save2FA();
 			
 			Boolean result = true;
@@ -904,8 +904,8 @@ public class PersonFileTest extends TestMachine {
 			changeParamObject(testID);
 
 			PeoplePage peoplePage = goTo2FAConfig();
-			if(paramObject.booleanParamOne){ peoplePage.configure2FaForAgent(false, "Email, Text or Voice Callback"); }
-			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(false, "Email, Text or Voice Callback"); }
+			if(paramObject.booleanParamOne){ peoplePage.configure2FaForAgent(false, "Email or Text"); }
+			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(false, "Email or Text"); }
 			peoplePage.save2FA();
 			
 			Boolean result = true;

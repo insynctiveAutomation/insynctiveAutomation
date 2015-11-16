@@ -105,4 +105,8 @@ public class MailManager {
 		
 		return number;
 	}
+	
+	public static void main(String[] args) throws Exception {
+		MailManager.getEmailByBody("insynctivetestng@gmail.com", "benefits123", "a");
+	}
 }
