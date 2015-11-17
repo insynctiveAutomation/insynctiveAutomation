@@ -2,7 +2,6 @@ package insynctive.pages.insynctive.employee;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,14 +11,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import insynctive.exception.ElementNotFoundException;
-import insynctive.exception.MethodNoImplementedException;
-import insynctive.model.Account;
-import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.PersonalPage;
-import insynctive.pages.insynctive.UpdateInfoPage;
 import insynctive.utils.Sleeper;
 
 public class EmployeeDashboardPage extends Page implements PageInterface {

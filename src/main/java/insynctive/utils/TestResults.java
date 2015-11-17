@@ -1,12 +1,9 @@
 package insynctive.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.testng.TestListenerAdapter;
-import org.testng.annotations.Listeners;
 
 public class TestResults {
 

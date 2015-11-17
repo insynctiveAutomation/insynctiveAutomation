@@ -1,7 +1,5 @@
 package insynctive.dao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,7 +11,6 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import insynctive.model.Test;
 import insynctive.model.TestSuite;
 
 @Repository

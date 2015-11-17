@@ -1,9 +1,5 @@
 package insynctive.pages.insynctive.employee;
 
-import insynctive.model.ParamObject;
-import insynctive.pages.PersonalPage;
-import insynctive.utils.Sleeper;
-
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -14,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import org.testng.Assert;
+import insynctive.utils.Sleeper;
 
 public class EmployeeDocumentsPage extends Page implements PageInterface {
 

@@ -1,20 +1,17 @@
 package insynctive.tests;
 
-import insynctive.annotation.ParametersFront;
-import insynctive.pages.insynctive.employee.EmployeeDashboardPage;
-import insynctive.pages.insynctive.employee.EmployeeDocumentsPage;
-import insynctive.utils.Debugger;
-import insynctive.utils.ParamObjectField;
-import insynctive.utils.data.TestEnvironment;
+import static org.junit.Assert.assertTrue;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.Assert.assertTrue;
+import insynctive.annotation.ParametersFront;
+import insynctive.pages.insynctive.employee.EmployeeDocumentsPage;
+import insynctive.utils.Debugger;
+import insynctive.utils.ParamObjectField;
+import insynctive.utils.data.TestEnvironment;
 
 /**
  * Created by cristi on 11/6/2015.

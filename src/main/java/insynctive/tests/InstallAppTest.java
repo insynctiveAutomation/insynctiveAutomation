@@ -1,7 +1,5 @@
 package insynctive.tests;
 
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
@@ -9,8 +7,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import insynctive.model.ParamObject;
-import insynctive.pages.insynctive.MarketPage;
-import insynctive.utils.data.App;
 import insynctive.utils.data.TestEnvironment;
 
 @Deprecated

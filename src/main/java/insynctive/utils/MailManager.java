@@ -1,20 +1,14 @@
 package insynctive.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Properties;
 
 import javax.mail.Flags;
 import javax.mail.Flags.Flag;
 import javax.mail.Folder;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.search.BodyTerm;
-import javax.mail.search.SearchTerm;
-import javax.mail.search.SubjectTerm;
 
 public class MailManager {
 

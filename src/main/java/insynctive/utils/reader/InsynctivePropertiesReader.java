@@ -359,7 +359,6 @@ public class InsynctivePropertiesReader {
 		InsynctivePropertiesReader properties = getAllAccountsProperties();
 		account.setUsername(properties.getLoginUsername());
 		account.setPassword(properties.getLoginPassword());
-		account.setRunID(Integer.parseInt(properties.getRunID()));
 		
 		InsynctiveProperty property = new InsynctiveProperty();
 		property.setEnvironment(properties.getEnviroment());

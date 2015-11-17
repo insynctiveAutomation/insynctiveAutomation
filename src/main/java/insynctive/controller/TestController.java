@@ -647,7 +647,6 @@ public class TestController {
 	private Integer runTest(TestSuite form, Account acc) {
 		//Increment Run ID of account and update it.
 		InsynctiveProperty properties = acc.getAccountProperty();
-		acc.setRunID(acc.getRunID()+1);
 		properties.setEnvironment(form.getEnvironment());
 		accDao.update(acc);
 		List<XmlSuite> suites = getXmlTestSuiteForUI(form.getTestSuiteName());

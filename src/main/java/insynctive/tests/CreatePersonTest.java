@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -14,7 +12,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import insynctive.annotation.ParametersFront;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.CreatePersonForm;
 import insynctive.pages.insynctive.LoginPage;

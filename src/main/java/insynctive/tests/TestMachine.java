@@ -10,13 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
-import javax.annotation.Resource;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -26,16 +20,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
@@ -111,7 +99,7 @@ public abstract class TestMachine {
 			
 		
 			account = HibernateUtil.accDao.getAccountByID(accountID);
-			account.setRunID(runID != null ? runID : account.getRunID());
+			account.setRunID();
 			
 			paramObject = account.getParamObject();
 			properties = account.getAccountProperty();
@@ -276,8 +264,9 @@ public abstract class TestMachine {
 		StringBuilder responseStrBuilder = new StringBuilder();
 
 		String inputStr;
-		while ((inputStr = streamReader.readLine()) != null)
-		    responseStrBuilder.append(inputStr);
+		while ((inputStr = streamReader.readLine()) != null){
+			responseStrBuilder.append(inputStr);
+		}
 		return new JSONObject(responseStrBuilder.toString());
 	}
 	

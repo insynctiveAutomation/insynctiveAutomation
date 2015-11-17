@@ -3,11 +3,7 @@ package insynctive.tests;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
-import javax.annotation.Resource;
 
-import org.hibernate.SessionFactory;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;

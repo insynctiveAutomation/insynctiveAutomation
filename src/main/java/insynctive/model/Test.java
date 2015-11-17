@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.internal.util.Cloneable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

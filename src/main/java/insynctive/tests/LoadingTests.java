@@ -2,7 +2,6 @@ package insynctive.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.BeforeClass;

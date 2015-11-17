@@ -1,17 +1,11 @@
 package insynctive.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import com.twilio.sdk.*;
-import com.twilio.sdk.resource.factory.*;
-import com.twilio.sdk.resource.instance.*;
-import com.twilio.sdk.resource.list.*;
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.instance.Message;
+import com.twilio.sdk.resource.list.MessageList;
 
 public class TwilioUtil {
 

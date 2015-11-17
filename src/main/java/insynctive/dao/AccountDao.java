@@ -32,28 +32,12 @@ public class AccountDao {
 		return (Account) openSession().get(Account.class, id);
 	}
 	
-	public int incrementRunID(int accID){
-		Account acc = (Account) openSession().get(Account.class, accID);
-		int newID = acc.getRunID()+1;
-		acc.setRunID(newID);
-		openSession().update(acc);
-		return newID;
-	}
-	
 	public void save(Account acc){
 		openSession().update(acc);
 	}
 	
 	public void update(Account acc){
 		openSession().update(acc);
-	}
-	
-	public Account incrementRunIDAndGetAcc(int accID){
-		Account acc = (Account) openSession().get(Account.class, accID);
-		int newID = acc.getRunID()+1;
-		acc.setRunID(newID);
-		openSession().update(acc);
-		return acc;
 	}
 	
 	public Account getAccountLogin(String username, String password){

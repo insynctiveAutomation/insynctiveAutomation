@@ -1,5 +1,12 @@
 package insynctive.model;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +18,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.json.JSONObject;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -43,6 +50,7 @@ public class Account {
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "param_object_id")
 	private ParamObject paramObject;
+
 	
 	public String getUsername() {
 		return username;
@@ -77,7 +85,33 @@ public class Account {
 		return String.valueOf(runID);
 	}
 
-	public void setRunID(int runID) {
+	public void setRunID(Integer runID){
+		this.runID = runID;
+	}
+	
+	@JsonIgnore
+	public void setRunID() throws IOException {
+		URL u = new URL("https://insynctive-support.herokuapp.com/runID");
+		HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+		
+		conn.setRequestMethod("GET");
+		conn.setConnectTimeout(5000);
+		conn.setUseCaches(false);
+		conn.setDoInput(true);
+		conn.setDoOutput(true);
+		
+		InputStream is = conn.getInputStream();
+		
+		BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
+		StringBuilder responseStrBuilder = new StringBuilder();
+
+		String inputStr;
+		while ((inputStr = streamReader.readLine()) != null){
+			responseStrBuilder.append(inputStr);
+		}
+		
+		JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
+		Integer runID = jsonObject.getInt("runID");
 		this.runID = runID;
 	}
 
