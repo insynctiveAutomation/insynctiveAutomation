@@ -366,6 +366,16 @@ public class TestController {
 		return "{\"index\" : \""+(runTest(form, accDao.getAccountByID(logedAccID)))+"\"}";
 	}
 	
+	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
+	@ResponseBody
+	public String retry(@PathVariable("ID") Integer testSuiteID) throws CloneNotSupportedException {
+		
+		TestSuite testSuiteToRetry = testSuiteDao.getTestSuiteByID(testSuiteID);
+		TestSuite testSuite = testSuiteToRetry.getNewWithOutIDs();
+		
+		return "{\"index\" : \""+(runTest(testSuite, accDao.getAccountByID(logedAccID)))+"\"}";
+	}
+	
 	@RequestMapping(value = "/nightly/{environment}/{xmlName}/{browser}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runNightlyTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws ConfigurationException{
@@ -375,16 +385,6 @@ public class TestController {
 		TestSuite form = createTestSuite(paramObject, xmlName, environment, browser);
 		
 		return "{\"index\" : \""+(runTest(form, nightlyAcc))+"\"}";
-	}
-	
-	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
-	@ResponseBody
-	public String retry(@PathVariable("ID") Integer testSuiteID) throws CloneNotSupportedException {
-		
-		TestSuite testSuiteToRetry = testSuiteDao.getTestSuiteByID(testSuiteID);
-		TestSuite testSuite = testSuiteToRetry.getNewWithOutIDs();
-		
-		return "{\"index\" : \""+(runTest(testSuite, accDao.getAccountByID(logedAccID)))+"\"}";
 	}
 	
 	@RequestMapping(value = "/nightly/{environment}/{xmlName}", method = RequestMethod.POST)

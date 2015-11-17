@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
+import insynctive.utils.Sleeper;
 
 
 public class LoginPage extends Page implements PageInterface{
@@ -73,8 +74,8 @@ public class LoginPage extends Page implements PageInterface{
 	}
     
     public boolean isLoggedIn() throws Exception{
-    	HomeForAgentsPage homePage = new HomeForAgentsPage(driver, enviroment);
-    	return !driver.getTitle().equals("Login");
+    	Sleeper.sleep(3000, driver);
+    	return !driver.getCurrentUrl().contains("/Insynctive.Hub/Login.aspx");
     }
     
     public  boolean isNotLoggedIn() {
