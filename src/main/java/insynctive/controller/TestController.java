@@ -101,49 +101,49 @@ public class TestController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginGet(HttpSession session){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("login");
+		model.setViewName("/login");
 		return model;
 	}
 	
 	@RequestMapping(value = "/configuration", method = RequestMethod.GET)
 	public ModelAndView configuration(HttpSession session){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("advancedConfiguration");
+		model.setViewName("/advancedConfiguration");
 		return model;
 	}
 
 	@RequestMapping(value = "/gender_template", method = RequestMethod.GET)
 	public ModelAndView getGender() {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("template/gender");
+		model.setViewName("/template/gender");
 		return model;
 	}
 	
 	@RequestMapping(value = "/marital_status", method = RequestMethod.GET)
 	public ModelAndView getMaritalStatus() {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("template/maritalStatus");
+		model.setViewName("/template/maritalStatus");
 		return model;
 	}
 	
 	@RequestMapping(value = "/us_address", method = RequestMethod.GET)
 	public ModelAndView getUsAddress() {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("template/us_address");
+		model.setViewName("/template/us_address");
 		return model;
 	}
 	
 	@RequestMapping(value = "/benefit_company" ,method = RequestMethod.GET)
 	public ModelAndView modelBenefitCompany() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("template/benefit_company");
+		model.setViewName("/template/benefit_company");
 		return model;
 	}
 	
 	@RequestMapping(value = "/yes_no" ,method = RequestMethod.GET)
 	public ModelAndView getYesNo() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("template/yes_no");
+		model.setViewName("/template/yes_no");
 		return model;
 	}
 
@@ -151,7 +151,7 @@ public class TestController {
 	public ModelAndView logout() throws Exception{
 		logedAccID = null;
 		ModelAndView model = new ModelAndView();
-		model.setViewName("login");
+		model.setViewName("/login");
 		return model;
 	}
 	
@@ -159,10 +159,10 @@ public class TestController {
 	public ModelAndView root(HttpSession session){
 		ModelAndView model = new ModelAndView();
 		if(logedAccID != null){
-			model.setViewName("test");
+			model.setViewName("/test");
 			account = logedAccID != null ? accDao.getAccountByID(logedAccID) : null;
 		} else {
-			model.setViewName("login");
+			model.setViewName("/login");
 		}
 		return model;
 	}
@@ -170,14 +170,14 @@ public class TestController {
 	@RequestMapping(value = "/main" ,method = RequestMethod.GET)
 	public ModelAndView main(){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("main");
+		model.setViewName("/main");
 		return model;
 	}
 	
 	@RequestMapping(value = "/accountConfigContent" ,method = RequestMethod.GET)
 	public ModelAndView goAccountConfigModel() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("accountConfigModel");
+		model.setViewName("/accountConfigModel");
 		return model;
 	}
 
@@ -191,7 +191,7 @@ public class TestController {
 	@RequestMapping(value = "/editParameters" ,method = RequestMethod.GET)
 	public ModelAndView modelParameters() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("parametersModel");
+		model.setViewName("/parametersModel");
 		return model;
 	}
 	
@@ -199,17 +199,24 @@ public class TestController {
 	public ModelAndView dashboard() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();;
 		if(logedAccID != null){
-			model.setViewName("dashboard");
+			model.setViewName("/dashboard");
 		} else {
-			model.setViewName("login");
+			model.setViewName("/login");
 		}
 		return model;
 	}
 	
-	@RequestMapping(value = "/testSuite" ,method = RequestMethod.GET)
+	@RequestMapping(value = "/testSuiteTemplate" ,method = RequestMethod.GET)
 	public ModelAndView testSuite() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("template/testSuite");
+		model.setViewName("/template/testSuite");
+		return model;
+	}
+	
+	@RequestMapping(value = "/testSuite" ,method = RequestMethod.GET)
+	public ModelAndView testSuiteView() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/viewTestSuite");
 		return model;
 	}
 	

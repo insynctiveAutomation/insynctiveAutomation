@@ -1,6 +1,6 @@
 var app = angular.module('testApp');
 
-app.directive("vewOfRun", function($compile, $cookies){
+app.directive("viewOfRun", function($compile, $cookies){
 	return {
 		restrict: "E",
 		scope: {
@@ -8,7 +8,7 @@ app.directive("vewOfRun", function($compile, $cookies){
 			controller: '=',
 			testParameterText: '@'
 		},
-		templateUrl: '/testSuite',
+		templateUrl: '/testSuiteTemplate',
 		transclude: true,
         replace: true
 		}

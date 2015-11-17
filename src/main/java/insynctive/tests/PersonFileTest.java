@@ -144,7 +144,7 @@ public class PersonFileTest extends TestMachine {
 			twoFAPage.sendViaPrimaryEmail(paramObject.loginUsername, properties.getGmailPassword());
 			Sleeper.sleep(7000, driver);
 			
-			boolean result = true; //TODO 
+			boolean result = !driver.getCurrentUrl().contains("TwoFA"); 
 			Debugger.log("loginWith2FAEmail => "+result, isSaucelabs);
 			setResult(result, "Login With 2FA Email");
 			assertTrue(result);
@@ -170,7 +170,8 @@ public class PersonFileTest extends TestMachine {
 			twoFAPage.sendViaPhone();
 			
 			Sleeper.sleep(7000, driver);
-			boolean result = true; //TODO 
+			boolean result = !driver.getCurrentUrl().contains("TwoFA");
+			
 			Debugger.log("loginWith2FAPhone => "+result, isSaucelabs);
 			setResult(result, "Login With 2FA Phone");
 			assertTrue(result);
@@ -791,9 +792,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			Page page = new Page(driver);
 			page.logout();
-			Sleeper.sleep(2000, driver);
-			assertTrue(true );
-			//Assertation
+			assertTrue(true);
 		}catch (Exception ex){ 
 			failTest("log out fail", ex, isSaucelabs);
 			assertTrue(false);
@@ -881,7 +880,7 @@ public class PersonFileTest extends TestMachine {
 			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(true, "Email or Text"); }
 			peoplePage.save2FA();
 			
-			Boolean result = true;
+			Boolean result = true;//TODO
 			
 			Debugger.log("config2FAOn  => "+result, isSaucelabs);
 			setResult(result, "Config 2FA On");
@@ -906,7 +905,7 @@ public class PersonFileTest extends TestMachine {
 			if(paramObject.booleanParamTwo){ peoplePage.configure2FaForEmployee(false, "Email or Text"); }
 			peoplePage.save2FA();
 			
-			Boolean result = true;
+			Boolean result = true;//TODO
 			
 			Debugger.log("config2FAOff  => "+result, isSaucelabs);
 			setResult(result, "Config 2FA Off");

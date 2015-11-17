@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('dashboardApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'parameterApp', 'testApp']);
+var app = angular.module('dashboardApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'testApp']);
 
 app.controller('DashboardController', function($cookies, $http, $window, $modal, $scope, $interval, dashboardService, testService) {
 	
@@ -27,7 +27,7 @@ app.controller('DashboardController', function($cookies, $http, $window, $modal,
 		} else {
 			var modalInstance = $modal.open({
 				animation : true,
-				templateUrl : '/testSuite', 
+				templateUrl : '/testSuiteTemplate', 
 				backdrop: true,
 				controller : 'TestSuiteController',
 				controllerAs : 'controller',

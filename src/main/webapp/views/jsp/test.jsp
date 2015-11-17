@@ -85,7 +85,7 @@
 			<span class="started"> {{testCtrl.runStatus}}</span>
 			<img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif" ng-class="[testCtrl.loaderVisible]"><br/>
 			<a ng-if="testCtrl.videoLink" ng-href="{{testCtrl.videoLink}}" class="video" target="_blank"> Watch Video </a>
-			<vew-of-run model="testCtrl.testDetails" controller="testCtrl" test-parameter-text="View/Edit Parameters" ></vew-of-run>
+			<view-of-Run model="testCtrl.testDetails" controller="testCtrl" test-parameter-text="View/Edit Parameters" ></view-of-Run>
 			<button ng-if="testCtrl.runStatus" ng-click="testCtrl.clearTests()" class="btn btn-lg btn-primary">Clear Test!</button>	
 		</div>
 	<div class="alert alert-danger animate-repeat" ng-repeat="error in testCtrl.errors">{{error}}</div>

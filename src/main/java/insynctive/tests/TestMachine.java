@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -309,7 +310,12 @@ public abstract class TestMachine {
 		JSONArray attachments = new JSONArray();
 		JSONObject attachment = new JSONObject(); 
 		attachment.put("fallback", "Status of the Test "+sessionName+": "+(generalStatus ? "PASS" : "FAIL"));
-		attachment.put("pretext", (jobID == null ? "Local Test" : "<"+getJobURL()+"|Watch test video here>")+" | Environment: "+properties.getEnvironment());
+		String testDetailsUrl = getTestDetailsUrl();
+		attachment.put("pretext", 
+				(jobID == null ? "Local Test" : "<"+getJobURL()+"|Watch test video here> | ") + 
+				(testDetailsUrl != null ? "<"+testDetailsUrl+" |See details> | " : "") + 
+				"Environment: "+properties.getEnvironment());
+		
 		attachment.put("color", generalStatus ? "#00CE00" : "#FC000D"); //AA3939
 		
 		JSONArray fields = new JSONArray();
@@ -339,6 +345,24 @@ public abstract class TestMachine {
 		System.out.println(is);
 	}
 	
+	private String getTestDetailsUrl() {
+		String testEnvironment = getTestEnvironment();
+		return testEnvironment != null ? testEnvironment+"testSuite?id="+testSuiteID : null;
+	}
+
+	private String getTestEnvironment() {
+		ResourceBundle rb = ResourceBundle.getBundle("application");
+		Integer environment = Integer.valueOf(rb.getString("environment"));
+		switch (environment) {
+		case 2:
+			return "https://insynctiveautomation.herokuapp.com/";
+		case 3:
+			return "https://alpha-insynctiveautomation.herokuapp.com/";
+		default:
+			return null;
+		}
+	}
+
 	private String getStatusMessageOfTests(List<String> testsStatus) {
 		String results = "";
 		if (testsStatus.size() != 0){
