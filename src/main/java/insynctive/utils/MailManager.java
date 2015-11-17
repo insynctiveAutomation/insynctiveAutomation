@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 
 import javax.mail.Flags;
+import javax.mail.Flags.Flag;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -17,7 +18,7 @@ import javax.mail.search.SubjectTerm;
 
 public class MailManager {
 
-	public static StringBuffer getEmailByBody(String username, String password, String containsMsg) throws Exception {
+	public static String getEmailByBody(String username, String password, String containsMsg) throws Exception {
 		Properties props = System.getProperties();
 		props.setProperty("mail.store.protocol", "imaps");
 
@@ -38,22 +39,17 @@ public class MailManager {
 			for(Message message : messages){
 				if (!message.isSet(Flags.Flag.SEEN)) {
 					confirmationMAil = message;
+					message.setFlag(Flag.SEEN, true);
 					isMailFound = true;
 					break;
 				}
 			}
 			// wait for 3 seconds if message is not found
-			if (!isMailFound) {
-				Thread.sleep(3000);
-			}
-		}
-
-		// Search latests for unread mail
-		for(Message message : messages){
-			if (!message.isSet(Flags.Flag.SEEN)) {
-				confirmationMAil = message;
-				isMailFound = true;
+			if (isMailFound) {
 				break;
+			}
+			else {
+				Thread.sleep(3000);
 			}
 		}
 		
@@ -63,21 +59,18 @@ public class MailManager {
 
 			// Read the content of mail and launch registration URL
 		} else {
-			String line;
-			StringBuffer buffer = new StringBuffer();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					confirmationMAil.getInputStream()));
-			while ((line = reader.readLine()) != null) {
-				buffer.append(line);
-			}
-			return buffer;
+			Object body = confirmationMAil.getContent(); 
+		    if(body instanceof String){
+		    	return body.toString();
+		    }
 		}
+		return null;
 	}
 	
 	public static boolean checkIfChangeEmailIsSending(String username, String password, String beforeEmail)
 			throws Exception {
 		try {
-			StringBuffer buffer = getEmailByBody(username, password,
+			String buffer = getEmailByBody(username, password,
 					"Your login was changed from " + beforeEmail + " to " + username);
 			return buffer != null;
 		} catch (Exception ex) {
@@ -88,7 +81,7 @@ public class MailManager {
 
 	public static String getAuthLink(String username, String password, String runID) throws Exception {
 
-		StringBuffer buffer = getEmailByBody(username, password, runID);
+		String buffer = getEmailByBody(username, password, runID);
 		String[] splitHref = buffer.toString().split(">Create Password Now")[0].split("href=\"");
 		String registationUrl = splitHref[splitHref.length - 1].split("\"")[0];
 
@@ -99,14 +92,17 @@ public class MailManager {
 
 	public static String getVerificationCode(String username, String password) throws Exception {
 
-		StringBuffer buffer = getEmailByBody(username, password, "Your HR Self Service verification code is ");
+		System.out.println("Username:"+ username + " - Password: "+password);
+		System.out.println("Connecting...");
+		
+		String buffer = getEmailByBody(username, password, "Your HR Self Service verification code is ");
 		String number = buffer.toString().split("Your HR Self Service verification code is ")[1].split("<")[0];
-		System.out.println(number);
+		System.out.println("Verification Code: "+number);
 		
 		return number;
 	}
 	
 	public static void main(String[] args) throws Exception {
-		MailManager.getEmailByBody("insynctivetestng@gmail.com", "benefits123", "a");
+		getVerificationCode("insynctiveCBT@gmail.com", "benefits123");
 	}
 }

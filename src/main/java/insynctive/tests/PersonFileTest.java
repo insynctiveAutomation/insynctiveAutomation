@@ -153,6 +153,7 @@ public class PersonFileTest extends TestMachine {
 			setResult(result, "Login With 2FA Email");
 			assertTrue(result);
 		} catch(Exception ex){
+			ex.printStackTrace();
 			failTest("Login With 2FA Email", ex, isSaucelabs);
 			assertTrue(false);
 		}
@@ -795,6 +796,7 @@ public class PersonFileTest extends TestMachine {
 			Page page = new Page(driver);
 			page.logout();
 			Sleeper.sleep(2000, driver);
+			assertTrue(true );
 			//Assertation
 		}catch (Exception ex){ 
 			failTest("log out fail", ex, isSaucelabs);

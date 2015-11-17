@@ -17,7 +17,7 @@ public class TwoFAPage extends Page implements PageInterface {
 
 	@FindBy(id = "SendOneTimeCodeViaEmail")
 	WebElement sendViaPrimaryEmailBox;
-	@FindBy(css = "SendOneTimeCodeViaText")
+	@FindBy(id = "SendOneTimeCodeViaText")
 	WebElement sendViaPhone;
 
 	@FindBy(id = "txtVerificationCode")
