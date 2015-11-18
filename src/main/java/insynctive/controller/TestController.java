@@ -195,6 +195,13 @@ public class TestController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/viewParameters" ,method = RequestMethod.GET)
+	public ModelAndView viewParameters() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/parametersNoEditable");
+		return model;
+	}
+	
 	@RequestMapping(value = "/dashboard" ,method = RequestMethod.GET)
 	public ModelAndView dashboard() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();;

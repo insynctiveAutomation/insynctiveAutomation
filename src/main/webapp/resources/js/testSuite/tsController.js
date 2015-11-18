@@ -24,10 +24,10 @@ app.controller('TestViewController', function($location, $cookies, $http, $windo
 	this.openEditParameters = function(test) {
 		var modalInstance = $modal.open({
 			animation : true,
-			templateUrl : 'editParameters',
-			 controller: 'modalParametersController',
-			 controllerAs: 'parametersCtrl',
 			backdrop: true,
+			templateUrl : 'viewParameters',
+			controller: 'modalParametersController',
+			controllerAs: 'parametersCtrl',
 			windowClass: 'edit-parameter-modal',
 			size : 'lg',
 			resolve : {
