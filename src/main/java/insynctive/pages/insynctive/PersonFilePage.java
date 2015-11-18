@@ -65,7 +65,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	WebElement selectChecklist;
 	@FindBy(id = "btnStartChecklist")
 	WebElement assignChecklistButton;
-	@FindBy(css = "div.row:nth-child(3) > div:nth-child(1) > span:nth-child(1)")
+	@FindBy(xpath = "(//div[contains(@class, 'runningchecklist_checklistcolumn')])[1]/span")
 	WebElement firstChecklist;
 	@FindBy(css = "#pendingTasksList > div.task-list > div:nth-child(1) > span > div")
 	WebElement firstTaskLink;
@@ -295,10 +295,14 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	public boolean isChecklistAssigned() throws Exception {
 		return isChecklistAssigned("Employee Onboarding");
 	}
-	
+//	Checklist Test Template started successfully for Automated 64 Valeiras Test
 	public boolean isChecklistAssigned(String checklistName) throws Exception {
 		try {
-			return isElementTextEquals(firstChecklist, checklistName);
+			swichToFirstFrame(driver);
+			swichToIframe(tabiFrame);
+			Boolean result = isElementTextEquals(firstChecklist, checklistName);
+			swichToFirstFrame(driver);
+			return result;
 		} catch(Exception ex){
 			throw ex;
 		}

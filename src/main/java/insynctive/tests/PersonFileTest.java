@@ -218,7 +218,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.EMAIL}, 
-			labels={"Email to search"})
+			labels={"Email of Person File"})
 	public void openPersonFIle(@Optional("TestID") Integer testID) throws Throwable {
 		try{ 
 			changeParamObject(testID);
