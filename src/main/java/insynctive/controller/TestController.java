@@ -443,6 +443,64 @@ public class TestController {
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
 	
+	@RequestMapping(value = "/nightly", method = RequestMethod.POST)
+	@ResponseBody
+	public String runNightly() throws ConfigurationException {
+		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
+		ParamObject paramObject = nightlyAcc.getParamObject();
+		final String DEFAULT_ENVIRONMENT = "staging";
+		
+		//Person File
+		TestSuite form = createTestSuite(paramObject,"Person File", DEFAULT_ENVIRONMENT, "FIREFOX");
+		runTest(form, nightlyAcc);
+		form = createTestSuite(paramObject,"Person File", DEFAULT_ENVIRONMENT, "CHROME");
+		runTest(form, nightlyAcc);
+		form = createTestSuite(paramObject,"Person File", DEFAULT_ENVIRONMENT, "IPAD");
+		runTest(form, nightlyAcc);
+		
+		//Open Documents - Person File
+		TestSuite odpform = createTestSuite(paramObject,"Open Documents - Person File", DEFAULT_ENVIRONMENT, "FIREFOX");
+		runTest(odpform, nightlyAcc);
+		odpform = createTestSuite(paramObject,"Open Documents - Person File", DEFAULT_ENVIRONMENT, "CHROME");
+		runTest(odpform, nightlyAcc);
+		odpform = createTestSuite(paramObject,"Open Documents - Person File", DEFAULT_ENVIRONMENT, "IPAD");
+		runTest(odpform, nightlyAcc);
+		
+		//Open Documents - Employee Interface
+		TestSuite odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", DEFAULT_ENVIRONMENT, "FIREFOX");
+		runTest(odeiform, nightlyAcc);
+		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", DEFAULT_ENVIRONMENT, "CHROME");
+		runTest(odeiform, nightlyAcc);
+		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", DEFAULT_ENVIRONMENT, "IPAD");
+		runTest(odeiform, nightlyAcc);
+		
+		//Loading Page
+		TestSuite loadingForm = createTestSuite(paramObject,"Loading Page", DEFAULT_ENVIRONMENT, "FIREFOX");
+		runTest(loadingForm, nightlyAcc);
+		loadingForm = createTestSuite(paramObject, "Loading Page", DEFAULT_ENVIRONMENT, "CHROME");
+		runTest(loadingForm, nightlyAcc);
+		loadingForm = createTestSuite(paramObject, "Loading Page", DEFAULT_ENVIRONMENT, "IPAD");
+		runTest(loadingForm, nightlyAcc);
+		
+		//2FA - Email - Agent
+		TestSuite twoFAEmailAgentForm = createTestSuite(paramObject,"2FA - Email - Agent", "2FA", "CHROME");
+		Integer twoFAEmailAgentID = runTest(twoFAEmailAgentForm, nightlyAcc);
+		
+		//2FA - Email - Employee
+		TestSuite twoFAEmailEmployeeForm = createTestSuite(paramObject,"2FA - Email - Employee", "2FA", "FIREFOX");
+		Integer twoFAEmailEmployeeID = runTest(twoFAEmailEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAEmailAgentID));
+		
+		//2FA - Phone - Agent
+		TestSuite twoFAPhoneAgentForm = createTestSuite(paramObject,"2FA - Phone - Agent", "2FA", "IPAD");
+		Integer twoFAPhoneAgentID = runTest(twoFAPhoneAgentForm, nightlyAcc, TestResults.workers.get(twoFAEmailEmployeeID));
+		
+		//2FA - Phone - Employee
+		TestSuite twoFAPhoneEmployeeForm = createTestSuite(paramObject,"2FA - Phone - Employee", "2FA", "CHROME");
+		Integer twoFAPhoneEmployeeID = runTest(twoFAPhoneEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAPhoneAgentID));
+		
+		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
+	}
+	
 	@RequestMapping(value = "/test/{testName}/{index}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String getTest(@PathVariable("testName") String testName, @PathVariable("index") Integer index) throws ConfigurationException{
@@ -657,8 +715,12 @@ public class TestController {
 		
 		return testSuite;
 	}
-
+	
 	private Integer runTest(TestSuite form, Account acc) {
+		return runTest(form, acc, null);
+	}
+
+	private Integer runTest(TestSuite form, Account acc, Thread threadToJoin) {
 		//Increment Run ID of account and update it.
 		InsynctiveProperty properties = acc.getAccountProperty();
 		properties.setEnvironment(form.getEnvironment());
@@ -718,7 +780,7 @@ public class TestController {
 		testNG.addListener(testListenerAdapter);
 		
 		//START TEST IN OTHER THREAD
-		Thread thread = new Thread(new RunnableTest(testNG, testSuite, testListenerAdapter, testSuiteDao, testDao));
+		Thread thread = new Thread(new RunnableTest(testNG, testSuite, testListenerAdapter, testSuiteDao, testDao, threadToJoin));
 		TestResults.addWorker(testSuite.getTestSuiteID(), thread);
 		thread.start();
 		

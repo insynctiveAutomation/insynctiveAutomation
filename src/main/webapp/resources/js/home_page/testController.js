@@ -29,7 +29,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	/* On Load Methods */
 	this.getTestsSuites = function() {
 		testService.getTestsSuites(function(data) {
-			self.testsSuites = _.map(data,self.split);
+			self.testsSuites = (_.map(data,self.split)).sort();
 		});
 	};
 	this.getTestsSuites();

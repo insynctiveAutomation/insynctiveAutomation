@@ -17,21 +17,29 @@ public class RunnableTest implements Runnable {
 	private TestListenerAdapter testListenerAdapter;  
 	private TestSuiteDao testSuiteDao;
 	private TestDao testDao;
-	
-	public RunnableTest(TestNG  testNG, TestSuite testSuite, TestListenerAdapter testListenerAdapter, TestSuiteDao testSuiteDao, TestDao testDao){
+	private Thread threadToJoin;
+
+	public RunnableTest(TestNG  testNG, TestSuite testSuite, TestListenerAdapter testListenerAdapter, TestSuiteDao testSuiteDao, TestDao testDao, Thread threadToJoin){
 		  this.testNG = testNG;
 		  this.testSuite = testSuite;
 		  this.testListenerAdapter = testListenerAdapter;
 		  this.testSuiteDao = testSuiteDao;
 		  this.testDao = testDao;
+		  this.threadToJoin = threadToJoin;
 	}
-	
 	public RunnableTest(TestNG  testNG){
 		this.testNG = testNG;
 	}
 	
 	@Override
 	public void run() {
+		if(threadToJoin != null){
+			try {
+				threadToJoin.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		testNG.setPreserveOrder(true);
 		testNG.run();
 		setResult();
