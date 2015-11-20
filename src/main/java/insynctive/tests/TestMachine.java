@@ -26,7 +26,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+
 import insynctive.exception.ConfigurationException;
+import insynctive.exception.ElementIsAllwaysVisibleException;
+import insynctive.exception.MethodNoImplementedException;
+import insynctive.exception.WrongMessageException;
 import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
@@ -108,7 +113,7 @@ public abstract class TestMachine {
 			
 		} catch(Exception ex){
 			ex.printStackTrace();
-			throw new Exception("Fail on TearUp "+ex);
+			throw new ConfigurationException("Fail on TearUp "+ex);
 		}
 	}
 	
@@ -189,36 +194,28 @@ public abstract class TestMachine {
 		loginPage.loadPage();
 		loginPage.login(email, password);
 		return loginPage;
-		
 	}
 
 	public void failTest(String testName,Exception ex, boolean isSaucelabs) throws Exception{
 		failTest(testName, ex, isSaucelabs, null);
 	}
 	
-	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception{
-		Reporter.log( testName, true );
-		System.out.println(ex.getStackTrace()[7]);
-		System.out.println(ex.getStackTrace()[6]);
-		System.out.println(ex.getStackTrace()[5]);
-		System.out.println(ex.getStackTrace()[4]);
-		System.out.println(ex.getStackTrace()[3]);
-		System.out.println(ex.getStackTrace()[2]);
-		System.out.println(ex.getStackTrace()[1]);
-		System.out.println(ex.getStackTrace()[0]);
+	public void failTest(String testName, Exception ex, boolean isSaucelabs, Long duration) throws Exception {
+		ex.printStackTrace();
 		
-		Throwable cause = ex.getCause();
-		String exMessage = ex.getMessage();
 		String nameAndCause = "";
 
-		if(cause != null){
-//			nameAndCause = testName+" Cause Message: => " + cause.getMessage();
-			nameAndCause = testName;
-		} else if(exMessage != null) {
-//			nameAndCause = testName+" Exception Message =>  "+exMessage;
-			nameAndCause = testName;
+		if(ex instanceof ConfigurationException){
+			nameAndCause = "Error on configuration in test: "+testName;
+		} else if(ex instanceof ElementIsAllwaysVisibleException){
+			nameAndCause = "Element is allways visible in test: "+testName+"| Element: "+ex.getMessage();
+		}  else if(ex instanceof ElementNotFoundException){
+			nameAndCause = "Element not found in test: "+testName+"| Element: "+ex.getMessage();
+		}  else if(ex instanceof MethodNoImplementedException){
+			nameAndCause = "Method not implemented in test: "+testName+"| Method: "+ex.getMessage();;
+		}  else if(ex instanceof WrongMessageException){
+			nameAndCause = "Wrong message in test: "+testName;
 		} else {
-//			nameAndCause = testName+" => "+ (ex != null ? ex : "EXCEPTION");
 			nameAndCause = testName;
 		}
 		
@@ -382,7 +379,7 @@ public abstract class TestMachine {
 			System.out.println("Param Object Changes to: "+testID+" ID");
 		} catch(Exception ex) {
 			System.out.println(ex);
-			throw new Exception("Fail on changeObject "+ex);
+			throw new ConfigurationException("Fail on changeObject "+ex);
 		}
 	}
 	

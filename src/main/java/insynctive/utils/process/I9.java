@@ -131,7 +131,7 @@ public class I9 extends Process implements PageInterface {
 	}
 	
 	@Override
-	public void completeSteps() throws Exception{
+	public void completeSteps() throws Exception {
 		//Step 1
 		completeStepOne();
 		//Step 2
@@ -146,8 +146,7 @@ public class I9 extends Process implements PageInterface {
 		completeFinalStep();
 	}
 
-	private void completeFinalStep() throws Exception,
-			ElementNotFoundException, IOException, InterruptedException {
+	private void completeFinalStep() throws Exception {
 		checkIfAllInformationIsOk();
 //		swichToFirstFrame(driver);
 //		swichToIframe(taskiFrame);
@@ -167,31 +166,27 @@ public class I9 extends Process implements PageInterface {
 		Sleeper.sleep(6000, driver);
 	}
 
-	private void completeStepFourth() throws ElementNotFoundException,
-			IOException, InterruptedException, Exception {
+	private void completeStepFourth() throws Exception {
 		//		if(!isElementTextEquals(emailField, employee.personData.getEmail())){throw new Exception("The information autocompleted in the fourth Step is wrong");};
 				setTextInField(mobilePhoneField, employee.personData.getPrimaryPhone());
 				clickAButton(nextToFifthButton);
 				Sleeper.sleep(4000, driver);
 	}
 
-	private void completeStepThree() throws ElementNotFoundException,
-			IOException, InterruptedException, Exception {
+	private void completeStepThree() throws Exception {
 		setTextInField(ssnField, employee.personData.getSsn());
 		setTextInField(dateBirthField, employee.personData.getBirthDate());
 		clickAButton(nextToFourthButton);
 		Sleeper.sleep(4000, driver);
 	}
 
-	private void completeStepTwo() throws Exception, ElementNotFoundException,
-			IOException, InterruptedException {
+	private void completeStepTwo() throws Exception {
 		addUsAddress();
 		clickAButton(nextToThirdStepTaskButton);
 		Sleeper.sleep(4000, driver);
 	}
 
-	private void completeStepOne() throws IOException, InterruptedException,
-			ElementNotFoundException, Exception {
+	private void completeStepOne() throws Exception {
 		swichToFirstFrame(driver);
 		swichToIframe(taskiFrame);
 		checkIdFirstStepIsCompletedOk();
@@ -203,9 +198,7 @@ public class I9 extends Process implements PageInterface {
 		// TODO Auto-generated method stub
 	}
 
-	private void checkIdFirstStepIsCompletedOk()
-			throws IOException, InterruptedException, ElementNotFoundException,
-			Exception {
+	private void checkIdFirstStepIsCompletedOk() throws Exception {
 		boolean isAllOk = true;
 		isAllOk &= isElementValueEquals(lastNameTask, employee.personData.getLastName());
 		isAllOk &= isElementValueEquals(firstNameTask, employee.personData.getName());

@@ -76,7 +76,7 @@ public class Page {
     		waitUntilIsLoaded(iframe);
     		driver.switchTo().frame(iframe);
     	} catch (Exception ex){
-    		throw new ElementNotFoundException(getMessageFromWebElement(iframe) +" is not found.", null);
+    		throw new ElementNotFoundException((iframe) +" is not found.", null);
     	}
     }
     
@@ -111,7 +111,7 @@ public class Page {
         	element.sendKeys(text);
         	assertEquals(element.getAttribute("value"), text);
         } catch (NullPointerException nEx){
-        	throw new ElementNotFoundException(getMessageFromWebElement(element)+" is NULL", null);
+        	throw new ElementNotFoundException((element)+" is NULL", null);
         }
     }
 
@@ -131,7 +131,7 @@ public class Page {
        try{
     	   new WebDriverWait(driver, SELENIUM_TIMEOUT_SEC).until(ExpectedConditions.visibilityOf(element));
        } catch (Exception ex){
-    	   throw new ElementNotFoundException(getMessageFromWebElement(element)+" is not found", null);
+    	   throw new ElementNotFoundException((element)+" is not found", null);
        }
     }
 
@@ -143,7 +143,7 @@ public class Page {
     			times++;
     		}
     	} catch (Exception ex){
-    		throw new ElementIsAllwaysVisibleException("The element "+getMessageFromWebElement(element)+" is still visible", null);
+    		throw new ElementIsAllwaysVisibleException("The element "+(element)+" is still visible", null);
     	}
     }
 
@@ -235,7 +235,7 @@ public class Page {
 			textField.clear();
 			textField.sendKeys(text);
 		} catch (NullPointerException nEx){
-			throw new ElementNotFoundException(getMessageFromWebElement(textField)+" is not found",null);
+			throw new ElementNotFoundException((textField)+" is not found",null);
 		}
 	}
 	
@@ -246,7 +246,7 @@ public class Page {
 			Sleeper.sleep(1000, driver);
 			combo.sendKeys("\n");
 		} catch (NullPointerException nEx){
-			throw new ElementNotFoundException(getMessageFromWebElement(combo)+" is not found",null);
+			throw new ElementNotFoundException((combo)+" is not found",null);
 		}
 	}
 	
@@ -269,7 +269,7 @@ public class Page {
 			clickAButton((driver.findElement(By.xpath("//"+typeOfContainer+"[contains(text(),'"+text+"')]" ))));
 			return true;
 		} catch (NullPointerException nEx){
-			throw new ElementNotFoundException(getMessageFromWebElement(combo)+" is not found",null);
+			throw new ElementNotFoundException((combo)+" is not found",null);
 		} catch (org.openqa.selenium.NoSuchElementException nSEx){
 			return false;
 		}
@@ -280,7 +280,7 @@ public class Page {
 			clickAButton((driver.findElement(By.xpath("//"+typeOfContainer+"[contains(text(),'"+text+"')]" ))));
 			return true;
 		} catch (NullPointerException nEx){
-			throw new ElementNotFoundException(getMessageFromWebElement(combo)+" is not found",null);
+			throw new ElementNotFoundException((combo)+" is not found",null);
 		} catch (org.openqa.selenium.NoSuchElementException nSEx){
 			return false;
 		}
@@ -358,14 +358,6 @@ public class Page {
 		}
 		if(elements == null){throw new ElementNotFoundException(tagName+"elements are not found", null);}
 		return elements;
-	}
-	
-	public String getMessageFromWebElement(WebElement element){
-		String[] elementSplit = element.toString().split("-> ");
-		return (elementSplit.length > 0) ? 
-				(elementSplit[1].split("]").length > 0 ? 
-						elementSplit[1].split("]")[0] : elementSplit[1]) 
-				: element.toString(); 
 	}
 	
 	public void logout() throws Exception{

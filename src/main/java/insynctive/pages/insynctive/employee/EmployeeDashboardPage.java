@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import insynctive.exception.ElementIsAllwaysVisibleException;
 import insynctive.exception.ElementNotFoundException;
 import insynctive.model.ParamObject;
 import insynctive.pages.Page;
@@ -329,12 +330,12 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 				if(isPresentMissingrequired(nameOfField)){Sleeper.sleep(1000, driver);count++;};
 			} catch(NoSuchElementException ex){break;}
 		}
-		if(count > 30){throw new Exception("The Missing information: '"+nameOfField+"' Is Present");}
+		if(count > 30){throw new ElementIsAllwaysVisibleException("The Missing information: '"+nameOfField+"' Is Present", null);}
 	}
 	
 	public void checkIsPresent(String nameOfField) throws Exception{
 		if(!isPresentMissingrequired(nameOfField)){
-			throw new Exception("The Missing information: '"+nameOfField+"' Is Not Present");
+			throw new ElementNotFoundException("The Missing information: '"+nameOfField+"' Is Not Present", null);
 		}
 	}
 

@@ -10,53 +10,59 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.search.BodyTerm;
 
+import insynctive.exception.ConfigurationException;
+
 public class MailManager {
 
 	public static String getEmailByBody(String username, String password, String containsMsg) throws Exception {
-		Properties props = System.getProperties();
-		props.setProperty("mail.store.protocol", "imaps");
-
-		Session session = Session.getDefaultInstance(props, null);
-		Store store = session.getStore("imaps");
-		store.connect("imap.gmail.com", username , password);
-
-		Folder folder = store.getFolder("INBOX");
-		folder.open(Folder.READ_WRITE);
-
-		Message[] messages = null;
-		boolean isMailFound = false;
-		Message confirmationMAil = null;
-
-		// Search for mail MAX 10 runs
-		for (int i = 0; i < 10; i++) {
-			messages = folder.search(new BodyTerm(containsMsg), folder.getMessages());
-			for(Message message : messages){
-				if (!message.isSet(Flags.Flag.SEEN)) {
-					confirmationMAil = message;
-					message.setFlag(Flag.SEEN, true);
-					isMailFound = true;
+		try{
+			Properties props = System.getProperties();
+			props.setProperty("mail.store.protocol", "imaps");
+	
+			Session session = Session.getDefaultInstance(props, null);
+			Store store = session.getStore("imaps");
+			store.connect("imap.gmail.com", username , password);
+	
+			Folder folder = store.getFolder("INBOX");
+			folder.open(Folder.READ_WRITE);
+	
+			Message[] messages = null;
+			boolean isMailFound = false;
+			Message confirmationMAil = null;
+	
+			// Search for mail MAX 10 runs
+			for (int i = 0; i < 10; i++) {
+				messages = folder.search(new BodyTerm(containsMsg), folder.getMessages());
+				for(Message message : messages){
+					if (!message.isSet(Flags.Flag.SEEN)) {
+						confirmationMAil = message;
+						message.setFlag(Flag.SEEN, true);
+						isMailFound = true;
+						break;
+					}
+				}
+				// wait for 3 seconds if message is not found
+				if (isMailFound) {
 					break;
 				}
+				else {
+					Thread.sleep(3000);
+				}
 			}
-			// wait for 3 seconds if message is not found
-			if (isMailFound) {
-				break;
+			
+			// Test fails if no unread mail was found from God
+			if (!isMailFound) {
+				throw new ConfigurationException("Could not find email that contains: "+containsMsg);
+	
+				// Read the content of mail and launch registration URL
+			} else {
+				Object body = confirmationMAil.getContent(); 
+			    if(body instanceof String){
+			    	return body.toString();
+			    }
 			}
-			else {
-				Thread.sleep(3000);
-			}
-		}
-		
-		// Test fails if no unread mail was found from God
-		if (!isMailFound) {
-			throw new Exception("Could not find email");
-
-			// Read the content of mail and launch registration URL
-		} else {
-			Object body = confirmationMAil.getContent(); 
-		    if(body instanceof String){
-		    	return body.toString();
-		    }
+		} catch(Exception ex){
+			throw new ConfigurationException("Error on connecting to: "+username+ " with password: "+password);
 		}
 		return null;
 	}

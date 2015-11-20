@@ -51,7 +51,7 @@ public class CreatePersonTest extends TestMachine {
 	public void loginTest(@Optional("personID") Integer personID) throws Exception {
 		this.personID = personID;
 		if(personID.equals("personID")){
-			throw new Exception("No email added");
+			throw new ConfigurationException("No email added");
 		}
 
 		testEnvironment = TestEnvironment.FIREFOX;

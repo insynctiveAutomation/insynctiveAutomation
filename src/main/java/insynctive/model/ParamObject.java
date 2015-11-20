@@ -468,11 +468,11 @@ public class ParamObject {
 				case 3:
 					return aClass.getField(splitName[0]).getType().getField(splitName[1]).getType().getField(splitName[2]);
 				default: 
-					throw new Exception();
+					throw new ConfigurationException("Error on get field: "+name);
 			}
 		} catch(Exception ex){
 			ex.printStackTrace();
-			throw new Exception("Error on getFieldByName("+name+")");
+			throw new ConfigurationException("Error on get field: "+name);
 		}
 	}
 	
@@ -488,11 +488,11 @@ public class ParamObject {
 				case 3:
 					return getFieldByName(name).get(getFieldByName(splitName[1]).get(getFieldByName(splitName[0]).get(this)));
 				default:
-					throw new Exception();
+					throw new ConfigurationException("Error on getValueByName("+name+")");
 			}
 		} catch(Exception ex){
 			ex.printStackTrace();
-			throw new Exception("Error on getValueByName("+name+")");
+			throw new ConfigurationException("Error on getValueByName("+name+")");
 		}
 	}
 
@@ -511,11 +511,11 @@ public class ParamObject {
 				case 3:
 					
 				default:
-					throw new Exception();
+					throw new ConfigurationException("Error on getValueByName("+name+")");
 			}
 		} catch(Exception ex){
 			ex.printStackTrace();
-			throw new Exception("Error on getValueByName("+name+")"); 
+			throw new ConfigurationException("Error on getValueByName("+name+")"); 
 		}
 	}
 	
