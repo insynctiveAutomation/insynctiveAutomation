@@ -84,8 +84,6 @@ public class TestController {
 	//SESSION SCOPES
 	private Account account;
 	private Integer logedAccID;
-	
-	
 
 	@Inject
 	public TestController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao, TestSuiteDao testSuiteDao) {
