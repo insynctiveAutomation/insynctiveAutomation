@@ -842,7 +842,7 @@ public class PersonFileTest extends TestMachine {
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.NAME, ParamObjectField.LOADING_TIME}, 
+			attrs={ParamObjectField.DOC_NAME, ParamObjectField.LOADING_TIME}, 
 			labels={"Document name", "Documents count"})
 	public void openDocuments(@Optional("TestID") Integer testID) throws Exception {
 		Boolean result = true;
@@ -852,7 +852,7 @@ public class PersonFileTest extends TestMachine {
 			personFilePage.goToDocumentsTab();
 			
 			for(int index = 1 ; index <= paramObject.loadingTime ; index++){
-				personFilePage.openDocument(paramObject.name + " " + index);
+				personFilePage.openDocument(paramObject.docName + " " + index);
 				result = result && personFilePage.isOpenDocument(); 
 				personFilePage.returnToPerson();
 			}

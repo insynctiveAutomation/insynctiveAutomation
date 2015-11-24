@@ -63,7 +63,14 @@ public class TestSuite {
 		this.tests = new ArrayList<>();
 	}
 
-
+	@JsonIgnore
+	public Test getTestByName(String name){
+		for(Test test : tests){
+			if(test.getTestName().equals(name)){ return test; }
+		}
+		return null;
+	}
+	
 	public List<Test> getTests() {
 		return tests;
 	}

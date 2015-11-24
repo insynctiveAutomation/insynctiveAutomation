@@ -531,7 +531,7 @@ public class ParamObject {
 		return booleanParamTwo;
 	}
 	
-	public void setBooleanParamOneTwo(Boolean booleanParamTwo) {
+	public void setBooleanParamTwo(Boolean booleanParamTwo) {
 		this.booleanParamTwo = booleanParamTwo;
 	}
 

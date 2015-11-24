@@ -69,6 +69,7 @@ public class TestController {
 //	return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
 	
 	private final int NIGHTLY_ACCOUNT_ID = 6;
+	final String NIGHTLY_DEFAULT_ENVIRONMENT = "AutomationQA";
 	
 	//DB Connections.
 	private final InsynctivePropertyDao propertyDao;
@@ -446,54 +447,61 @@ public class TestController {
 	public String runNightly() throws ConfigurationException {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		ParamObject paramObject = nightlyAcc.getParamObject();
-		final String DEFAULT_ENVIRONMENT = "staging";
 		
 		//Person File
-		TestSuite form = createTestSuite(paramObject,"Person File", DEFAULT_ENVIRONMENT, "FIREFOX");
+		TestSuite form = createTestSuite(paramObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
 		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject,"Person File", DEFAULT_ENVIRONMENT, "CHROME");
+		form = createTestSuite(paramObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
 		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject,"Person File", DEFAULT_ENVIRONMENT, "IPAD");
+		form = createTestSuite(paramObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 		runTest(form, nightlyAcc);
 		
 		//Open Documents - Person File
-		TestSuite odpform = createTestSuite(paramObject,"Open Documents - Person File", DEFAULT_ENVIRONMENT, "FIREFOX");
+		TestSuite odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
 		runTest(odpform, nightlyAcc);
-		odpform = createTestSuite(paramObject,"Open Documents - Person File", DEFAULT_ENVIRONMENT, "CHROME");
+		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
 		runTest(odpform, nightlyAcc);
-		odpform = createTestSuite(paramObject,"Open Documents - Person File", DEFAULT_ENVIRONMENT, "IPAD");
+		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 		runTest(odpform, nightlyAcc);
 		
 		//Open Documents - Employee Interface
-		TestSuite odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", DEFAULT_ENVIRONMENT, "FIREFOX");
+		TestSuite odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
 		runTest(odeiform, nightlyAcc);
-		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", DEFAULT_ENVIRONMENT, "CHROME");
+		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
 		runTest(odeiform, nightlyAcc);
-		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", DEFAULT_ENVIRONMENT, "IPAD");
+		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 		runTest(odeiform, nightlyAcc);
 		
 		//Loading Page
-		TestSuite loadingForm = createTestSuite(paramObject,"Loading Page", DEFAULT_ENVIRONMENT, "FIREFOX");
+		TestSuite loadingForm = createTestSuite(paramObject,"Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
 		runTest(loadingForm, nightlyAcc);
-		loadingForm = createTestSuite(paramObject, "Loading Page", DEFAULT_ENVIRONMENT, "CHROME");
+		loadingForm = createTestSuite(paramObject, "Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
 		runTest(loadingForm, nightlyAcc);
-		loadingForm = createTestSuite(paramObject, "Loading Page", DEFAULT_ENVIRONMENT, "IPAD");
+		loadingForm = createTestSuite(paramObject, "Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 		runTest(loadingForm, nightlyAcc);
 		
 		//2FA - Email - Agent
 		TestSuite twoFAEmailAgentForm = createTestSuite(paramObject,"2FA - Email - Agent", "2FA", "CHROME");
+		twoFAEmailAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(true);
+		twoFAEmailAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(true);
 		Integer twoFAEmailAgentID = runTest(twoFAEmailAgentForm, nightlyAcc);
 		
 		//2FA - Email - Employee
 		TestSuite twoFAEmailEmployeeForm = createTestSuite(paramObject,"2FA - Email - Employee", "2FA", "FIREFOX");
+		twoFAEmailEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
+		twoFAEmailEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
 		Integer twoFAEmailEmployeeID = runTest(twoFAEmailEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAEmailAgentID));
 		
 		//2FA - Phone - Agent
 		TestSuite twoFAPhoneAgentForm = createTestSuite(paramObject,"2FA - Phone - Agent", "2FA", "IPAD");
+		twoFAPhoneAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(true);
+		twoFAPhoneAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(true);
 		Integer twoFAPhoneAgentID = runTest(twoFAPhoneAgentForm, nightlyAcc, TestResults.workers.get(twoFAEmailEmployeeID));
 		
 		//2FA - Phone - Employee
 		TestSuite twoFAPhoneEmployeeForm = createTestSuite(paramObject,"2FA - Phone - Employee", "2FA", "CHROME");
+		twoFAPhoneEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
+		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
 		Integer twoFAPhoneEmployeeID = runTest(twoFAPhoneEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAPhoneAgentID));
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
