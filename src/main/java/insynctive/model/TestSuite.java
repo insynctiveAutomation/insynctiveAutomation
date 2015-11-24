@@ -63,7 +63,14 @@ public class TestSuite {
 		this.tests = new ArrayList<>();
 	}
 
-
+	@JsonIgnore
+	public Test getTestByName(String name){
+		for(Test test : tests){
+			if(test.getTestName().equals(name)){ return test; }
+		}
+		return null;
+	}
+	
 	public List<Test> getTests() {
 		return tests;
 	}
@@ -149,30 +156,23 @@ public class TestSuite {
 	}
 
 	@JsonIgnore
-	public TestSuite getNewWithOutIDs() {
+	public static TestSuite getNewWithOutIDs(TestSuite testSuite) throws Exception {
 		TestSuite newTestSuite = new TestSuite();
 		
-		newTestSuite.setBrowser(browser);
-		newTestSuite.setClassName(className);
-		newTestSuite.setEnvironment(environment);
-		newTestSuite.setRemote(remote);
+		newTestSuite.setBrowser(testSuite.browser);
+		newTestSuite.setClassName(testSuite.className);
+		newTestSuite.setEnvironment(testSuite.environment);
+		newTestSuite.setRemote(testSuite.remote);
 		newTestSuite.setStatus("-");
-		newTestSuite.setTester(tester);
-		newTestSuite.setTestSuiteID(null);
-		newTestSuite.setTestSuiteName(testSuiteName);
+		newTestSuite.setTester(testSuite.tester);
+		newTestSuite.setTestSuiteName(testSuite.testSuiteName);
 		
-		for(Test test : tests){
-			Test newTest = new Test();
-			newTest.setStatus("-");
-			newTest.setTestID(null);
-			newTest.setTestName(test.getTestName());
-			newTest.setTestSuiteID(null);
-			if(test.getParamObject() != null) test.getParamObject().setParamObjectID(null);
-			newTest.setParamObject(test.getParamObject());
-			
+		for(Test test : testSuite.tests){
+			Test newTest = Test.getNewWithOutIDs(test);
 			newTestSuite.addMethod(newTest);
 		}
 		
+		newTestSuite.setTestSuiteID(null);
 		return newTestSuite;
 	}
 	

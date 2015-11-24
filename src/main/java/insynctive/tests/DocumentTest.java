@@ -19,12 +19,13 @@ import insynctive.utils.data.TestEnvironment;
 public class DocumentTest extends TestMachine{
 
     @BeforeClass
-    @Parameters({"accountID", "runID", "bowser", "testID", "testName"})
-    public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName) throws Exception {
+    @Parameters({"accountID", "runID", "bowser", "testID", "testName", "environment"})
+    public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName, String environment) throws Exception {
         super.testSuiteID = Integer.parseInt(testSuiteID);
         super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
         testEnvironment = TestEnvironment.valueOf(bowser);
         this.sessionName = testName;
+		properties.setEnvironment(environment);
     }
 
     @Test

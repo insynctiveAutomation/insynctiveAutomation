@@ -1,5 +1,8 @@
 package insynctive.model;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -21,21 +25,21 @@ public class Test {
 	@Id
 	@GeneratedValue
 	@Column(name = "test_id")
-	private Integer testID;
+	public Integer testID;
 	
 	@Column(name = "test_name")
-	private String testName;
+	public String testName;
 	
 	@Column(name = "status")
-	private String status;
+	public String status;
 
 	@Column(name = "testSuite_id")
-	private Integer testSuiteID;
+	public Integer testSuiteID;
 	
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "param_object_id")
-	private ParamObject paramObject;
+	public ParamObject paramObject;
 	
 	public Test(){
 		this.status = "-";
@@ -96,5 +100,17 @@ public class Test {
 		this.testID = null;
 		this.status = "-";
 		this.paramObject.setParamObjectID(null);
+	}
+	
+	public static Test getNewWithOutIDs(Test test) throws IllegalArgumentException, IllegalAccessException, Exception{
+		Test newtest = new Test();
+		
+		newtest.paramObject = ParamObject.getNewWithOutIDs(test.getParamObject());
+		newtest.status = test.getStatus();
+		newtest.testName = test.getTestName();
+		
+		newtest.testSuiteID = null;
+		newtest.testID = null;
+		return newtest;
 	}
 }

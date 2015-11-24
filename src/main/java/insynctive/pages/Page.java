@@ -25,7 +25,7 @@ import insynctive.utils.Sleeper;
 
 public class Page {
 
-	public static final int SELENIUM_TIMEOUT_SEC = 30;
+	public static final int SELENIUM_TIMEOUT_SEC = 50;
     public WebDriver driver;
     public String PAGE_URL;
     public String PAGE_TITLE;
@@ -372,7 +372,6 @@ public class Page {
 		swichToFirstFrame(driver);
 		clickAButton(arrowImage);
 		clickAButton(singoutLink);
-		Sleeper.sleep(1000, driver);
 	}
 	
 	public boolean isElementTextEquals(WebElement element, String lastName) throws IOException, InterruptedException, ElementNotFoundException {

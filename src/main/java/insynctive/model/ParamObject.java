@@ -1,6 +1,7 @@
 package insynctive.model;
 
 import java.io.FileReader;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import javax.persistence.AttributeOverride;
@@ -531,7 +532,7 @@ public class ParamObject {
 		return booleanParamTwo;
 	}
 	
-	public void setBooleanParamOneTwo(Boolean booleanParamTwo) {
+	public void setBooleanParamTwo(Boolean booleanParamTwo) {
 		this.booleanParamTwo = booleanParamTwo;
 	}
 
@@ -541,5 +542,43 @@ public class ParamObject {
 
 	public void setWaitTime(Integer waitTime) {
 		this.waitTime = waitTime;
+	}
+	
+	//TODO AUTOMCATICALLY
+	public static ParamObject getNewWithOutIDs(ParamObject p) throws IllegalArgumentException, IllegalAccessException, Exception{
+		ParamObject newParamObject = new ParamObject();
+		
+		newParamObject.birthDate = p.birthDate;
+		newParamObject.booleanParamOne = p.booleanParamOne;
+		newParamObject.booleanParamTwo = p.booleanParamTwo;
+		newParamObject.checklistName = p.checklistName;
+		newParamObject.dentalBenefit = p.dentalBenefit;
+		newParamObject.departamentOfEmployee = p.departamentOfEmployee;
+		newParamObject.docCategory = p.docCategory;
+		newParamObject.docKeyword = p.docKeyword;
+		newParamObject.docName = p.docName;
+		newParamObject.docPlanName = p.docPlanName;
+		newParamObject.docProcess = p.docProcess;
+		newParamObject.email = p.email;
+		newParamObject.emergencyContact = p.emergencyContact;
+		newParamObject.gender = p.gender;
+		newParamObject.lastName = p.lastName;
+		newParamObject.loadingTime = p.loadingTime;
+		newParamObject.loginPassword = p.loginPassword;
+		newParamObject.loginUsername = p.loginUsername;
+		newParamObject.maidenName = p.maidenName;
+		newParamObject.maritalStatus = p.maritalStatus;
+		newParamObject.medicalBenefit = p.medicalBenefit;
+		newParamObject.middleName = p.middleName;
+		newParamObject.name = p.name;
+		newParamObject.primaryPhone = p.primaryPhone;
+		newParamObject.ssn = p.ssn;
+		newParamObject.titleOfEmployee = p.titleOfEmployee;
+		newParamObject.usAddress = p.usAddress;
+		newParamObject.visionBenefit = p.visionBenefit;
+		newParamObject.waitTime = p.waitTime;
+		
+		newParamObject.paramObjectID = null;
+		return newParamObject;
 	}
 }

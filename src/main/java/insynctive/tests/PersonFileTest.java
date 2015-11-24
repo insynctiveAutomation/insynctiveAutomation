@@ -33,12 +33,13 @@ public class PersonFileTest extends TestMachine {
 	private USAddress usaddress = null;
 	
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID", "testName"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName) throws Exception {
+	@Parameters({"accountID", "runID", "bowser", "testID", "testName", "environment"})
+	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName, String environment) throws Exception {
 		super.testSuiteID = Integer.parseInt(testSuiteID);
 		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = testName;
+		properties.setEnvironment(environment);
 	}
 	
 	@BeforeTest
@@ -224,7 +225,7 @@ public class PersonFileTest extends TestMachine {
 			changeParamObject(testID);
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			boolean result;
-				homePage.openPersonFile(paramObject.getSearchEmail());
+				homePage.openPersonFile(paramObject.getEmail());
 				result = homePage.isPersonFileOpened();
 				Sleeper.sleep(5000, driver);
 			
@@ -789,14 +790,8 @@ public class PersonFileTest extends TestMachine {
 	}
 
 	private void logOut() throws Exception {
-		try{ 
-			Page page = new Page(driver);
-			page.logout();
-			assertTrue(true);
-		}catch (Exception ex){ 
-			failTest("log out fail", ex, isSaucelabs);
-			assertTrue(false);
-		}
+		Page page = new Page(driver);
+		page.logout();
 	}
 	
 	
@@ -842,7 +837,7 @@ public class PersonFileTest extends TestMachine {
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.NAME, ParamObjectField.LOADING_TIME}, 
+			attrs={ParamObjectField.DOC_NAME, ParamObjectField.LOADING_TIME}, 
 			labels={"Document name", "Documents count"})
 	public void openDocuments(@Optional("TestID") Integer testID) throws Exception {
 		Boolean result = true;
@@ -852,7 +847,7 @@ public class PersonFileTest extends TestMachine {
 			personFilePage.goToDocumentsTab();
 			
 			for(int index = 1 ; index <= paramObject.loadingTime ; index++){
-				personFilePage.openDocument(paramObject.name + " " + index);
+				personFilePage.openDocument(paramObject.docName + " " + index);
 				result = result && personFilePage.isOpenDocument(); 
 				personFilePage.returnToPerson();
 			}

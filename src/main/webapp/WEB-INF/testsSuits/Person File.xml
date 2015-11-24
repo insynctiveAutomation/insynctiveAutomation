@@ -35,8 +35,8 @@
 	        <include name="removeUSAddress" />
 
 			<!-- Tasks -->
-	        <include name="assignTask" />
-	        <include name="startChecklist" />
+	       <!--  <include name="assignTask" />
+	        <include name="startChecklist" /> -->
 	        
 			<!-- Job -->
 	        <include name="assignJob" />

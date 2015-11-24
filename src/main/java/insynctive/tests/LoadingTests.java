@@ -31,12 +31,13 @@ public class LoadingTests extends TestMachine {
 	int TIME_EXPECTED = 5000;
 	
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID) throws Exception {
+	@Parameters({"accountID", "runID", "bowser", "testID", "environment"})
+	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String environment) throws Exception {
 		super.testSuiteID = Integer.parseInt(testSuiteID);
 		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Loading Tests";
+		properties.setEnvironment(environment);
 	}
 	
 	@Test()

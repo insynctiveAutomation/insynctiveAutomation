@@ -22,12 +22,13 @@ import insynctive.utils.data.TestEnvironment;
 public class TaskTest extends TestMachine {
 
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID) throws Exception {
+	@Parameters({"accountID", "runID", "bowser", "testID", "environment"})
+	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String environment) throws Exception {
 		super.testSuiteID = Integer.parseInt(testSuiteID);
 		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
 		testEnvironment = TestEnvironment.valueOf(bowser);
 		this.sessionName = "Assign Task Test ("+ paramObject.getEmail()+")";
+		properties.setEnvironment(environment);
 	}
 	
 	@Override

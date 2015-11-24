@@ -23,7 +23,7 @@ app.controller('DashboardController', function($cookies, $http, $window, $modal,
 	
 	this.openTestSuite = function(testSuite, $event) {
 		if($event.ctrlKey || $event.which === 2){
-			$window.open('http://google.com.ar','_blank')
+			$window.open('/testSuite?id='+testSuite.testSuiteID,'_blank')
 		} else {
 			var modalInstance = $modal.open({
 				animation : true,
