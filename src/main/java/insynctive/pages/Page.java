@@ -25,7 +25,7 @@ import insynctive.utils.Sleeper;
 
 public class Page {
 
-	public static final int SELENIUM_TIMEOUT_SEC = 50;
+	public static int SELENIUM_TIMEOUT_SEC = 30;
     public WebDriver driver;
     public String PAGE_URL;
     public String PAGE_TITLE;
@@ -127,6 +127,14 @@ public class Page {
         return driver.getTitle();
     }
 
+    public void waitUntilIsLoaded(WebElement element, Integer segs) throws IOException, InterruptedException, ElementNotFoundException {
+       try{
+    	   new WebDriverWait(driver, segs).until(ExpectedConditions.visibilityOf(element));
+       } catch (Exception ex){
+    	   throw new ElementNotFoundException(getMessageFromWebElement(element)+" is not found", null);
+       }
+    }
+    
     public void waitUntilIsLoaded(WebElement element) throws IOException, InterruptedException, ElementNotFoundException {
        try{
     	   new WebDriverWait(driver, SELENIUM_TIMEOUT_SEC).until(ExpectedConditions.visibilityOf(element));
@@ -158,7 +166,11 @@ public class Page {
     		throw new ElementIsAllwaysVisibleException("The text "+element.getText()+" is different from "+name, null);
     	}
     }
- 
+
+    public void waitUntilTitleContains(String str, Integer segs) throws IOException, InterruptedException {
+    	new WebDriverWait(driver, segs).until(ExpectedConditions.titleContains(str));
+    }
+    
     public void waitUntilTitleContains(String str) throws IOException, InterruptedException {
     	new WebDriverWait(driver, SELENIUM_TIMEOUT_SEC).until(ExpectedConditions.titleContains(str));
     }

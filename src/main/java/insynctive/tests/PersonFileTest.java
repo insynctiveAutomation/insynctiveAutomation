@@ -192,6 +192,7 @@ public class PersonFileTest extends TestMachine {
 	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		try{ 
+			HomeForAgentsPage.SELENIUM_TIMEOUT_SEC = 50;
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
 			boolean result;
 			if(paramObject.getBooleanParamOne()){//True = Open Person file > False = Create Person.
@@ -212,6 +213,8 @@ public class PersonFileTest extends TestMachine {
 		}catch (Exception ex){ 
 			failTest("Create Person", ex, isSaucelabs);
 			assertTrue(false);
+		} finally {
+			HomeForAgentsPage.SELENIUM_TIMEOUT_SEC = 30;
 		}
 	}
 	

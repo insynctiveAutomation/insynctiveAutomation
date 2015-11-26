@@ -28,7 +28,7 @@ import insynctive.utils.data.TestEnvironment;
 @Transactional
 public class LoadingTests extends TestMachine {
 
-	int TIME_EXPECTED = 5000;
+	int TIME_EXPECTED = 10000;
 	
 	@BeforeClass
 	@Parameters({"accountID", "runID", "bowser", "testID", "environment"})
