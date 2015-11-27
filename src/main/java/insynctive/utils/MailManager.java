@@ -56,16 +56,17 @@ public class MailManager {
 			Object body = confirmationMAil.getContent(); 
 		    if(body instanceof String){
 		    	return body.toString();
+		    } else {
+		    	return body.toString();
 		    }
 		}
-		return null;
 	}
 	
 	public static boolean checkIfChangeEmailIsSending(String username, String password, String beforeEmail)
 			throws Exception {
 		try {
-			String buffer = getEmailByBody(username, password,
-					"Your login was changed from " + beforeEmail + " to " + username);
+			String buffer = getEmailByBody(username, password, "Your login was changed from " + beforeEmail + " to " + username);
+			System.out.println(buffer);
 			return buffer != null;
 		} catch (Exception ex) {
 			return false;

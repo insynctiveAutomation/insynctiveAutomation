@@ -461,10 +461,10 @@ public class TestController {
 		
 		//Open Documents - Person File
 		TestSuite odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
-		odpform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
+		odpform.getTestByName("openDocuments").getParamObject().setLoadingTime(5);
 		runTest(odpform, nightlyAcc);
 		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		odpform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
+		odpform.getTestByName("openDocuments").getParamObject().setLoadingTime(5);
 		runTest(odpform, nightlyAcc);
 //		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 //		runTest(odpform, nightlyAcc);
@@ -535,8 +535,20 @@ public class TestController {
 		twoFAPhoneEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
 		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(false);
 		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
-		
 		Integer twoFAPhoneEmployeeID = runTest(twoFAPhoneEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAPhoneAgentID));
+		
+		//Make Primary Email and Login
+		TestSuite makePrimeryEmailAndLoginForm = createTestSuite(paramObject, "Make Primary Email and Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
+		runTest(makePrimeryEmailAndLoginForm, nightlyAcc);
+		
+		//Change Email And Login
+		TestSuite changeEmailAndLoginForm = createTestSuite(paramObject, "Change Email And Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
+		runTest(changeEmailAndLoginForm, nightlyAcc);
+		
+		
+		twoFAPhoneEmployeeForm = TestSuite.getNewWithOutIDs(twoFAPhoneEmployeeForm);
+		
+		
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
