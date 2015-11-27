@@ -6,9 +6,7 @@
 	      <methods>
 	      	<include name="loginTest" />
 	        <include name="openPersonFIle" />
-	        
-	        <include name="startChecklist" />
-	        <include name="assignTask" />
+	        <include name="assignJob" />
 	      </methods>
 	    </class>
 	  </classes>

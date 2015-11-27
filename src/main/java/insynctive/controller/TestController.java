@@ -461,16 +461,20 @@ public class TestController {
 		
 		//Open Documents - Person File
 		TestSuite odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
+		odpform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
 		runTest(odpform, nightlyAcc);
 		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
+		odpform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
 		runTest(odpform, nightlyAcc);
 //		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 //		runTest(odpform, nightlyAcc);
 		
 		//Open Documents - Employee Interface
 		TestSuite odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
+		odeiform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
 		runTest(odeiform, nightlyAcc);
 		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
+		odeiform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
 		runTest(odeiform, nightlyAcc);
 //		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
 //		runTest(odeiform, nightlyAcc);

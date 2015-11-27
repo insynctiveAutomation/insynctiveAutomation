@@ -65,9 +65,7 @@ public class LoadingTests extends TestMachine {
 	
 	@Test
 	@Parameters({"TestID"})
-	@ParametersFront(
-			attrs={ParamObjectField.LOADING_TIME}, 
-			labels={"Loading time (segs)"})
+	@ParametersFront(attrs={ParamObjectField.LOADING_TIME}, labels={"Loading time (segs)"})
 	public void hrPeopleLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
@@ -88,9 +86,7 @@ public class LoadingTests extends TestMachine {
 	
 	@Test
 	@Parameters({"TestID"})
-	@ParametersFront(
-			attrs={ParamObjectField.LOADING_TIME}, 
-			labels={"Loading time (segs)"})
+	@ParametersFront(attrs={ParamObjectField.LOADING_TIME}, labels={"Loading time (segs)"})
 	public void hrTasksLoadingTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;

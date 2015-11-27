@@ -33,7 +33,7 @@
 		<!-- TESTS -->
 		<junit-Version>4.11</junit-Version>
 		<junit-dep>4.10</junit-dep>
-		<selenium.version>2.45.0</selenium.version>
+		<selenium.version>2.48.2</selenium.version>
 		<testNG-Version>6.9.4</testNG-Version>
 
 		<!-- DATA BASE -->
