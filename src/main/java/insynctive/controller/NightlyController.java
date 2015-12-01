@@ -20,7 +20,7 @@ import insynctive.utils.TestResults;
 import insynctive.utils.TestWebRunner;
 
 @Controller
-@RequestMapping(value = "/nightly")
+@RequestMapping
 public class NightlyController {
 	
 	private final int NIGHTLY_ACCOUNT_ID = 6;
@@ -46,7 +46,7 @@ public class NightlyController {
 		this.testRunner = new TestWebRunner(servletContext, testSuiteDao, accDao, testDao);
 	}
 	
-	@RequestMapping(value = "/{environment}/{xmlName}/{browser}", method = RequestMethod.POST)
+	@RequestMapping(value = "/nightly/{environment}/{xmlName}/{browser}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runNightlyTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws Exception{
 		
@@ -57,7 +57,7 @@ public class NightlyController {
 		return "{\"index\" : \""+(testRunner.runTest(form, nightlyAcc))+"\"}";
 	}
 	
-	@RequestMapping(value = "/{environment}/{xmlName}", method = RequestMethod.POST)
+	@RequestMapping(value = "/nightly/{environment}/{xmlName}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runNightlybyTestSuiteName(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws Exception{
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
@@ -74,7 +74,7 @@ public class NightlyController {
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
 
-	@RequestMapping(value = "/{environment}", method = RequestMethod.POST)
+	@RequestMapping(value = "/nightly/{environment}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runNightly(@PathVariable("environment") String environment) throws Exception{
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
@@ -99,7 +99,7 @@ public class NightlyController {
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@RequestMapping(value = "/nightly", method = RequestMethod.POST)
 	@ResponseBody
 	public String runNightly() throws Exception {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
@@ -205,6 +205,53 @@ public class NightlyController {
 		testRunner.runTest(changeEmailAndLoginForm, nightlyAcc, new Thread[]{
 				TestResults.workers.get(loadingPageChrome), TestResults.workers.get(loadingPageFirefox), TestResults.workers.get(loadingPageIPad)
 		});
+		
+		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
+	}
+	
+	@RequestMapping(value = "/nightly-microsoft", method = RequestMethod.POST)
+	@ResponseBody
+	public String runNightlyMicrosoft() throws Exception {
+		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
+		ParamObject defaultParamObject = nightlyAcc.getParamObject();
+		
+		//Person File - IE 10
+		TestSuite form10 = testRunner.createTestSuite(defaultParamObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_10");
+			form10.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
+		Integer PersonFileFirefox10 = testRunner.runTest(form10, nightlyAcc);
+		
+		//Person File - IE 11
+		TestSuite form11 = testRunner.createTestSuite(defaultParamObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_11");
+		form11.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
+		Integer PersonFileFirefox11 = testRunner.runTest(form11, nightlyAcc);
+		
+		//Open Documents - Person File - IE 10
+		TestSuite odpform10 = testRunner.createTestSuite(defaultParamObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_10");
+			odpform10.getTestByName("openDocuments").getParamObject().setLoadingTime(5);
+		Integer openDocumentsPersonFileFirefox10 = testRunner.runTest(odpform10, nightlyAcc);
+		
+		//Open Documents - Person File - IE 11
+		TestSuite odpform11 = testRunner.createTestSuite(defaultParamObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_11");
+		odpform11.getTestByName("openDocuments").getParamObject().setLoadingTime(5);
+		Integer openDocumentsPersonFileFirefox11 = testRunner.runTest(odpform11, nightlyAcc);
+		
+		//Open Documents - Employee Interface - IE 10
+		TestSuite odeiform10 = testRunner.createTestSuite(defaultParamObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_10");
+			odeiform10.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
+		Integer openDocumentsEmployeeInterfaceFirefox10 = testRunner.runTest(odeiform10, nightlyAcc);
+		
+		//Open Documents - Employee Interface - IE 11
+		TestSuite odeiform11 = testRunner.createTestSuite(defaultParamObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_11");
+		odeiform11.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
+		Integer openDocumentsEmployeeInterfaceFirefox11 = testRunner.runTest(odeiform11, nightlyAcc);
+
+		//Loading Page - IE 10
+		TestSuite loadingForm10 = testRunner.createTestSuite(defaultParamObject,"Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_10");
+		Integer loadingPageFirefox10 = testRunner.runTest(loadingForm10, nightlyAcc);
+		
+		//Loading Page - IE 11
+		TestSuite loadingForm11 = testRunner.createTestSuite(defaultParamObject,"Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "IE_11");
+		Integer loadingPageFirefox11 = testRunner.runTest(loadingForm11, nightlyAcc);
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}

@@ -75,12 +75,14 @@ public class MailManager {
 	}
 
 	public static String getAuthLink(String username, String password, String runID) throws Exception {
-
+		System.out.println("Username:"+ username + " - Password: "+password);
+		System.out.println("Connecting...");
+		
 		String buffer = getEmailByBody(username, password, runID);
 		String[] splitHref = buffer.toString().split(">Create Password Now")[0].split("href=\"");
 		String registationUrl = splitHref[splitHref.length - 1].split("\"")[0];
 
-		System.out.println(registationUrl);
+		System.out.println("Registation URL: "+registationUrl);
 
 		return registationUrl;
 	}
@@ -98,6 +100,6 @@ public class MailManager {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		getVerificationCode("insynctiveCBT@gmail.com", "benefits123");
+		getEmailByBody("insynctivecbt@gmail.com", "benefits123", "sign");
 	}
 }

@@ -69,7 +69,8 @@
 		    	<option value="">Select a Browser</option>
 		    	<option value="FIREFOX">Firefox</option>
 		    	<option value="CHROME">Chrome</option>
-		    	<option value="IE">IE</option>
+		    	<option value="IE_10">IE 10</option>
+		    	<option value="IE_11">IE 11</option>
 		    	<option value="IPAD">iPad</option>
 		 	</select> 
 		 	
