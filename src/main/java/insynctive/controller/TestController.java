@@ -60,6 +60,7 @@ import insynctive.utils.LoginForm;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
 import insynctive.utils.TestResults;
+import insynctive.utils.TestWebRunner;
 
 @Controller
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
@@ -67,9 +68,6 @@ public class TestController {
  
 //	How to return error codes
 //	return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
-	
-	private final int NIGHTLY_ACCOUNT_ID = 6;
-	final String NIGHTLY_DEFAULT_ENVIRONMENT = "AutomationQA";
 	
 	//DB Connections.
 	private final InsynctivePropertyDao propertyDao;
@@ -82,6 +80,9 @@ public class TestController {
 	//Servlet Context Helper
 	private final ServletContext servletContext;
 
+	//Test Runner
+	private final TestWebRunner testRunner;
+	
 	//SESSION SCOPES
 	private Account account;
 	private Integer logedAccID;
@@ -95,6 +96,7 @@ public class TestController {
 		this.createPersonFormDao = createPersonFormDao;
 		this.testDao = testDao;
 		this.testSuiteDao = testSuiteDao;
+		this.testRunner = new TestWebRunner(servletContext, testSuiteDao, accDao, testDao);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -287,7 +289,7 @@ public class TestController {
 	@RequestMapping(value = "/testsSuites" ,method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getTestsSuitesString() throws MalformedURLException, URISyntaxException{
-		List<String> testsSuites = getTestSuitesForRunUI();
+		List<String> testsSuites = testRunner.getTestSuitesForRunUI();
 		return testsSuites;
 	}
 	
@@ -332,7 +334,7 @@ public class TestController {
 	public TestSuite getTestsRuns(@PathVariable("xmlName") String xmlName) {
 		TestSuite testSuite = null;
 		try{
-			List<XmlSuite> suite = getXmlTestSuiteForUI(xmlName);
+			List<XmlSuite> suite = testRunner.getXmlTestSuiteForUI(xmlName);
 			testSuite = new TestSuite();
 			
 			for(XmlTest test : suite.get(0).getTests()){
@@ -376,7 +378,7 @@ public class TestController {
 		form.setBrowser(browser);
 		form.setEnvironment(environment);
 		form.setTestSuiteName(xmlName);
-		return "{\"index\" : \""+(runTest(form, accDao.getAccountByID(logedAccID)))+"\"}";
+		return "{\"index\" : \""+(testRunner.runTest(form, accDao.getAccountByID(logedAccID)))+"\"}";
 	}
 	
 	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
@@ -386,231 +388,7 @@ public class TestController {
 		TestSuite testSuiteToRetry = testSuiteDao.getTestSuiteByID(testSuiteID);
 		TestSuite testSuite = TestSuite.getNewWithOutIDs(testSuiteToRetry);
 		
-		return "{\"index\" : \""+(runTest(testSuite, accDao.getAccountByID(logedAccID)))+"\"}";
-	}
-	
-	@RequestMapping(value = "/nightly/{environment}/{xmlName}/{browser}", method = RequestMethod.POST)
-	@ResponseBody
-	public String runNightlyTest(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws Exception{
-		
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		ParamObject paramObject = nightlyAcc.getParamObject();
-		TestSuite form = createTestSuite(paramObject, xmlName, environment, browser);
-		
-		return "{\"index\" : \""+(runTest(form, nightlyAcc))+"\"}";
-	}
-	
-	@RequestMapping(value = "/nightly/{environment}/{xmlName}", method = RequestMethod.POST)
-	@ResponseBody
-	public String runNightlybyTestSuiteName(@PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment) throws Exception{
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		ParamObject paramObject = nightlyAcc.getParamObject();
-		
-		//Person File RUN
-		TestSuite form = createTestSuite(paramObject, xmlName, environment, "FIREFOX");
-		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject, xmlName, environment, "CHROME");
-		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject, xmlName, environment, "IPAD");
-		runTest(form, nightlyAcc);
-		
-		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
-	}
-
-	@RequestMapping(value = "/nightly/{environment}", method = RequestMethod.POST)
-	@ResponseBody
-	public String runNightly(@PathVariable("environment") String environment) throws Exception{
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		ParamObject paramObject = nightlyAcc.getParamObject();
-		
-		//Person File RUN
-		TestSuite form = createTestSuite(paramObject,"Person File", environment, "FIREFOX");
-		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject,"Person File", environment, "CHROME");
-		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject,"Person File", environment, "IPAD");
-		runTest(form, nightlyAcc);
-		
-		//Loading Page RUN
-		TestSuite loadingForm = createTestSuite(paramObject,"Loading Page", environment, "FIREFOX");
-		runTest(loadingForm, nightlyAcc);
-		loadingForm = createTestSuite(paramObject, "Loading Page", environment, "CHROME");
-		runTest(loadingForm, nightlyAcc);
-		loadingForm = createTestSuite(paramObject, "Loading Page", environment, "IPAD");
-		runTest(loadingForm, nightlyAcc);
-		
-		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
-	}
-
-	@RequestMapping(value = "/nightly", method = RequestMethod.POST)
-	@ResponseBody
-	public String runNightly() throws Exception {
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		ParamObject paramObject = nightlyAcc.getParamObject();
-		
-		//Person File
-		TestSuite form = createTestSuite(paramObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
-		form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
-		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
-		runTest(form, nightlyAcc);
-		form = createTestSuite(paramObject,"Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
-		form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
-		runTest(form, nightlyAcc);
-		
-		//Open Documents - Person File
-		TestSuite odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
-		odpform.getTestByName("openDocuments").getParamObject().setLoadingTime(5);
-		runTest(odpform, nightlyAcc);
-		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		odpform.getTestByName("openDocuments").getParamObject().setLoadingTime(5);
-		runTest(odpform, nightlyAcc);
-//		odpform = createTestSuite(paramObject,"Open Documents - Person File", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
-//		runTest(odpform, nightlyAcc);
-		
-		//Open Documents - Employee Interface
-		TestSuite odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
-		odeiform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
-		runTest(odeiform, nightlyAcc);
-		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		odeiform.getTestByName("getDocuments").getParamObject().setLoadingTime(5);
-		runTest(odeiform, nightlyAcc);
-//		odeiform = createTestSuite(paramObject,"Open Documents - Employee Interface", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
-//		runTest(odeiform, nightlyAcc);
-		
-		//Loading Page
-		TestSuite loadingForm = createTestSuite(paramObject,"Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "FIREFOX");
-		runTest(loadingForm, nightlyAcc);
-		loadingForm = createTestSuite(paramObject, "Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		runTest(loadingForm, nightlyAcc);
-		loadingForm = createTestSuite(paramObject, "Loading Page", NIGHTLY_DEFAULT_ENVIRONMENT, "IPAD");
-		runTest(loadingForm, nightlyAcc);
-		
-		//2FA - Email - Agent
-		TestSuite twoFAEmailAgentForm = createTestSuite(paramObject, "2FA - Email - Agent", "2FA", "CHROME");
-		
-		twoFAEmailAgentForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginUsername("insynctiveCBT+agent@gmail.com");
-		twoFAEmailAgentForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginPassword("password");
-		twoFAEmailAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(true);
-		twoFAEmailAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(false);
-		twoFAEmailAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(true);
-		twoFAEmailAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(false);
-		
-		Integer twoFAEmailAgentID = runTest(twoFAEmailAgentForm, nightlyAcc);
-		
-		//2FA - Email - Employee
-		TestSuite twoFAEmailEmployeeForm = createTestSuite(paramObject, "2FA - Email - Employee", "2FA", "FIREFOX");
-		
-		twoFAEmailEmployeeForm = TestSuite.getNewWithOutIDs(twoFAEmailEmployeeForm);
-		twoFAEmailEmployeeForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginUsername("insynctiveCBT+employee@gmail.com");
-		twoFAEmailEmployeeForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginPassword("password");
-		twoFAEmailEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(false);
-		twoFAEmailEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
-		twoFAEmailEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(false);
-		twoFAEmailEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
-		
-		Integer twoFAEmailEmployeeID = runTest(twoFAEmailEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAEmailAgentID));
-		
-		//2FA - Phone - Agent
-		TestSuite twoFAPhoneAgentForm = createTestSuite(paramObject, "2FA - Phone - Agent", "2FA", "IPAD");
-		
-		twoFAPhoneAgentForm = TestSuite.getNewWithOutIDs(twoFAPhoneAgentForm);
-		twoFAPhoneAgentForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginUsername("insynctivetestng@gmail.com");
-		twoFAPhoneAgentForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginPassword("password");
-		twoFAPhoneAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(true);
-		twoFAPhoneAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(false);
-		twoFAPhoneAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(true);
-		twoFAPhoneAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(false);
-		
-		Integer twoFAPhoneAgentID = runTest(twoFAPhoneAgentForm, nightlyAcc, TestResults.workers.get(twoFAEmailEmployeeID));
-		
-		//2FA - Phone - Employee
-		TestSuite twoFAPhoneEmployeeForm = createTestSuite(paramObject, "2FA - Phone - Employee", "2FA", "CHROME");
-		
-		twoFAPhoneEmployeeForm = TestSuite.getNewWithOutIDs(twoFAPhoneEmployeeForm);
-		twoFAPhoneEmployeeForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginUsername("insynctivecbt@gmail.com");
-		twoFAPhoneEmployeeForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginPassword("password");
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(false);
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(false);
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
-		Integer twoFAPhoneEmployeeID = runTest(twoFAPhoneEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAPhoneAgentID));
-		
-		//Make Primary Email and Login
-		TestSuite makePrimeryEmailAndLoginForm = createTestSuite(paramObject, "Make Primary Email and Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		runTest(makePrimeryEmailAndLoginForm, nightlyAcc);
-		
-		//Change Email And Login
-		TestSuite changeEmailAndLoginForm = createTestSuite(paramObject, "Change Email And Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		runTest(changeEmailAndLoginForm, nightlyAcc);
-		
-		
-		twoFAPhoneEmployeeForm = TestSuite.getNewWithOutIDs(twoFAPhoneEmployeeForm);
-		
-		
-		
-		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
-	}
-	
-	@RequestMapping(value = "/2fa", method = RequestMethod.GET)
-	@ResponseBody
-	public TestSuite run2fa() throws Exception {
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		ParamObject paramObject = nightlyAcc.getParamObject();
-		
-		//2FA - Email - Agent
-		TestSuite twoFAEmailAgentForm = createTestSuite(paramObject, "2FA - Email - Agent", "2FA", "CHROME");
-		
-		twoFAEmailAgentForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginUsername("insynctiveCBT+agent@gmail.com");
-		twoFAEmailAgentForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginPassword("password");
-		twoFAEmailAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(true);
-		twoFAEmailAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(false);
-		twoFAEmailAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(true);
-		twoFAEmailAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(false);
-		
-		Integer twoFAEmailAgentID = runTest(twoFAEmailAgentForm, nightlyAcc);
-		
-		//2FA - Email - Employee
-		TestSuite twoFAEmailEmployeeForm = createTestSuite(paramObject, "2FA - Email - Employee", "2FA", "FIREFOX");
-		
-		twoFAEmailEmployeeForm = TestSuite.getNewWithOutIDs(twoFAEmailEmployeeForm);
-		twoFAEmailEmployeeForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginUsername("insynctiveCBT+employee@gmail.com");
-		twoFAEmailEmployeeForm.getTestByName("loginWith2FAEmail").getParamObject().setLoginPassword("password");
-		twoFAEmailEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(false);
-		twoFAEmailEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
-		twoFAEmailEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(false);
-		twoFAEmailEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
-		
-		Integer twoFAEmailEmployeeID = runTest(twoFAEmailEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAEmailAgentID));
-		
-		//2FA - Phone - Agent
-		TestSuite twoFAPhoneAgentForm = createTestSuite(paramObject, "2FA - Phone - Agent", "2FA", "IPAD");
-		
-		twoFAPhoneAgentForm = TestSuite.getNewWithOutIDs(twoFAPhoneAgentForm);
-		twoFAPhoneAgentForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginUsername("insynctivetestng@gmail.com");
-		twoFAPhoneAgentForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginPassword("password");
-		twoFAPhoneAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(true);
-		twoFAPhoneAgentForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(false);
-		twoFAPhoneAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(true);
-		twoFAPhoneAgentForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(false);
-		
-		Integer twoFAPhoneAgentID = runTest(twoFAPhoneAgentForm, nightlyAcc, TestResults.workers.get(twoFAEmailEmployeeID));
-		
-		//2FA - Phone - Employee
-		TestSuite twoFAPhoneEmployeeForm = createTestSuite(paramObject, "2FA - Phone - Employee", "2FA", "CHROME");
-		
-		twoFAPhoneEmployeeForm = TestSuite.getNewWithOutIDs(twoFAPhoneEmployeeForm);
-		twoFAPhoneEmployeeForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginUsername("insynctivecbt@gmail.com");
-		twoFAPhoneEmployeeForm.getTestByName("loginWith2FAPhone").getParamObject().setLoginPassword("password");
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamOne(false);
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOn").getParamObject().setBooleanParamTwo(true);
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamOne(false);
-		twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
-		
-		Integer twoFAPhoneEmployeeID = runTest(twoFAPhoneEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAPhoneAgentID));
-		
-		return twoFAPhoneEmployeeForm;
+		return "{\"index\" : \""+(testRunner.runTest(testSuite, accDao.getAccountByID(logedAccID)))+"\"}";
 	}
 	
 	@RequestMapping(value = "/test/{testName}/{index}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
@@ -627,10 +405,10 @@ public class TestController {
 	
 	@RequestMapping(value = "/start/OE" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String startCreatePersonOpenEnrollment(@RequestBody CreatePersonForm form) throws ConfigurationException{
+	public String startCreatePersonOpenEnrollment(@RequestBody CreatePersonForm form) throws ConfigurationException {
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
-		List<XmlSuite> suites = getXmlTestSuiteForExternalUser("CreatePerson_OpenEnrollment");
+		List<XmlSuite> suites = testRunner.getXmlTestSuiteForExternalUser("CreatePerson_OpenEnrollment");
 		HashMap<String,String> params = new HashMap<String, String>();
 		params.put("personID", String.valueOf(newPersonID));
 		
@@ -659,7 +437,7 @@ public class TestController {
 	public String startCreatePersonOnBoarding(@RequestBody CreatePersonForm form) throws ConfigurationException{
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
-		List<XmlSuite> suites = getXmlTestSuiteForExternalUser("CreatePerson_Onboarding");
+		List<XmlSuite> suites = testRunner.getXmlTestSuiteForExternalUser("CreatePerson_Onboarding");
 		HashMap<String,String> params = new HashMap<String, String>();
 		params.put("personID", String.valueOf(newPersonID));
 		
@@ -709,64 +487,7 @@ public class TestController {
 		TestResults.removeListener(index);
 	}
 
-	/*Private Methods*/
-	private List<XmlSuite> getXmlTestSuiteForUI(String xmlName){
-		return getXmlTestSuite(xmlName, "/WEB-INF/testsSuits/");
-	}
 	
-	private List<XmlSuite> getXmlTestSuiteForExternalUser(String xmlName){
-		return getXmlTestSuite(xmlName, "/WEB-INF/externalTest/");
-	}
-	
-	private List<XmlSuite> getXmlTestSuite(String xmlName, String path) {
-		String xmlFileName = new File( servletContext.getRealPath(path+xmlName+".xml")).getPath();
-		
-		List<XmlSuite> suite = getSuite(xmlFileName);
-		
-		return suite;
-	}
-
-	private List<XmlSuite> getSuite(String xmlFileName) {
-		List<XmlSuite> suite = null;
-		try
-		{
-			suite = (List <XmlSuite>)(new Parser(xmlFileName).parse());
-		}
-		catch (ParserConfigurationException e)
-		{
-		    e.printStackTrace();
-		}
-		catch (SAXException e)
-		{
-		    e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-		    e.printStackTrace();
-		}
-		return suite;
-	}
-	
-	private List<String> getTestSuitesForRunUI() throws MalformedURLException, URISyntaxException{
-		return getTestSuites("/WEB-INF/testsSuits/");
-	}
-	
-	private List<String> getTestSuitesForExternalClient() throws MalformedURLException, URISyntaxException{
-		return getTestSuites("/WEB-INF/externalTest/");
-	}
-	
-	private List<String> getTestSuites(String path) throws MalformedURLException, URISyntaxException{
-		List<String> results = new ArrayList<String>();
-
-		File[] files = new File( servletContext.getRealPath(path)).listFiles();
-		
-		for (File file : files) {
-		    if (file.isFile()) {
-		        results.add(file.getName());
-		    }
-		}
-		return results;
-	}
 	
 	private String checkStatusOfMethodInTLA(Integer tlaIndex, String nameOfTest) throws Exception {
 		List<ITestResult> passedTests = TestResults.listeners.get(tlaIndex).getPassedTests();
@@ -802,112 +523,6 @@ public class TestController {
 		    	parametersFrontObject.setLabels(labels);
 		}
 		return parametersFrontObject;
-	}
-
-	private TestSuite createTestSuite(ParamObject paramObject, String testSuiteName, String environment, String browser) throws Exception {
-		TestSuite testSuite = new TestSuite();
-		testSuite.setEnvironment(environment);
-		testSuite.setBrowser(browser);
-		testSuite.setTestSuiteName(testSuiteName);
-		List<XmlSuite> suites = getXmlTestSuiteForUI(testSuiteName);
-		List<Test> listIncMethod = new ArrayList<Test>();
-		for (XmlSuite suite : suites) {
-			for(XmlTest test : suite.getTests()){
-				for(XmlClass clazz : test.getClasses()){
-					testSuite.setClassName(clazz.getName());
-					for(XmlInclude incMethod : clazz.getIncludedMethods()){
-							Test newTest= new Test(incMethod.getName());
-							newTest.setParamObject(ParamObject.getNewWithOutIDs(paramObject));
-							listIncMethod.add(newTest);
-					}
-				}
-			}
-		}
-		testSuite.setTests(listIncMethod);
-		
-		return testSuite;
-	}
-	
-	private Integer runTest(TestSuite form, Account acc) {
-		return runTest(form, acc, null);
-	}
-
-	private Integer runTest(TestSuite form, Account acc, Thread threadToJoin) {
-		//Increment Run ID of account and update it.
-		InsynctiveProperty properties = acc.getAccountProperty();
-		properties.setEnvironment(form.getEnvironment());
-		accDao.update(acc);
-		List<XmlSuite> suites = getXmlTestSuiteForUI(form.getTestSuiteName());
-
-		//Save Test Suite with all TESTS and Parameters
-		TestSuite testSuite = new TestSuite();
-		testSuite.setTestSuiteName(form.getTestSuiteName());
-		testSuite.setTests(form.getTests());
-		testSuite.setClassName(getClassnameFromXMLTestSuite(form.getTestSuiteName()));
-		testSuite.setBrowser(form.getBrowser());
-		testSuite.setEnvironment(form.getEnvironment());
-		testSuite.setRemote(properties.isRemote());
-		testSuite.setTester(acc.getUsername());
-		testSuite.setStatus("RUNNING");
-		Integer testSuiteID = testSuiteDao.save(testSuite);
-		
-		//Add TestID parameters in method (THE XML NEED TO HAVE ONLY ONE SUTIE)
-		for(Test test : form.getTests()){
-			test.setTestSuiteID(testSuiteID);
-			//Add Parameters to Test
-			for(XmlTest xmlTest : suites.get(0).getTests()){
-				for(XmlClass classes : xmlTest.getClasses()){
-					for(XmlInclude methodsInXML: classes.getIncludedMethods()){
-						if(methodsInXML.getName().equals(test.getTestName())){
-							methodsInXML.addParameter("TestID", test.getTestID().toString());
-						}
-					}
-				}
-			}
-		}
-		
-		//Initialize tests.
-		Map<String, String> parameters = new HashMap<>();
-		parameters.put("accountID", String.valueOf(acc.getAccountID()));
-		parameters.put("runID", acc.getRunIDString());
-		parameters.put("bowser", form.getBrowser());
-		parameters.put("testID", testSuite.getTestSuiteID().toString());
-		parameters.put("testName", form.getTestSuiteName());
-		parameters.put("environment", form.getEnvironment());
-		
-		//Add to Test Suite
-		for (XmlSuite suite : suites) {
-			suite.setParameters(parameters);
-		}
-		
-		//Is not using now.
-		
-		//Create Test listener and add it.
-		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
-		TestResults.addListener(testSuite.getTestSuiteID(), testListenerAdapter);
-		
-		//Make test and run the thread.
-		TestNG testNG = new TestNG();
-		testNG.setXmlSuites(suites);
-		testNG.setPreserveOrder(true);
-		testNG.addListener(testListenerAdapter);
-		
-		//START TEST IN OTHER THREAD
-		Thread thread = new Thread(new RunnableTest(testNG, testSuite, testListenerAdapter, testSuiteDao, testDao, threadToJoin));
-		TestResults.addWorker(testSuite.getTestSuiteID(), thread);
-		thread.start();
-		
-		return testSuite.getTestSuiteID();
-	}
-
-	private String getClassnameFromXMLTestSuite(String xmlName) {
-		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
-		for(XmlTest xmlTest : suites.get(0).getTests()){
-			for(XmlClass classes : xmlTest.getClasses()){
-				return classes.getName();
-			}
-		}
-		return null;
 	}
 
 }

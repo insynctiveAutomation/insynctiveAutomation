@@ -48,6 +48,7 @@
 	</properties>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>net.oauth.core</groupId>
 			<artifactId>oauth</artifactId>
@@ -279,6 +280,7 @@
 		</dependency>
 
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<!-- ECLIPSE MAVEN PLUGINS -->

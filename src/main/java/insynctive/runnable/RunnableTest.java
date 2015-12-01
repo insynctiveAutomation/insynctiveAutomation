@@ -17,15 +17,15 @@ public class RunnableTest implements Runnable {
 	private TestListenerAdapter testListenerAdapter;  
 	private TestSuiteDao testSuiteDao;
 	private TestDao testDao;
-	private Thread threadToJoin;
+	private Thread[] threadsToJoin;
 
-	public RunnableTest(TestNG  testNG, TestSuite testSuite, TestListenerAdapter testListenerAdapter, TestSuiteDao testSuiteDao, TestDao testDao, Thread threadToJoin){
+	public RunnableTest(TestNG  testNG, TestSuite testSuite, TestListenerAdapter testListenerAdapter, TestSuiteDao testSuiteDao, TestDao testDao, Thread[] threadsToJoin){
 		  this.testNG = testNG;
 		  this.testSuite = testSuite;
 		  this.testListenerAdapter = testListenerAdapter;
 		  this.testSuiteDao = testSuiteDao;
 		  this.testDao = testDao;
-		  this.threadToJoin = threadToJoin;
+		  this.threadsToJoin = threadsToJoin;
 	}
 	public RunnableTest(TestNG  testNG){
 		this.testNG = testNG;
@@ -33,9 +33,11 @@ public class RunnableTest implements Runnable {
 	
 	@Override
 	public void run() {
-		if(threadToJoin != null){
+		if(threadsToJoin != null){
 			try {
-				threadToJoin.join();
+				for(Thread threadToJoin : threadsToJoin){
+					threadToJoin.join();
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

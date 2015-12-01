@@ -74,8 +74,19 @@ public class LoginPage extends Page implements PageInterface{
 	}
     
     public boolean isLoggedIn() throws Exception{
+    	boolean result = false;
     	Sleeper.sleep(3000, driver);
-    	return !driver.getCurrentUrl().contains("/Insynctive.Hub/Login.aspx");
+    	int times = 1;
+    	while(times < 10){
+    		result = !driver.getCurrentUrl().contains("/Insynctive.Hub/Login.aspx");
+    		if(!result){
+    			Sleeper.sleep(3000, driver);
+    			times++;
+    		} else {
+    			break;
+    		}
+    	}
+    	return result;
     }
     
     public  boolean isNotLoggedIn() {
