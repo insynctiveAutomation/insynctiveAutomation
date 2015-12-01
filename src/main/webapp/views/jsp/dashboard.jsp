@@ -70,31 +70,34 @@
 </head>
 <body data-ng-controller="DashboardController as testCtrl">
 	<img ng-if="testCtrl.isLoadingPage" alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif">
-	<table ng-if="!testCtrl.isLoadingPage" class="table table-striped table-hover table-condensed">
-		<tbody ng-if="testCtrl.testsSuites">
-			<tr>
-				<th>ID</th>
-				<th>Test Suite Runs</th>
-				<th>Status</th>
-				<th>Browsers</th>
-				<th>Environment</th>
-				<th>Tester</th>
-				<th>View</th>
-				<th>Retry</th>
-			</tr>
-			<tr data-ng-repeat="testSuite in testCtrl.testsSuites" class="animate-repeat">
-				<td class="col-sm-1"><span ng-bind="testSuite.testSuiteID"></span></td>
-				<td class="col-sm-4"><span ng-bind="testSuite.testSuiteName"></span></td>
-				<td class="col-sm-1"><result ng-model="testSuite.status" bind="testSuite.status" value="{{testSuite.status}}" /></td>
-				<td class="col-sm-1"><span ng-bind="testSuite.browser"></span></td>
-				<td class="col-sm-1"><span ng-bind="testSuite.environment"></span></td>
-				<td class="col-sm-1"><span ng-bind="testSuite.tester"></span></td>
-				<td class="col-sm-3"><a id="" ng-click="testCtrl.openTestSuite(testSuite, $event)">View TestSuite</a></td>
-				<td ng-if="!testSuite.isLoadingRetry && !testSuite.error" class="col-sm-3"><a id="" ng-click="testCtrl.retry(testSuite)">Retry</a></td>
-				<td ng-if="testSuite.error" class="col-sm-3">ERROR ON SERVER</td>
-				<td ng-if="testSuite.isLoadingRetry" class="col-sm-3"><img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif"></td>
-			</tr>
-		</tbody>
-	</table>
+	<div ng-hide="testCtrl.isLoadingPage">
+		<table class="table table-striped table-hover table-condensed">
+			<tbody>
+				<tr>
+					<th>ID</th>
+					<th>Test Suite Runs</th>
+					<th>Status</th>
+					<th>Browsers</th>
+					<th>Environment</th>
+					<th>Tester</th>
+					<th>View</th>
+					<th>Retry</th>
+				</tr>
+				<tr data-ng-repeat="testSuite in testCtrl.testsSuites" class="animate-repeat">
+					<td class="col-sm-1"><span ng-bind="testSuite.testSuiteID"></span></td>
+					<td class="col-sm-4"><span ng-bind="testSuite.testSuiteName"></span></td>
+					<td class="col-sm-1"><result ng-model="testSuite.status" bind="testSuite.status" value="{{testSuite.status}}" /></td>
+					<td class="col-sm-1"><span ng-bind="testSuite.browser"></span></td>
+					<td class="col-sm-1"><span ng-bind="testSuite.environment"></span></td>
+					<td class="col-sm-1"><span ng-bind="testSuite.tester"></span></td>
+					<td class="col-sm-3"><a id="" ng-click="testCtrl.openTestSuite(testSuite, $event)">View TestSuite</a></td>
+					<td ng-if="!testSuite.isLoadingRetry && !testSuite.error" class="col-sm-3"><a id="" ng-click="testCtrl.retry(testSuite)">Retry</a></td>
+					<td ng-if="testSuite.error" class="col-sm-3">ERROR ON SERVER</td>
+					<td ng-if="testSuite.isLoadingRetry" class="col-sm-3"><img alt="loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif"></td>
+				</tr>
+			</tbody>
+		</table>
+		<pagination ng-model="currentPage" total-items="testCtrl.testSuiteCount" max-size="numPerPage" boundary-links="true"></pagination>
+	</div>
 </body>
 </html>

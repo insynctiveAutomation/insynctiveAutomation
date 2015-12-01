@@ -366,9 +366,21 @@ public class TestController {
 		return testSuite;
 	}
 	
+	@RequestMapping(value = "/countTestSuites" ,method = RequestMethod.GET)
+	@ResponseBody
+	public Long getTestsSuites() {
+		return testSuiteDao.countTestSuites();
+	}
+	
+	@RequestMapping(value = "/getTestsSuites/{page}/{count}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public List<TestSuite> getTestsSuites(@PathVariable("page") Integer page, @PathVariable("count") Integer count) {
+		return testSuiteDao.getTestSuite(page, count);
+	}
+	
 	@RequestMapping(value = "/getAllTestsSuites" ,method = RequestMethod.GET)
 	@ResponseBody
-	public List<TestSuite> getTestsSuites() {
+	public List<TestSuite> getAllTestsSuites() {
 		return testSuiteDao.getAllTestSuite();
 	}
 	

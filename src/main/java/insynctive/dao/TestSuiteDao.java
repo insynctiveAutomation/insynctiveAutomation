@@ -4,10 +4,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +45,7 @@ private final SessionFactory sessionFactory;
 	}
 
 	public List<TestSuite> getAllTestSuite() {
-		return openSession().createCriteria(TestSuite.class).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).list();
+		return openSession().createCriteria(TestSuite.class).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).addOrder(Order.desc("testSuiteID")).list();
 	}
 
 	public void merge(TestSuite testSuite) {
@@ -54,6 +58,22 @@ private final SessionFactory sessionFactory;
 	
 	public void evict(TestSuite testSuite){
 		openSession().evict(testSuite);
+	}
+
+	public List<TestSuite> getTestSuite(Integer page, Integer count) {
+		return openSession().createCriteria(TestSuite.class)
+				.setMaxResults(count)
+				.setFirstResult((page-1)*count)
+				.addOrder(Order.desc("testSuiteID"))
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.setFetchMode("tests", FetchMode.SELECT)
+				.list();
+	}
+
+	public Long countTestSuites() {
+		Criteria criteriaCount = openSession().createCriteria(TestSuite.class);
+		criteriaCount.setProjection(Projections.rowCount());
+		return (Long) criteriaCount.uniqueResult();
 	}
 	
 }

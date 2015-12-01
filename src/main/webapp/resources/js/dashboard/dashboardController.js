@@ -4,16 +4,31 @@ var app = angular.module('dashboardApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCooki
 
 app.controller('DashboardController', function($cookies, $http, $window, $modal, $scope, $interval, dashboardService, testService) {
 	
+	$scope.currentPage = 1;
+	$scope.numPerPage = 10;
+	
 	var self = this;
 	this.testsSuites;
 	this.retryText = "Retry"
 	this.isLoadingRetry = false;
 	this.isLoadingPage;
 	this.testService = testService;
+	this.testSuiteCount = 0;
+	
+	$scope.$watch('currentPage', function() {
+	    self.getTestsSuites();
+	  });
+	
+	this.countTestSuites = function(){
+		dashboardService.countTestSuites(function(data){
+			self.testSuiteCount = data; 
+		});
+	}
+	this.countTestSuites();
 	
 	this.getTestsSuites = function(){
 		self.isLoadingPage = true;
-		dashboardService.getTestsSuites(function(data){
+		dashboardService.getTestsSuites($scope.currentPage, $scope.numPerPage, function(data){
 			self.testsSuites = data;
 			self.isLoadingPage = false
 		});
