@@ -203,7 +203,7 @@ public class NightlyController {
 		//Change Email And Login
 		TestSuite changeEmailAndLoginForm = testRunner.createTestSuite(defaultParamObject, "Change Email And Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
 		testRunner.runTest(changeEmailAndLoginForm, nightlyAcc, new Thread[]{
-				TestResults.workers.get(loadingPageChrome), TestResults.workers.get(loadingPageFirefox), TestResults.workers.get(loadingPageIPad)
+				TestResults.workers.get(PersonFileFirefox),TestResults.workers.get(PersonFileChrome)
 		});
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
