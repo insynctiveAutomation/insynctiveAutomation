@@ -3,23 +3,23 @@ package insynctive.runnable;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
 
-import insynctive.dao.TestDao;
-import insynctive.dao.TestSuiteDao;
-import insynctive.model.Test;
-import insynctive.model.TestSuite;
+import insynctive.dao.test.TestDao;
+import insynctive.dao.test.TestSuiteRunDao;
+import insynctive.model.test.Test;
+import insynctive.model.test.run.TestSuiteRun;
 import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
  
 public class RunnableTest implements Runnable {
 
 	private TestNG testNG;
-	private TestSuite testSuite;
+	private TestSuiteRun testSuite;
 	private TestListenerAdapter testListenerAdapter;  
-	private TestSuiteDao testSuiteDao;
+	private TestSuiteRunDao testSuiteDao;
 	private TestDao testDao;
 	private Thread[] threadsToJoin;
 
-	public RunnableTest(TestNG  testNG, TestSuite testSuite, TestListenerAdapter testListenerAdapter, TestSuiteDao testSuiteDao, TestDao testDao, Thread[] threadsToJoin){
+	public RunnableTest(TestNG  testNG, TestSuiteRun testSuite, TestListenerAdapter testListenerAdapter, TestSuiteRunDao testSuiteDao, TestDao testDao, Thread[] threadsToJoin){
 		  this.testNG = testNG;
 		  this.testSuite = testSuite;
 		  this.testListenerAdapter = testListenerAdapter;
@@ -46,15 +46,16 @@ public class RunnableTest implements Runnable {
 		testNG.run();
 		setResult();
 		Sleeper.threadSleep(3500);
-		TestResults.removeScopeVars(testSuite.getTestSuiteID());
+		TestResults.removeScopeVars(testSuite.getTestSuiteRunID());
 	}
 
+	@Deprecated
 	private void setResult() {
-		for(Test test : testSuite.getTests()){
-			test.setStatus(getTestStatus(test));
-		}
-		testSuite.setStatus(getTestSuiteStatus());
-		testSuiteDao.saveOrUpdate(testSuite);
+//		for(Test test : testSuite.getTests()){
+//			test.setStatus(getTestStatus(test));
+//		}
+//		testSuite.setStatus(getTestSuiteStatus());
+//		testSuiteDao.saveOrUpdate(testSuite);
 	}
 
 	private String getTestSuiteStatus() {

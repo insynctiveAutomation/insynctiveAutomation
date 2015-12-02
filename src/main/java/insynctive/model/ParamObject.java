@@ -1,7 +1,6 @@
 package insynctive.model;
 
 import java.io.FileReader;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import javax.persistence.AttributeOverride;

@@ -1,4 +1,4 @@
-package insynctive.utils;
+package insynctive.utils.data;
 
 public enum WhenStart {
 	

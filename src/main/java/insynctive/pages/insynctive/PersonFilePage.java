@@ -18,8 +18,8 @@ import insynctive.model.USAddress;
 import insynctive.pages.PageInterface;
 import insynctive.pages.PersonalPage;
 import insynctive.utils.Sleeper;
-import insynctive.utils.Task;
 import insynctive.utils.Wait;
+import insynctive.utils.data.Task;
 
 public class PersonFilePage extends PersonalPage implements PageInterface {
 

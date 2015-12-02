@@ -7,8 +7,8 @@ import org.openqa.selenium.support.PageFactory;
 
 import insynctive.exception.MethodNoImplementedException;
 import insynctive.pages.Page;
-import insynctive.utils.WhenStart;
 import insynctive.utils.data.Employee;
+import insynctive.utils.data.WhenStart;
 
 public abstract class Process extends Page{
 

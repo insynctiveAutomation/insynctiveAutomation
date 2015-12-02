@@ -12,8 +12,8 @@ import insynctive.pages.PageInterface;
 import insynctive.pages.insynctive.ImportPersonPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.utils.CheckInApp;
-import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
+import insynctive.utils.data.Checklist;
 
 //TODO get subject of email.
 public class HomeForAgentsPage extends Page implements PageInterface {

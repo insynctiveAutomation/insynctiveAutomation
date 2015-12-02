@@ -18,8 +18,6 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import insynctive.utils.SessionScope;
-
 @Configuration
 @ComponentScan(basePackages = "insynctive")
 @EnableTransactionManagement
@@ -51,11 +49,6 @@ public class AppConfig {
 	@Value("${hibernate.showSQL}")
 	private Boolean showSQL;
 
-	@Bean
-	public SessionScope sessionScope(){
-		return new SessionScope();
-	}
-	
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();

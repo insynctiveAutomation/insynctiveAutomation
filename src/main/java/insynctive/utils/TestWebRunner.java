@@ -12,6 +12,9 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
 import org.testng.xml.Parser;
@@ -21,68 +24,60 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.xml.sax.SAXException;
 
-import com.beust.jcommander.internal.Nullable;
-
 import insynctive.dao.AccountDao;
-import insynctive.dao.TestDao;
-import insynctive.dao.TestSuiteDao;
+import insynctive.dao.test.TestDao;
+import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.Account;
-import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
-import insynctive.model.Test;
-import insynctive.model.TestSuite;
+import insynctive.model.test.Test;
+import insynctive.model.test.TestSuite;
+import insynctive.model.test.run.TestPlanRun;
+import insynctive.model.test.run.TestRun;
+import insynctive.model.test.run.TestSuiteRun;
 import insynctive.runnable.RunnableTest;
 
+@Transactional
 public class TestWebRunner {
 
 	private final ServletContext servletContext;
-	private final TestSuiteDao testSuiteDao;
+	private final TestSuiteRunDao testSuiteRunDao;
 	private final AccountDao accDao;
 	private final TestDao testDao;
 
-	public TestWebRunner(ServletContext servletContext, TestSuiteDao testSuiteDao, AccountDao accDao, TestDao testDao) {
+	public TestWebRunner(ServletContext servletContext, TestSuiteRunDao testSuiteRunDao, AccountDao accDao, TestDao testDao) {
 		this.servletContext = servletContext;
-		this.testSuiteDao = testSuiteDao;
+		this.testSuiteRunDao = testSuiteRunDao;
 		this.accDao = accDao;
 		this.testDao = testDao;
 	}
 	
-	public Integer runTest(TestSuite form, Account acc) {
+	public void runTest(TestPlanRun tpRun, Account acc) {
+
+		for(TestSuiteRun tsRun : tpRun.testSuiteRuns){
+			runTest(tsRun, acc);
+		}
+	}
+	
+	public Integer runTest(TestSuiteRun form, Account acc) {
 		return runTest(form, acc, new Thread[]{});
 	}
 
-	public Integer runTest(TestSuite form, Account acc, Thread threadToJoin) {
+	public Integer runTest(TestSuiteRun form, Account acc, Thread threadToJoin) {
 		return runTest(form, acc, new Thread[]{threadToJoin});
 	}
 	
-	public Integer runTest(TestSuite form, Account acc, Thread[] threadToJoin) {
-		//Increment Run ID of account and update it.
-		InsynctiveProperty properties = acc.getAccountProperty();
-		properties.setEnvironment(form.getEnvironment());
-		accDao.update(acc);
-		List<XmlSuite> suites = getXmlTestSuiteForUI(form.getTestSuiteName());
-
-		//Save Test Suite with all TESTS and Parameters
-		TestSuite testSuite = new TestSuite();
-		testSuite.setTestSuiteName(form.getTestSuiteName());
-		testSuite.setTests(form.getTests());
-		testSuite.setClassName(getClassnameFromXMLTestSuite(form.getTestSuiteName()));
-		testSuite.setBrowser(form.getBrowser());
-		testSuite.setEnvironment(form.getEnvironment());
-		testSuite.setRemote(properties.isRemote());
-		testSuite.setTester(acc.getUsername());
-		testSuite.setStatus("RUNNING");
-		Integer testSuiteID = testSuiteDao.save(testSuite);
+	public Integer runTest(TestSuiteRun tsRun, Account acc, Thread[] threadToJoin) {
+		XmlSuite suite = createXmlTest(tsRun);
+		List<XmlSuite> suites = new ArrayList<>();
+		suites.add(suite);
 		
-		//Add TestID parameters in method (THE XML NEED TO HAVE ONLY ONE SUTIE)
-		for(Test test : form.getTests()){
-			test.setTestSuiteID(testSuiteID);
-			//Add Parameters to Test
-			for(XmlTest xmlTest : suites.get(0).getTests()){
+		//Add Parameters to Test
+		for(TestRun testRun : tsRun.getTestsRuns()){
+			for(XmlTest xmlTest : suite.getTests()){
 				for(XmlClass classes : xmlTest.getClasses()){
 					for(XmlInclude methodsInXML: classes.getIncludedMethods()){
-						if(methodsInXML.getName().equals(test.getTestName())){
-							methodsInXML.addParameter("TestID", test.getTestID().toString());
+						if(methodsInXML.getName().equals(testRun.getTestName())){
+							methodsInXML.addParameter("TestID", testRun.getTestRunID().toString());
 						}
 					}
 				}
@@ -93,22 +88,18 @@ public class TestWebRunner {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("accountID", String.valueOf(acc.getAccountID()));
 		parameters.put("runID", acc.getRunIDString());
-		parameters.put("bowser", form.getBrowser());
-		parameters.put("testID", testSuite.getTestSuiteID().toString());
-		parameters.put("testName", form.getTestSuiteName());
-		parameters.put("environment", form.getEnvironment());
+		parameters.put("bowser", tsRun.getBrowser());
+		parameters.put("testID", tsRun.getTestSuiteRunID().toString());
+		parameters.put("testName", tsRun.getName());
+		parameters.put("environment", tsRun.getEnvironment());
 		
 		
 		//Add to Test Suite
-		for (XmlSuite suite : suites) {
-			suite.setParameters(parameters);
-		}
-		
-		//Is not using now.
+		suite.setParameters(parameters);
 		
 		//Create Test listener and add it.
 		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
-		TestResults.addListener(testSuite.getTestSuiteID(), testListenerAdapter);
+		TestResults.addListener(tsRun.getTestSuiteRunID(), testListenerAdapter);
 		
 		//Make test and run the thread.
 		TestNG testNG = new TestNG();
@@ -117,28 +108,24 @@ public class TestWebRunner {
 		testNG.addListener(testListenerAdapter);
 		
 		//START TEST IN OTHER THREAD
-		Thread thread = new Thread(new RunnableTest(testNG, testSuite, testListenerAdapter, testSuiteDao, testDao, threadToJoin));
-		TestResults.addWorker(testSuite.getTestSuiteID(), thread);
+		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, testSuiteRunDao, testDao, threadToJoin));
+		TestResults.addWorker(tsRun.getTestSuiteRunID(), thread);
 		thread.start();
 		
-		return testSuite.getTestSuiteID();
+		return tsRun.getTestSuiteRunID();
 	}
 	
-
-
-	public TestSuite createTestSuite(ParamObject paramObject, String testSuiteName, String environment, String browser) throws Exception {
+	public TestSuite getTestSuiteByXML(ParamObject paramObject, String testSuiteName) throws Exception {
 		TestSuite testSuite = new TestSuite();
-		testSuite.setEnvironment(environment);
-		testSuite.setBrowser(browser);
 		testSuite.setTestSuiteName(testSuiteName);
 		List<XmlSuite> suites = getXmlTestSuiteForUI(testSuiteName);
 		List<Test> listIncMethod = new ArrayList<Test>();
 		for (XmlSuite suite : suites) {
 			for(XmlTest test : suite.getTests()){
 				for(XmlClass clazz : test.getClasses()){
-					testSuite.setClassName(clazz.getName());
 					for(XmlInclude incMethod : clazz.getIncludedMethods()){
 							Test newTest= new Test(incMethod.getName());
+							newTest.setClassName(clazz.getName());
 							newTest.setParamObject(ParamObject.getNewWithOutIDs(paramObject));
 							listIncMethod.add(newTest);
 					}
@@ -148,6 +135,21 @@ public class TestWebRunner {
 		testSuite.setTests(listIncMethod);
 		
 		return testSuite;
+	}
+
+	public TestSuiteRun getTestSuiteRun(TestSuite testSuite, String environment, String browser) throws Exception {
+		TestSuiteRun testSuiteRun = testSuite.toTestSuiteRun();
+		testSuiteRun.setEnvironment(environment);
+		testSuiteRun.setBrowser(browser);
+		
+		return testSuiteRun;
+	}
+	
+	public TestSuiteRun getTestSuiteRunByXML(ParamObject paramObject, String testSuiteName, String environment, String browser) throws Exception {
+		TestSuite testSuite = getTestSuiteByXML(paramObject, testSuiteName);
+		TestSuiteRun testSuiteRun = getTestSuiteRun(testSuite, environment, browser);
+		
+		return testSuiteRun;
 	}
 	
 	public String getClassnameFromXMLTestSuite(String xmlName) {
@@ -218,5 +220,32 @@ public class TestWebRunner {
 		}
 		return results;
 	}
-	
+
+	private XmlSuite createXmlTest(TestSuiteRun tsRun) {
+		List<XmlSuite> suites = new ArrayList<XmlSuite>();
+		List<XmlClass> classes = new ArrayList<XmlClass>();
+		
+		XmlSuite suite = new XmlSuite();
+		suite.setName(tsRun.getName());
+		
+		XmlTest test = new XmlTest(suite);
+		test.setName("Test Name");
+		//Test class to be included for test execution
+		XmlClass clz = new XmlClass(tsRun.getTestsRuns().get(0).getClassName());
+		
+		//Test methods to be included
+		List<XmlInclude> includes = new ArrayList<XmlInclude>();
+		for(TestRun testRun : tsRun.getTestsRuns()){
+			XmlInclude method = new XmlInclude(testRun.getTestName());
+			includes.add(method);
+		}
+		
+		//Setting the included methods for the class
+		clz.setIncludedMethods(includes);
+		
+		classes.add(clz);
+		test.setXmlClasses(classes);
+
+		return suite;
+	}
 }

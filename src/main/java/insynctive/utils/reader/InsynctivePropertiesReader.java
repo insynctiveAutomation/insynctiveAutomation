@@ -12,8 +12,8 @@ import org.openqa.selenium.WebDriver;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.InsynctiveProperty;
-import insynctive.utils.Checklist;
 import insynctive.utils.data.App;
+import insynctive.utils.data.Checklist;
 
 @Deprecated()
 public class InsynctivePropertiesReader {

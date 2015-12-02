@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import insynctive.dao.AccountDao;
 import insynctive.dao.InsynctivePropertyDao;
-import insynctive.dao.TestDao;
-import insynctive.dao.TestSuiteDao;
 import insynctive.model.Account;
 import insynctive.model.ParamObject;
-import insynctive.model.TestSuite;
 import insynctive.utils.TestResults;
+import insynctive.dao.test.TestDao;
+import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.utils.TestWebRunner;
 import insynctive.utils.jenkins.JenkinsForm;
 import insynctive.utils.slack.SlackMessage;
@@ -36,7 +35,7 @@ public class JenkinsController {
 	//DB Connections.
 	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
-	private final TestSuiteDao testSuiteDao;
+	private final TestSuiteRunDao testSuiteDao;
 	
 	//Servlet Context Helper
 	private final ServletContext servletContext;
@@ -45,7 +44,7 @@ public class JenkinsController {
 	private final TestWebRunner testRunner;
 
 	@Inject
-	public JenkinsController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, TestSuiteDao testSuiteDao) {
+	public JenkinsController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, TestSuiteRunDao testSuiteDao) {
 		this.servletContext = servletContext;
 		this.propertyDao = propertyDao;
 		this.accDao = accDao;
@@ -102,12 +101,12 @@ public class JenkinsController {
 		String insynctiveAccount = jenkinsForm.getBuild().getParameters().getAccount();
 		
 		//FIRST LOGIN
-		TestSuite firstLoginform = testRunner.createTestSuite(defaultParamObject,"First Login", insynctiveAccount, "FIREFOX");
-		Integer firstLoginRun = testRunner.runTest(firstLoginform, nightlyAcc);
-		
-		//Person File - FIREFOX
-		TestSuite form = testRunner.createTestSuite(defaultParamObject,"Person File", insynctiveAccount, "FIREFOX");
-			form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
-		Integer PersonFileFirefox = testRunner.runTest(form, nightlyAcc, TestResults.workers.get(firstLoginRun));
+//		TestSuite firstLoginform = testRunner.createTestSuite(defaultParamObject,"First Login", insynctiveAccount, "FIREFOX");
+//		Integer firstLoginRun = testRunner.runTest(firstLoginform, nightlyAcc);
+//		
+//		//Person File - FIREFOX
+//		TestSuite form = testRunner.createTestSuite(defaultParamObject,"Person File", insynctiveAccount, "FIREFOX");
+//			form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
+//		Integer PersonFileFirefox = testRunner.runTest(form, nightlyAcc, TestResults.workers.get(firstLoginRun));
 	}
 }

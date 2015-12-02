@@ -31,7 +31,8 @@ import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
-import insynctive.model.Test;
+import insynctive.model.test.Test;
+import insynctive.model.test.run.TestRun;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
@@ -369,8 +370,8 @@ public abstract class TestMachine {
 	
 	public void changeParamObject(Integer testID) throws Exception{
 		try{
-			Test test = HibernateUtil.testDao.getTestByID(testID);
-			paramObject = test.getParamObject();
+			TestRun testRun = HibernateUtil.testRunDao.getTestByID(testID);
+			paramObject = testRun.getParamObject();
 			System.out.println("Param Object Changes to: "+testID+" ID");
 		} catch(Exception ex) {
 			System.out.println(ex);

@@ -42,12 +42,6 @@ public class PersonFileTest extends TestMachine {
 		properties.setEnvironment(environment);
 	}
 	
-	@BeforeTest
-	@Parameters({"TestID"})
-	public void beforeTest(@Optional("TestID") String testID){
-		System.out.println("TESTID: "+testID);
-	}
-	
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 

@@ -8,8 +8,8 @@ import org.openqa.selenium.support.PageFactory;
 import insynctive.exception.MethodNoImplementedException;
 import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
-import insynctive.utils.Checklist;
 import insynctive.utils.Sleeper;
+import insynctive.utils.data.Checklist;
 import insynctive.utils.process.Process;
 
 public class TemplatePage extends Page implements PageInterface{

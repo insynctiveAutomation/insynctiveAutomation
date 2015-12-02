@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.WebDriver;
 
-import insynctive.utils.Checklist;
+import insynctive.utils.data.Checklist;
 import insynctive.utils.process.Process;
 
 public class ChecklistReader {

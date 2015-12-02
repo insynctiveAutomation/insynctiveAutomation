@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Test Suite" verbose="1" >
+<suite name="Open Documents - Employee Interface" verbose="1" >
 	<test name="DocumentTest">
 	  <classes>
 	    <class name="insynctive.tests.DocumentTest">

@@ -10,8 +10,8 @@ import insynctive.exception.ElementNotFoundException;
 import insynctive.model.USAddress;
 import insynctive.pages.PageInterface;
 import insynctive.utils.Sleeper;
-import insynctive.utils.WhenStart;
 import insynctive.utils.data.Employee;
+import insynctive.utils.data.WhenStart;
 
 public class I9 extends Process implements PageInterface {
 

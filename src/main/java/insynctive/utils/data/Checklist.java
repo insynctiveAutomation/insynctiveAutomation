@@ -1,4 +1,4 @@
-package insynctive.utils;
+package insynctive.utils.data;
 
 import java.io.FileReader;
 import java.util.ArrayList;

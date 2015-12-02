@@ -1,4 +1,4 @@
-package insynctive.dao;
+package insynctive.dao.test;
 
 import javax.inject.Inject;
 
@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import insynctive.model.Test;
+import insynctive.model.test.Test;
 
 @Repository
 @Transactional
@@ -39,5 +39,5 @@ public class TestDao {
 	public void update(Test test) {
 		openSession().update(test);
 	}
-	
 }
+ 

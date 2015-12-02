@@ -1,4 +1,4 @@
-package insynctive.utils;
+package insynctive.utils.form;
 
 public class LoginForm {
 
