@@ -196,15 +196,6 @@ public class NightlyController {
 			twoFAPhoneEmployeeForm.getTestByName("config2FAOff").getParamObject().setBooleanParamTwo(true);
 		Integer twoFAPhoneEmployeeID = testRunner.runTest(twoFAPhoneEmployeeForm, nightlyAcc, TestResults.workers.get(twoFAPhoneAgentID));
 		
-		//Make Primary Email and Login
-		TestSuite makePrimeryEmailAndLoginForm = testRunner.createTestSuite(defaultParamObject, "Make Primary Email and Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		testRunner.runTest(makePrimeryEmailAndLoginForm, nightlyAcc, TestResults.workers.get(loadingPageIPad));
-		
-		//Change Email And Login
-		TestSuite changeEmailAndLoginForm = testRunner.createTestSuite(defaultParamObject, "Change Email And Login", NIGHTLY_DEFAULT_ENVIRONMENT, "CHROME");
-		testRunner.runTest(changeEmailAndLoginForm, nightlyAcc, new Thread[]{
-				TestResults.workers.get(PersonFileFirefox),TestResults.workers.get(PersonFileChrome)
-		});
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
