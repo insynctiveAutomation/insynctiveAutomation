@@ -5,7 +5,7 @@
 	    <class name="insynctive.tests.PersonFileTest">
 	      <methods>
 	      	<include name="loginTest" />
-	        <include name="openPersonFIle" />
+	        <include name="openPersonFIle" /> 
 	        <include name="assignJob" />
 	      </methods>
 	    </class>

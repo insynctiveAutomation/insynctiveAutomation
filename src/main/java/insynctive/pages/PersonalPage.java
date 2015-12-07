@@ -74,7 +74,7 @@ public abstract class PersonalPage extends Page {
 	@FindBy(css = "#content > div:nth-of-type(5) > div > div:nth-last-of-type(2) > span:nth-of-type(5) > img:nth-of-type(1)")
 	public WebElement lastEmergencyContactDelete;
 
-	@FindBy(id = "btnAddNewJob")
+	@FindBy(className = "buttonMedium")
 	public WebElement addJobButon;
 	@FindBy(id = "employmentFrm")
 	public WebElement employmentFrm;
@@ -84,19 +84,19 @@ public abstract class PersonalPage extends Page {
 	public WebElement statesPicker;
 	@FindBy(id = "searchResult")
 	public WebElement searchResult;
-	@FindBy(id = "categoryPicker")
-	public WebElement categoryPicker;
+	@FindBy(id = "usjobs_roleposition")
+	public WebElement categoryField;
 	@FindBy(id = "rateEditor")
 	public WebElement rateEditor;
-	@FindBy(css = "#ui-tooltip-0 > div > div > form > div > div:nth-child(1) > div.editable-input > input")
+	@FindBy(id = "usjobs_amount")
 	public WebElement rateInput;
 	@FindBy(className = "editable-submit")
 	public WebElement saveRate;
 	@FindBy(id = "paymentUnitKey")
 	public WebElement paymentUnitKey;
-	@FindBy(id = "btnActivate")
+	@FindBy(id = "usjobs_btnactivate")
 	public WebElement btnActivate;
-	@FindBy(id = "datePicker")
+	@FindBy(id = "inputusjobs_hiredate")
 	public WebElement datePicker;
 	@FindBy(id = "statesPickerSearch")
 	public WebElement statesPickerSearch;
@@ -142,7 +142,7 @@ public abstract class PersonalPage extends Page {
 	public WebElement saveChangeFullName;
 
 	// Birth Date
-	@FindBy(id = "dateInput")
+	@FindBy(id = "inputusjobs_hiredate")
 	public WebElement dateInput;
 	@FindBy(id = "saveBtnNewDatePicker")
 	public WebElement saveChangeBirthDate;

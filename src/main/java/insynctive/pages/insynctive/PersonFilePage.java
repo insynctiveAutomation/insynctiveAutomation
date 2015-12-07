@@ -86,7 +86,15 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	@FindBy(id = "bigoverlayiframe")
 	WebElement documentiFrame;
 
-	
+	@FindBy(id = "employer-dd")
+	WebElement employer;
+	@FindBy(css = "#employer-dd > option:nth-child(2)")
+	WebElement firstEmployerInCombo;
+	@FindBy(id = "worklocation-dd")
+	WebElement workLocation;
+	@FindBy(css = "div.search-row:nth-child(1)")
+	WebElement firstWorkLocation;
+
 	@FindBy(className = "doc-name")
 	List<WebElement> docRows;
 	
@@ -165,27 +173,17 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			swichToFirstFrame(driver);
 			clickAButton(employmentTab);
 			swichToIframe(tabiFrame);
-			swichToIframe(employmentFrm);
-			clickAButton(addJobButon);
-			clickAButton(datePicker);
-			setTextInField(dateInput, "10/05/2000");
-			clickAButton(saveBtn);
-			clickAButton(statesPicker);
-			Sleeper.sleep(1500, driver);
-			setTextInField(statesPickerSearch, "California");
-			Sleeper.sleep(3000, driver);
-			clickAButton(firstSearchJobState);
-			clickAButton(categoryPicker);
-			clickAButton(chefExecutives);
-			clickAButton(rateEditor);
-			setTextInField(rateInput, "1000");
-			clickAButton(saveRate);
-			clickAButton(paymentUnitKey);
-			clickAButton(findElementByText("div", "Year"));
-			Sleeper.sleep(1500, driver);
+			clickAButton(addJobButon);//CHANGE
+			swichToFirstFrame(driver);
+			setTextInField(dateInput, "10-05-2000", 1000);
+			setTextInField(categoryField, "My Role", 1000);
+			try{ selectElementInDefaultCombo(employer, "Staging"); } catch(Exception ex){}
+			clickAButton(workLocation, 1000);
+			clickAButton(firstWorkLocation, 1000);
+			setTextInField(rateInput, "1000", 1000);
 			clickAButton(btnActivate);
 		} catch(Exception ex){
-			goToPersonalTab();
+			goToPersonalTab();   
 			throw ex;
 		}
 	}

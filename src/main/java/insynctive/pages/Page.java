@@ -237,15 +237,25 @@ public class Page {
     }
     
     public void clickAButton(WebElement element) throws Exception {
-    	waitUntilIsLoaded(element);
-    	element.click();
+    	clickAButton(element, null);
     }
     
-	public void setTextInField(WebElement textField, String text) throws ElementNotFoundException, IOException, InterruptedException {
+    public void clickAButton(WebElement element, Integer msSleepAfterCommand) throws Exception {
+    	waitUntilIsLoaded(element);
+    	element.click();
+    	if(msSleepAfterCommand != null) Sleeper.sleep(msSleepAfterCommand, driver);
+    }
+    
+    public void setTextInField(WebElement textField, String text) throws ElementNotFoundException, IOException, InterruptedException {
+    	setTextInField(textField, text, null);
+    }
+    
+	public void setTextInField(WebElement textField, String text, Integer msSleepAfterCommand) throws ElementNotFoundException, IOException, InterruptedException {
 		try {
 			waitUntilIsLoaded(textField);
 			textField.clear();
 			textField.sendKeys(text);
+			if(msSleepAfterCommand != null) Sleeper.sleep(msSleepAfterCommand, driver);
 		} catch (NullPointerException nEx){
 			throw new ElementNotFoundException(getMessageFromWebElement(textField)+" is not found",null);
 		}
@@ -270,6 +280,12 @@ public class Page {
 		return selectElementInCombo(combo, text, "option");
 	}
 
+	public boolean selectElementInComboOption(WebElement combo, String text, Integer msSleepAfterCommand) throws Exception{
+		Boolean result = selectElementInCombo(combo, text, "option");
+		if(msSleepAfterCommand != null) Sleeper.sleep(msSleepAfterCommand, driver);
+		return result;
+	}
+	
 	public boolean selectElementInDefaultCombo(WebElement combo, String text){
 		new Select(combo).selectByVisibleText(text);
 		return true;
@@ -279,6 +295,17 @@ public class Page {
 		try{
 			clickAButton(combo);
 			clickAButton((driver.findElement(By.xpath("//"+typeOfContainer+"[contains(text(),'"+text+"')]" ))));
+			return true;
+		} catch (NullPointerException nEx){
+			throw new ElementNotFoundException(getMessageFromWebElement(combo)+" is not found",null);
+		} catch (org.openqa.selenium.NoSuchElementException nSEx){
+			return false;
+		}
+	}
+	
+	public boolean selectElementInComboByIndex(WebElement combo, Integer index, String typeOfContainer) throws Exception{
+		try{
+			clickAButton((driver.findElement(By.xpath("//"+typeOfContainer+"["+index+"]" ))));
 			return true;
 		} catch (NullPointerException nEx){
 			throw new ElementNotFoundException(getMessageFromWebElement(combo)+" is not found",null);
