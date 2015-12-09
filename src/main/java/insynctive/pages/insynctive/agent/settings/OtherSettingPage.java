@@ -12,10 +12,10 @@ public class OtherSettingPage extends Page implements PageInterface {
 
 	String enviroment;
 
-	@FindBy(id = "btnEmailSetup_CD")
-	WebElement emailSetupBtn;
-	@FindBy(id = "mailBoxFrame")
-	WebElement mailBoxFrame;
+	@FindBy(id = "mainTab_btnEditEmployeeNotificationsSettings_B")
+	WebElement editNotificationsBtn;
+	@FindBy(id = "notificationsFrame")
+	WebElement notificationsFrame;
 
 	@Override
 	public boolean isPageLoad() {
@@ -33,8 +33,8 @@ public class OtherSettingPage extends Page implements PageInterface {
 	
 	@Override
 	public void waitPageIsLoad() throws Exception {
-		swichToIframe(mailBoxFrame);
-		waitUntilIsLoaded(emailSetupBtn);
+		swichToIframe(notificationsFrame);
+		waitUntilIsLoaded(editNotificationsBtn);
 		swichToFirstFrame(driver);
 	}
 }
