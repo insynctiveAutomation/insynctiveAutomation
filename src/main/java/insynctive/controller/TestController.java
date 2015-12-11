@@ -1,21 +1,30 @@
 package insynctive.controller;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.reflections.Reflections;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
@@ -30,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
+import insynctive.model.test.Test;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlSuite;
@@ -47,10 +57,10 @@ import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
-import insynctive.model.test.Test;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
+import insynctive.tests.TestMachine;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
 import insynctive.utils.TestResults;
@@ -63,6 +73,8 @@ public class TestController {
  
 //	How to return error codes
 //	return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+	
+	private final String TEST_PACKAGE = "insynctive.tests";
 	
 	//DB Connections.
 	private final InsynctivePropertyDao propertyDao;
@@ -203,6 +215,17 @@ public class TestController {
 		ModelAndView model = new ModelAndView();;
 		if(logedAccID != null){
 			model.setViewName("/dashboard");
+		} else {
+			model.setViewName("/login");
+		}
+		return model;
+	}
+	
+	@RequestMapping(value = "/testplan" ,method = RequestMethod.GET)
+	public ModelAndView testPlan() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();;
+		if(logedAccID != null){
+			model.setViewName("/testPlan");
 		} else {
 			model.setViewName("/login");
 		}
@@ -494,7 +517,31 @@ public class TestController {
 		TestResults.removeListener(index);
 	}
 
-	
+	@RequestMapping(value = "/testclasses" ,method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public Object[] getClasses() throws ConfigurationException, ClassNotFoundException, IOException {
+		  Reflections reflections = new Reflections(TEST_PACKAGE);
+		  Set<Class<? extends TestMachine>> testsClasses =  reflections.getSubTypesOf(TestMachine.class);
+		  return testsClasses.stream().map(test -> test.getSimpleName()).toArray();
+		  
+	}
+
+	@RequestMapping(value = "/test/{className}" ,method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public Object[] getTests(@PathVariable("className") String className) throws ConfigurationException, ClassNotFoundException, IOException {
+		Object[] testsMethods = null;  
+		Reflections reflections = new Reflections(TEST_PACKAGE);
+		Set<Class<? extends TestMachine>> testsClasses = reflections.getSubTypesOf(TestMachine.class);
+		for (Class<? extends TestMachine> testClass : testsClasses) {
+			if (testClass.getSimpleName().equals(className)) {
+				System.out.println(Arrays.asList(testClass.getDeclaredMethods()).stream().filter(meth -> meth.isAnnotationPresent(org.testng.annotations.Test.class)).toArray());
+				testsMethods = Arrays.asList(testClass.getDeclaredMethods()).stream().filter(meth -> meth.isAnnotationPresent(org.testng.annotations.Test.class)).map(meth -> meth.getName()).toArray();
+			}
+		}
+		return testsMethods;
+	}
 	
 	private String checkStatusOfMethodInTLA(Integer tlaIndex, String nameOfTest) throws Exception {
 		List<ITestResult> passedTests = TestResults.listeners.get(tlaIndex).getPassedTests();
@@ -509,7 +556,7 @@ public class TestController {
 				throw new Exception("The Methods Create Job Fails");
 			}
 		}
-		return "{\"status\": false}";
+		return "{\"status\": 200}";
 	}
 	
 	private ParametersFrontObject getParams(String className, String testName) throws ClassNotFoundException, NoSuchMethodException, SecurityException{
