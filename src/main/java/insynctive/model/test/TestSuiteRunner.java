@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.run.TestSuiteRun;
@@ -37,18 +38,15 @@ public class TestSuiteRunner {
 
 	@Column(name = "environment")
 	private String environment;
-	
-	//PARENT
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name="test_plan_id", nullable=true, insertable=true, updatable=true)
-	private TestPlan testPlan;
 
+	@Column(name = "test_plan_id")
+	private Integer testPlanID;
+	
 	public TestSuiteRunner() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	public TestSuiteRunner(TestSuite newTestSuite, String environment, TestEnvironment browser) {
-		newTestSuite.setTestSuiteRunner(this);
 		this.testSuite = newTestSuite;
 		this.environment = environment;
 		this.browser = browser.name();
@@ -86,12 +84,12 @@ public class TestSuiteRunner {
 		this.environment = environment;
 	}
 
-	public TestPlan getTestPlan() {
-		return testPlan;
+	public Integer getTestPlanID() {
+		return testPlanID;
 	}
 
-	public void setTestPlan(TestPlan testPlan) {
-		this.testPlan = testPlan;
+	public void setTestPlanID(Integer testPlanID) {
+		this.testPlanID = testPlanID;
 	}
 
 	public TestSuiteRun toTestSuiteRun() {

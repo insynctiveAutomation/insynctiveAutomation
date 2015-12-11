@@ -5,15 +5,14 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.testng.xml.XmlClass;
-import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
@@ -26,13 +25,13 @@ import insynctive.dao.test.TestPlanDao;
 import insynctive.dao.test.TestRunDao;
 import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
+import insynctive.exception.ConfigurationException;
 import insynctive.model.ParamObject;
 import insynctive.model.test.Test;
 import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
 import insynctive.model.test.TestSuiteRunner;
 import insynctive.model.test.run.TestPlanRun;
-import insynctive.model.test.run.TestSuiteRun;
 import insynctive.utils.HibernateUtil;
 import insynctive.utils.TestWebRunner;
 import insynctive.utils.data.TestEnvironment;
@@ -123,6 +122,53 @@ public class InitController {
 		}
 		
 		return "{\"status\" : 200}";
+	}
+	
+	
+	/** Move to Tests Controller*/
+	/** GET AND SAVE TEST **/
+	@RequestMapping(value = "/test" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String savetet(@RequestBody Test test) throws Exception{
+		testDao.saveOrUpdate(test);
+		return "{\"statut\" : 200}";
+	}
+	
+	@RequestMapping(value = "/test/{testID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public Test getTest(@PathVariable("testID") Integer testID) throws Exception{
+		Test test = testDao.getTestByID(testID);
+		return test;
+	}
+	
+	/** GET AND SAVE TEST SUITE **/
+	@RequestMapping(value = "/testSuite" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String getTestSuite(@RequestBody TestSuite testSuite) throws Exception{
+		testSuiteDao.saveOrUpdate(testSuite);
+		return "{\"statut\" : 200}";
+	}
+	
+	@RequestMapping(value = "/testSuite/{testSuiteID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestSuite getTestSuite(@PathVariable Integer testSuiteID) throws ConfigurationException {
+		TestSuite testByID = testSuiteDao.getTestByID(testSuiteID);
+		return testByID;
+	}
+
+	/** GET AND SAVE TEST PLAN **/
+	@RequestMapping(value = "/testPlan" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String getTestPlan(@RequestBody TestPlan testPlan) throws Exception{
+		testPlanDao.saveOrUpdate(testPlan);
+		return "{\"statut\" : 200}";
+	}
+	
+	@RequestMapping(value = "/testPlan/{testPlanID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestPlan getTestPlan(@PathVariable Integer testPlanID) throws ConfigurationException {
+		TestPlan testPlanByID = testPlanDao.getTestPlanByID(testPlanID);
+		return testPlanByID;
 	}
 	
 	

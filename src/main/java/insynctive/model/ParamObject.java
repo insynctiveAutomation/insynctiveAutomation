@@ -178,53 +178,6 @@ public class ParamObject {
 		addData(runID, DEFAULT_FILE);
 	}
 
-	@Deprecated
-	private void addData(String runID, String path) throws ConfigurationException {
-		try {
-			JSONParser parser = new JSONParser();
-			JSONObject person = (JSONObject) parser.parse(new FileReader(path));
-			name = (String)person.get("name");
-			middleName = (String)person.get("middleName");
-			lastName = (String)person.get("lastName");
-			maidenName = (String)person.get("maidenName");
-			birthDate = (String)person.get("birthDate");
-			gender = Gender.valueOf((String)person.get("gender"));
-			maritalStatus = MaritalStatus.valueOf((String)person.get("maritalStatus"));
-			email = (String)person.get("email");
-			setSsn((String)person.get("ssn"));
-			
-			email = email.split("@")[0] + "+" + runID + "@" + email.split("@")[1];
-			titleOfEmployee = (String)person.get("titleOfEmployee");
-			departamentOfEmployee = (String)person.get("departamentOfEmployee");
-			primaryPhone = (String)person.get("primaryPhone");
-
-			JSONObject emg = (JSONObject) person.get("emergencyContact");
-			emergencyContact = new EmergencyContact((String) emg.get("name"),
-					(String) emg.get("relationShip"),
-					(String) emg.get("email"), (String) emg.get("phone"));
-			
-			JSONObject jsonUSAddres = (JSONObject)person.get("USAddress");
-			usAddress = new USAddress();
-			usAddress.setStreet((String)jsonUSAddres.get("street"));
-			usAddress.setSecondStreet((String)jsonUSAddres.get("secondStreet"));
-			usAddress.setCity((String)jsonUSAddres.get("city"));
-			usAddress.setState((String)jsonUSAddres.get("state"));
-			usAddress.setZipCode((String)jsonUSAddres.get("zipCode"));
-			usAddress.setCounty((String)jsonUSAddres.get("county"));
-			usAddress.setSameAsHome((Boolean)jsonUSAddres.get("sameAsHome"));
-			
-//			JSONArray jsonDependents = (JSONArray) person.get("Dependents");
-			
-		} catch(Exception ex) {
-			throw new ConfigurationException("Fail reading Person Configuration ====> "+ ex.getMessage());
-		}
-	}
-	
-	@JsonIgnore
-	public String getEmailToChange(String runID){
-		return email.split("@")[0] +"+"+runID+ "+test@" + email.split("@")[1];
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -346,11 +299,6 @@ public class ParamObject {
 		return (email.split("@")[0] + "+" + runID + "@" + email.split("@")[1]);
 	}
 	
-	@Override
-	public String toString() {
-		return this.name + " "+this.lastName;
-	}
-	
 	public Benefit getMedicalBenefit() {
 		return medicalBenefit;
 	}
@@ -455,6 +403,30 @@ public class ParamObject {
 		this.loadingTime = loadingTime;
 	}
 	
+	public Boolean getBooleanParamOne() {
+		return booleanParamOne;
+	}
+
+	public void setBooleanParamOne(Boolean booleanParamOne) {
+		this.booleanParamOne = booleanParamOne;
+	}
+	
+	public Boolean getBooleanParamTwo() {
+		return booleanParamTwo;
+	}
+	
+	public void setBooleanParamTwo(Boolean booleanParamTwo) {
+		this.booleanParamTwo = booleanParamTwo;
+	}
+
+	public Integer getWaitTime() {
+		return waitTime;
+	}
+
+	public void setWaitTime(Integer waitTime) {
+		this.waitTime = waitTime;
+	}
+
 	@JsonIgnore
 	public Field getFieldByName(String name) throws Exception {
 		try {
@@ -495,7 +467,8 @@ public class ParamObject {
 			throw new Exception("Error on getValueByName("+name+")");
 		}
 	}
-
+	
+	@JsonIgnore
 	public Object getFieldToSet(String name) throws Exception {
 		try{
 			String[] splitName = name.split("\\.");
@@ -519,31 +492,8 @@ public class ParamObject {
 		}
 	}
 	
-	public Boolean getBooleanParamOne() {
-		return booleanParamOne;
-	}
-
-	public void setBooleanParamOne(Boolean booleanParamOne) {
-		this.booleanParamOne = booleanParamOne;
-	}
-	
-	public Boolean getBooleanParamTwo() {
-		return booleanParamTwo;
-	}
-	
-	public void setBooleanParamTwo(Boolean booleanParamTwo) {
-		this.booleanParamTwo = booleanParamTwo;
-	}
-
-	public Integer getWaitTime() {
-		return waitTime;
-	}
-
-	public void setWaitTime(Integer waitTime) {
-		this.waitTime = waitTime;
-	}
-	
 	//TODO AUTOMCATICALLY
+	@JsonIgnore
 	public static ParamObject getNewWithOutIDs(ParamObject p) throws IllegalArgumentException, IllegalAccessException, Exception{
 		ParamObject newParamObject = new ParamObject();
 		
@@ -579,5 +529,57 @@ public class ParamObject {
 		
 		newParamObject.paramObjectID = null;
 		return newParamObject;
+	}
+	
+	@Override
+	public String toString() {
+		return "ID : "+paramObjectID;
+	}
+	
+	@JsonIgnore
+	public String getEmailToChange(String runID){
+		return email.split("@")[0] +"+"+runID+ "+test@" + email.split("@")[1];
+	}
+	
+	@Deprecated
+	private void addData(String runID, String path) throws ConfigurationException {
+		try {
+			JSONParser parser = new JSONParser();
+			JSONObject person = (JSONObject) parser.parse(new FileReader(path));
+			name = (String)person.get("name");
+			middleName = (String)person.get("middleName");
+			lastName = (String)person.get("lastName");
+			maidenName = (String)person.get("maidenName");
+			birthDate = (String)person.get("birthDate");
+			gender = Gender.valueOf((String)person.get("gender"));
+			maritalStatus = MaritalStatus.valueOf((String)person.get("maritalStatus"));
+			email = (String)person.get("email");
+			setSsn((String)person.get("ssn"));
+			
+			email = email.split("@")[0] + "+" + runID + "@" + email.split("@")[1];
+			titleOfEmployee = (String)person.get("titleOfEmployee");
+			departamentOfEmployee = (String)person.get("departamentOfEmployee");
+			primaryPhone = (String)person.get("primaryPhone");
+
+			JSONObject emg = (JSONObject) person.get("emergencyContact");
+			emergencyContact = new EmergencyContact((String) emg.get("name"),
+					(String) emg.get("relationShip"),
+					(String) emg.get("email"), (String) emg.get("phone"));
+			
+			JSONObject jsonUSAddres = (JSONObject)person.get("USAddress");
+			usAddress = new USAddress();
+			usAddress.setStreet((String)jsonUSAddres.get("street"));
+			usAddress.setSecondStreet((String)jsonUSAddres.get("secondStreet"));
+			usAddress.setCity((String)jsonUSAddres.get("city"));
+			usAddress.setState((String)jsonUSAddres.get("state"));
+			usAddress.setZipCode((String)jsonUSAddres.get("zipCode"));
+			usAddress.setCounty((String)jsonUSAddres.get("county"));
+			usAddress.setSameAsHome((Boolean)jsonUSAddres.get("sameAsHome"));
+			
+//			JSONArray jsonDependents = (JSONArray) person.get("Dependents");
+			
+		} catch(Exception ex) {
+			throw new ConfigurationException("Fail reading Person Configuration ====> "+ ex.getMessage());
+		}
 	}
 }

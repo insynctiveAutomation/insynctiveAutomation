@@ -1,9 +1,9 @@
-function TestSuite() {
-	this.testName;
-	this.className;
-	this.includeMethods;
+function Test(testSuite) {
+	this.testSuiteID = testSuite.testSuiteID;
+	this.testSuiteName;
+	this.tests;
 }
 
-TestSuite.asTestSuite = function (jsonTestSuite) {
-	return angular.extend(new TestSuite(), jsonTestSuite);
+Test.asTest = function (jsonTest) {
+	return angular.extend(new Test(), jsonTestSuite);
 };

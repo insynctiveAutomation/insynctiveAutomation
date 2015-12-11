@@ -8,11 +8,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.testng.xml.XmlSuite;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.Account;
@@ -32,7 +36,8 @@ public class TestPlan {
 	@Column(name = "name")
 	public String name;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy = "testPlan")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="testPlanID")
 	public List<TestSuiteRunner> testSuiteRunners = new ArrayList<>();
 
 	public TestPlan() {
@@ -56,7 +61,7 @@ public class TestPlan {
 	}
 	
 	public void addTestSuiteRunner(TestSuiteRunner testSuiteRunner){
-		testSuiteRunner.setTestPlan(this);
+		testSuiteRunner.setTestPlanID(this.testPlanID);
 		testSuiteRunners.add(testSuiteRunner);
 	}
 
@@ -80,6 +85,4 @@ public class TestPlan {
 		tpRun.setStatus("Running");
 		return tpRun;
 	}
-	
-	
 }

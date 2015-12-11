@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlSuite;
@@ -34,18 +36,14 @@ public class TestSuite {
 	@Id
 	@GeneratedValue
 	@Column(name = "test_suite_id")
-	private Integer testSuiteID;
+	private Integer testSuiteID; 
 	
 	@Column(name = "test_suite_name")
 	private String testSuiteName;
 	
-	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "testSuite")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade={CascadeType.ALL})
 	private List<Test> tests = new ArrayList<>();
-	
-	//PARENT
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name="test_suite_runner_id", nullable=true, insertable=true, updatable=true)
-	private TestSuiteRunner testSuiteRunner;
 	
 	public TestSuite() {
 		// TODO Auto-generated constructor stub
@@ -59,17 +57,8 @@ public class TestSuite {
 		}
 	}
 
-	@JsonIgnore
-	public Test getTestByName(String name){
-		for(Test test : tests){
-			if(test.getTestName().equals(name)){ return test; }
-		}
-		return null;
-	}
-	
 	public void addMethod(Test newTest) {
 		tests.add(newTest);
-		newTest.setTestSuite(this);
 	}
 	
 	public Integer getTestSuiteID() {
@@ -100,14 +89,18 @@ public class TestSuite {
 		this.tests.remove(test);
 	}
 
-	public TestSuiteRunner getTestSuiteRunner() {
-		return testSuiteRunner;
+	public void addTest(Test test){
+		test.setTestSuiteID(this.testSuiteID);
+		tests.add(test);
 	}
 
-	public void setTestSuiteRunner(TestSuiteRunner testSuiteRunner) {
-		this.testSuiteRunner = testSuiteRunner;
+	public TestSuiteRun toTestSuiteRun() {
+		TestSuiteRun tsRun = new TestSuiteRun();
+		tsRun.setName(testSuiteName);
+		tsRun.addTestsRuns(tests);
+		return tsRun;
 	}
-
+	
 	@JsonIgnore
 	@Deprecated
 	public static TestSuite getNewWithOutIDs(TestSuiteRun testSuite) throws Exception {
@@ -122,7 +115,14 @@ public class TestSuite {
 		return newTestSuite;
 	}
 	
-
+	@JsonIgnore
+	public Test getTestByName(String name){
+		for(Test test : tests){
+			if(test.getTestName().equals(name)){ return test; }
+		}
+		return null;
+	}
+	
 	@Deprecated
 	public TestSuite resetTestSuite() {
 		for(Test test : this.getTests()){
@@ -132,17 +132,5 @@ public class TestSuite {
 			if(paramObject.getUSAddress() != null) paramObject.getUSAddress().setUsAddressID(null);
 		}
 		return this;
-	}
-	
-	public void addTest(Test test){
-		test.setTestSuite(this);
-		tests.add(test);
-	}
-
-	public TestSuiteRun toTestSuiteRun() {
-		TestSuiteRun tsRun = new TestSuiteRun();
-		tsRun.setName(testSuiteName);
-		tsRun.addTestsRuns(tests);
-		return tsRun;
 	}
 }

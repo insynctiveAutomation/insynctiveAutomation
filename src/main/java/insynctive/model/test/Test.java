@@ -16,6 +16,7 @@ import org.testng.xml.XmlClass;
 import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlTest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.ParamObject;
@@ -38,29 +39,24 @@ public class Test {
 	private String className;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "param_object_id", nullable=true, insertable=true, updatable=true)
+	@JoinColumn(name = "param_object_id")
 	private ParamObject paramObject;
-
-	//PARENT
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "test_suite_id", nullable=true, insertable=true, updatable=true)
-	private TestSuite testSuite;
+	
+	@Column(name = "test_suite_id")
+	private Integer testSuiteID;
 	
 	public Test(){
 		this.paramObject = new ParamObject();
-		this.testSuite = new TestSuite();
 	}
 	
 	public Test(String testName) {
 		this.testName = testName;
 		this.paramObject = new ParamObject();
-		this.testSuite = new TestSuite();
 	}
 	
 	public Test(String testName, String status) {
 		this.testName = testName;
 		this.paramObject = new ParamObject();
-		this.testSuite = new TestSuite();
 	}
 	
 	public Test(XmlInclude method, String className) {
@@ -93,10 +89,6 @@ public class Test {
 		this.className = className;
 	}
 
-	public TestSuite getTestSuite() {
-		return testSuite;
-	}
-
 	public ParamObject getParamObject() {
 		return paramObject;
 	}
@@ -104,11 +96,15 @@ public class Test {
 	public void setParamObject(ParamObject paramObject) {
 		this.paramObject = paramObject;
 	}
-
-	public void setTestSuite(TestSuite testSuite) {
-		this.testSuite = testSuite;
-	}
 	
+	public Integer getTestSuiteID() {
+		return testSuiteID;
+	}
+
+	public void setTestSuiteID(Integer testSuiteID) {
+		this.testSuiteID = testSuiteID;
+	}
+
 	@Deprecated
 	public void resetTest() {
 		testID = null;
@@ -116,6 +112,7 @@ public class Test {
 	}
 	
 	@Deprecated
+	@JsonIgnore
 	public static Test getNewWithOutIDs(Test test) throws IllegalArgumentException, IllegalAccessException, Exception{
 		Test newtest = new Test();
 		
@@ -124,10 +121,6 @@ public class Test {
 		
 		newtest.testID = null;
 		return newtest;
-	}
-
-	public void setTestSuiteID(Integer testSuiteID) {
-		this.testSuite.setTestSuiteID(testSuiteID);
 	}
 
 	public TestRun toTestRun() {

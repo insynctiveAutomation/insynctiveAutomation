@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
-<html lang="en" ng-app="">
+<html lang="en" ng-app="testPlanApp">
 
 <head>
 <meta charset="utf-8">
@@ -23,20 +23,29 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
 	
+	<!-- Test Plan  -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/testPlan/testPlanController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/testPlan/testPlanService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/testPlan/testPlanDirectives.js"></script>
+	
 </head>
 
-<body data-ng-controller="">
+<body data-ng-controller="testPlanController as controller">
 	<span>Name: </span><input type="text"/>
+	<select name="testSuite" ng-model="controller.selectTestSuitName" data-ng-options="testSuite as testSuite for testSuite in controller.testSuites" ng-change="" required>
+    	<option value="">Select a Test Suite</option>
+ 	</select>	
 	
 	<table class="table table-striped table-hover table-condensed">
 			<tbody>
 				<tr>
 					<th>Name</th>
-					<th>Add</th>
+					<th>View</th>
+					<th>add</th>
 				</tr>
 				<tr data-ng-repeat="" class="animate-repeat">
 					<td class="col-sm-3"><span>Test Name</span></td>
-					<td class="col-sm-3"><a id="" ng-click="">Add</a></td>
+					<td class="col-sm-3"><a id="" ng-click="">View Tests</a></td>
 				</tr>
 			</tbody>
 		</table>
