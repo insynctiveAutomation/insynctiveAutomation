@@ -56,7 +56,7 @@ public abstract class TestMachine {
 	public ParamObject paramObject;
 	
 	public WebDriver driver;
-	
+
 	/** TAGS => Add tests result test.*/
 	List<String> tags = new ArrayList<String>();
 	

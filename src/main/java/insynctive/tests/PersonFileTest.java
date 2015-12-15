@@ -82,7 +82,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
-			boolean result = loginPage.isLoggedIn();
+			boolean result = loginPage.isLoggedIn(1000);
 			Debugger.log("loginTest => "+result, isSaucelabs);
 			setResult(result, "Login Test");
 			assertTrue(result);
