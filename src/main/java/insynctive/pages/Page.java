@@ -447,10 +447,10 @@ public class Page {
 		clickAButton(closeOverlayBtn);
 	}
 
-	public static WebElement waitForElement(WebDriver driver, WebElement element, int timeSeconds) throws ElementNotFoundException {
+	public static WebElement waitElement(WebDriver driver, WebElement element, int timeSeconds) throws ElementNotFoundException {
 		WebElement webElement;
 		try {
-			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 			WebDriverWait wait = new WebDriverWait(driver, timeSeconds);
 			webElement = wait.withTimeout(timeSeconds, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOf(element));
 			driver.manage().timeouts().implicitlyWait(SELENIUM_TIMEOUT_SEC_LONG, TimeUnit.SECONDS);

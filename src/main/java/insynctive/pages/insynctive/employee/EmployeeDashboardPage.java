@@ -214,7 +214,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
         clickDoneBtn();
         swichToFirstFrame(driver);
 
-        waitForElement(driver, buttonFirstStepCompleted, Page.SELENIUM_TIMEOUT_SEC_MEDIUM);
+        waitElement(driver, buttonFirstStepCompleted, Page.SELENIUM_TIMEOUT_SEC_MEDIUM);
     }
 
     private void clickDoneBtnAndWait(Integer time) throws Exception {
@@ -248,7 +248,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
         Sleeper.sleep(5000, driver);
         clickAButton(doneBtn); //click Done
         swichToFirstFrame(driver);
-        waitForElement(driver, buttonSecondStepCompleted, Page.SELENIUM_TIMEOUT_SEC_MEDIUM);
+        waitElement(driver, buttonSecondStepCompleted, Page.SELENIUM_TIMEOUT_SEC_MEDIUM);
     }
 
     public void fillAndSignWaiver(String benefitName) throws Exception {
