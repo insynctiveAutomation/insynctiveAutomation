@@ -1,10 +1,11 @@
 package insynctive.controller;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,12 +18,21 @@ import insynctive.dao.TestSuiteDao;
 import insynctive.model.Account;
 import insynctive.model.ParamObject;
 import insynctive.model.TestSuite;
+import insynctive.utils.TestResults;
 import insynctive.utils.TestWebRunner;
+import insynctive.utils.jenkins.JenkinsForm;
+import insynctive.utils.slack.SlackMessage;
+import insynctive.utils.slack.SlackUtil;
+import insynctive.utils.slack.builders.SlackMessageBuilder;
 
 @Controller
 @RequestMapping(value = "/jenkins")
 public class JenkinsController {
 
+	//NIGHTLY SETTINGS
+	private final int NIGHTLY_ACCOUNT_ID = 6;
+	final String NIGHTLY_DEFAULT_ENVIRONMENT = "AutomationQA";
+	
 	//DB Connections.
 	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
@@ -45,21 +55,56 @@ public class JenkinsController {
 	
 	@RequestMapping(value = "/build", method = RequestMethod.POST)
 	@ResponseBody
-	public String newBuild(@RequestBody JenkinsForm form) throws Exception {
-		boolean isMaster = form.account.equals("master");
-		boolean isIntegration = form.branch.toLowerCase().contains("integration"); 
+	public String newBuild(@RequestBody JenkinsForm jenkinsForm) throws Exception {
+
+		//Send Jenkins Message in slack, to notify whats happens with the Job.
 		
-		if(isMaster){
-			
-		} else if(isIntegration){
+		
+		if(needComunication(jenkinsForm)){
+			SlackMessage Slackmessage = new SlackMessageBuilder()
+					.setUsername(jenkinsForm.getUsername())
+					.setText(jenkinsForm.getMessage())
+					.setIconEmoji(jenkinsForm.getEmoji())
+					.setChannel(jenkinsForm.getChannel())
+					.build();
+			SlackUtil.sendMessage(Slackmessage);
 			
 		}
 		
-		return "{\"branch\" : \""+form.branch+"\", \"account\" : \""+form.account+"\", \"isMaster\" : \""+isMaster+"\", \"isIntegration\" : \""+isIntegration+"\"}";
+		
+
+		if(jenkinsForm.isMaster() && jenkinsForm.isTypeInstall() && jenkinsForm.isStatusSuccess()){ 
+			runBuildMasterTests(jenkinsForm);
+		} else if(jenkinsForm.isIntegration()){
+			runBuildIntegrationsTests(jenkinsForm);
+		} else if(jenkinsForm.isTypeInstall() && jenkinsForm.isStatusSuccess()){
+			runBuildMasterTests(jenkinsForm);
+		}
+		
+		
+		return "{\"status\" : 200}";
 	}
 	
-	public class JenkinsForm {
-		public String account;
-		public String branch;
+	private boolean needComunication(JenkinsForm jenkinsForm) {
+		return jenkinsForm.isStatusFailure() || jenkinsForm.isPhaseStarted() || jenkinsForm.isStatusAborted() || jenkinsForm.isTypeInstall(); 
+	}
+
+	public void runBuildMasterTests(JenkinsForm jenkinsForm) throws Exception{
+		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
+		ParamObject defaultParamObject = nightlyAcc.getParamObject();
+		String insynctiveAccount = jenkinsForm.getBuild().getParameters().getAccount();
+		
+		//FIRST LOGIN
+		TestSuite firstLoginform = testRunner.createTestSuite(defaultParamObject,"First Login", insynctiveAccount, "FIREFOX");
+		Integer firstLoginRun = testRunner.runTest(firstLoginform, nightlyAcc);
+		
+		//Person File - FIREFOX
+		TestSuite form = testRunner.createTestSuite(defaultParamObject,"Person File", insynctiveAccount, "FIREFOX");
+			form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
+		Integer PersonFileFirefox = testRunner.runTest(form, nightlyAcc, TestResults.workers.get(firstLoginRun));
+	}
+	
+	public void runBuildIntegrationsTests(JenkinsForm jenkinsForm) throws Exception{
+
 	}
 }

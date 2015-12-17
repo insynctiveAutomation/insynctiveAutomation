@@ -73,11 +73,11 @@ public class LoginPage extends Page implements PageInterface{
 				&& loginUsernameField.isDisplayed();
 	}
     
-    public boolean isLoggedIn() throws Exception{
+    public boolean isLoggedIn(Integer maxTimeSegs) throws Exception{
     	boolean result = false;
     	Sleeper.sleep(3000, driver);
     	int times = 1;
-    	while(times < 10){
+    	while(times < maxTimeSegs){
     		result = !driver.getCurrentUrl().contains("/Insynctive.Hub/Login.aspx");
     		if(!result){
     			Sleeper.sleep(3000, driver);
@@ -87,6 +87,10 @@ public class LoginPage extends Page implements PageInterface{
     		}
     	}
     	return result;
+    }
+
+    public boolean isLoggedIn() throws Exception{
+    	return isLoggedIn(10);
     }
     
     public  boolean isNotLoggedIn() {

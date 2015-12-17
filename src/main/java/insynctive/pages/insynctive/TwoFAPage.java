@@ -54,7 +54,7 @@ public class TwoFAPage extends Page implements PageInterface {
 		clickAButton(sendViaPhone);
 		clickAButton(sendVerificationBtn);
 
-		Sleeper.sleep(5000, driver);
+		Sleeper.sleep(9000, driver);
 		String verificationCode = TwilioUtil.getVerificationCode();
 		
 		setTextInField(verificationCodeInput, verificationCode);

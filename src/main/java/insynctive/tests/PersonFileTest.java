@@ -60,7 +60,29 @@ public class PersonFileTest extends TestMachine {
 		try{
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
-			boolean result = loginPage.isLoggedIn();
+			boolean result = loginPage.isLoggedIn(1000);
+			Debugger.log("loginTest => "+result, isSaucelabs);
+			setResult(result, "Login Test");
+			assertTrue(result);
+		} catch(Exception ex){
+			failTest("Login Test", ex, isSaucelabs);
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Parameters({"TestID"})
+	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
+	labels={"Login Username", "Login Password"})
+	public void longTimeLogin(@Optional("TestID") Integer testID)
+			throws Exception {
+		changeParamObject(testID);
+		
+		startTest(testEnvironment);
+		try{ 
+			LoginPage loginPage = login();
+			Sleeper.sleep(1500, driver);
+			boolean result = loginPage.isLoggedIn(1000);
 			Debugger.log("loginTest => "+result, isSaucelabs);
 			setResult(result, "Login Test");
 			assertTrue(result);
