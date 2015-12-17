@@ -70,26 +70,35 @@ public class JenkinsController {
 			SlackUtil.sendMessage(Slackmessage);
 			
 		}
-		
-		
 
-		if(jenkinsForm.isMaster() && jenkinsForm.isTypeInstall() && jenkinsForm.isStatusSuccess()){ 
-			runBuildMasterTests(jenkinsForm);
-		} else if(jenkinsForm.isIntegration()){
-			runBuildIntegrationsTests(jenkinsForm);
-		} else if(jenkinsForm.isTypeInstall() && jenkinsForm.isStatusSuccess()){
-			runBuildMasterTests(jenkinsForm);
-		}
+		if(jenkinsForm.isTypeInstall() && jenkinsForm.isStatusSuccess()){
+			
+			if(jenkinsForm.isMaster()){ 
+				runMasterTests(jenkinsForm);
+			} else if(jenkinsForm.isIntegration()){
+				runIntegrationsTests(jenkinsForm);
+			} else {
+				runOtherBranchesTests(jenkinsForm);
+			}
 		
+		}
 		
 		return "{\"status\" : 200}";
 	}
 	
+	private void runOtherBranchesTests(JenkinsForm jenkinsForm) throws Exception {
+		runMasterTests(jenkinsForm);
+	}
+
+	private void runIntegrationsTests(JenkinsForm jenkinsForm) throws Exception {
+		runMasterTests(jenkinsForm);
+	}
+
 	private boolean needComunication(JenkinsForm jenkinsForm) {
 		return jenkinsForm.isStatusFailure() || jenkinsForm.isPhaseStarted() || jenkinsForm.isStatusAborted() || jenkinsForm.isTypeInstall(); 
 	}
 
-	public void runBuildMasterTests(JenkinsForm jenkinsForm) throws Exception{
+	public void runMasterTests(JenkinsForm jenkinsForm) throws Exception{
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		ParamObject defaultParamObject = nightlyAcc.getParamObject();
 		String insynctiveAccount = jenkinsForm.getBuild().getParameters().getAccount();

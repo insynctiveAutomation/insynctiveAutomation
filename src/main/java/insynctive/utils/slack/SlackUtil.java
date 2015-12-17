@@ -10,6 +10,10 @@ import java.net.URL;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 
+import insynctive.utils.Notify;
+import insynctive.utils.jenkins.JenkinsForm;
+import insynctive.utils.slack.builders.SlackMessageBuilder;
+
 public class SlackUtil {
 
 	public static void sendMessage(SlackMessage message) throws IOException{
@@ -58,7 +62,7 @@ public class SlackUtil {
 		System.out.println(is);
 	}
 	
-	public static String getSlackAccountMentionByEmail(String email){
+	public static String getSlackAccountMentionByEmail(String email, Notify notifyIfNotExist, String channel) throws IOException{
 		switch (email) {
 		case "rgonzalez@insynctive.com":
 			return "@rgonzalez";
@@ -71,7 +75,18 @@ public class SlackUtil {
 		case "@svaz@insynctive.com":
 			return "@simon";
 		default:
-			return email;
+			if(notifyIfNotExist.value){notifyIfNotExist(email, channel);}
+				return "@channel";
 		}
+	}
+
+	private static void notifyIfNotExist(String email, String channel) throws IOException {
+		SlackMessage message = new SlackMessageBuilder()
+				.setText("@eugeniovaleiras please set "+email+" to match the right user in Slack")
+				.setChannel(":heavy_plus_sign:")
+				.setUsername("Bot Notify")
+				.setChannel(channel)
+				.build();
+		SlackUtil.sendMessage(message);
 	}
 }

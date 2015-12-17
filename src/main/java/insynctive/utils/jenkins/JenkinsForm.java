@@ -1,8 +1,11 @@
 package insynctive.utils.jenkins;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import insynctive.utils.Notify;
 import insynctive.utils.slack.SlackUtil;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -12,8 +15,8 @@ public class JenkinsForm {
 	public JenkinsBuild build;
 	
 	@JsonIgnore
-	public String getMessage() {
-		String mentionUser = build.parameters.user != null ? SlackUtil.getSlackAccountMentionByEmail(build.parameters.user)+ " - " : "";
+	public String getMessage() throws IOException {
+		String mentionUser = (build.parameters.user != null ? SlackUtil.getSlackAccountMentionByEmail(build.parameters.user, Notify.NOTIFY, this.getChannel()) : "@channel")+ " - ";
 		
 		if(isPhaseStarted()){
 			
