@@ -140,7 +140,7 @@ public class TestController {
 		model.setViewName("/template/benefit_company");
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/yes_no" ,method = RequestMethod.GET)
 	public ModelAndView getYesNo() throws ConfigurationException {
 		ModelAndView model = new ModelAndView();

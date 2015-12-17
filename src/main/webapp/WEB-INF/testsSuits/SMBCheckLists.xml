@@ -1,8 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Test Suite" verbose="1" >
-	<test name="Test">
+	<test name="SMB CheckList Test">
 	  <classes>
-	    <class name="insynctive.tests.NewChecklistTest">
+	    <class name="insynctive.tests.SMBChecklistTest">
 	      <methods>
 	      	<include name="loginTest" />
 	        <include name="archiveRunningChecklist" />

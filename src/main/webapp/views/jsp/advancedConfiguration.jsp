@@ -184,7 +184,20 @@
 				<label for="">Vision Benefit Name: </label>
 				<input ng-model="configCtl.configuration.paramObject.visionBenefit.name" />
 				<benefit-company ng-model="configCtl.configuration.paramObject.visionBenefit.company"></benefit-company>
-		 		<br/>     
+		 		<br/>
+				<br/>
+				<label for="">Waiver Form1: </label>
+
+				<benefit-company ng-model="configCtl.configuration.paramObject.waiverForm1"></benefit-company>
+				<br/>
+				<label for="">Waiver Form2: </label>
+
+				<benefit-company ng-model="configCtl.configuration.paramObject.waiverForm2"></benefit-company>
+				<br/>
+				<label for="">Waiver Form3: </label>
+
+				<benefit-company ng-model="configCtl.configuration.paramObject.waiverForm3"></benefit-company>
+				<br/>
 			</div>
 
 			<div class="col-md-6 col-md-offset-6">

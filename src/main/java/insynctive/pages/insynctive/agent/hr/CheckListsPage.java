@@ -81,7 +81,23 @@ public class CheckListsPage extends Page implements PageInterface {
 
 	@FindBy(className = "ladda-button")
 	WebElement deleteFinalTemplate;
-	
+
+	@FindBy(css = "input[name='name']")
+	WebElement searchName;
+
+	@FindBy(xpath = "//span[text()='Elect benefits'][1]")
+	WebElement searchNameElection;
+
+	@FindBy(xpath = "//div[@class='rowMenu overallProgress']/img")
+	WebElement dashMenuBtn;
+
+	@FindBy(xpath = "//div[@class='cancelAllProcesses']")
+	WebElement cancelProcessesLink;
+
+	@FindBy(xpath = "//div[@class='archiveChecklist']")
+	WebElement archiveAllProcessesLink;
+
+
 	public CheckListsPage(WebDriver driver, String enviroment) {
 		super(driver);
 		this.enviroment = enviroment;
@@ -208,5 +224,18 @@ public class CheckListsPage extends Page implements PageInterface {
 			} catch (Exception ex){times++;/*THE ELEMENT IS NOT FOUND*/}
 		}
 		if(deleteTask == null){throw new ElementNotFoundException("The Checklists "+newCheckListName+" is not found after"+ times +" segs wait", null);}
+	}
+
+	public void archiveChecklist(String name, String lastname, String checklist) throws Exception {
+		//search the user
+		setTextInCombo(searchName, name + " " + lastname);
+		Sleeper.sleep(5000, driver);
+		clickAButton(searchNameElection);
+		Sleeper.sleep(10000, driver);
+		clickAButton(dashMenuBtn);
+		clickAButton(cancelProcessesLink);
+		Sleeper.sleep(70000, driver);
+		clickAButton(dashMenuBtn);
+		clickAButton(archiveAllProcessesLink);
 	}
 }

@@ -2,12 +2,20 @@
 <suite name="Test Suite" verbose="1" >
 	<test name="Employee Dashboard Test">
 	  <classes>
+		 <!--<class name="insynctive.tests.CreatePersonTest">-->
+			  <!--<methods>-->
+				  <!--<include name="loginTest" />-->
+				  <!--<include name="createPersonTest" />-->
+				  <!--<include name="assignJob" />-->
+			  <!--</methods>-->
+		 <!--</class>-->
 	    <class name="insynctive.tests.EmployeeDashboardInterfaceTest">
 	      <methods>
 			<!-- Initial Test -->
 	        <include name="loginTest" />
-	        <include name="updatePersonalInformatioWithErrors" />
+	        <include name="updatePersonalInformationWithErrors" />
 	        <include name="electBenefits" />
+			<include name="fillAndSignWaiver" />
 	        <include name="fillAndSignBenefit" />
 	      </methods>
 	    </class>

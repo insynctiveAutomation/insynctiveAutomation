@@ -1,7 +1,6 @@
 package insynctive.model;
 
 import java.io.FileReader;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import javax.persistence.AttributeOverride;
@@ -117,6 +116,15 @@ public class ParamObject {
 	})
 	@Embedded
 	public Benefit visionBenefit;
+
+	@Column(name = "waiverform1")
+	public String waiverForm1;
+
+	@Column(name = "waiverform2")
+	public String waiverForm2;
+
+	@Column(name = "waiverform3")
+	public String waiverForm3;
 
 	@OneToOne
 	@Cascade({CascadeType.SAVE_UPDATE})
@@ -374,6 +382,28 @@ public class ParamObject {
 
 	public void setVisionBenefit(Benefit visionBenefit) {
 		this.visionBenefit = visionBenefit;
+	}
+
+	public String getWaiverForm1() {
+		return waiverForm1;
+	}
+
+	public void setWaiverForm1(String waiverForm1) {
+		this.waiverForm1 = waiverForm1;
+	}
+	public String getWaiverForm2() {
+		return waiverForm2;
+	}
+
+	public void setWaiverForm2(String waiverForm2) {
+		this.waiverForm2 = waiverForm2;
+	}
+	public String getWaiverForm3() {
+		return waiverForm3;
+	}
+
+	public void setWaiverForm3(String waiverForm3) {
+		this.waiverForm3 = waiverForm3;
 	}
 
 	public String getLoginUsername() {

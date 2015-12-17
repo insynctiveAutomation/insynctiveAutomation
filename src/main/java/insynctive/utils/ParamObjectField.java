@@ -20,6 +20,7 @@ public enum ParamObjectField {
 	MEDICAL_BENEFIT_NAME("medicalBenefit.name"),MEDICAL_BENEFIT_COMPANY("medicalBenefit.company"),
 	DENTAL_BENEFIT_NAME("dentalBenefit.name"), DENTAL_BENEFIT_COMPANY("dentalBenefit.company"),
 	VISION_BENEFIT_NAME("visionBenefit.name"), VISION_BENEFIT_COMPANY("visionBenefit.company"),
+	WAIVER_FORM1("waiverForm1"), WAIVER_FORM2("waiverForm2"), WAIVER_FORM3("waiverForm3"),
 
 	DOC_NAME("docName"), DOC_CATEGORY("docCategory"), DOC_PROCESS("docProcess"), DOC_PLAN_NAME("docPlanName"), DOC_KEYWORD("docKeyword");
 

@@ -60,14 +60,6 @@ public class SMBChecklistTest extends TestMachine {
             Boolean result = true;
             checklistPage.archiveChecklist(paramObject.name, paramObject.lastName, paramObject.checklistName);
 
-//            checklistPage.fluentWait();
-//            for (int index = 1; index <= paramObject.loadingTime; index++) {
-//                result = result && employeeDocuments.isDocumentInGrid(paramObject.docName + " " + index, paramObject.docCategory);
-//                employeeDocuments.viewDocument(paramObject.docName + " " + index);
-//                result = result && employeeDocuments.isOpenDocument();
-//                employeeDocuments.closeBigOverlay();
-//            }
-
             Debugger.log("archiveRunningChecklist => " + result, isSaucelabs);
             setResult(result, "Checklist Arhived");
             assertTrue(result);

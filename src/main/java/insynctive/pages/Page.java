@@ -8,14 +8,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Function;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.*;
 
 import insynctive.exception.ElementIsAllwaysVisibleException;
 import insynctive.exception.ElementNotFoundException;
@@ -26,6 +27,8 @@ import insynctive.utils.Sleeper;
 public class Page {
 
 	public static int SELENIUM_TIMEOUT_SEC = 30;
+	public static int SELENIUM_TIMEOUT_SEC_MEDIUM = 120;
+	public static int SELENIUM_TIMEOUT_SEC_LONG = 360;
     public WebDriver driver;
     public String PAGE_URL;
     public String PAGE_TITLE;
@@ -442,6 +445,35 @@ public class Page {
 	public void closeBigOverlay() throws Exception{
 		swichToFirstFrame(driver);
 		clickAButton(closeOverlayBtn);
+	}
+
+	public static WebElement waitForElement(WebDriver driver, WebElement element, int timeSeconds) throws ElementNotFoundException {
+		WebElement webElement;
+		try {
+			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+			WebDriverWait wait = new WebDriverWait(driver, timeSeconds);
+			webElement = wait.withTimeout(timeSeconds, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOf(element));
+			driver.manage().timeouts().implicitlyWait(SELENIUM_TIMEOUT_SEC_LONG, TimeUnit.SECONDS);
+			return webElement;
+
+		} catch (Exception ex){
+			throw new ElementNotFoundException("Element Not Found in (seconds): " + timeSeconds, null);
+		}
+	}
+
+	public WebElement fluentWait(final By locator) {
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(SELENIUM_TIMEOUT_SEC_MEDIUM, TimeUnit.SECONDS)
+				.pollingEvery(5, TimeUnit.SECONDS)
+				.ignoring(NoSuchElementException.class);
+
+		WebElement foo = wait.until(new Function<WebDriver, WebElement>() {
+										public WebElement apply(WebDriver driver) {
+											return driver.findElement(locator);
+										}
+									}
+		);
+		return foo;
 	}
 
 
