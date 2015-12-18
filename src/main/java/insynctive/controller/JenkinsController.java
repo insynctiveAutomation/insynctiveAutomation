@@ -57,9 +57,7 @@ public class JenkinsController {
 	@ResponseBody
 	public String newBuild(@RequestBody JenkinsForm jenkinsForm) throws Exception {
 
-		//Send Jenkins Message in slack, to notify whats happens with the Job.
-		
-		
+		//Comunicate The status of the build if need it.
 		if(needComunication(jenkinsForm)){
 			SlackMessage Slackmessage = new SlackMessageBuilder()
 					.setUsername(jenkinsForm.getUsername())
@@ -68,9 +66,9 @@ public class JenkinsController {
 					.setChannel(jenkinsForm.getChannel())
 					.build();
 			SlackUtil.sendMessage(Slackmessage);
-			
 		}
 
+		//Start Tests if is install and finish success.
 		if(jenkinsForm.isTypeInstall() && jenkinsForm.isStatusSuccess()){
 			
 			if(jenkinsForm.isMaster()){ 
@@ -111,9 +109,5 @@ public class JenkinsController {
 		TestSuite form = testRunner.createTestSuite(defaultParamObject,"Person File", insynctiveAccount, "FIREFOX");
 			form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
 		Integer PersonFileFirefox = testRunner.runTest(form, nightlyAcc, TestResults.workers.get(firstLoginRun));
-	}
-	
-	public void runBuildIntegrationsTests(JenkinsForm jenkinsForm) throws Exception{
-
 	}
 }
