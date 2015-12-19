@@ -1,7 +1,7 @@
 function TestSuite() {
+	this.testSuiteID;
 	this.testName;
-	this.className;
-	this.includeMethods;
+	this.tests = [];
 }
 
 TestSuite.asTestSuite = function (jsonTestSuite) {

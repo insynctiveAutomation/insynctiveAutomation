@@ -1,7 +1,9 @@
 function Test(testSuite) {
+	this.testID;
+	this.className;
+	this.testName;
 	this.testSuiteID = testSuite.testSuiteID;
-	this.testSuiteName;
-	this.tests;
+	this.paramObject = {};
 }
 
 Test.asTest = function (jsonTest) {

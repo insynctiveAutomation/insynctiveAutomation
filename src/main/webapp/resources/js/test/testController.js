@@ -20,13 +20,13 @@ app.controller('testController', function($cookies, $scope, $window, $modal, $lo
 	
 	this.getTestFromClass = function(){
 		testService.getTestFromClass(self.test.className, function(data){
-			self.testsFromClass = data;
+			self.testsFromClass = data.sort();
 		})
 	}
 	
 	this.getClasses = function(){
 		testService.getClasses(function(data){
-			self.classes = data
+			self.classes = data.sort()
 			self.getTestFromClass(self.test.testName)
 		})
 	}

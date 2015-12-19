@@ -14,8 +14,6 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	this.testID = $location.search().id
 	this.testSuite = {}
 	
-	this.tests = []
-	
 	this.getTestSuiteByID = function(id){
 		if(id){
 			testSuiteService.findTestSuite(id, function(data){
@@ -23,6 +21,8 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 			}, function(data){
 				self.message = 'Error =>'+data;
 			});
+		} else {
+			self.testSuite = new TestSuite();
 		}
 	};
 	self.getTestSuiteByID(self.testID);
@@ -37,6 +37,10 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	
 	this.addTest = function(){
 		self.testSuite.tests.push(new Test(self.testSuite));
+	}
+	
+	this.removeTest = function(test){
+		self.testSuite.tests.pop(test);
 	}
 	
 	//On Edit Parameters click

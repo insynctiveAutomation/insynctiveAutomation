@@ -393,7 +393,7 @@ public class PersonFileTest extends TestMachine {
 	@ParametersFront(
 			attrs={ParamObjectField.NAME, ParamObjectField.LAST_NAME, ParamObjectField.MIDDLE_NAME, ParamObjectField.MAIDEN_NAME}, 
 			labels={"Name:", "Last Name", "Middle Name", "Maiden Name"})
-	public void ChangeNameInTitle(@Optional("TestID") Integer testID)
+	public void changeNameInTitle(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
