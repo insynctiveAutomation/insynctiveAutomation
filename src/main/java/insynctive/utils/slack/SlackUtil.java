@@ -68,12 +68,14 @@ public class SlackUtil {
 			return "@rgonzalez";
 		case "mdjonov@insynctive.com":
 			return "@djonov";
-		case "@dtravieso@insynctive.com":
+		case "dtravieso@insynctive.com":
 			return "@dtravieso";
-		case "@ppetrea@insynctive.com":
+		case "ppetrea@insynctive.com":
 			return "@pepe";
-		case "@svaz@insynctive.com":
+		case "svaz@insynctive.com":
 			return "@simon";
+		case "atodorovski@insynctive.com":
+			return "@atanast";
 		default:
 			if(notifyIfNotExist.value){notifyIfNotExist(email, channel);}
 				return "@channel";
