@@ -30,7 +30,7 @@ public class TestSuiteRunner {
 	public Integer testSuiteRunnerID;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "test_suite_id", nullable=true, insertable=true, updatable=true)
+	@JoinColumn(name = "test_suite_id")
 	private TestSuite testSuite;
 
 	@Column(name = "browser")
@@ -39,9 +39,6 @@ public class TestSuiteRunner {
 	@Column(name = "environment")
 	private String environment;
 
-	@Column(name = "test_plan_id")
-	private Integer testPlanID;
-	
 	public TestSuiteRunner() {
 		// TODO Auto-generated constructor stub
 	}
@@ -82,14 +79,6 @@ public class TestSuiteRunner {
 
 	public void setEnvironment(String environment) {
 		this.environment = environment;
-	}
-
-	public Integer getTestPlanID() {
-		return testPlanID;
-	}
-
-	public void setTestPlanID(Integer testPlanID) {
-		this.testPlanID = testPlanID;
 	}
 
 	public TestSuiteRun toTestSuiteRun() {

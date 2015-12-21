@@ -2,7 +2,9 @@ package insynctive.model.test.run;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -53,7 +55,7 @@ public class TestSuiteRun {
 	private String status;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy = "testSuiteRun")
-	private List<TestRun> testsRuns = new ArrayList<>();
+	private Set<TestRun> testsRuns = new HashSet();
 
 	//PARENT
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -112,11 +114,11 @@ public class TestSuiteRun {
 		this.testSuiteRunID = testSuiteRunID;
 	}
 
-	public List<TestRun> getTestsRuns() {
+	public Set<TestRun> getTestsRuns() {
 		return testsRuns;
 	}
 
-	public void setTestsRuns(List<TestRun> testsRuns) {
+	public void setTestsRuns(Set<TestRun> testsRuns) {
 		this.testsRuns = testsRuns;
 	}
 	
@@ -157,7 +159,7 @@ public class TestSuiteRun {
 		testRun.setTestSuiteRun(this);
 	}
 
-	public void addTestsRuns(List<Test> tests) {
+	public void addTestsRuns(Set<Test> tests) {
 		for(Test test : tests){
 			TestRun testRun = test.toTestRun();
 			testRun.setStatus("Running");

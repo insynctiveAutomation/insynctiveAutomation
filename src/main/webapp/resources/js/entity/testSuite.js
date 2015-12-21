@@ -1,11 +1,9 @@
-function Test(testSuite) {
-	this.testID;
-	this.className;
-	this.testName;
-	this.testSuiteID = testSuite.testSuiteID;
-	this.paramObject = {};
+function TestSuite() {
+	this.testSuiteID;
+	this.testSuiteName = '';
+	this.tests = [];
 }
 
-Test.asTest = function (jsonTest) {
-	return angular.extend(new Test(), jsonTestSuite);
+TestSuite.asTestSuite = function (jsonTestSuite) {
+	return angular.extend(new TestSuite(), jsonTestSuite);
 };

@@ -1,27 +1,24 @@
 package insynctive.model.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.testng.xml.XmlSuite;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import insynctive.model.Account;
 import insynctive.model.test.run.TestPlanRun;
-import insynctive.model.test.run.TestSuiteRun;
 
 @Entity
 @Table(name = "test_plan")
@@ -37,8 +34,13 @@ public class TestPlan {
 	public String name;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy="testPlanID")
-	public List<TestSuiteRunner> testSuiteRunners = new ArrayList<>();
+	@OneToMany(cascade={CascadeType.ALL})
+	@JoinTable(
+			name = "test_plan_x_test_suite_runner",
+			joinColumns = @JoinColumn(name = "test_plan_id"),
+			inverseJoinColumns = @JoinColumn(name = "test_suite_runner_id")
+	)
+	public Set<TestSuiteRunner> testSuiteRunners = new HashSet();
 
 	public TestPlan() {
 		// TODO Auto-generated constructor stub
@@ -61,15 +63,14 @@ public class TestPlan {
 	}
 	
 	public void addTestSuiteRunner(TestSuiteRunner testSuiteRunner){
-		testSuiteRunner.setTestPlanID(this.testPlanID);
 		testSuiteRunners.add(testSuiteRunner);
 	}
 
-	public List<TestSuiteRunner> getTestSuiteRunners() {
+	public Set<TestSuiteRunner> getTestSuiteRunners() {
 		return testSuiteRunners;
 	}
 
-	public void setTestSuiteRunners(List<TestSuiteRunner> testSuiteRunners) {
+	public void setTestSuiteRunners(Set<TestSuiteRunner> testSuiteRunners) {
 		this.testSuiteRunners = testSuiteRunners;
 	}
 	

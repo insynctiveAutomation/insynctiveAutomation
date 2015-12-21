@@ -20,7 +20,7 @@ app.controller('testController', function($cookies, $scope, $window, $modal, $lo
 	
 	this.getTestFromClass = function(){
 		testService.getTestFromClass(self.test.className, function(data){
-			self.testsFromClass = data.sort();
+			if(self.test.className) self.testsFromClass = data.sort();
 		})
 	}
 	

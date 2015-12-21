@@ -818,7 +818,7 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={ParamObjectField.EMAIL, ParamObjectField.LOGIN_PASSWORD}, 
-			labels={"Gmail Email", "New Password"})
+			labels={"Insynctive Email", "New Password"})
 	public void firstLogin(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);

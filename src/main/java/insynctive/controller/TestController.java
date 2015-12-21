@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import javax.websocket.server.PathParam;
 
 import org.reflections.Reflections;
 import org.springframework.context.annotation.Scope;
@@ -25,6 +24,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
-import insynctive.model.test.Test;
-import insynctive.model.test.TestPlan;
-import insynctive.model.test.TestSuite;
-
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
@@ -55,6 +51,7 @@ import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
 import insynctive.model.InsynctiveProperty;
+import insynctive.model.test.Test;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
@@ -572,7 +569,7 @@ public class TestController {
 	@RequestMapping(value = "/view/test" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public Object[] getTests(@PathParam("className") String className) throws ConfigurationException, ClassNotFoundException, IOException {
+	public Object[] getTests(@RequestParam("className") String className) throws ConfigurationException, ClassNotFoundException, IOException {
 		Object[] testsMethods = null;  
 		Reflections reflections = new Reflections(TEST_PACKAGE);
 		Set<Class<? extends TestMachine>> testsClasses = reflections.getSubTypesOf(TestMachine.class);

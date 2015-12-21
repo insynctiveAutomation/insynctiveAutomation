@@ -42,9 +42,6 @@ public class Test {
 	@JoinColumn(name = "param_object_id")
 	private ParamObject paramObject;
 	
-	@Column(name = "test_suite_id")
-	private Integer testSuiteID;
-	
 	public Test(){
 		this.paramObject = new ParamObject();
 	}
@@ -97,14 +94,6 @@ public class Test {
 		this.paramObject = paramObject;
 	}
 	
-	public Integer getTestSuiteID() {
-		return testSuiteID;
-	}
-
-	public void setTestSuiteID(Integer testSuiteID) {
-		this.testSuiteID = testSuiteID;
-	}
-
 	@Deprecated
 	public void resetTest() {
 		testID = null;

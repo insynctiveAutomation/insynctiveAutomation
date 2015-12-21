@@ -62,6 +62,9 @@
 </head>
 
 <body data-ng-controller="testController as controller">
-	<test-view controller="controller"></test-view>
+	<form ng-submit="controller.save()" name="form" id="form">
+		<test-view controller="controller"></test-view>
+		<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
+	</form>
 </body>
 </html>

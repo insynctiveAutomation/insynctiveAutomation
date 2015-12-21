@@ -6,8 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
@@ -132,7 +134,7 @@ public class TestWebRunner {
 				}
 			}
 		}
-		testSuite.setTests(listIncMethod);
+		testSuite.setTests(new HashSet<Test>(listIncMethod));
 		
 		return testSuite;
 	}
@@ -231,7 +233,7 @@ public class TestWebRunner {
 		XmlTest test = new XmlTest(suite);
 		test.setName("Test Name");
 		//Test class to be included for test execution
-		XmlClass clz = new XmlClass(tsRun.getTestsRuns().get(0).getClassName());
+		XmlClass clz = new XmlClass(new ArrayList<>(tsRun.getTestsRuns()).get(0).getClassName());
 		
 		//Test methods to be included
 		List<XmlInclude> includes = new ArrayList<XmlInclude>();

@@ -1,7 +1,9 @@
 package insynctive.model.test.run;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,7 +35,7 @@ public class TestPlanRun {
 	private String status;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy = "testPlanRun")
-	public List<TestSuiteRun> testSuiteRuns = new ArrayList<>();
+	public Set<TestSuiteRun> testSuiteRuns = new HashSet<>();
 
 	public TestPlanRun() {
 		// TODO Auto-generated constructor stub
@@ -55,11 +57,11 @@ public class TestPlanRun {
 		this.name = name;
 	}
 
-	public List<TestSuiteRun> getTestSuiteRuns() {
+	public Set<TestSuiteRun> getTestSuiteRuns() {
 		return testSuiteRuns;
 	}
 
-	public void setTestSuiteRuns(List<TestSuiteRun> testSuiteRuns) {
+	public void setTestSuiteRuns(Set<TestSuiteRun> testSuiteRuns) {
 		this.testSuiteRuns = testSuiteRuns;
 	}
 
@@ -76,7 +78,7 @@ public class TestPlanRun {
 		testSuiteRuns.add(tsRun);
 	}
 	
-	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners){
+	public void addTestSuiteRuns(Set<TestSuiteRunner> testSuitesRunners){
 		for(TestSuiteRunner tsRunner : testSuitesRunners){
 			TestSuiteRun tsRun = tsRunner.toTestSuiteRun();
 			this.addTestSuiteRun(tsRun);

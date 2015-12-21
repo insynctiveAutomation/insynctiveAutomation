@@ -7,25 +7,24 @@ var app = angular.module('testSuiteApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCooki
    	})
 });
 
-app.controller('testSuiteController', function($cookies, $scope, $window, $modal, $location, testSuiteService) {
+app.controller('testSuiteController', function($cookies, $scope, $window, $modal, $location, testSuiteService, testSuite) {
 
 	var self = this;
 	
-	this.testID = $location.search().id
-	this.testSuite = {}
+	this.testSuite = testSuite;
 	
-	this.getTestSuiteByID = function(id){
-		if(id){
-			testSuiteService.findTestSuite(id, function(data){
-				self.testSuite = data;
-			}, function(data){
-				self.message = 'Error =>'+data;
-			});
-		} else {
-			self.testSuite = new TestSuite();
-		}
-	};
-	self.getTestSuiteByID(self.testID);
+//	this.getTestSuiteByID = function(id){
+//		if(id){
+//			testSuiteService.findTestSuite(id, function(data){
+//				self.testSuite = data;
+//			}, function(data){
+//				self.message = 'Error =>'+data;
+//			});
+//		} else {
+//			self.testSuite = new TestSuite();
+//		}
+//	};
+//	self.getTestSuiteByID(self.testID);
 	
 	this.save = function(){
 		testSuiteService.saveTestSuite(self.testSuite, function(data){

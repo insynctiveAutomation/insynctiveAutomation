@@ -23,6 +23,50 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
 	
+	<!-- Entities -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuiteRunner.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testPlan.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/test.js"></script>
+	
+	<!-- Directive -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/testDirective.js"></script>
+
+	<!-- Configuration modal -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
+	
+	<!-- Advanced module -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+	
+	<!-- Parameters Modal -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersDirectives.js"></script>
+	
+	<!-- Home -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
+
+	<!-- Test  -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testDirectives.js"></script>
+	
+	<!-- Test Suite-->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testSuiteController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testSuiteService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testSuiteDirectives.js"></script>
+	
 	<!-- Test Plan  -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/testPlan/testPlanController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/testPlan/testPlanService.js"></script>
@@ -31,24 +75,42 @@
 </head>
 
 <body data-ng-controller="testPlanController as controller">
-	<span>Name: </span><input type="text"/>
-	<select name="testSuite" ng-model="controller.selectTestSuitName" data-ng-options="testSuite as testSuite for testSuite in controller.testSuites" ng-change="" required>
-    	<option value="">Select a Test Suite</option>
- 	</select>	
-	
-	<table class="table table-striped table-hover table-condensed">
-			<tbody>
-				<tr>
-					<th>Name</th>
-					<th>View</th>
-					<th>add</th>
-				</tr>
-				<tr data-ng-repeat="" class="animate-repeat">
-					<td class="col-sm-3"><span>Test Name</span></td>
-					<td class="col-sm-3"><a id="" ng-click="">View Tests</a></td>
-				</tr>
-			</tbody>
-		</table>
-	
-	</body>
+		
+		<form ng-submit="controller.save()" name="form" id="form">
+			<span>Test Plan Name</span> <input type="text" ng-model="controller.testPlan.name"/>
+			<table class="table table-striped table-hover table-condensed">
+				<tbody>
+					<tr>
+						<th>Test Suite Name</th>
+						<th>Browser</th>
+						<th>Environment</th>
+						<th>Edit</th>
+						<th>Remove</th>
+					</tr>
+					<tr data-ng-repeat="testSuiteRunner in controller.testPlan.testSuiteRunners" class="animate-repeat">
+						<td class="col-sm-2"><span ng-bind="testSuiteRunner.testSuite.testSuiteName"></span></td>
+						<td class="col-sm-2"><select name="environment" ng-model="testSuiteRunner.environment" data-ng-options="environment as environment for environment in controller.environments" required>
+					    	<option value="">Select an Environment</option>
+					 	</select> 
+					 	</td>
+					  	<td class="col-sm-2"><select name="browser" ng-model="testSuiteRunner.browser" required>
+					    	<option value="">Select a Browser</option>
+					    	<option value="FIREFOX">Firefox</option>
+					    	<option value="CHROME">Chrome</option>
+					    	<option value="IE_10">IE 10</option>
+					    	<option value="IE_11">IE 11</option>
+					    	<option value="IPAD">iPad</option>
+					 	</select> 
+					 	</td>
+						<td class="col-sm-2"><a id="edit" ng-click="controller.openEditTestSuite(testSuiteRunner.testSuite)">Edit Test Suite</a></td>
+						<td class="col-sm-2"><a id="edit" ng-click="controller.removeTest(testSuiteRunner.testSuite)">Remove Test Suite</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<a class="btn" ng-click="controller.addTestSuite()">add Test Suite</a>
+			<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
+		</form>
+			
+</body>
+
 </html>

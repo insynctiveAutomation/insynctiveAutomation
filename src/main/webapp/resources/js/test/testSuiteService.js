@@ -8,8 +8,8 @@ app.service('testSuiteService', function($http) {
 		$http.get('/testSuite/'+id).success(callback).error(error);
 	};
 	
-	this.saveTestSuite = function(testSuite, callback, error) {
-		$http.post('/testSuite',testSuite).success(callback).error(error);
+	this.saveTestPlan = function(testSuite, callback, error) {
+		$http.post('/testPlan',testSuite).success(callback).error(error);
 	};
 	
 });
