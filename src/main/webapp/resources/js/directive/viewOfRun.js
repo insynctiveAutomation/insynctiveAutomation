@@ -1,13 +1,14 @@
 var app = angular.module('directiveApp');
 
-app.directive("test", function($compile, $cookies){
+app.directive("viewOfRun", function($compile, $cookies){
 	return {
 		restrict: "E",
 		scope: {
 			testDetails: '=model',
-			controller: '='
+			controller: '=',
+			testParameterText: '@'
 		},
-		templateUrl: '/testSuite',
+		templateUrl: '/testSuiteHome',
 		transclude: true,
         replace: true
 	}

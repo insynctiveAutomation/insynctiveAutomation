@@ -29,7 +29,7 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 					return self.paramObject
 				},
 				className: function() {
-					return self.testDetails.className;
+					return test.className;
 				},
 				editable: function() {
 					return self.editable;
@@ -40,7 +40,7 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 	
 	//DUPLICATED CODE
 	this.updateStatus = function(){
-		_.map(self.testDetails.tests, self.getMethodStatus)
+		_.map(self.testDetails.testsRuns, self.getMethodStatus)
 	};
 	
 	//DUPLICATED CODE
@@ -62,7 +62,7 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 	
 	//DUPLICATED CODE
 	this.isOneInNotRun = function(){
-		var statuses = self.testDetails.tests.map(function(test){return test.status})
+		var statuses = self.testDetails.testsRuns.map(function(test){return test.status})
 		return statuses.indexOf("NOT RUN") != -1 || statuses.indexOf("-") != -1
 //		return true
 	};

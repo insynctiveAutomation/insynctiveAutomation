@@ -52,6 +52,7 @@ import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
 import insynctive.model.InsynctiveProperty;
 import insynctive.model.test.Test;
+import insynctive.model.test.TestSuite;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
@@ -232,13 +233,13 @@ public class TestController {
 		}
 		return model;
 	}
-//	
-//	@RequestMapping(value = "/testSuiteTemplate" ,method = RequestMethod.GET)
-//	public ModelAndView testSuite() throws ConfigurationException {
-//		ModelAndView model = new ModelAndView();
-//		model.setViewName("/template/testSuite");
-//		return model;
-//	}
+	
+	@RequestMapping(value = "/testSuiteHome" ,method = RequestMethod.GET)
+	public ModelAndView testSuite() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/template/testSuite");
+		return model;
+	}
 	
 	@RequestMapping(value = "/test" ,method = RequestMethod.GET)
 	@ResponseBody
@@ -345,9 +346,9 @@ public class TestController {
 	
 	@RequestMapping(value = "/testsSuites" ,method = RequestMethod.GET)
 	@ResponseBody
-	public List<String> getTestsSuitesString() throws MalformedURLException, URISyntaxException{
-		List<String> testsSuites = testRunner.getTestSuitesForRunUI();
-		return testsSuites;
+	public Object[] getTestsSuitesString() throws MalformedURLException, URISyntaxException{
+		List<TestSuite> allTestSuite = testSuiteDao.getAllTestSuite();
+		return allTestSuite.stream().map(tsRun -> tsRun.getTestSuiteName()).toArray();
 	}
 	
 	
@@ -386,42 +387,13 @@ public class TestController {
 		return testSuiteRunDao.getTestSuiteRunByID(id);
 	}
 	
-//	@RequestMapping(value = "/get/{xmlName}" ,method = RequestMethod.GET)
-//	@ResponseBody
-//	public TestSuiteRun getTestsRuns(@PathVariable("xmlName") String xmlName) {
-//		TestSuiteRun testSuite = null;
-//		try{
-//			List<XmlSuite> suite = testRunner.getXmlTestSuiteForUI(xmlName);
-//			testSuite = new TestSuiteRun();
-//			
-//			for(XmlTest test : suite.get(0).getTests()){
-//				testSuite.setTestSuiteName(test.getName());
-//				for(XmlClass classes : test.getClasses()){
-//					
-//					testSuite.setClassName(classes.getName());
-//					
-//					for(XmlInclude includeMethod: classes.getIncludedMethods()){
-//						Test newTest = new Test(includeMethod.getName());
-//						ParametersFrontObject params = getParams(classes.getName(), includeMethod.getName());
-//						ParamObject newParamObject = new ParamObject();
-//						for(String param : params.getParams()){
-////							Field fieldByName = newParamObject.getFieldByName(param.split("\\.")[0]);
-////							fieldByName.set(newParamObject, account.getParamObject().getValueByName(param.split("\\.")[0]));
-//							Field fieldByName = newParamObject.getFieldByName(param);
-//							fieldByName.set(newParamObject.getFieldToSet(param), account.getParamObject().getValueByName(param));
-//						}
-//						if(params.getParams().size() > 0){
-//							newTest.setParamObject(newParamObject);
-//						}
-//						testSuite.addMethod(newTest);
-//					}
-//				}
-//			} 
-//		} catch(Exception ex) {
-//			ex.printStackTrace();
-//		}
-//		return testSuite;
-//	}
+	@RequestMapping(value = "/get/{xmlName}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestSuite getTestsRuns(@PathVariable("xmlName") String name) {
+		TestSuite testSuite = testSuiteDao.getTestSuiteByName(name);
+		
+		return testSuite;
+	}
 	
 	@RequestMapping(value = "/countTestSuites" ,method = RequestMethod.GET)
 	@ResponseBody
@@ -438,17 +410,20 @@ public class TestController {
 	@RequestMapping(value = "/getAllTestsSuites" ,method = RequestMethod.GET)
 	@ResponseBody
 	public List<TestSuiteRun> getAllTestsSuites() {
-		return testSuiteRunDao.getAllTestSuite();
+		return testSuiteRunDao.getAllTestSuiteRuns();
 	}
 	
-//	@RequestMapping(value = "/test/{xmlName}/{environment}/{browser}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public String runTest(@RequestBody TestSuiteRun form, @PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws ConfigurationException{
-//		form.setBrowser(browser);
-//		form.setEnvironment(environment);
-//		form.setTestSuiteName(xmlName);
-//		return "{\"index\" : \""+(testRunner.runTest(form, accDao.getAccountByID(logedAccID)))+"\"}";
-//	}
+	@RequestMapping(value = "/test/{xmlName}/{environment}/{browser}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTest(@RequestBody TestSuite form, @PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws Exception{
+		Account acc = accDao.getAccountByID(logedAccID);
+		
+		TestSuiteRun tsRun = testRunner.getTestSuiteRun(form, environment, browser, acc);
+		
+		testSuiteRunDao.save(tsRun);		
+		
+		return "{\"index\" : \""+(testRunner.runTest(tsRun,acc))+"\"}";
+	}
 	
 //	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
 //	@ResponseBody

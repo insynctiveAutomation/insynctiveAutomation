@@ -10,8 +10,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -34,7 +39,13 @@ public class TestPlanRun {
 	@Column(name = "status")
 	private String status;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy = "testPlanRun")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade={CascadeType.ALL})
+	@JoinTable(
+			name = "test_plan_run_x_test_suite_run",
+			joinColumns = @JoinColumn(name = "test_plan_run_id"),
+			inverseJoinColumns = @JoinColumn(name = "test_suite_run_id")
+	)
 	public Set<TestSuiteRun> testSuiteRuns = new HashSet<>();
 
 	public TestPlanRun() {
@@ -74,7 +85,6 @@ public class TestPlanRun {
 	}
 
 	public void addTestSuiteRun(TestSuiteRun tsRun) {
-		tsRun.setTestPlanRun(this);
 		testSuiteRuns.add(tsRun);
 	}
 	

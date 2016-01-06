@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'accountApp', 'parameterApp', 'configuration']);
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'directiveApp', 'accountApp', 'parameterApp', 'configuration']);
 
 app.controller('TestController', function($cookies, $http, $window, $modal, $scope, $interval, testService, accountService) {
 	var self = this;
@@ -191,7 +191,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 					return self.paramObject
 				},
 				className: function() {
-					return self.testDetails.className;
+					return test.className;
 				},
 				editable: function() {
 					return true;

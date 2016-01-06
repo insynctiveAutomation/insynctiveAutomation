@@ -43,11 +43,6 @@ public class TestRun {
 	@Column(name = "status")
 	public String status;
 
-	//PARENT
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "test_suite_run_id", nullable=true, insertable=true, updatable=true)
-	private TestSuiteRun testSuiteRun;
-
 	public TestRun() {
 		// TODO Auto-generated constructor stub
 	}
@@ -58,14 +53,6 @@ public class TestRun {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public TestSuiteRun getTestSuiteRun() {
-		return testSuiteRun;
-	}
-
-	public void setTestSuiteRun(TestSuiteRun testSuiteRun) {
-		this.testSuiteRun = testSuiteRun;
 	}
 
 	public Integer getTestRunID() {

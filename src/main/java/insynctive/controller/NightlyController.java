@@ -106,7 +106,7 @@ public class NightlyController {
 	public String runID(@PathVariable("id") Integer id) throws Exception{
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		TestSuite ts = testSuiteDao.getTestByID(id);
-		TestSuiteRun tsRun = testRunner.getTestSuiteRun(ts, "automationQA", "FIREFOX");
+		TestSuiteRun tsRun = testRunner.getTestSuiteRun(ts, "automationQA", "FIREFOX", nightlyAcc);
 		testSuiteRunDao.save(tsRun);
 		
 		testRunner.runTest(tsRun, nightlyAcc);

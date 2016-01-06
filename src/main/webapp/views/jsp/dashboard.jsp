@@ -58,6 +58,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
 
 <!-- Dashboard -->
@@ -84,8 +85,8 @@
 					<th>Retry</th>
 				</tr>
 				<tr data-ng-repeat="testSuite in testCtrl.testsSuites" class="animate-repeat">
-					<td class="col-sm-1"><span ng-bind="testSuite.testSuiteID"></span></td>
-					<td class="col-sm-4"><span ng-bind="testSuite.testSuiteName"></span></td>
+					<td class="col-sm-1"><span ng-bind="testSuite.testSuiteRunID"></span></td>
+					<td class="col-sm-4"><span ng-bind="testSuite.name"></span></td>
 					<td class="col-sm-1"><result ng-model="testSuite.status" bind="testSuite.status" value="{{testSuite.status}}" /></td>
 					<td class="col-sm-1"><span ng-bind="testSuite.browser"></span></td>
 					<td class="col-sm-1"><span ng-bind="testSuite.environment"></span></td>

@@ -13,9 +13,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -54,14 +58,15 @@ public class TestSuiteRun {
 	@Column(name = "status")
 	private String status;
 	
-	@OneToMany(cascade={CascadeType.ALL}, mappedBy = "testSuiteRun")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade={CascadeType.ALL})
+	@JoinTable(
+			name = "test_suite_run_x_test_run",
+			joinColumns = @JoinColumn(name = "test_suite_run_id"),
+			inverseJoinColumns = @JoinColumn(name = "test_run_id")
+	)
 	private Set<TestRun> testsRuns = new HashSet();
 
-	//PARENT
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "test_plan_run_id", nullable=true, insertable=true, updatable=true)
-	private TestPlanRun testPlanRun;
-	
 	public TestSuiteRun() {
 		this.setStatus(null);
 	}
@@ -146,17 +151,8 @@ public class TestSuiteRun {
 		return remote;
 	}
 
-	public TestPlanRun getTestPlanRun() {
-		return testPlanRun;
-	}
-
-	public void setTestPlanRun(TestPlanRun testPlanRun) {
-		this.testPlanRun = testPlanRun;
-	}
-
 	public void addTestRun(TestRun testRun){
 		this.testsRuns.add(testRun);
-		testRun.setTestSuiteRun(this);
 	}
 
 	public void addTestsRuns(Set<Test> tests) {

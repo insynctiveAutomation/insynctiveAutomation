@@ -147,6 +147,15 @@ public class TestWebRunner {
 		return testSuiteRun;
 	}
 	
+	public TestSuiteRun getTestSuiteRun(TestSuite testSuite, String environment, String browser, Account account) throws Exception {
+		TestSuiteRun testSuiteRun = getTestSuiteRun(testSuite, environment, browser);
+		testSuiteRun.setRemote(account.getAccountProperty().isRemote());
+		testSuiteRun.setTester(account.getUsername());
+		
+		return testSuiteRun;
+	}
+	
+	
 	public TestSuiteRun getTestSuiteRunByXML(ParamObject paramObject, String testSuiteName, String environment, String browser) throws Exception {
 		TestSuite testSuite = getTestSuiteByXML(paramObject, testSuiteName);
 		TestSuiteRun testSuiteRun = getTestSuiteRun(testSuite, environment, browser);

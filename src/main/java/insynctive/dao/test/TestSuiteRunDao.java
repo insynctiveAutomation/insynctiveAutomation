@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,10 +45,10 @@ private final SessionFactory sessionFactory;
 		openSession().saveOrUpdate(testSuite);
 	}
 
-	public List<TestSuiteRun> getAllTestSuite() {
+	public List<TestSuiteRun> getAllTestSuiteRuns() {
 		return openSession().createCriteria(TestSuiteRun.class)
 				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-				.addOrder(Order.desc("testSuiteID"))
+				.addOrder(Order.desc("testSuiteRunID"))
 				.list();
 	}
 
@@ -55,10 +56,16 @@ private final SessionFactory sessionFactory;
 		return openSession().createCriteria(TestSuiteRun.class)
 				.setMaxResults(count)
 				.setFirstResult((page-1)*count)
-				.addOrder(Order.desc("testSuiteID"))
+				.addOrder(Order.desc("testSuiteRunID"))
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 				.setFetchMode("tests", FetchMode.SELECT)
 				.list();
+	}
+	
+	public TestSuiteRun getTestSuiteRunByName(String name){
+		List list = openSession().createCriteria(TestSuiteRun.class)
+				.add(Restrictions.eq("name", name)).list();
+		return list.size() > 0 ? (TestSuiteRun)list.get(0) : null;
 	}
 
 	public Long countTestSuitesRuns() {
