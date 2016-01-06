@@ -88,7 +88,7 @@
 						<th>Remove</th>
 					</tr>
 					<tr data-ng-repeat="testSuiteRunner in controller.testPlan.testSuiteRunners" class="animate-repeat">
-						<td class="col-sm-2"><span ng-bind="testSuiteRunner.testSuite.testSuiteName"></span></td>
+						<td class="col-sm-2"><input type="text" ng-model="testSuiteRunner.testSuite.testSuiteName"></input></td>
 						<td class="col-sm-2"><select name="environment" ng-model="testSuiteRunner.environment" data-ng-options="environment as environment for environment in controller.environments" required>
 					    	<option value="">Select an Environment</option>
 					 	</select> 

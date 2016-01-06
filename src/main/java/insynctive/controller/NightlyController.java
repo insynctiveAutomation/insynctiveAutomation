@@ -107,7 +107,8 @@ public class NightlyController {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		TestSuite ts = testSuiteDao.getTestByID(id);
 		TestSuiteRun tsRun = testRunner.getTestSuiteRun(ts, "automationQA", "FIREFOX");
-
+		testSuiteRunDao.save(tsRun);
+		
 		testRunner.runTest(tsRun, nightlyAcc);
 		
 		return "{\"status\" : 200}";
