@@ -140,7 +140,6 @@ public abstract class TestMachine {
 	    caps.setCapability("record_snapshot", "false");
 	    caps.setCapability("max_duration", 3600);
 
-	    ("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub").equals("http://eugenio.valeiras%2b9%40gmail.com:uca60139cbdf183b@hub.crossbrowsertesting.com:80/wd/hub");
 	    webDriver.set(new RemoteWebDriver(new URL("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub"), caps));
 	    jobID = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
 		sessionId.set(jobID);
