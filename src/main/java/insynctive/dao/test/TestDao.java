@@ -1,13 +1,18 @@
 package insynctive.dao.test;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import insynctive.model.test.Test;
+import insynctive.model.test.TestPlan;
 
 @Repository
 @Transactional
@@ -38,6 +43,13 @@ public class TestDao {
 
 	public void update(Test test) {
 		openSession().update(test);
+	}
+	
+	public List<Test> getAllTestPlans() {
+		return openSession().createCriteria(Test.class)
+				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+				.addOrder(Order.desc("testName"))
+				.list();
 	}
 }
  

@@ -2,7 +2,7 @@
 
 var app = angular.module('loginApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
 
-app.controller('LoginController', function($cookies, $scope, $window, loginService) {
+app.controller('loginController', function($cookies, $scope, $window, loginService) {
 
 	var self = this;
 	this.username;
@@ -10,7 +10,6 @@ app.controller('LoginController', function($cookies, $scope, $window, loginServi
 	this.loginNotification;
 	$scope.disabled = false;
 	
-	/*On Load Methods*/
 	this.login = function() {
 		$scope.disabled = true;
 		loginService.login({username : self.username, password : self.password}, function(data) {
@@ -22,4 +21,11 @@ app.controller('LoginController', function($cookies, $scope, $window, loginServi
 			$scope.disabled = false;
 		});
 	};
+	
+	this.logout = function(){
+		loginService.logout(function(data) {
+			$cookies.remove('userID');
+			$window.location.href = '/login';
+		});
+	}
 });

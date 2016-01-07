@@ -23,10 +23,14 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/configuration/configuration.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
 	
+	<!-- Login -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
+	
 	<!-- Advanced Modules -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/fieldDirectives.js"></script>
 
 </head>
 

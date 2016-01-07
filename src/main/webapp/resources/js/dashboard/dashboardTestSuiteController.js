@@ -2,7 +2,7 @@
 
 var app = angular.module('dashboardApp');
 
-app.controller('TestSuiteController', function($cookies, $http, $window, $modal, $scope, $interval, testDetails, refreshGrid, testService, testParameterText, editable) {
+app.controller('DashboardTestRunController', function($cookies, $http, $window, $modal, $scope, $interval, testDetails, refreshGrid, homeService, testParameterText, editable) {
 	var self = this;
 	this.testDetails = testDetails;
 	this.refreshGrid = refreshGrid;
@@ -68,7 +68,7 @@ app.controller('TestSuiteController', function($cookies, $http, $window, $modal,
 	};
 	
 	this.checkStatus = function(){
-		testService.getTestsStatus(self.testDetails.testSuiteID, function(data) {
+		homeService.getTestsStatus(self.testDetails.testSuiteID, function(data) {
 			self.testStatus = data;
 			self.updateStatus();
 		}

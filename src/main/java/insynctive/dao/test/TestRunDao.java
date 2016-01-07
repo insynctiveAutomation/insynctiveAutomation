@@ -24,7 +24,7 @@ public class TestRunDao {
 		return sessionFactory.getCurrentSession();
 	}
 	
-	public TestRun getTestByID(int id){
+	public TestRun getTestRunByID(int id){
 		return (TestRun) openSession().get(TestRun.class, id);
 	}
 	

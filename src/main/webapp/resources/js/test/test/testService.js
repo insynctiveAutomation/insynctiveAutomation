@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('testEntityApp');
+var app = angular.module('testApp');
 
 app.service('testService', function($http) {
 	

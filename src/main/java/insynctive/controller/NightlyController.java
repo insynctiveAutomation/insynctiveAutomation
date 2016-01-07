@@ -17,12 +17,10 @@ import insynctive.dao.test.TestPlanDao;
 import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.Account;
-import insynctive.model.ParamObject;
 import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
 import insynctive.model.test.run.TestPlanRun;
 import insynctive.model.test.run.TestSuiteRun;
-import insynctive.utils.TestResults;
 import insynctive.utils.TestWebRunner;
 
 @Controller
@@ -33,22 +31,16 @@ public class NightlyController {
 	final String NIGHTLY_DEFAULT_ENVIRONMENT = "AutomationQA";
 	
 	//DB Connections.
-	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
 	private final TestSuiteRunDao testSuiteRunDao;
 	private final TestSuiteDao testSuiteDao;
 	private final TestPlanDao testPlanDao;
 	
-	//Servlet Context Helper
-	private final ServletContext servletContext;
-
 	//Test Runner
 	private final TestWebRunner testRunner;
 
 	@Inject
 	public NightlyController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, TestSuiteRunDao testSuiteRunDao, TestSuiteDao testSuiteDao, TestPlanDao tpDao) {
-		this.servletContext = servletContext;
-		this.propertyDao = propertyDao;
 		this.accDao = accDao;
 		this.testSuiteRunDao = testSuiteRunDao;
 		this.testSuiteDao = testSuiteDao;

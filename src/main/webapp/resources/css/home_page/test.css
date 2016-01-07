@@ -45,6 +45,10 @@ a:hover {
 	right: 0;
 }
 
+.float-right {
+	float: right;
+}
+
 .top-left-corner {
 	position: absolute;
 	top: 0;
@@ -69,6 +73,7 @@ a:hover {
 	width: 313px;
 }
 
-#configurationLink {
+#configurationLink, #dashboardLink, #testPlansLink {
 	padding-right: 10px;
+	padding-top: 5px;
 }

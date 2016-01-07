@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'directiveApp', 'accountApp', 'parameterApp', 'configuration']);
+var app = angular.module('homeApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'directiveApp', 'accountApp', 'parameterApp', 'configuration', 'loginApp']);
 
-app.controller('TestController', function($cookies, $http, $window, $modal, $scope, $interval, testService, accountService) {
+app.controller('HomeController', function($cookies, $http, $window, $modal, $scope, $interval, homeService, loginService, accountService) {
 	var self = this;
 	this.isLogin = false;
 	this.paramObject = {};
@@ -28,7 +28,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	
 	/* On Load Methods */
 	this.getTestsSuites = function() {
-		testService.getTestsSuites(function(data) {
+		homeService.getTestsSuites(function(data) {
 			self.testsSuites = (_.map(data,self.split)).sort();
 		});
 	};
@@ -36,7 +36,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	
 	/* On change TestSuite Combo */
 	this.getTestDetails = function(testSuiteValue){
-		testService.getTestDetails(testSuiteValue, function(data) {
+		homeService.getTestDetails(testSuiteValue, function(data) {
 			self.testDetails = data;
 			self.getTestsStatus();
 		});
@@ -48,13 +48,13 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 		self.runStatus = "Running..";
 		self.videoLink = "";
 		self.loaderVisible = "visible";
-		testService.startTest(self.testDetails, testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
+		homeService.startTest(self.testDetails, testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
 			
 			self.runStatus = "The Test is Running...";
 			self.tlaIndex = data.index;
 			self.resetTestsStatus();
 			
-			testService.getVideoLink(self.tlaIndex, function(data) {
+			homeService.getVideoLink(self.tlaIndex, function(data) {
 				self.videoLink = data;
 			});
 			
@@ -66,7 +66,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	/* On Clear Button */
 	this.clearTests = function(){
 		if(self.tlaIndex){
-			testService.clearTests(self.tlaIndex, function(data) {
+			homeService.clearTests(self.tlaIndex, function(data) {
 				self.start = false;
 				self.loaderVisible = "hidden";
 				self.getTestsStatus();
@@ -78,7 +78,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	}; this.clearTests();
 	
 	this.logout = function(){
-		testService.logout(function(data) {
+		loginService.logout(function(data) {
 			$cookies.remove('userID');
 			$window.location.href = '/login';
 		});
@@ -125,7 +125,7 @@ app.controller('TestController', function($cookies, $http, $window, $modal, $sco
 	}
 	
 	this.checkStatus = function(){
-		testService.getTestsStatus(self.tlaIndex, function(data) {
+		homeService.getTestsStatus(self.tlaIndex, function(data) {
 			self.testStatus = data;
 			self.updateStatus();
 		})

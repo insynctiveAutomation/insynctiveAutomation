@@ -19,7 +19,8 @@
 		<button ng-disabled="" class="btn btn-lg btn-primary" type="submit">Save</button>
 		<span ng-bind="accountCtrl.saved"></span>
 	</form>
-	<a href="/configuration">Advanced Configuration</a>
+	<a href="/configuration">Advanced Configuration</a></br>
+	<a href="/testPlans">View Test Plans</a>
 </div>
 
 <div class="alert alert-danger animate-repeat" ng-repeat="error in accountCtrl.errors">{{error}}</div>

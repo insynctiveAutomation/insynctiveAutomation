@@ -6,6 +6,7 @@ import org.testng.TestNG;
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.test.Test;
+import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
@@ -13,7 +14,7 @@ import insynctive.utils.TestResults;
 public class RunnableTest implements Runnable {
 
 	private TestNG testNG;
-	private TestSuiteRun testSuite;
+	private TestSuiteRun testSuiteRun;
 	private TestListenerAdapter testListenerAdapter;  
 	private TestSuiteRunDao testSuiteDao;
 	private TestDao testDao;
@@ -21,7 +22,7 @@ public class RunnableTest implements Runnable {
 
 	public RunnableTest(TestNG  testNG, TestSuiteRun testSuite, TestListenerAdapter testListenerAdapter, TestSuiteRunDao testSuiteDao, TestDao testDao, Thread[] threadsToJoin){
 		  this.testNG = testNG;
-		  this.testSuite = testSuite;
+		  this.testSuiteRun = testSuite;
 		  this.testListenerAdapter = testListenerAdapter;
 		  this.testSuiteDao = testSuiteDao;
 		  this.testDao = testDao;
@@ -46,16 +47,15 @@ public class RunnableTest implements Runnable {
 		testNG.run();
 		setResult();
 		Sleeper.threadSleep(3500);
-		TestResults.removeScopeVars(testSuite.getTestSuiteRunID());
+		TestResults.removeScopeVars(testSuiteRun.getTestSuiteRunID());
 	}
 
-	@Deprecated
 	private void setResult() {
-//		for(Test test : testSuite.getTests()){
-//			test.setStatus(getTestStatus(test));
-//		}
-//		testSuite.setStatus(getTestSuiteStatus());
-//		testSuiteDao.saveOrUpdate(testSuite);
+		for(TestRun testRun : testSuiteRun.getTestsRuns()){
+			testRun.setStatus(getTestStatus(testRun));
+		}
+		testSuiteRun.setStatus(getTestSuiteStatus());
+		testSuiteDao.saveOrUpdate(testSuiteRun);
 	}
 
 	private String getTestSuiteStatus() {
@@ -66,14 +66,14 @@ public class RunnableTest implements Runnable {
 		}
 	}
 
-	private String getTestStatus(Test test) {
-		if(testListenerAdapter.getPassedTests().stream().anyMatch(res -> res.getName().equals(test.getTestName()))){
+	private String getTestStatus(TestRun testRun) {
+		if(testListenerAdapter.getPassedTests().stream().anyMatch(res -> res.getName().equals(testRun.getTestName()))){
 			return "SUCCESS";
 		}
-		if(testListenerAdapter.getFailedTests().stream().anyMatch(res -> res.getName().equals(test.getTestName()))){
+		if(testListenerAdapter.getFailedTests().stream().anyMatch(res -> res.getName().equals(testRun.getTestName()))){
 			return "FAILED";
 		}
-		if(testListenerAdapter.getSkippedTests().stream().anyMatch(res -> res.getName().equals(test.getTestName()))){
+		if(testListenerAdapter.getSkippedTests().stream().anyMatch(res -> res.getName().equals(testRun.getTestName()))){
 			return "SKIPPED";
 		}
 		return "-";

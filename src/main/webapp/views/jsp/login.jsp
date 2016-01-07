@@ -32,11 +32,10 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginDirectives.js"></script>
 
 </head>
 
-<body data-ng-controller="LoginController as loginController">
+<body data-ng-controller="loginController as loginController">
 	<div>
 		<form  ng-submit="loginController.login()" class="form-signin" name="sendTest">
 		<h2 class="form-signin-heading">Sign in</h2>

@@ -22,11 +22,6 @@ app.controller('AccountController', function($modalInstance, accountService) {
 	};
 	this.accountConfig = this.getConfig();
 	
-//	this.isLocalhost = function(){
-//		self.isLocalhost = document.location.hostname == "localhost";
-//	};
-//	this.isLocalhost();
-	
 	this.saveConfig = function(){
 		accountService.saveConfig(self.accountConfig,function(data) {
 			self.saved = data;

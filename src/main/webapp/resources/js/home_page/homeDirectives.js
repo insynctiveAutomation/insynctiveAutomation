@@ -1,4 +1,4 @@
-var app = angular.module('testApp');
+var app = angular.module('homeApp');
 
 app.directive("result", function($compile) {
 	return {

@@ -1,7 +1,10 @@
-function TestSuiteRunner(testPlan) {
+function TestSuiteRunner() {
 	this.testSuiteRunnerID;
 	this.testSuite = new TestSuite();
 	this.browser = '';
 	this.environment = '';
-	this.testPlanID = testPlan.testPlanID;
 }
+
+TestSuiteRunner.asTestSuiteRunner = function (jsonTestSuiteRunner) {
+	return angular.extend(new TestSuiteRunner(), jsonTestSuiteRunner);
+};

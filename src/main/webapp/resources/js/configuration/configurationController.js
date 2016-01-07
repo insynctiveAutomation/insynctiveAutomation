@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('configuration', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies']);
+var app = angular.module('configuration', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'loginApp']);
 
-app.controller('configurationController', function($cookies, $http, $window, $modal, $scope, $interval, configurationService) {
+app.controller('configurationController', function($cookies, $http, $window, $modal, $scope, $interval, loginService, configurationService) {
 	
 	var self = this;
 	this.configuration;
@@ -65,7 +65,7 @@ app.controller('configurationController', function($cookies, $http, $window, $mo
 	}
 	
 	this.logout = function(){
-		testService.logout(function(data) {
+		loginService.logout(function(data) {
 			$cookies.remove('userID');
 			$window.location.href = '/login';
 		});

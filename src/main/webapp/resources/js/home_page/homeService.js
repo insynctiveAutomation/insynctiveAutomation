@@ -1,11 +1,11 @@
 'use strict';
 
-var app = angular.module('testApp');
+var app = angular.module('homeApp');
 
-app.service('testService', function($http) {
+app.service('homeService', function($http) {
 	
 	this.getTestsSuites = function(callback) {
-		$http.get('/testsSuites').success(callback);
+		$http.get('/testSuitesNames').success(callback);
 	};
 
 	this.startTest = function(testDetails, testSuiteName, environmentName, browser, callback, errorCallback) {
@@ -28,11 +28,7 @@ app.service('testService', function($http) {
 		$http.get('/clearTest/'+tlaIndex).success(callback);
 	};
 	
-	this.logout = function(callback) {
-		$http.post('/logout', {}).success(callback);
-	};
-	
 	this.getTestSuiteByID = function(id, callback) {
-		$http.get('/getTestSuite/'+id).success(callback);
+		$http.get('/testSuiteRun/'+id).success(callback);
 	};
 });

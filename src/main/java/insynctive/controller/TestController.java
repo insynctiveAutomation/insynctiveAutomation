@@ -16,22 +16,18 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
 import org.reflections.Reflections;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
@@ -41,18 +37,20 @@ import org.testng.xml.XmlTest;
 import insynctive.annotation.ParametersFront;
 import insynctive.dao.AccountDao;
 import insynctive.dao.CreatePersonFormDao;
-import insynctive.dao.CrossBrowserAccountDao;
-import insynctive.dao.InsynctivePropertyDao;
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestPlanDao;
+import insynctive.dao.test.TestPlanRunDao;
+import insynctive.dao.test.TestRunDao;
 import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
-import insynctive.model.InsynctiveProperty;
 import insynctive.model.test.Test;
+import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
+import insynctive.model.test.run.TestPlanRun;
+import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
@@ -61,9 +59,7 @@ import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
 import insynctive.utils.TestResults;
 import insynctive.utils.TestWebRunner;
-import insynctive.utils.form.LoginForm;
 
-@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
 @Controller
 @Transactional
 public class TestController {
@@ -74,240 +70,144 @@ public class TestController {
 	private final String TEST_PACKAGE = "insynctive.tests";
 	
 	//DB Connections.
-	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
-	private final CreatePersonFormDao createPersonFormDao;
-	private final CrossBrowserAccountDao crossDao;
+	
 	private final TestDao testDao;
-	private final TestSuiteRunDao testSuiteRunDao;
 	private final TestSuiteDao testSuiteDao;
 	private final TestPlanDao testPlanDao;
 	
+	private final TestRunDao testRunDao;
+	private final TestSuiteRunDao testSuiteRunDao;
+	private final TestPlanRunDao testPlanRunDao;
 	
-	//Servlet Context Helper
-	private final ServletContext servletContext;
+	private final CreatePersonFormDao createPersonFormDao;
 
 	//Test Runner
 	private final TestWebRunner testRunner;
 	
-	//SESSION SCOPES
-	private Account account;
-	private Integer logedAccID;
-
 	@Inject
-	public TestController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, CrossBrowserAccountDao crossDao, CreatePersonFormDao createPersonFormDao, TestSuiteRunDao testSuiteRunDao, TestSuiteDao testSuiteDao, TestPlanDao testPlanDao) {
-		this.servletContext = servletContext;
-		this.propertyDao = propertyDao;
-		this.accDao = accDao;
-		this.crossDao = crossDao;
-		this.createPersonFormDao = createPersonFormDao;
+	public TestController(TestDao testDao, TestSuiteDao testSuiteDao, TestPlanDao testPlanDao, 
+			TestRunDao testRunDao, TestSuiteRunDao testSuiteRunDao, TestPlanRunDao testPlanRunDao, 
+			 ServletContext servletContext, AccountDao accDao, CreatePersonFormDao createPersonFormDao) {
+
 		this.testDao = testDao;
-		this.testSuiteRunDao = testSuiteRunDao;
 		this.testSuiteDao = testSuiteDao;
 		this.testPlanDao = testPlanDao;
+		
+		this.testRunDao = testRunDao;
+		this.testSuiteRunDao = testSuiteRunDao;
+		this.testPlanRunDao = testPlanRunDao;
+		
+		this.accDao = accDao;
+		this.createPersonFormDao = createPersonFormDao;
 		this.testRunner = new TestWebRunner(servletContext, testSuiteRunDao, accDao, testDao);
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView loginGet(HttpSession session){
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/login");
-		return model;
-	}
-	
-	@RequestMapping(value = "/configuration", method = RequestMethod.GET)
-	public ModelAndView configuration(HttpSession session){
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/advancedConfiguration");
-		return model;
-	}
-
-	@RequestMapping(value = "/gender_template", method = RequestMethod.GET)
-	public ModelAndView getGender() {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/template/gender");
-		return model;
-	}
-	
-	@RequestMapping(value = "/marital_status", method = RequestMethod.GET)
-	public ModelAndView getMaritalStatus() {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/template/maritalStatus");
-		return model;
-	}
-	
-	@RequestMapping(value = "/us_address", method = RequestMethod.GET)
-	public ModelAndView getUsAddress() {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/template/us_address");
-		return model;
-	}
-	
-	@RequestMapping(value = "/benefit_company" ,method = RequestMethod.GET)
-	public ModelAndView modelBenefitCompany() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/template/benefit_company");
-		return model;
-	}
-	
-	@RequestMapping(value = "/yes_no" ,method = RequestMethod.GET)
-	public ModelAndView getYesNo() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/template/yes_no");
-		return model;
-	}
-
-	@RequestMapping(value = "/logout" ,method = RequestMethod.POST)
-	public ModelAndView logout() throws Exception{
-		logedAccID = null;
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/login");
-		return model;
-	}
-	
-	@RequestMapping(value = "/" ,method = RequestMethod.GET)
-	public ModelAndView root(HttpSession session){
-		ModelAndView model = new ModelAndView();
-		if(logedAccID != null){
-			model.setViewName("/test");
-			account = logedAccID != null ? accDao.getAccountByID(logedAccID) : null;
-		} else {
-			model.setViewName("/login");
-		}
-		return model;
-	}
-	
-	@RequestMapping(value = "/main" ,method = RequestMethod.GET)
-	public ModelAndView main(){
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/main");
-		return model;
-	}
-	
-	@RequestMapping(value = "/accountConfigContent" ,method = RequestMethod.GET)
-	public ModelAndView goAccountConfigModel() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/accountConfigModel");
-		return model;
-	}
-
-	@RequestMapping(value = "/model/{model}" ,method = RequestMethod.GET)
-	public ModelAndView goModel(@PathVariable("model") String modelName) throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName(modelName);
-		return model;
-	}
-	
-	@RequestMapping(value = "/editParameters" ,method = RequestMethod.GET)
-	public ModelAndView modelParameters() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/parametersModel");
-		return model;
-	}
-	
-	@RequestMapping(value = "/viewParameters" ,method = RequestMethod.GET)
-	public ModelAndView viewParameters() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/parametersNoEditable");
-		return model;
-	}
-	
-	@RequestMapping(value = "/dashboard" ,method = RequestMethod.GET)
-	public ModelAndView dashboard() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();;
-		if(logedAccID != null){
-			model.setViewName("/dashboard");
-		} else {
-			model.setViewName("/login");
-		}
-		return model;
-	}
-	
-	@RequestMapping(value = "/testplan" ,method = RequestMethod.GET)
-	public ModelAndView testPlan() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();;
-		if(logedAccID != null){
-			model.setViewName("/testPlan");
-		} else {
-			model.setViewName("/login");
-		}
-		return model;
-	}
-	
-	@RequestMapping(value = "/testSuiteHome" ,method = RequestMethod.GET)
-	public ModelAndView testSuite() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/template/testSuite");
-		return model;
-	}
-	
-	@RequestMapping(value = "/test" ,method = RequestMethod.GET)
+	@RequestMapping(value = "/test/{testID}" ,method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView test() throws Exception{
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/test/test");
-		return model;
+	public Test getTest(@PathVariable("testID") Integer testID) throws Exception{
+		Test test = testDao.getTestByID(testID);
+		return test;
 	}
 	
-	@RequestMapping(value = "/testSuite" ,method = RequestMethod.GET)
-	public ModelAndView testSuiteView() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/test/testSuite");
-		return model;
-	}
-	
-	@RequestMapping(value = "/testPlan" ,method = RequestMethod.GET)
-	public ModelAndView testPlanView() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/test/testPlan");
-		return model;
-	}
-	
-	@RequestMapping(value = "/testTemplate" ,method = RequestMethod.GET)
-	public ModelAndView testTemplateView() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/test/template/testTemplate");
-		return model;
-	}
-	
-	@RequestMapping(value = "/testSuiteTemplate" ,method = RequestMethod.GET)
-	public ModelAndView testSuiteTemplateView() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/test/template/testSuiteTemplate");
-		return model;
-	}
-	
-	@RequestMapping(value = "/testPlanTemplate" ,method = RequestMethod.GET)
-	public ModelAndView testPlanTemplateView() throws ConfigurationException {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/test/template/testPlanTemplate");
-		return model;
-	}
-	
-	/**END OF VIEWS**/
-
-	@RequestMapping(value = "/configuration/{accID}", method = RequestMethod.GET)
+	@RequestMapping(value = "/test" ,method = RequestMethod.POST)
 	@ResponseBody
-	public Account configuration(@PathVariable("accID") Integer accID){
-		return accDao.getAccountByID(accID);
+	public String saveTest(@RequestBody Test test) throws Exception{
+		testDao.saveOrUpdate(test);
+		return "{\"statut\" : 200}";
 	}
 	
+	@RequestMapping(value = "/testSuite/{testSuiteID}" ,method = RequestMethod.GET)
 	@ResponseBody
-	@RequestMapping(value = "/configuration/save", method = RequestMethod.POST)
-	public String save(@RequestBody Account formAcc){
-		accDao.save(formAcc);
-		return "{\"status\" : 200}";
+	public TestSuite getTestSuite(@PathVariable Integer testSuiteID) throws ConfigurationException {
+		TestSuite testByID = testSuiteDao.getTestByID(testSuiteID);
+		return testByID;
 	}
 	
-	@RequestMapping(value = "/login" ,method = RequestMethod.POST)
+	@RequestMapping(value = "/testSuite" ,method = RequestMethod.POST)
 	@ResponseBody
-	public String loginPost(@RequestBody LoginForm form) throws Exception{
-		Account acc = accDao.getAccountLogin(form.getUsername(), form.getPassword());
-		if(acc != null){
-			logedAccID = acc.getAccountID();
-			return "{\"accID\" : \""+(acc.getAccountID())+"\"}";
-		}
-		throw new Exception("Account not found");
+	public String saveTestSuite(@RequestBody TestSuite testSuite) throws Exception{
+		testSuiteDao.saveOrUpdate(testSuite);
+		return "{\"statut\" : 200}";
+	}
+	
+	@RequestMapping(value = "/testPlan/{testPlanID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestPlan getTestPlan(@PathVariable Integer testPlanID) throws ConfigurationException {
+		TestPlan testPlanByID = testPlanDao.getTestPlanByID(testPlanID);
+		return testPlanByID;
+	}
+	
+	@RequestMapping(value = "/testPlan" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String saveTestPlan(@RequestBody TestPlan testPlan) throws Exception{
+		testPlanDao.saveOrUpdate(testPlan);
+		return "{\"statut\" : 200}";
+	} 
+	
+	@RequestMapping(value = "/testRun/{testRunID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestRun getTestRun(@PathVariable("testRunID") Integer testRunID) {
+		return testRunDao.getTestRunByID(testRunID);
+	}
+	
+	@RequestMapping(value = "/testRun" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String saveTestRun(@RequestBody TestRun testRun) throws Exception{
+		testRunDao.saveOrUpdate(testRun);
+		return "{\"statut\" : 200}";
+	} 
+	
+	@RequestMapping(value = "/testSuiteRun/{testSuiteRunID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestSuiteRun getTestSuiteRun(@PathVariable("testSuiteRunID") Integer testSuiteRunID) {
+		return testSuiteRunDao.getTestSuiteRunByID(testSuiteRunID);
+	}
+	
+	@RequestMapping(value = "/testSuiteRun" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String saveTestSuiteRun(@RequestBody TestSuiteRun testSuiteRun) throws Exception{
+		testSuiteRunDao.saveOrUpdate(testSuiteRun);
+		return "{\"statut\" : 200}";
+	} 
+	
+	@RequestMapping(value = "/testPlanRun/{testPlanRunID}" ,method = RequestMethod.GET)
+	@ResponseBody
+	public TestPlanRun getTestPlanRun(@PathVariable("testPlanRunID") Integer testPlanRunID) {
+		return testPlanRunDao.getTestPlanRunByID(testPlanRunID);
+	}
+	
+	@RequestMapping(value = "/testPlanRun" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String saveTestSuiteRun(@RequestBody TestPlanRun testPlanRun) throws Exception{
+		testPlanRunDao.saveOrUpdate(testPlanRun);
+		return "{\"statut\" : 200}";
+	}
+	
+	@RequestMapping(value = "/tests" ,method = RequestMethod.GET)
+	@ResponseBody
+	public List<Test> getAllTests() throws MalformedURLException, URISyntaxException{
+		return testDao.getAllTestPlans();
+	}
+	
+	@RequestMapping(value = "/testSuites" ,method = RequestMethod.GET)
+	@ResponseBody
+	public List<TestSuite> getAllTestSuites() throws MalformedURLException, URISyntaxException{
+		return testSuiteDao.getAllTestSuite();
+	}
+	
+	@RequestMapping(value = "/testPlans" ,method = RequestMethod.GET)
+	@ResponseBody
+	public List<TestPlan> getAllTestsPlans() throws MalformedURLException, URISyntaxException{
+		return testPlanDao.getAllTestPlans();
+	}
+	
+	
+	@RequestMapping(value = "/testSuitesNames" ,method = RequestMethod.GET)
+	@ResponseBody
+	public Object[] getAllTestsSutiesName() throws MalformedURLException, URISyntaxException{
+		List<TestSuite> allTestSuite = testSuiteDao.getAllTestSuite();
+		return allTestSuite.stream().map(ts -> ts.getTestSuiteName()).toArray();
 	}
 	
 	@RequestMapping(value = "/parameter/{className}/{testName}" ,method = RequestMethod.GET)
@@ -316,17 +216,10 @@ public class TestController {
 		return getParams(className, testName);
 	}
 
-	@RequestMapping(value = "/accountProperties" ,method = RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public Account getAccountProperties() throws ConfigurationException {
-		return accDao.getAccountByID(logedAccID);
-	}
-
 	@RequestMapping(value = "/video/{testListenenerIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String getVideo(@PathVariable("testListenenerIndex") Integer testListenenerIndex) throws InterruptedException, ConfigurationException{
-		if (account != null && account.getAccountProperty().isRemote()) {
+		if (SessionController.account != null && SessionController.account.getAccountProperty().isRemote()) {
 			int times = 1;
 			int sleep = 2000;
 			
@@ -343,14 +236,6 @@ public class TestController {
 			return "";//Local Test
 		}
 	}
-	
-	@RequestMapping(value = "/testsSuites" ,method = RequestMethod.GET)
-	@ResponseBody
-	public Object[] getTestsSuitesString() throws MalformedURLException, URISyntaxException{
-		List<TestSuite> allTestSuite = testSuiteDao.getAllTestSuite();
-		return allTestSuite.stream().map(tsRun -> tsRun.getTestSuiteName()).toArray();
-	}
-	
 	
 	@RequestMapping(value = "/status/{index}" ,method = RequestMethod.GET)
 	@ResponseBody
@@ -379,12 +264,6 @@ public class TestController {
 		resultsAux = new ArrayList<Test>();
 		
 		return testResults;
-	} 
-	
-	@RequestMapping(value = "/getTestSuite/{ID}" ,method = RequestMethod.GET)
-	@ResponseBody
-	public TestSuiteRun getTestsRuns(@PathVariable("ID") Integer id) {
-		return testSuiteRunDao.getTestSuiteRunByID(id);
 	}
 	
 	@RequestMapping(value = "/get/{xmlName}" ,method = RequestMethod.GET)
@@ -416,7 +295,7 @@ public class TestController {
 	@RequestMapping(value = "/test/{xmlName}/{environment}/{browser}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runTest(@RequestBody TestSuite form, @PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws Exception{
-		Account acc = accDao.getAccountByID(logedAccID);
+		Account acc = accDao.getAccountByID(SessionController.account.getAccountID());
 		
 		TestSuiteRun tsRun = testRunner.getTestSuiteRun(form, environment, browser, acc);
 		
@@ -516,13 +395,6 @@ public class TestController {
 	public String checkIfIsJobAdded(@PathVariable("tlaIndex") Integer tlaIndex) throws Exception{
 		return checkStatusOfMethodInTLA(tlaIndex, "assignJob");
 	}
-	
-	@RequestMapping(value = "/saveAccountConfig" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
-	@ResponseBody
-	public String saveAccountConfig(@RequestBody InsynctiveProperty properties) throws ConfigurationException{
-		propertyDao.update(properties);
-		return "Done!";
-	}
 
 	@RequestMapping(value = "/clearTest/{index}" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -544,7 +416,7 @@ public class TestController {
 	@RequestMapping(value = "/view/test" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public Object[] getTests(@RequestParam("className") String className) throws ConfigurationException, ClassNotFoundException, IOException {
+	public Object[] getTestsInClass(@RequestParam("className") String className) throws ConfigurationException, ClassNotFoundException, IOException {
 		Object[] testsMethods = null;  
 		Reflections reflections = new Reflections(TEST_PACKAGE);
 		Set<Class<? extends TestMachine>> testsClasses = reflections.getSubTypesOf(TestMachine.class);

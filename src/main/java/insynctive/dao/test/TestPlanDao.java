@@ -7,11 +7,14 @@ import javax.inject.Inject;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import insynctive.model.test.TestPlan;
+import insynctive.model.test.TestSuite;
 import insynctive.model.test.run.TestPlanRun;
 
 @Repository
@@ -61,7 +64,13 @@ public class TestPlanDao {
 		} else {
 			return null;
 		}
-		
+	}
+	
+	public List<TestPlan> getAllTestPlans() {
+		return openSession().createCriteria(TestPlan.class)
+				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+				.addOrder(Order.desc("name"))
+				.list();
 	}
 	
 }

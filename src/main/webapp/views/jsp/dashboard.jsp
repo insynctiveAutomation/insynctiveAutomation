@@ -28,9 +28,12 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/dashboard/dashboard.css">
 
+<!-- Login -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
+	
 <!-- Entities -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
 
 <!-- Configuration modal -->
@@ -42,7 +45,7 @@
 <!-- Advanced module -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/fieldDirectives.js"></script>
 	
 <!-- Parameters Modal -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersController.js"></script>
@@ -55,16 +58,15 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
 
 <!-- Test -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeController.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeService.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeDirectives.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
 
 <!-- Dashboard -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardController.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/testSuiteController.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/viewTestSuite/viewController.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardTestSuiteController.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardService.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dashboard/dashboardDirectives.js"></script>
 
@@ -76,7 +78,7 @@
 			<tbody>
 				<tr>
 					<th>ID</th>
-					<th>Test Suite Runs</th>
+					<th>Test Suite Run</th>
 					<th>Status</th>
 					<th>Browsers</th>
 					<th>Environment</th>

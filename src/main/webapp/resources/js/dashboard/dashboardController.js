@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('dashboardApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'testApp']);
+var app = angular.module('dashboardApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'homeApp', 'loginApp']);
 
-app.controller('DashboardController', function($cookies, $http, $window, $modal, $scope, $interval, dashboardService, testService) {
+app.controller('DashboardController', function($cookies, $http, $window, $modal, $scope, $interval, dashboardService, homeService) {
 	
 	$scope.currentPage = 1;
 	$scope.numPerPage = 10;
@@ -12,7 +12,7 @@ app.controller('DashboardController', function($cookies, $http, $window, $modal,
 	this.retryText = "Retry"
 	this.isLoadingRetry = false;
 	this.isLoadingPage;
-	this.testService = testService;
+	this.homeService = homeService;
 	this.testSuiteCount = 0;
 	
 	$scope.$watch('currentPage', function() {
@@ -42,9 +42,9 @@ app.controller('DashboardController', function($cookies, $http, $window, $modal,
 		} else {
 			var modalInstance = $modal.open({
 				animation : true,
-				templateUrl : '/testSuiteTemplate', 
+				templateUrl : '/testRunTemplate', 
 				backdrop: true,
-				controller : 'TestSuiteController',
+				controller : 'DashboardTestRunController',
 				controllerAs : 'controller',
 				windowClass: 'edit-parameter-modal',
 				size : 'lg',
@@ -69,14 +69,14 @@ app.controller('DashboardController', function($cookies, $http, $window, $modal,
 	this.retry = function(testSuite) {
 		testSuite.isLoadingRetry = true;
 		dashboardService.retry(testSuite.testSuiteID, function(data){
-			self.testService.getTestSuiteByID(data.index, function(testSuiteByID){
+			self.homeService.getTestSuiteByID(data.index, function(testSuiteByID){
 				self.getTestsSuites();
 				testSuite.isLoadingRetry = false;
 				var modalInstance = $modal.open({
 					animation : true,
 					templateUrl : 'testSuite', 
 					backdrop: true,
-					controller : 'TestSuiteController',
+					controller : 'DashboardTestSuiteController',
 					controllerAs : 'controller',
 					windowClass: 'edit-parameter-modal',
 					size : 'lg',

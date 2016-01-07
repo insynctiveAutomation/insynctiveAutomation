@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
-<html lang="en" ng-app="testEntityApp">
+<html lang="en" ng-app="testApp">
 
 <head>
 <meta charset="utf-8">
@@ -23,10 +23,6 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
 	
-	<!-- Directives -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/testDirective.js"></script>
-	
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
@@ -38,10 +34,13 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountService.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
 	
+	<!-- Login -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
+	
 	<!-- Advanced module -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/fieldDirectives.js"></script>
 	
 	<!-- Parameters Modal -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersController.js"></script>
@@ -49,15 +48,15 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/parameters/parametersDirectives.js"></script>
 	
 	<!-- Home -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testController.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testService.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/testDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeController.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/home_page/homeService.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/home_page/homeDirectives.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
 
 	<!-- Test  -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testController.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testService.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/test/testController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/test/testService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/test/testDirectives.js"></script>
 	
 </head>
 

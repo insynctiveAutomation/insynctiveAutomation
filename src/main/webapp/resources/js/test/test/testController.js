@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('testEntityApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'parameterApp', 'testApp', 'directiveApp']).config(function($locationProvider) {
+var app = angular.module('testApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'parameterApp', 'homeApp', 'directiveApp']).config(function($locationProvider) {
 	 $locationProvider.html5Mode({
    	  enabled: true,
    	  requireBase: false

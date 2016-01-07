@@ -39,7 +39,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	};
 	
 	this.addTestSuite = function(){
-		self.testPlan.testSuiteRunners.push(new TestSuiteRunner(self.testPlan));
+		self.testPlan.testSuiteRunners.push(new TestSuiteRunner());
 	}
 	
 	this.removeTestSuite = function(testSuite){
