@@ -51,7 +51,7 @@ public class TestSuite {
 			joinColumns = @JoinColumn(name = "test_suite_id"),
 			inverseJoinColumns = @JoinColumn(name = "test_id")
 	)
-	private Set<Test> tests = new HashSet();
+	private List<Test> tests = new ArrayList<Test>();
 	
 	public TestSuite() {
 		// TODO Auto-generated constructor stub
@@ -85,11 +85,11 @@ public class TestSuite {
 		this.testSuiteName = testSuiteName;
 	}
 
-	public Set<Test> getTests() {
+	public List<Test> getTests() {
 		return tests;
 	}
 
-	public void setTests(Set<Test> tests) {
+	public void setTests(List<Test> tests) {
 		this.tests = tests;
 	}
 	

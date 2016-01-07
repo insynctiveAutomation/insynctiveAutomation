@@ -46,7 +46,7 @@ public class TestPlanRun {
 			joinColumns = @JoinColumn(name = "test_plan_run_id"),
 			inverseJoinColumns = @JoinColumn(name = "test_suite_run_id")
 	)
-	public Set<TestSuiteRun> testSuiteRuns = new HashSet<>();
+	public List<TestSuiteRun> testSuiteRuns = new ArrayList();
 
 	public TestPlanRun() {
 		// TODO Auto-generated constructor stub
@@ -68,11 +68,11 @@ public class TestPlanRun {
 		this.name = name;
 	}
 
-	public Set<TestSuiteRun> getTestSuiteRuns() {
+	public List<TestSuiteRun> getTestSuiteRuns() {
 		return testSuiteRuns;
 	}
 
-	public void setTestSuiteRuns(Set<TestSuiteRun> testSuiteRuns) {
+	public void setTestSuiteRuns(List<TestSuiteRun> testSuiteRuns) {
 		this.testSuiteRuns = testSuiteRuns;
 	}
 
@@ -88,7 +88,7 @@ public class TestPlanRun {
 		testSuiteRuns.add(tsRun);
 	}
 	
-	public void addTestSuiteRuns(Set<TestSuiteRunner> testSuitesRunners){
+	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners){
 		for(TestSuiteRunner tsRunner : testSuitesRunners){
 			TestSuiteRun tsRun = tsRunner.toTestSuiteRun();
 			this.addTestSuiteRun(tsRun);

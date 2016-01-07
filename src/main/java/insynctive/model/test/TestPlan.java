@@ -1,6 +1,8 @@
 package insynctive.model.test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,7 +42,7 @@ public class TestPlan {
 			joinColumns = @JoinColumn(name = "test_plan_id"),
 			inverseJoinColumns = @JoinColumn(name = "test_suite_runner_id")
 	)
-	public Set<TestSuiteRunner> testSuiteRunners = new HashSet();
+	public List<TestSuiteRunner> testSuiteRunners = new ArrayList<>();
 
 	public TestPlan() {
 		// TODO Auto-generated constructor stub
@@ -66,11 +68,11 @@ public class TestPlan {
 		testSuiteRunners.add(testSuiteRunner);
 	}
 
-	public Set<TestSuiteRunner> getTestSuiteRunners() {
+	public List<TestSuiteRunner> getTestSuiteRunners() {
 		return testSuiteRunners;
 	}
 
-	public void setTestSuiteRunners(Set<TestSuiteRunner> testSuiteRunners) {
+	public void setTestSuiteRunners(List<TestSuiteRunner> testSuiteRunners) {
 		this.testSuiteRunners = testSuiteRunners;
 	}
 	

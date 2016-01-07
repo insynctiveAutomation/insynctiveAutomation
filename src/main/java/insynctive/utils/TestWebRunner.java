@@ -134,7 +134,7 @@ public class TestWebRunner {
 				}
 			}
 		}
-		testSuite.setTests(new HashSet<Test>(listIncMethod));
+		testSuite.setTests(new ArrayList<Test>(listIncMethod));
 		
 		return testSuite;
 	}

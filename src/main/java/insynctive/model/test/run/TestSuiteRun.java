@@ -65,7 +65,7 @@ public class TestSuiteRun {
 			joinColumns = @JoinColumn(name = "test_suite_run_id"),
 			inverseJoinColumns = @JoinColumn(name = "test_run_id")
 	)
-	private Set<TestRun> testsRuns = new HashSet();
+	private List<TestRun> testsRuns = new ArrayList<>();
 
 	public TestSuiteRun() {
 		this.setStatus(null);
@@ -119,11 +119,11 @@ public class TestSuiteRun {
 		this.testSuiteRunID = testSuiteRunID;
 	}
 
-	public Set<TestRun> getTestsRuns() {
+	public List<TestRun> getTestsRuns() {
 		return testsRuns;
 	}
 
-	public void setTestsRuns(Set<TestRun> testsRuns) {
+	public void setTestsRuns(List<TestRun> testsRuns) {
 		this.testsRuns = testsRuns;
 	}
 	
@@ -155,7 +155,7 @@ public class TestSuiteRun {
 		this.testsRuns.add(testRun);
 	}
 
-	public void addTestsRuns(Set<Test> tests) {
+	public void addTestsRuns(List<Test> tests) {
 		for(Test test : tests){
 			TestRun testRun = test.toTestRun();
 			testRun.setStatus("Running");
