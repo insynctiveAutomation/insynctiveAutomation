@@ -32,11 +32,19 @@ a:hover {
 }
 
 .centered {
-	position: relative;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	/* bring your own prefixes */
 	transform: translate(-50%, -50%);
+}
+
+.img-50 {
+	height: 50px;
+}
+
+.img-30 {
+	height: 50px;
 }
 
 .top-right-corner {

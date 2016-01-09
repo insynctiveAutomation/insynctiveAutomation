@@ -1,10 +1,9 @@
 var app = angular.module('testSuiteApp');
 
-app.directive("testSuiteView", function($compile, $cookies){
+app.directive("testSuite", function($compile, $cookies){
 	return {
 		restrict: "E",
 		scope: {
-			test: '=',
 			controller: '='
 		},
 		templateUrl: '/testSuiteTemplate',

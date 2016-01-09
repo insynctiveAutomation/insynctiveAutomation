@@ -169,5 +169,11 @@ public class ViewsController {
 		model.setViewName("/template/testRunTemplate");
 		return model;
 	}
-	
+
+	@RequestMapping(value = "/listTestPlan" ,method = RequestMethod.GET)
+	public ModelAndView allTestPlans() throws ConfigurationException {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/test/list/testPlan");
+		return model;
+	}
 }

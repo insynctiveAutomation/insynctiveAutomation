@@ -48,8 +48,12 @@ public class TestPlanDao {
 		return (Integer) openSession().save(tpRun);
 	}
 	
-	public void saveOrUpdate(TestPlan TestPlan){
-		openSession().saveOrUpdate(TestPlan);
+	public void saveOrUpdate(TestPlan testPlan){
+		openSession().saveOrUpdate(testPlan);
+	}
+
+	public void remove(TestPlan testPlan) {
+		openSession().delete(testPlan);
 	}
 	
 	public void update(TestPlan TestPlan) {

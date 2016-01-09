@@ -12,10 +12,9 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	var self = this;
 	
 	this.testSuite = testSuite;
-	
 	this.save = function(){
 		testSuiteService.saveTestSuite(self.testSuite, function(data){
-			self.message = 'success';
+			self.message = 'Saved!';
 		}, function(data){
 			self.message = 'Error => '+data;
 		}); 
@@ -35,7 +34,7 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 			animation : true,
 			controller: 'testController',
 			controllerAs: 'controller',
-			template : '<test-view controller="controller"></test-view>',
+			template : '<test controller="controller" test="test"></test>',
 			backdrop: true,
 			windowClass: 'edit-parameter-modal',
 			size : 'lg',

@@ -25,13 +25,15 @@
 	
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/test.js"></script>
 	
+	<!-- Login -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
+	
 	<!-- Directive -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/testDirective.js"></script>
 
 	<!-- Configuration modal -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
@@ -51,8 +53,8 @@
 	
 	<!-- Home -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeController.js"></script>
-	src="${pageContext.request.contextPath}/resources/js/home_page/homeService.js"></script>
-	src="${pageContext.request.contextPath}/resources/js/home_page/homeDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeDirectives.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
 
 	<!-- Test  -->
@@ -69,8 +71,9 @@
 
 <body data-ng-controller="testSuiteController as controller">
 	<form ng-submit="controller.save()" name="form" id="form">
-		<test-suite-view controller="controller"></test-suite-view>
+		<test-suite controller="controller"></test-suite>
 		<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
 	</form>
+	<span ng-bind="controller.message"></span>
 </body>
 </html>

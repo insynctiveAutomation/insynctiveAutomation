@@ -145,6 +145,13 @@ public class TestController {
 		return "{\"statut\" : 200}";
 	} 
 	
+	@RequestMapping(value = "/remove/testPlan" ,method = RequestMethod.POST)
+	@ResponseBody
+	public String removeTestPlan(@RequestBody TestPlan testPlan) throws Exception{
+		testPlanDao.remove(testPlan);
+		return "{\"statut\" : 200}";
+	}
+	
 	@RequestMapping(value = "/testRun/{testRunID}" ,method = RequestMethod.GET)
 	@ResponseBody
 	public TestRun getTestRun(@PathVariable("testRunID") Integer testRunID) {

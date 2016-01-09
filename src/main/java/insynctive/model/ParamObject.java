@@ -118,12 +118,12 @@ public class ParamObject {
 	public Benefit visionBenefit;
 
 	@OneToOne
-	@Cascade({CascadeType.SAVE_UPDATE})
+	@Cascade({CascadeType.ALL})
 	@JoinColumn(name = "emergency_contact_id")
 	public EmergencyContact emergencyContact;
 
 	@OneToOne
-	@Cascade({CascadeType.SAVE_UPDATE})
+	@Cascade({CascadeType.ALL})
 	@JoinColumn(name = "USAddress_id")
 	public USAddress usAddress;
 

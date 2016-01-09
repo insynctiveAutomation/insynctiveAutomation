@@ -74,14 +74,14 @@ public class TestPlan {
 		this.testSuiteRunners = testSuiteRunners;
 	}
 	
-	public TestPlanRun toTestPlanRun(){
+	public TestPlanRun toTestPlanRun() throws IllegalArgumentException, IllegalAccessException, Exception{
 		TestPlanRun tpRun = new TestPlanRun();
 		tpRun.setName(name);
 		tpRun.addTestSuiteRuns(testSuiteRunners);
 		return tpRun;
 	}
 
-	public TestPlanRun run() {
+	public TestPlanRun run() throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestPlanRun tpRun = toTestPlanRun();
 		tpRun.setStatus("Running");
 		return tpRun;

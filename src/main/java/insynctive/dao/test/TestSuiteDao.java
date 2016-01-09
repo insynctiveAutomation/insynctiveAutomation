@@ -1,5 +1,6 @@
 package insynctive.dao.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,10 +49,21 @@ public class TestSuiteDao {
 	}
 	
 	public List<TestSuite> getAllTestSuite() {
-		return openSession().createCriteria(TestSuite.class)
+		List<TestSuite> list = openSession().createCriteria(TestSuite.class)
 				.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
 				.addOrder(Order.desc("testSuiteID"))
 				.list();
+		List<TestSuite> returnList = new ArrayList<>();
+		List<TestSuite> auxList = list;
+		
+		for(int index = 0; index < list.size(); index++){
+			TestSuite ts = list.get(index);
+			String tsName = ts.getTestSuiteName();
+			if(returnList.stream().filter(tsList -> tsList.getTestSuiteName().equals(tsName)).toArray().length == 0){
+				returnList.add(ts);
+			}
+		}
+		return returnList;
 	}
 
 	public List<TestSuite> getTestSuite(Integer page, Integer count) {

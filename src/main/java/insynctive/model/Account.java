@@ -40,14 +40,13 @@ public class Account {
 	@Column(name = "password")
 	private String password;
 	
-	@NotNull
 	@OneToOne
-	@Cascade({CascadeType.SAVE_UPDATE})
+	@Cascade({CascadeType.ALL})
 	@JoinColumn(name = "insynctive_property_id")
 	private InsynctiveProperty accountProperty;
 	
 	@OneToOne
-	@Cascade({CascadeType.SAVE_UPDATE})
+	@Cascade({CascadeType.ALL})
 	@JoinColumn(name = "param_object_id")
 	private ParamObject paramObject;
 

@@ -85,7 +85,7 @@ public class TestPlanRun {
 		testSuiteRuns.add(tsRun);
 	}
 	
-	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners){
+	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners) throws IllegalArgumentException, IllegalAccessException, Exception{
 		for(TestSuiteRunner tsRunner : testSuitesRunners){
 			TestSuiteRun tsRun = tsRunner.toTestSuiteRun();
 			this.addTestSuiteRun(tsRun);

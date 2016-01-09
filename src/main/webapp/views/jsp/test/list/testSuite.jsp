@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
-<html lang="en" ng-app="testApp">
+<html lang="en" ng-app="testSuiteApp">
 
 <head>
 <meta charset="utf-8">
@@ -25,23 +25,19 @@
 	
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/test.js"></script>
 	
 	<!-- Directive -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
-	
-	<!-- Login -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
-	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/testDirective.js"></script>
+
 	<!-- Configuration modal -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountService.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountDirectives.js"></script>
-	
-	<!-- Login -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
 	
 	<!-- Advanced module -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
@@ -63,14 +59,18 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/test/testController.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/test/testService.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/test/testDirectives.js"></script>
+
+	<!-- Test Suite-->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testSuite/testSuiteController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testSuite/testSuiteService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/test/testSuite/testSuiteDirectives.js"></script>
 	
 </head>
 
-<body data-ng-controller="testController as controller">
+<body data-ng-controller="testSuiteController as controller">
 	<form ng-submit="controller.save()" name="form" id="form">
-		<test controller="controller"></test>
+		<test-suite-view controller="controller"></test-suite-view>
 		<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
 	</form>
-	<span ng-bind="controller.message"></span>
 </body>
 </html>

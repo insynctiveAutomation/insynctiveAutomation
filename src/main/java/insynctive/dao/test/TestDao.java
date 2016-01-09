@@ -40,6 +40,10 @@ public class TestDao {
 	public void saveOrUpdate(Test test){
 		openSession().saveOrUpdate(test);
 	}
+	
+	public void remove(Test test){
+		openSession().delete(test);
+	}
 
 	public void update(Test test) {
 		openSession().update(test);

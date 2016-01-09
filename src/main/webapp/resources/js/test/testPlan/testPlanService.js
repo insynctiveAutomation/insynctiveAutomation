@@ -12,4 +12,12 @@ app.service('testPlanService', function($http) {
 		$http.post('/testPlan',testPlan).success(callback).error(error);
 	};
 	
+	this.removeTestPlan  = function(testPlan, callback, error) {
+		$http.post('/remove/testPlan',testPlan).success(callback).error(error);
+	};
+
+	this.getAllTestPlan = function(callback) {
+		$http.get('/testPlans').success(callback);
+	};
+	
 });

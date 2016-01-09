@@ -231,6 +231,7 @@ public class TestWebRunner {
 	private XmlSuite createXmlTest(TestSuiteRun tsRun) {
 		List<XmlSuite> suites = new ArrayList<XmlSuite>();
 		List<XmlClass> classes = new ArrayList<XmlClass>();
+		Integer index = 1;
 		
 		XmlSuite suite = new XmlSuite();
 		suite.setName(tsRun.getName());
@@ -243,7 +244,7 @@ public class TestWebRunner {
 		//Test methods to be included
 		List<XmlInclude> includes = new ArrayList<XmlInclude>();
 		for(TestRun testRun : tsRun.getTestsRuns()){
-			XmlInclude method = new XmlInclude(testRun.getTestName());
+			XmlInclude method = new XmlInclude(testRun.getTestName(), index++);
 			includes.add(method);
 		}
 		

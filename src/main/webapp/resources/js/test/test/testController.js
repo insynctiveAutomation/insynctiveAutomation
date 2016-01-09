@@ -36,7 +36,7 @@ app.controller('testController', function($cookies, $scope, $window, $modal, $lo
 	
 	this.save = function(){
 		testService.saveTest(self.test, function(data){
-			self.message = 'success';
+			self.message = 'Saved!';
 			$modalInstance.close()
 		}, function(data){
 			self.message = 'Error => '+data;

@@ -149,7 +149,7 @@ public class TestSuiteRun {
 		this.testsRuns.add(testRun);
 	}
 
-	public void addTestsRuns(List<Test> tests) {
+	public void addTestsRuns(List<Test> tests) throws IllegalArgumentException, IllegalAccessException, Exception {
 		for(Test test : tests){
 			TestRun testRun = test.toTestRun();
 			testRun.setStatus("Running");

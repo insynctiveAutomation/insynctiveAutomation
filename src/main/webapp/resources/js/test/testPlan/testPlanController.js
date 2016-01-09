@@ -10,10 +10,9 @@ var app = angular.module('testPlanApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookie
 app.controller('testPlanController', function($cookies, $scope, $window, $modal, $location, testPlanService) {
 
 	var self = this;
-	this.testPlan = {}
+	this.isLoading = true;
 	this.testPlanID = $location.search().id
 	this.environments = Environment.getEnvironments();
-	
 	this.message = '';
 	
 	/*On Load Methods*/
@@ -21,10 +20,12 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		if(id){
 			testPlanService.findTestPlan(id, function(data){
 				self.testPlan = data;
+				self.isLoading = false;
 			}, function(data){
 				self.message = 'Error =>'+data;
 			});
 		} else {
+			self.isLoading = false;
 			self.testPlan = new TestPlan();
 		}
 	};
@@ -32,7 +33,15 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	
 	this.save = function(){
 		testPlanService.saveTestPlan(self.testPlan, function(data){
-			self.message = 'success';
+			self.message = 'Saved!';
+		}, function(data){
+			self.message = 'Error => '+data;
+		}); 
+	};
+	
+	this.remove = function(){
+		testPlanService.removeTestPlan(self.testPlan, function(data){
+			$window.location.href = '/';
 		}, function(data){
 			self.message = 'Error => '+data;
 		}); 
@@ -52,7 +61,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 			animation : true,
 			controller: 'testSuiteController',
 			controllerAs: 'controller',
-			template : '<test-suite-view controller="controller"></test-suite-view>',
+			template : '<test-suite controller="controller"></test-suite>',
 			backdrop: true,
 			windowClass: 'edit-parameter-modal',
 			size : 'lg',

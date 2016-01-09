@@ -107,11 +107,11 @@ public class Test {
 		return newtest;
 	}
 
-	public TestRun toTestRun() {
+	public TestRun toTestRun() throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestRun testRun = new TestRun();
 		testRun.setTestName(testName);
 		testRun.setClassName(className);
-		testRun.setParamObject(paramObject); //Check if this need to be a new ParamObject
+		testRun.setParamObject(ParamObject.getNewWithOutIDs(paramObject));
 		testRun.setStatus("Running");
 		return testRun;
 	}

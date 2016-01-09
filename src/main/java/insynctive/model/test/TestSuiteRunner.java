@@ -76,7 +76,7 @@ public class TestSuiteRunner {
 		this.environment = environment;
 	}
 
-	public TestSuiteRun toTestSuiteRun() {
+	public TestSuiteRun toTestSuiteRun() throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = testSuite.toTestSuiteRun();
 		tsRun.setEnvironment(environment);
 		tsRun.setBrowser(browser);

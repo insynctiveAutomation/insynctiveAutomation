@@ -25,14 +25,8 @@
 	
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testDetail.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
-	
-	<!-- Directive -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
-	
-	<!-- Login -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
 	
 	<!-- Configuration modal -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
@@ -71,6 +65,5 @@
 		<test controller="controller"></test>
 		<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
 	</form>
-	<span ng-bind="controller.message"></span>
 </body>
 </html>

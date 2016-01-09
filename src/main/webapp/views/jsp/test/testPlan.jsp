@@ -23,6 +23,9 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
 	
+	<!-- MY CSS -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
+	
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuiteRunner.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testPlan.js"></script>
@@ -33,6 +36,10 @@
 	<!-- Directive -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
 
+	<!-- Login -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
+	
 	<!-- Configuration modal -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/account_config/accountController.js"></script>
@@ -51,8 +58,8 @@
 	
 	<!-- Home -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeController.js"></script>
-	src="${pageContext.request.contextPath}/resources/js/home_page/homeService.js"></script>
-	src="${pageContext.request.contextPath}/resources/js/home_page/homeDirectives.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeService.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/home_page/homeDirectives.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/viewOfRun.js"></script>
 
 	<!-- Test  -->
@@ -73,42 +80,16 @@
 </head>
 
 <body data-ng-controller="testPlanController as controller">
-		
+	<div ng-hide="controller.isLoading">
 		<form ng-submit="controller.save()" name="form" id="form">
-			<span>Test Plan Name</span> <input type="text" ng-model="controller.testPlan.name"/>
-			<table class="table table-striped table-hover table-condensed">
-				<tbody>
-					<tr>
-						<th>Test Suite Name</th>
-						<th>Browser</th>
-						<th>Environment</th>
-						<th>Edit</th>
-						<th>Remove</th>
-					</tr>
-					<tr data-ng-repeat="testSuiteRunner in controller.testPlan.testSuiteRunners" class="animate-repeat">
-						<td class="col-sm-2"><input type="text" ng-model="testSuiteRunner.testSuite.testSuiteName"></input></td>
-						<td class="col-sm-2"><select name="environment" ng-model="testSuiteRunner.environment" data-ng-options="environment as environment for environment in controller.environments" required>
-					    	<option value="">Select an Environment</option>
-					 	</select> 
-					 	</td>
-					  	<td class="col-sm-2"><select name="browser" ng-model="testSuiteRunner.browser" required>
-					    	<option value="">Select a Browser</option>
-					    	<option value="FIREFOX">Firefox</option>
-					    	<option value="CHROME">Chrome</option>
-					    	<option value="IE_10">IE 10</option>
-					    	<option value="IE_11">IE 11</option>
-					    	<option value="IPAD">iPad</option>
-					 	</select> 
-					 	</td>
-						<td class="col-sm-2"><a id="edit" ng-click="controller.openEditTestSuite(testSuiteRunner.testSuite)">Edit Test Suite</a></td>
-						<td class="col-sm-2"><a id="edit" ng-click="controller.removeTest(testSuiteRunner.testSuite)">Remove Test Suite</a></td>
-					</tr>
-				</tbody>
-			</table>
-			<a class="btn" ng-click="controller.addTestSuite()">add Test Suite</a>
+			<test-plan controller="controller"></test-plan>
 			<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
 		</form>
-			
+		<span ng-bind="controller.message"></span>
+		<br>
+		<button class="btn-primary" ng-click="controller.remove()">Remove</button>
+	</div>
+	<img class="centered img-30" ng-hide="!controller.isLoading" alt="Loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif">
 </body>
 
 </html>

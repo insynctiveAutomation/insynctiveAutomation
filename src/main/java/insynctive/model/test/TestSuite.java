@@ -94,7 +94,7 @@ public class TestSuite {
 		tests.add(test);
 	}
 
-	public TestSuiteRun toTestSuiteRun() {
+	public TestSuiteRun toTestSuiteRun() throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = new TestSuiteRun();
 		tsRun.setName(testSuiteName);
 		tsRun.addTestsRuns(tests);
