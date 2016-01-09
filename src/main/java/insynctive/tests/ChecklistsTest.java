@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.model.ParamObject;
@@ -27,10 +28,11 @@ public class ChecklistsTest extends TestMachine {
 
 	ParamObject person;
 
-	@Override
 	@BeforeClass
-	public void tearUp() throws Exception {
-		super.tearUp();
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
 		this.sessionName = "Checklist Sanity Tests";
 	}
 	
@@ -44,7 +46,7 @@ public class ChecklistsTest extends TestMachine {
 	
 	@Test(dataProvider = "hardCodedBrowsers")
 	public void startCheckListI9(TestEnvironment testEnvironment) throws Throwable {
-		startTest(testEnvironment);
+		startTest();
 		
 		Checklist checklist = new Checklist("I9 Template");
 		Employee employee = Employee.W2_EMPLOYEE;
@@ -56,10 +58,10 @@ public class ChecklistsTest extends TestMachine {
 			boolean result = homeForAgent.isTaskAssign(checklist);
 			
 			setResult(result, "Start I9 Checklist");
-			Debugger.log("asssignI9Task => "+result, isSaucelabs);
+			Debugger.log("asssignI9Task => "+result, isRemote);
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Start I9 Checklist", ex, isSaucelabs);
+			failTest("Start I9 Checklist", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -79,18 +81,18 @@ public class ChecklistsTest extends TestMachine {
 		boolean result = true;
 			
 		setResult(result, "Complete I9 Checklist");
-		Debugger.log("completeCheckListI9 => "+result, isSaucelabs);
+		Debugger.log("completeCheckListI9 => "+result, isRemote);
 		assertTrue(result);
 		
 		} catch (Exception ex){
-			failTest("Complete I9 Checklist", ex, isSaucelabs);
+			failTest("Complete I9 Checklist", ex, isRemote);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dataProvider = "hardCodedBrowsers")
 	public void startCheckListW4(TestEnvironment testEnvironment) throws Throwable {
-		startTest(testEnvironment);
+		startTest();
 		
 		Checklist checklist = new Checklist("W4 Template");
 		checklist.addProcess(new W4(WhenStart.ASAP, false, driver));
@@ -103,17 +105,17 @@ public class ChecklistsTest extends TestMachine {
 			boolean result = homeForAgent.isTaskAssign(checklist);
 
 			setResult(result, "Start W4 Checklist");
-			Debugger.log("asssignW4Task => "+result, isSaucelabs);
+			Debugger.log("asssignW4Task => "+result, isRemote);
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Start W4 Checklist", ex, isSaucelabs);
+			failTest("Start W4 Checklist", ex, isRemote);
 			assertTrue(false);
 		}
 	}
 	
 	@Test(dataProvider = "hardCodedBrowsers")
 	public void startCheckListPDF(TestEnvironment testEnvironment) throws Throwable {
-		startTest(testEnvironment);
+		startTest();
 		
 		Checklist checklist = new Checklist("PDF Template");
 		Employee employee = Employee.W2_EMPLOYEE;
@@ -128,17 +130,17 @@ public class ChecklistsTest extends TestMachine {
 			boolean result = homeForAgent.isTaskAssign(checklist);
 
 			setResult(result, "Start PDF Checklist");
-			Debugger.log("asssignW4Task => "+result, isSaucelabs);
+			Debugger.log("asssignW4Task => "+result, isRemote);
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Start PDF Checklist", ex, isSaucelabs);
+			failTest("Start PDF Checklist", ex, isRemote);
 			assertTrue(false);
 		}
 	}
 	 
 	@Test(dataProvider = "hardCodedBrowsers")
 	public void startChecklistAssignTask(TestEnvironment testEnvironment) throws Throwable {
-		startTest(testEnvironment);
+		startTest();
 		
 		Checklist checklist = new Checklist("Assignt Task Template");
 		checklist.addProcess(new AssignTask(WhenStart.ASAP, Employee.AGENT_OFFICER, driver));
@@ -151,10 +153,10 @@ public class ChecklistsTest extends TestMachine {
 			boolean result = homeForAgent.isTaskAssign(checklist);
 
 			setResult(result, "Start Assign Task Checklist");
-			Debugger.log("asssignW4Task => "+result, isSaucelabs);
+			Debugger.log("asssignW4Task => "+result, isRemote);
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Start Assign Task Checklist", ex, isSaucelabs);
+			failTest("Start Assign Task Checklist", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -163,8 +165,8 @@ public class ChecklistsTest extends TestMachine {
 	private HomeForAgentsPage createAndAssignTask(Checklist checklist,
 			Employee employee) throws Exception, Throwable {
 		login();
-		HomeForAgentsPage homeForAgent = new HomeForAgentsPage(driver, properties.getEnvironment());
-		CheckListsPage checkListsPage = new CheckListsPage(driver, properties.getEnvironment());
+		HomeForAgentsPage homeForAgent = new HomeForAgentsPage(driver, environment);
+		CheckListsPage checkListsPage = new CheckListsPage(driver, environment);
 
 		homeForAgent.waitPageIsLoad();
 		

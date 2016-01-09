@@ -163,7 +163,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		if(personalPage.isPresent(personalPage.phoneRequired)) personalPage.addPhoneNumber(person.getPrimaryPhone(), runID);
 		Sleeper.sleep(500, driver);
 		
-		if(personalPage.isPresent(personalPage.addressRequired)) personalPage.addUsAddress(person.getUSAddress());
+		if(personalPage.isPresent(personalPage.addressRequired)) personalPage.addUsAddress(person.getUsAddress());
 		Sleeper.sleep(500, driver);
 		
 		if(personalPage.isPresent(personalPage.dependentRequired)) personalPage.addHasNotDependents();
@@ -214,7 +214,7 @@ public class EmployeeDashboardPage extends Page implements PageInterface {
 		
 		if(personalPage.isPresent(personalPage.addressRequired)){
 			checkIsPresent("Address");
-			personalPage.addUsAddress(person.getUSAddress());
+			personalPage.addUsAddress(person.getUsAddress());
 			checkIsNotPresent("Address");
 		}
 

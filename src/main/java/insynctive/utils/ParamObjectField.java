@@ -21,7 +21,10 @@ public enum ParamObjectField {
 	DENTAL_BENEFIT_NAME("dentalBenefit.name"), DENTAL_BENEFIT_COMPANY("dentalBenefit.company"),
 	VISION_BENEFIT_NAME("visionBenefit.name"), VISION_BENEFIT_COMPANY("visionBenefit.company"),
 
-	DOC_NAME("docName"), DOC_CATEGORY("docCategory"), DOC_PROCESS("docProcess"), DOC_PLAN_NAME("docPlanName"), DOC_KEYWORD("docKeyword");
+	DOC_NAME("docName"), DOC_CATEGORY("docCategory"), DOC_PROCESS("docProcess"), DOC_PLAN_NAME("docPlanName"), DOC_KEYWORD("docKeyword"),
+	
+	GMAIL_PASSWORD("gmailPassword");
+	
 
 
 	private String value;

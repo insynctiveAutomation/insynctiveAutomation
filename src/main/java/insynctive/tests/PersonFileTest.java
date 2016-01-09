@@ -29,18 +29,23 @@ import insynctive.utils.Wait;
 import insynctive.utils.data.TestEnvironment;
  
 public class PersonFileTest extends TestMachine {
+	
 	private USAddress usaddress = null;
 	
-	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID", "testName", "environment"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName, String environment) throws Exception {
-		super.testSuiteID = Integer.parseInt(testSuiteID);
-		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
-		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = testName;
-		properties.setEnvironment(environment);
-	}
+	public Integer runID;
+	public String environment;
+	public TestEnvironment testEnvironment;
+	public boolean isRemote;
+	public boolean isNotification;
+	public Integer testSuiteID;
 	
+	@BeforeClass
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
+	}
+
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
@@ -48,17 +53,16 @@ public class PersonFileTest extends TestMachine {
 	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
-		
-		startTest(testEnvironment);
+		startTest();
 		try{ 
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
 			boolean result = loginPage.isLoggedIn(1000);
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Login Test", ex, isSaucelabs);
+			failTest("Login Test", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -71,16 +75,16 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		
-		startTest(testEnvironment);
+		startTest();
 		try{ 
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
 			boolean result = loginPage.isLoggedIn(1000);
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Login Test", ex, isSaucelabs);
+			failTest("Login Test", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -98,11 +102,11 @@ public class PersonFileTest extends TestMachine {
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
 			boolean result = loginPage.isLoggedIn();
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Login Test", ex, isSaucelabs);
+			failTest("Login Test", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -113,16 +117,16 @@ public class PersonFileTest extends TestMachine {
 	labels={"Login Username", "Login Password"})
 	public void loginAsEmployeeTest(@Optional("TestID") Integer testID)
 			throws Exception {
-		startTest(testEnvironment);
+		startTest();
 		try{ 
 			changeParamObject(testID);
 			LoginPage loginPage = loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
 			boolean result = loginPage.isLoggedIn();
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Login Test", ex, isSaucelabs);
+			failTest("Login Test", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -135,13 +139,13 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
-			LoginPage loginPage = loginAsEmployee(paramObject.getEmailToChange(account.getRunIDString()), paramObject.loginPassword);
+			LoginPage loginPage = loginAsEmployee(paramObject.getEmailToChange(getRunIDAsString()), paramObject.loginPassword);
 			boolean result = loginPage.isLoggedIn();
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Login Test", ex, isSaucelabs);
+			failTest("Login Test", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -156,17 +160,17 @@ public class PersonFileTest extends TestMachine {
 			changeParamObject(testID);
 			loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
 			
-			TwoFAPage twoFAPage = new TwoFAPage(driver, properties.getEnvironment());
-			twoFAPage.sendViaPrimaryEmail(paramObject.loginUsername, properties.getGmailPassword());
+			TwoFAPage twoFAPage = new TwoFAPage(driver, environment);
+			twoFAPage.sendViaPrimaryEmail(paramObject.loginUsername, paramObject.getGmailPassword());
 			Sleeper.sleep(7000, driver);
 			
 			boolean result = !driver.getCurrentUrl().contains("TwoFA"); 
-			Debugger.log("loginWith2FAEmail => "+result, isSaucelabs);
+			Debugger.log("loginWith2FAEmail => "+result, isRemote);
 			setResult(result, "Login With 2FA Email");
 			assertTrue(result);
 		} catch(Exception ex){
 			ex.printStackTrace();
-			failTest("Login With 2FA Email", ex, isSaucelabs);
+			failTest("Login With 2FA Email", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -181,18 +185,18 @@ public class PersonFileTest extends TestMachine {
 			changeParamObject(testID);
 			loginAsEmployee(paramObject.loginUsername, paramObject.loginPassword);
 			
-			TwoFAPage twoFAPage = new TwoFAPage(driver, properties.getEnvironment());
+			TwoFAPage twoFAPage = new TwoFAPage(driver, environment);
 			//TODO
 			twoFAPage.sendViaPhone();
 			
 			Sleeper.sleep(7000, driver);
 			boolean result = !driver.getCurrentUrl().contains("TwoFA");
 			
-			Debugger.log("loginWith2FAPhone => "+result, isSaucelabs);
+			Debugger.log("loginWith2FAPhone => "+result, isRemote);
 			setResult(result, "Login With 2FA Phone");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Login With 2FA Phone", ex, isSaucelabs);
+			failTest("Login With 2FA Phone", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -208,25 +212,25 @@ public class PersonFileTest extends TestMachine {
 		changeParamObject(testID);
 		try{ 
 			HomeForAgentsPage.SELENIUM_TIMEOUT_SEC = 50;
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			boolean result;
 			if(paramObject.getBooleanParamOne()){//True = Open Person file > False = Create Person.
 				homePage.openPersonFile(paramObject.getSearchEmail());
 				result = homePage.isPersonFileOpened();
 				Sleeper.sleep(5000, driver);
 			} else {
-				paramObject.setName(paramObject.getName() + " " + account.getRunIDString());
-				paramObject.setEmail(paramObject.getEmailWithRunID(account.getRunIDString()));
+				paramObject.setName(paramObject.getName() + " " + getRunIDAsString());
+				paramObject.setEmail(paramObject.getEmailWithRunID(getRunIDAsString()));
 				homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
 				homePage.sendInviteEmail(paramObject, CheckInApp.NO);
 				result = homePage.checkIfPersonIsCreated(paramObject);
 			}
 			
 			setResult(result, "Create Person");
-			Debugger.log("createPerson => "+result, isSaucelabs);
+			Debugger.log("createPerson => "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Create Person", ex, isSaucelabs);
+			failTest("Create Person", ex, isRemote);
 			assertTrue(false);
 		} finally {
 			HomeForAgentsPage.SELENIUM_TIMEOUT_SEC = 30;
@@ -241,17 +245,17 @@ public class PersonFileTest extends TestMachine {
 	public void openPersonFIle(@Optional("TestID") Integer testID) throws Throwable {
 		try{ 
 			changeParamObject(testID);
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			boolean result;
 				homePage.openPersonFile(paramObject.getEmail());
 				result = homePage.isPersonFileOpened();
 				Sleeper.sleep(5000, driver);
 			
 			setResult(result, "Open Person File" + paramObject.getSearchEmail());
-			Debugger.log("openPersonFIle => "+result, isSaucelabs);
+			Debugger.log("openPersonFIle => "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Open Person File", ex, isSaucelabs);
+			failTest("Open Person File", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -264,15 +268,15 @@ public class PersonFileTest extends TestMachine {
 	public void changePrimaryEmail(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.changePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
+			personFilePage.changePrimaryEmail(paramObject.getEmailToChange(getRunIDAsString()));
 			
-			boolean result = personFilePage.isChangePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
-			Debugger.log("changePrimaryEmail => "+result, isSaucelabs);
+			boolean result = personFilePage.isChangePrimaryEmail(paramObject.getEmailToChange(getRunIDAsString()));
+			Debugger.log("changePrimaryEmail => "+result, isRemote);
 			setResult(result, "Change Primary Email");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Change Primary Email", ex, isSaucelabs);
+			failTest("Change Primary Email", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -286,15 +290,15 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try {
-			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeePage.changeEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, environment);
+			employeePage.changeEmail(paramObject.getEmailToChange(getRunIDAsString()));
 			
 			boolean result = true; //TODO
-			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
+			Debugger.log("Change Primary Email From Employee"+result, isRemote);
 			setResult(result, "changePrimaryEmailFromEmployee");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Change Primary Email From Employee", ex, isSaucelabs);
+			failTest("Change Primary Email From Employee", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -307,15 +311,15 @@ public class PersonFileTest extends TestMachine {
 	public void addAlternativeEmailFromEmployee(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try {
-			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeePage.addAlternateiveEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, environment);
+			employeePage.addAlternateiveEmail(paramObject.getEmailToChange(getRunIDAsString()));
 			
 			boolean result = true; //TODO
-			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
+			Debugger.log("Change Primary Email From Employee"+result, isRemote);
 			setResult(result, "changePrimaryEmailFromEmployee");
 			assertTrue(result);
 		} catch (Exception ex){ 
-			failTest("Change Primary Email From Employee", ex, isSaucelabs);
+			failTest("Change Primary Email From Employee", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -328,15 +332,15 @@ public class PersonFileTest extends TestMachine {
 	public void makePrimaryEmail(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try {
-			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeePage.makePrimaryEmail(paramObject.getEmailToChange(account.getRunIDString()));
+			EmployeeDashboardPage employeePage = new EmployeeDashboardPage(driver, environment);
+			employeePage.makePrimaryEmail(paramObject.getEmailToChange(getRunIDAsString()));
 			
 			boolean result = true; //TODO
-			Debugger.log("Change Primary Email From Employee"+result, isSaucelabs);
+			Debugger.log("Change Primary Email From Employee"+result, isRemote);
 			setResult(result, "changePrimaryEmailFromEmployee");
 			assertTrue(result);
 		} catch (Exception ex){ 
-			failTest("Change Primary Email From Employee", ex, isSaucelabs);
+			failTest("Change Primary Email From Employee", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -350,16 +354,16 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
 			personFilePage.changeMaritalStatus(paramObject.getMaritalStatus());
 			
 			boolean result = personFilePage.isChangeMaritalStatus(paramObject.getMaritalStatus());
-			Debugger.log("changeMaritalStatus => "+result, isSaucelabs);
+			Debugger.log("changeMaritalStatus => "+result, isRemote);
 			setResult(result, "Change Marital Status");
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Change Marital Status", ex, isSaucelabs);
+			failTest("Change Marital Status", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -373,16 +377,16 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
 			personFilePage.changeName(paramObject.getName(), paramObject.getLastName(), paramObject.getMiddleName(), paramObject.getMaidenName());
 			
 			boolean result = personFilePage.isChangeNameInPersonalDetails(paramObject, Wait.WAIT);
-			Debugger.log("changeName => "+result, isSaucelabs);
+			Debugger.log("changeName => "+result, isRemote);
 			setResult(result, "Change name in Personal Info");
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Change name in Personal Info", ex, isSaucelabs);
+			failTest("Change name in Personal Info", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -396,16 +400,16 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
 			personFilePage.changeNameIntoTitle(paramObject.getName(), paramObject.getLastName(), paramObject.getMiddleName(), paramObject.getMaidenName());
 			
 			boolean result = personFilePage.isChangeNameInTitle(paramObject, Wait.WAIT);
-			Debugger.log("changeName2 =>"+result, isSaucelabs);
+			Debugger.log("changeName2 =>"+result, isRemote);
 			setResult(result, "Change name from Title");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Change name 2", ex, isSaucelabs);
+			failTest("Change name 2", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -419,16 +423,16 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
 			personFilePage.changeGender(paramObject.getGender());
 			
 			boolean result = personFilePage.isChangeGender(paramObject.getGender());
-			Debugger.log("changeGender => "+result, isSaucelabs);
+			Debugger.log("changeGender => "+result, isRemote);
 			setResult(result, "Change Gender");
 			assertTrue(result);
 		} catch (Exception ex){
-			failTest("Change Gender", ex, isSaucelabs);
+			failTest("Change Gender", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -442,16 +446,16 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
 			personFilePage.changeBirthDate(paramObject.getBirthDate());
 			
 			boolean result = personFilePage.isChangeBirthDate(paramObject.getBirthDate());
-			Debugger.log("changeBirthDate => "+result, isSaucelabs);
+			Debugger.log("changeBirthDate => "+result, isRemote);
 			setResult(result, "Change Birth Date");
 			assertTrue(result);
 		} catch(Exception ex){
-			failTest("Change Birth Date", ex, isSaucelabs);
+			failTest("Change Birth Date", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -464,16 +468,16 @@ public class PersonFileTest extends TestMachine {
 	public void addTitle(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
 			personFilePage.changeTitle(paramObject.getTitleOfEmployee(), paramObject.getDepartamentOfEmployee());
 			
 			boolean result = personFilePage.isChangeTitle(paramObject.getTitleOfEmployee(), paramObject.getDepartamentOfEmployee());
-			Debugger.log("addTitle => "+result, isSaucelabs);
+			Debugger.log("addTitle => "+result, isRemote);
 			setResult(result, "Add Title");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Add Title", ex, isSaucelabs);
+			failTest("Add Title", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -500,16 +504,16 @@ public class PersonFileTest extends TestMachine {
 	public void addPhoneNumber(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
-			personFilePage.addPhoneNumber(paramObject.getPrimaryPhone(), account.getRunIDString());
+			personFilePage.addPhoneNumber(paramObject.getPrimaryPhone(), getRunIDAsString());
 
-			boolean result = personFilePage.isAddPhoneNumber(paramObject.getPrimaryPhone(), account.getRunIDString());
-			Debugger.log("addPhoneNumber =>"+result, isSaucelabs);
+			boolean result = personFilePage.isAddPhoneNumber(paramObject.getPrimaryPhone(), getRunIDAsString());
+			Debugger.log("addPhoneNumber =>"+result, isRemote);
 			setResult(result, "Add Phone Number");
 			assertTrue(result);
 		}catch (Exception ex){
-			failTest("Add Phone Number", ex, isSaucelabs);
+			failTest("Add Phone Number", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -522,15 +526,15 @@ public class PersonFileTest extends TestMachine {
 	public void addAlternativePhone(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			personFilePage.addSecondaryEmail(paramObject.getPrimaryPhone(), account.getRunIDString());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
+			personFilePage.addSecondaryEmail(paramObject.getPrimaryPhone(), getRunIDAsString());
 			
-			boolean result = personFilePage.isAddAlternativePhoneNumber(paramObject.getPrimaryPhone(), account.getRunIDString());
-			Debugger.log("addAlternativePhone =>"+result, isSaucelabs);
+			boolean result = personFilePage.isAddAlternativePhoneNumber(paramObject.getPrimaryPhone(), getRunIDAsString());
+			Debugger.log("addAlternativePhone =>"+result, isRemote);
 			setResult(result, "Add Alternative Number");
 			assertTrue(result);
 		}catch (Exception ex){
-			failTest("Add Alternative Number", ex, isSaucelabs);
+			failTest("Add Alternative Number", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -543,15 +547,15 @@ public class PersonFileTest extends TestMachine {
 	public void makePrimaryPhone(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			Map<String, String> resultsPhones = personFilePage.makeAsPrimary();
 			
 			boolean result = personFilePage.isChangePrimaryPhone(resultsPhones);
-			Debugger.log("makePrimaryPhone =>"+result, isSaucelabs);
+			Debugger.log("makePrimaryPhone =>"+result, isRemote);
 			setResult(result, "Make as Primary Phone");
 			assertTrue(result);
 		}catch (Exception ex){
-			failTest("makePrimaryPhone", ex, isSaucelabs);
+			failTest("makePrimaryPhone", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -566,16 +570,17 @@ public class PersonFileTest extends TestMachine {
 	public void addUSAddress(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
-			this.usaddress = paramObject.getUSAddress();
-			personFilePage.addUsAddress(paramObject.getUSAddress());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
+			this.usaddress = paramObject.getUsAddress();
 			
-			boolean result = personFilePage.isAddUSAddress(paramObject.getUSAddress());
-			Debugger.log("addUSAddress => "+result, isSaucelabs);
+			personFilePage.addUsAddress(paramObject.getUsAddress());
+			
+			boolean result = personFilePage.isAddUSAddress(paramObject.getUsAddress());
+			Debugger.log("addUSAddress => "+result, isRemote);
 			setResult(result, "Add US Address");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Add US Address", ex, isSaucelabs);
+			failTest("Add US Address", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -584,19 +589,18 @@ public class PersonFileTest extends TestMachine {
 	@Parameters({"TestID"})
 	@ParametersFront(
 			attrs={}, 
-			labels={"Remove the US Address that is in the person File."})
+			labels={"Remove the US Address that you add before."})
 	public void removeUSAddress(@Optional("TestID") Integer testID) throws Exception{
-		setparamObjectAsAccount(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			personFilePage.removeUsAddress(usaddress);
 
-			boolean result = personFilePage.isRemoveUsAddress(paramObject.getUSAddress());
-			Debugger.log("removeUSAddress => "+result, isSaucelabs);
+			boolean result = personFilePage.isRemoveUsAddress(usaddress);
+			Debugger.log("removeUSAddress => "+result, isRemote);
 			setResult(result, "Remove US Address");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Remove US Address", ex, isSaucelabs);
+			failTest("Remove US Address", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -623,16 +627,16 @@ public class PersonFileTest extends TestMachine {
 			attrs={}, 
 			labels={"Not implemented yet (Using a hardcoded task until final parameters implementation)"})
 	public void assignTask(@Optional("TestID") Integer testID) throws Exception{
-		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+		PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 		try{ 
 			personFilePage.assignTask();
 			
 			boolean result = personFilePage.isTaskAssigned();
-			Debugger.log("asssignTask => "+result, isSaucelabs);
+			Debugger.log("asssignTask => "+result, isRemote);
 			setResult(result, "Assign Task");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Assign Task", ex, isSaucelabs);
+			failTest("Assign Task", ex, isRemote);
 			assertTrue(false);
 		} finally {
 			personFilePage.goToPersonalTab();
@@ -646,17 +650,17 @@ public class PersonFileTest extends TestMachine {
 			labels={"Checklist Name"})
 	public void startChecklist(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
-		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+		PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 		try{ 
 			personFilePage.assignChecklist(paramObject.getChecklistName());
 			Sleeper.sleep(5000, driver);
 			boolean result = personFilePage.isChecklistAssigned(paramObject.getChecklistName());
-			Debugger.log("startChecklist => "+result, isSaucelabs);
+			Debugger.log("startChecklist => "+result, isRemote);
 			setResult(result, "Start Checklist");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			personFilePage.goToPersonalTab();
-			failTest("Start Checklist", ex, isSaucelabs);
+			failTest("Start Checklist", ex, isRemote);
 			assertTrue(false);
 		} finally {
 			personFilePage.goToPersonalTab();
@@ -671,16 +675,16 @@ public class PersonFileTest extends TestMachine {
 	public void addSocialSecurityNumber(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			
-			personFilePage.addSocialSecurityNumber(paramObject.getSsn(), account.getRunIDString());
+			personFilePage.addSocialSecurityNumber(paramObject.getSsn(), getRunIDAsString());
 			
-			boolean result = personFilePage.isSocialSecurityNumberAdded(paramObject.getSsn(), account.getRunIDString());
-			Debugger.log("Add Social Security Number => "+result, isSaucelabs);
+			boolean result = personFilePage.isSocialSecurityNumberAdded(paramObject.getSsn(), getRunIDAsString());
+			Debugger.log("Add Social Security Number => "+result, isRemote);
 			setResult(result, "Add Social Security Number");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Add Social Security Number", ex, isSaucelabs);
+			failTest("Add Social Security Number", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -694,16 +698,16 @@ public class PersonFileTest extends TestMachine {
 	public void addEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			EmergencyContact emg = paramObject.getEmergencyContact();
 			personFilePage.addEmergencyContact(emg.getName(), emg.getRelationship(), emg.getPhone(), emg.getEmail());
 			
 			boolean result = personFilePage.isEmergencyContactAdded(emg);
-			Debugger.log("Add Emergency Contact => "+result, isSaucelabs);
+			Debugger.log("Add Emergency Contact => "+result, isRemote);
 			setResult(result, "Add Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Add Emergency Contact", ex, isSaucelabs);
+			failTest("Add Emergency Contact", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -717,7 +721,7 @@ public class PersonFileTest extends TestMachine {
 	public void changeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
 		changeParamObject(testID);
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			EmergencyContact emg = paramObject.getEmergencyContact();
 			personFilePage.editEmergencyContact(emg.getName()+"Test", emg.getRelationship(), emg.getPhone(), emg.getEmail());
 			
@@ -727,11 +731,11 @@ public class PersonFileTest extends TestMachine {
 			boolean result = personFilePage.isEmergencyContactAdded(emg);
 			emg.setName(name); //return the default name
 			
-			Debugger.log("Change Emergency Contact => "+result, isSaucelabs);
+			Debugger.log("Change Emergency Contact => "+result, isRemote);
 			setResult(result, "Change Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Change Emergency Contact", ex, isSaucelabs);
+			failTest("Change Emergency Contact", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -743,16 +747,16 @@ public class PersonFileTest extends TestMachine {
 			labels={"Remove last Emergency Contact"})
 	public void removeEmergencyContact(@Optional("TestID") Integer testID) throws Exception{
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			int count = personFilePage.getNumberOfEmergencyContacts();
 			personFilePage.removeLastEmergencyContact();
 		
 			boolean result = personFilePage.isEmergencyContactRemoved(count);
-			Debugger.log("Remove Emergency Contact => "+result, isSaucelabs);
+			Debugger.log("Remove Emergency Contact => "+result, isRemote);
 			setResult(result, "Add Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Remove Emergency Contact", ex, isSaucelabs);
+			failTest("Remove Emergency Contact", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -764,16 +768,16 @@ public class PersonFileTest extends TestMachine {
 			labels={"Not implemented yet (Using a hardcoded Job until final parameters implementation)"})
 	public void assignJob(@Optional("TestID") Integer testID) throws Exception{
 		try{ 
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			personFilePage.assignJob();
 			
 			Boolean result = personFilePage.isJobAdded();
 			
-			Debugger.log("assignJob => "+result, isSaucelabs);
+			Debugger.log("assignJob => "+result, isRemote);
 			setResult(result, "Assign Job");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Assign Job", ex, isSaucelabs);
+			failTest("Assign Job", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -822,13 +826,13 @@ public class PersonFileTest extends TestMachine {
 			throws Exception {
 		changeParamObject(testID);
 		try {
-			makeFirstLogin(paramObject.email, properties.getGmailPassword(), paramObject.loginPassword);//Re utilize EMAIL param because is a String
+			makeFirstLogin(paramObject.email, paramObject.getGmailPassword(), paramObject.loginPassword);//Re utilize EMAIL param because is a String
 			boolean result = true; //TODO
-			Debugger.log("First Login  => "+result, isSaucelabs);
+			Debugger.log("First Login  => "+result, isRemote);
 			setResult(result, "Change Emergency Contact");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("First Login ", ex, isSaucelabs);
+			failTest("First Login ", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -836,18 +840,18 @@ public class PersonFileTest extends TestMachine {
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.EMAIL}, 
-			labels={"Base Email (After change email will add '+runID+test' and Before change email will add '+runID')"})
+			attrs={ParamObjectField.EMAIL, ParamObjectField.GMAIL_PASSWORD}, 
+			labels={"Gmail email", "Gmail password"})
 	public void checkIfChangeEmailIsSending(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
 		try {
-			boolean result = MailManager.checkIfChangeEmailIsSending(paramObject.getEmailToChange(account.getRunIDString()), properties.getGmailPassword(), paramObject.getEmailWithRunID(account.getRunIDString()));//Re utilize lastname param because is a String
-			Debugger.log("checkIfChangeEmailIsSending  => "+result, isSaucelabs);
+			boolean result = MailManager.checkIfChangeEmailIsSending(paramObject.getEmailToChange(getRunIDAsString()), paramObject.getGmailPassword(), paramObject.getEmailWithRunID(getRunIDAsString()));//Re utilize lastname param because is a String
+			Debugger.log("checkIfChangeEmailIsSending  => "+result, isRemote);
 			setResult(result, "Check If Change Email is Sending");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Check If Change Email is Sending", ex, isSaucelabs);
+			failTest("Check If Change Email is Sending", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -861,7 +865,7 @@ public class PersonFileTest extends TestMachine {
 		Boolean result = true;
 		try {
 			changeParamObject(testID);
-			PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			personFilePage.goToDocumentsTab();
 			
 			for(int index = 1 ; index <= paramObject.loadingTime ; index++){
@@ -870,11 +874,11 @@ public class PersonFileTest extends TestMachine {
 				personFilePage.returnToPerson();
 			}
 			
-			Debugger.log("openDocuments  => "+result, isSaucelabs);
+			Debugger.log("openDocuments  => "+result, isRemote);
 			setResult(result, "Open document and check for content");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Open document and check for content", ex, isSaucelabs);
+			failTest("Open document and check for content", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -895,11 +899,11 @@ public class PersonFileTest extends TestMachine {
 			
 			Boolean result = true;//TODO
 			
-			Debugger.log("config2FAOn  => "+result, isSaucelabs);
+			Debugger.log("config2FAOn  => "+result, isRemote);
 			setResult(result, "Config 2FA On");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Config 2FA On", ex, isSaucelabs);
+			failTest("Config 2FA On", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -920,11 +924,11 @@ public class PersonFileTest extends TestMachine {
 			
 			Boolean result = true;//TODO
 			
-			Debugger.log("config2FAOff  => "+result, isSaucelabs);
+			Debugger.log("config2FAOff  => "+result, isRemote);
 			setResult(result, "Config 2FA Off");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Config 2FA Off", ex, isSaucelabs);
+			failTest("Config 2FA Off", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -940,27 +944,27 @@ public class PersonFileTest extends TestMachine {
 			goTo2FAConfig();
 			Boolean result = true;
 			
-			Debugger.log("config2FAOff  => "+result, isSaucelabs);
+			Debugger.log("config2FAOff  => "+result, isRemote);
 			setResult(result, "Config 2FA Off");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("Config 2FA Off", ex, isSaucelabs);
+			failTest("Config 2FA Off", ex, isRemote);
 			assertTrue(false);
 		}
 	}
 
 	private PeoplePage goTo2FAConfig() throws Exception {
-		PeoplePage peoplePage = new PeoplePage(driver, properties.getEnvironment());
+		PeoplePage peoplePage = new PeoplePage(driver, environment);
 		peoplePage.loadPage();
 		
-		HomeForAgentsPage home = new HomeForAgentsPage(driver, properties.getEnvironment());
+		HomeForAgentsPage home = new HomeForAgentsPage(driver, environment);
 		home.goToSecurityTabInSettingPeople();
 		return peoplePage;
 	}
 	
 	public boolean makeFirstLogin(String gmailEmail, String gmailPassword, String newPassword) throws Exception{
-		String firstLoginToken = MailManager.getAuthLink(gmailEmail, gmailPassword, account.getRunIDString());
-		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver, properties.getEnvironment(), firstLoginToken);
+		String firstLoginToken = MailManager.getAuthLink(gmailEmail, gmailPassword, getRunIDAsString());
+		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver, environment, firstLoginToken);
 		
 		resetPasswordPage.loadPage();
 		resetPasswordPage.changePassword(newPassword);

@@ -40,16 +40,12 @@ public class TestPlanDao {
 		return (TestPlan) openSession().get(TestPlanRun.class, id);
 	}
 	
-	public Integer save(TestPlan TestPlan){
-		return (Integer) openSession().save(TestPlan);
-	}
-	
-	public Integer save(TestPlanRun tpRun){
-		return (Integer) openSession().save(tpRun);
-	}
-	
 	public void saveOrUpdate(TestPlan testPlan){
 		openSession().saveOrUpdate(testPlan);
+	}
+	
+	public void merge(TestPlan testPlan){
+		openSession().merge(testPlan);
 	}
 
 	public void remove(TestPlan testPlan) {

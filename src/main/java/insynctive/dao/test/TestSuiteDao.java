@@ -36,12 +36,12 @@ public class TestSuiteDao {
 		return (TestSuite) openSession().get(TestSuite.class, id);
 	}
 	
-	public Integer save(TestSuite TestSuite){
-		return (Integer) openSession().save(TestSuite);
-	}
-	
 	public void saveOrUpdate(TestSuite TestSuite){
 		openSession().saveOrUpdate(TestSuite);
+	}
+	
+	public void merge(TestSuite TestSuite){
+		openSession().merge(TestSuite);
 	}
 
 	public void update(TestSuite TestSuite) {

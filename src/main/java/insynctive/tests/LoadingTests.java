@@ -31,13 +31,10 @@ public class LoadingTests extends TestMachine {
 	int TIME_EXPECTED = 10000;
 	
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID", "environment"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String environment) throws Exception {
-		super.testSuiteID = Integer.parseInt(testSuiteID);
-		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
-		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = "Loading Tests";
-		properties.setEnvironment(environment);
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
 	}
 	
 	@Test()
@@ -46,7 +43,7 @@ public class LoadingTests extends TestMachine {
 	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
-		startTest(testEnvironment);
+		startTest();
 
 		long startTime = System.nanoTime();
 		try{ 
@@ -54,11 +51,11 @@ public class LoadingTests extends TestMachine {
 			boolean result = loginPage.isLoggedIn();
 			long endTime = System.nanoTime();
 			setResult(result, "Login Test", endTime - startTime);
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			assertTrue(result);
 		} catch(Exception ex){
 			long endTime = System.nanoTime();
-			failTest("Login",  ex, isSaucelabs, endTime - startTime);
+			failTest("Login",  ex, isRemote, endTime - startTime);
 			assertTrue(false);
 		}
 	}
@@ -70,16 +67,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			long timeToLoad = homePage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > People > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrPeopleLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("hrPeopleLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("hrPeopleLoadingTest", ex, isSaucelabs);
+			failTest("hrPeopleLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -91,16 +88,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			TaskPage taskPage = new TaskPage(driver, properties.getEnvironment());
+			TaskPage taskPage = new TaskPage(driver, environment);
 			long timeToLoad = taskPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > Tasks > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrTasksLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("hrTasksLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("hrTasksLoadingTest", ex, isSaucelabs);
+			failTest("hrTasksLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -114,16 +111,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnvironment());
+			CheckListsPage checkListPage = new CheckListsPage(driver, environment);
 			long timeToLoad = checkListPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > Checklist > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrChecklistLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("hrChecklistLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("hrChecklistLoadingTest", ex, isSaucelabs);
+			failTest("hrChecklistLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -137,16 +134,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, properties.getEnvironment());
+			HelpDeskPage helpDeskPage = new HelpDeskPage(driver, environment);
 			long timeToLoad = helpDeskPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > HelpDesk > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrHelpDeskLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("hrHelpDeskLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("hrHelpDeskLoadingTest", ex, isSaucelabs);
+			failTest("hrHelpDeskLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -160,16 +157,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			AppsPage appPage = new AppsPage(driver, properties.getEnvironment());
+			AppsPage appPage = new AppsPage(driver, environment);
 			long timeToLoad = appPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "APP > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("apptLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("apptLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("apptLoadingTest", ex, isSaucelabs);
+			failTest("apptLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -183,16 +180,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			AccountPage accPage = new AccountPage(driver, properties.getEnvironment());
+			AccountPage accPage = new AccountPage(driver, environment);
 			long timeToLoad = accPage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > Account > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("settingAccountLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("settingAccountLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("settingAccountLoadingTest", ex, isSaucelabs);
+			failTest("settingAccountLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -206,16 +203,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			PeoplePage peoplePage = new PeoplePage(driver, properties.getEnvironment());
+			PeoplePage peoplePage = new PeoplePage(driver, environment);
 			long timeToLoad = peoplePage.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > People > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("settingPeopleLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("settingPeopleLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("settingPeopleLoadingTest", ex, isSaucelabs);
+			failTest("settingPeopleLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -229,16 +226,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			OtherSettingPage otherSetting = new OtherSettingPage(driver, properties.getEnvironment());
+			OtherSettingPage otherSetting = new OtherSettingPage(driver, environment);
 			long timeToLoad = otherSetting.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > Other Settings > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("settingOtherSettingsLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("settingOtherSettingsLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("settingOtherSettingsLoadingTest", ex, isSaucelabs);
+			failTest("settingOtherSettingsLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -252,16 +249,16 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		TIME_EXPECTED = paramObject.getLoadingTime()*1000;
 		try{ 
-			V3SettingsPage v3Setting = new V3SettingsPage(driver, properties.getEnvironment());
+			V3SettingsPage v3Setting = new V3SettingsPage(driver, environment);
 			long timeToLoad = v3Setting.getTimeToLoad();
 			
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > V3 Settings > Loading Test (Duration: "+timeToLoad+" ms)"); 
-			Debugger.log("settingV3SettingsLoadingTest "+timeToLoad+"=> "+result, isSaucelabs);
+			Debugger.log("settingV3SettingsLoadingTest "+timeToLoad+"=> "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			failTest("settingV3SettingsLoadingTest", ex, isSaucelabs);
+			failTest("settingV3SettingsLoadingTest", ex, isRemote);
 			assertTrue(false);
 		}
 	}

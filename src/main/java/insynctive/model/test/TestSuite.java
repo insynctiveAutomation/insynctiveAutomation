@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,6 +25,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import insynctive.model.ParamObject;
 import insynctive.model.test.run.TestSuiteRun;
 
+/**
+ * @author Eugenio
+ *
+ */
 @Entity
 @Table(name = "test_suite")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -45,6 +50,10 @@ public class TestSuite {
 			inverseJoinColumns = @JoinColumn(name = "test_id")
 	)
 	private List<Test> tests = new ArrayList<Test>();
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToOne(cascade={CascadeType.ALL} )
+	private TestSuite dependsTestSuite;
 	
 	public TestSuite() {
 		// TODO Auto-generated constructor stub
@@ -94,25 +103,27 @@ public class TestSuite {
 		tests.add(test);
 	}
 
+	public TestSuite getDependsTestSuite() {
+		return dependsTestSuite;
+	}
+
+	public void setDependsTestSuite(TestSuite dependsTestSuite) {
+		this.dependsTestSuite = dependsTestSuite;
+	}
+
+	@JsonIgnore
 	public TestSuiteRun toTestSuiteRun() throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = new TestSuiteRun();
 		tsRun.setName(testSuiteName);
 		tsRun.addTestsRuns(tests);
 		return tsRun;
 	}
-	
+
 	@JsonIgnore
-	@Deprecated
-	public static TestSuite getNewWithOutIDs(TestSuiteRun testSuite) throws Exception {
-		TestSuite newTestSuite = new TestSuite();
-		
-		for(Test test : newTestSuite.getTests()){
-			Test newTest = Test.getNewWithOutIDs(test);
-			newTestSuite.addMethod(newTest);
-		}
-		
-		newTestSuite.setTestSuiteID(null);
-		return newTestSuite;
+	public TestSuiteRun run() throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = toTestSuiteRun();
+		tsRun.setStatus("Running");
+		return tsRun;
 	}
 	
 	@JsonIgnore
@@ -129,8 +140,22 @@ public class TestSuite {
 			//Reset the paramObject IDS
 			ParamObject paramObject = test.getParamObject();
 			if(paramObject.getEmergencyContact() != null) paramObject.getEmergencyContact().setEmergencyID(null);
-			if(paramObject.getUSAddress() != null) paramObject.getUSAddress().setUsAddressID(null);
+			if(paramObject.getUsAddress() != null) paramObject.getUsAddress().setUsAddressID(null);
 		}
 		return this;
+	}
+	
+	@JsonIgnore
+	@Deprecated
+	public static TestSuite getNewWithOutIDs(TestSuiteRun testSuite) throws Exception {
+		TestSuite newTestSuite = new TestSuite();
+		
+		for(Test test : newTestSuite.getTests()){
+			Test newTest = Test.getNewWithOutIDs(test);
+			newTestSuite.addMethod(newTest);
+		}
+		
+		newTestSuite.setTestSuiteID(null);
+		return newTestSuite;
 	}
 }

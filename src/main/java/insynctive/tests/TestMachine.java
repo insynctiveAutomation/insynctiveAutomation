@@ -26,6 +26,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
@@ -44,35 +46,42 @@ import insynctive.utils.data.TestEnvironment;
 @ContextConfiguration
 public abstract class TestMachine {
 
-	//Session Name
+	//Session Name with default values
 	public String sessionName = "Insynctive Session";
 	public String testName = "Test Name";
 	public String suiteName = "Suite Name";
-	public boolean isSaucelabs;
-	public TestEnvironment testEnvironment;
 	
-	public InsynctiveProperty properties;
-	public Account account; 
+	//Parameters
+	public Integer runID;
+	public String environment;
+	public TestEnvironment testEnvironment;
+	public boolean isRemote;
+	public boolean isNotification;
+	public Integer testSuiteID; //TestSuiteID represent the test in list of video links and listeners.
+	
+	//Parameter to chenge ParamObject
 	public ParamObject paramObject;
 	
+	//WebDriver
 	public WebDriver driver;
-
-	/** TAGS => Add tests result test.*/
-	List<String> tags = new ArrayList<String>();
-	
-	boolean generalStatus = true;
-	
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();
 	public String jobID;
-	public Integer testSuiteID;
+
+	//Final result.
+	boolean generalStatus = true;
 	
-	//SLACK
+	
+	
+	//SLACK link
 	private String slackChannel = "https://hooks.slack.com/services/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";
 
-	//CROSSBROWSING
-	String username;
-	String password;
+	//TAGS => Add tests results (only the fail tests).
+	List<String> tags = new ArrayList<String>();
+	
+	//Remote Testing parameters (CROSSBROWSING)
+	String remoteTestingUsername;
+	String remoteTestingPassword;
 	
 	private String getJobURL() throws IOException, JSONException {
 		return getPublicVideoLinkOfJob();
@@ -87,23 +96,25 @@ public abstract class TestMachine {
 		return sessionId.get();
 	}
 	
-	public void tearUp() throws Exception {
-		tearUp(1, null);
+	public void tearUp(String browser, String environment, String isRemote, String isNotification, String testSuiteID) throws Exception {
+		tearUp(TestEnvironment.valueOf(browser), environment, Boolean.valueOf(isRemote), Boolean.valueOf(isNotification), Integer.parseInt(testSuiteID));
 	}
 	
-	public void tearUp(Integer accountID, Integer runID) throws Exception{
+	public void tearUp(TestEnvironment testEnvironment, String environment, Boolean isRemote, Boolean isNotification, Integer testSuiteID) throws Exception{
 		try{
-			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);
+			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);//CrossBrowser account in DB
 
-			username = crossBrowserAccount.getEmail();
-			password = crossBrowserAccount.getPassword();
+			remoteTestingUsername = crossBrowserAccount.getEmail();
+			remoteTestingPassword = crossBrowserAccount.getPassword();
 		
-			account = HibernateUtil.accDao.getAccountByID(accountID);
-			account.setRunID();
+			this.runID = getRunID();
+			this.isRemote = isRemote;
+			this.testEnvironment = testEnvironment;
+			this.environment = environment;
+			this.isNotification = isNotification;
+			this.testSuiteID = testSuiteID;
 			
-			paramObject = account.getParamObject();
-			properties = account.getAccountProperty();
-			Sleeper.setIsRemote(properties.isRemote());
+			Sleeper.setIsRemote(isRemote);
 			
 		} catch(Exception ex){
 			ex.printStackTrace();
@@ -114,7 +125,7 @@ public abstract class TestMachine {
 	@AfterClass(alwaysRun = true)
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		try{
-			if(properties.isRemote()){this.driver.quit();}
+			if(isRemote){this.driver.quit();}
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			System.out.println("Fail On TearDown");
@@ -139,7 +150,7 @@ public abstract class TestMachine {
 	    caps.setCapability("record_snapshot", "false");
 	    caps.setCapability("max_duration", 3600);
 
-	    webDriver.set(new RemoteWebDriver(new URL("http://"+getEmailForCurl()+":"+password+"@hub.crossbrowsertesting.com:80/wd/hub"), caps));
+	    webDriver.set(new RemoteWebDriver(new URL("http://"+getEmailForCurl()+":"+remoteTestingPassword+"@hub.crossbrowsertesting.com:80/wd/hub"), caps));
 	    jobID = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
 		sessionId.set(jobID);
 		if(testEnvironment.isDesktop) webDriver.get().manage().window().maximize();
@@ -147,8 +158,8 @@ public abstract class TestMachine {
 	    return webDriver.get();
 	}
 
-	public void startTest(TestEnvironment testEnvironment) throws ConfigurationException, JSONException, IOException {
-		if (properties.isRemote()) {
+	public void startTest() throws ConfigurationException, JSONException, IOException {
+		if (isRemote) {
 			driver = createDriver(testEnvironment);
 		} else {
 			FirefoxProfile firefoxProfile = new FirefoxProfile();
@@ -159,14 +170,9 @@ public abstract class TestMachine {
 		}
 		TestResults.addVideo(testSuiteID, getJobURL());
 	}
-	
-	public void openPersonFile(String emailSearch) throws Throwable{
-		HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment()); 
-		homePage.openPersonFile(emailSearch);
-	}
 
 	public LoginPage login(String username, String password, String returnURL) throws Exception {
-		LoginPage loginPage = new LoginPage(driver, properties.getEnvironment());
+		LoginPage loginPage = new LoginPage(driver, environment);
 		if(returnURL != null) loginPage.setReturnURL(returnURL);
 		loginPage.loadPage();
 		loginPage.login(username, password);
@@ -182,7 +188,7 @@ public abstract class TestMachine {
 	}
 	
 	public LoginPage loginAsEmployee(String email, String password) throws Exception {
-		LoginPage loginPage = new LoginPage(driver, properties.getEnvironment());
+		LoginPage loginPage = new LoginPage(driver, environment);
 		loginPage.setReturnAsEmployee();
 		loginPage.loadPage();
 		loginPage.login(email, password);
@@ -233,14 +239,14 @@ public abstract class TestMachine {
 	}
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		if(properties.isRemote()){
+		if(isRemote){
 			makeCurlToChangeStatus();
 		}
-		if(properties.isNotification()) {sendSlack();}
+		if(isNotification) {sendSlack();}
 	}
 	
 	public JSONObject makeCurl(String url, String type) throws IOException, JSONException{
-		String userPassword = username + ":" + password;
+		String userPassword = remoteTestingUsername + ":" + remoteTestingPassword;
 		
 		java.util.Base64.Encoder encoded = java.util.Base64.getEncoder();
 		String crud = encoded.encodeToString(userPassword.getBytes());
@@ -282,7 +288,7 @@ public abstract class TestMachine {
 	
 	private String getEmailForCurl() {
 		String returnEmail = "";
-		String[] returnUsernameForCurl = username.split("\\+");
+		String[] returnUsernameForCurl = remoteTestingUsername.split("\\+");
 		returnEmail += (returnUsernameForCurl.length == 2) ? returnUsernameForCurl[0]+"%2B"+returnUsernameForCurl[1] : returnUsernameForCurl[0];
 		returnUsernameForCurl = returnEmail.split("@");
 		return returnUsernameForCurl[0]+"%40"+returnUsernameForCurl[1];
@@ -305,7 +311,7 @@ public abstract class TestMachine {
 		attachment.put("pretext", 
 				(jobID == null ? "Local Test" : "<"+getJobURL()+"|Watch test video here> | ") + 
 				(testDetailsUrl != null ? "<"+testDetailsUrl+" |See details> | " : "") + 
-				"Environment: "+properties.getEnvironment());
+				"Environment: "+environment);
 		
 		attachment.put("color", generalStatus ? "#00CE00" : "#FC000D"); //AA3939
 		
@@ -377,32 +383,33 @@ public abstract class TestMachine {
 		}
 	}
 	
-	public void setparamObjectAsAccount(Integer testID) {
-		paramObject = account.getParamObject();
+	@JsonIgnore
+	public Integer getRunID() throws IOException {
+		URL u = new URL("https://insynctive-support.herokuapp.com/runID");
+		HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+		
+		conn.setRequestMethod("GET");
+		conn.setConnectTimeout(5000);
+		conn.setUseCaches(false);
+		conn.setDoInput(true);
+		conn.setDoOutput(true);
+		
+		InputStream is = conn.getInputStream();
+		
+		BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
+		StringBuilder responseStrBuilder = new StringBuilder();
+
+		String inputStr;
+		while ((inputStr = streamReader.readLine()) != null){
+			responseStrBuilder.append(inputStr);
+		}
+		
+		JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
+		return jsonObject.getInt("runID");
 	}
 	
-	/* RUNNABLE TEST */
-//	public static void main(String[] args) throws IOException, JSONException, ConfigurationException {
-//		String xmlFileName = "testRun.xml";
-//		List<XmlSuite> suite;
-//		try
-//		{
-//		    suite = (List <XmlSuite>)(new Parser(xmlFileName).parse());
-//			TestNG testNG = new TestNG();
-//			testNG.setXmlSuites(suite);
-//			testNG.run();
-//		}
-//		catch (ParserConfigurationException e)
-//		{
-//		    e.printStackTrace();
-//		}
-//		catch (SAXException e)
-//		{
-//		    e.printStackTrace();
-//		}
-//		catch (IOException e)
-//		{
-//		    e.printStackTrace();
-//		}
-//	}
+	public String getRunIDAsString(){
+		return String.valueOf(runID);
+	}
+	
 }

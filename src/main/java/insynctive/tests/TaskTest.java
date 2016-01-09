@@ -22,13 +22,11 @@ import insynctive.utils.data.TestEnvironment;
 public class TaskTest extends TestMachine {
 
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID", "environment"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String environment) throws Exception {
-		super.testSuiteID = Integer.parseInt(testSuiteID);
-		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
-		testEnvironment = TestEnvironment.valueOf(bowser);
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
 		this.sessionName = "Assign Task Test ("+ paramObject.getEmail()+")";
-		properties.setEnvironment(environment);
 	}
 	
 	@Override
@@ -40,7 +38,7 @@ public class TaskTest extends TestMachine {
 	@Test()
 	public void loginTest()
 			throws Exception {
-		startTest(testEnvironment);
+		startTest();
 
 		long startTime = System.nanoTime();
 		try{ 
@@ -48,11 +46,11 @@ public class TaskTest extends TestMachine {
 			boolean result = loginPage.isLoggedIn();
 			long endTime = System.nanoTime();
 			setResult(result, "Login Test", endTime - startTime);
-			Debugger.log("loginTest => "+result, isSaucelabs);
+			Debugger.log("loginTest => "+result, isRemote);
 			assertTrue(result);
 		} catch(Exception ex){
 			long endTime = System.nanoTime();
-			failTest("Login",  ex, isSaucelabs, endTime - startTime);
+			failTest("Login",  ex, isRemote, endTime - startTime);
 			assertTrue(false);
 		}
 	}
@@ -62,18 +60,18 @@ public class TaskTest extends TestMachine {
 	public void createPersonTest() throws Exception {
 		long startTime = System.nanoTime();
 		try{ 
-			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, properties.getEnvironment());
+			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			homePage.openPersonFile("insynctiveapps+task");
 
 			boolean result = homePage.isPersonFileOpened();
 			Sleeper.sleep(5000, driver);
 			long endTime = System.nanoTime();
 			setResult(result, "Open Person File", endTime - startTime);
-			Debugger.log("createPersonTest => "+result, isSaucelabs);
+			Debugger.log("createPersonTest => "+result, isRemote);
 			assertTrue(result);
 		} catch(Exception ex){
 			long endTime = System.nanoTime();
-			failTest("Open Person File", ex, isSaucelabs, endTime - startTime);
+			failTest("Open Person File", ex, isRemote, endTime - startTime);
 			assertTrue(false);
 		}
 	} 
@@ -81,18 +79,18 @@ public class TaskTest extends TestMachine {
 	@Test(dependsOnMethods="createPersonTest")
 	public void assignTask() throws Exception{
 		long startTime = System.nanoTime();
-		PersonFilePage personFilePage = new PersonFilePage(driver, properties.getEnvironment());
+		PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 		try{ 
 			personFilePage.assignTask();
 			
 			boolean result = personFilePage.isTaskAssigned();
-			Debugger.log("asssignTask => "+result, isSaucelabs);
+			Debugger.log("asssignTask => "+result, isRemote);
 			long endTime = System.nanoTime();
 			setResult(result, "Assign Task", endTime - startTime);
 			assertTrue(result);
 		}catch (Exception ex){ 
 			long endTime = System.nanoTime();
-			failTest("Assign Task", ex, isSaucelabs, endTime - startTime);
+			failTest("Assign Task", ex, isRemote, endTime - startTime);
 			assertTrue(false);
 		}
 	}

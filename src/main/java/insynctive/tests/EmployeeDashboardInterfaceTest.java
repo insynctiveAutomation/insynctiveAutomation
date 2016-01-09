@@ -23,13 +23,10 @@ import insynctive.utils.data.TestEnvironment;
 public class EmployeeDashboardInterfaceTest extends TestMachine {
 
 	@BeforeClass
-	@Parameters({"accountID", "runID", "bowser", "testID", "environment"})
-	public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String environment) throws Exception {
-		super.testSuiteID = Integer.parseInt(testSuiteID);
-		super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
-		testEnvironment = TestEnvironment.valueOf(bowser);
-		this.sessionName = "Open Enrollment Test";
-		properties.setEnvironment(environment);
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
 	}
 	
 	@Test
@@ -38,15 +35,15 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	public void loginTest(@Optional("TestID") Integer testID)
 			throws Exception {
 		changeParamObject(testID);
-		startTest(testEnvironment);
+		startTest();
 
 		try{ 
 			login("/Insynctive.Hub/Protected/Dashboard.aspx");
 			setResult(true, "Login Test");
-			Debugger.log("loginTest => "+true, isSaucelabs);
+			Debugger.log("loginTest => "+true, isRemote);
 			assertTrue(true);
 		} catch(Exception ex){
-			failTest("Login",  ex, isSaucelabs);
+			failTest("Login",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -59,15 +56,15 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	public void isAllDataOK(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
-			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, environment);
 			Boolean result = employeeDashboard.isAllDataOK(paramObject);
 			
-			Debugger.log("isAllDataOK => "+result, isSaucelabs);
+			Debugger.log("isAllDataOK => "+result, isRemote);
 			setResult(result, "Is all Data Ok in Dashboard?");
 			assertTrue(result);
 		
 		} catch(Exception ex){
-			failTest("Is all Data Ok in Dashboard?",  ex, isSaucelabs);
+			failTest("Is all Data Ok in Dashboard?",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -86,17 +83,17 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	public void updatePersonalInformationHappyPath(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
-			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeeDashboard.updatePersonalInformationHappyPath(paramObject, account.getRunIDString());
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, environment);
+			employeeDashboard.updatePersonalInformationHappyPath(paramObject, getRunIDAsString());
 			
 			boolean result = true;
 			
 			setResult(result, "Update Personal Information");
-			Debugger.log("updatePersonalInformation => "+result, isSaucelabs);
+			Debugger.log("updatePersonalInformation => "+result, isRemote);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			failTest("Update Personal Information",  ex, isSaucelabs);
+			failTest("Update Personal Information",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -115,17 +112,17 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	public void updatePersonalInformatioWithErrors(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
-			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeeDashboard.updatePersonalInformationWithErrors(paramObject, account.getRunIDString());
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, environment);
+			employeeDashboard.updatePersonalInformationWithErrors(paramObject, getRunIDAsString());
 			
 			boolean result = true;
 			
 			setResult(result, "Update Personal Information");
-			Debugger.log("updatePersonalInformation => "+result, isSaucelabs);
+			Debugger.log("updatePersonalInformation => "+result, isRemote);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			failTest("Update Personal Information",  ex, isSaucelabs);
+			failTest("Update Personal Information",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -138,17 +135,17 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	public void electBenefits(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
-			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
-			employeeDashboard.electBenefits(paramObject, account.getRunIDString());
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, environment);
+			employeeDashboard.electBenefits(paramObject, getRunIDAsString());
 			
 			boolean result = true;
 			
 			setResult(result, "Elect Benefits");
-			Debugger.log("electBenefits => "+result, isSaucelabs);
+			Debugger.log("electBenefits => "+result, isRemote);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			failTest("Elect Benefits",  ex, isSaucelabs);
+			failTest("Elect Benefits",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -161,7 +158,7 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 	public void fillAndSignBenefit(@Optional("TestID") Integer testID) throws Exception {
 		changeParamObject(testID);
 		try{ 
-			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, properties.getEnvironment());
+			EmployeeDashboardPage employeeDashboard = new EmployeeDashboardPage(driver, environment);
 			Set<String> benefits = new HashSet<String>();
 			
 			benefits.add(paramObject.getMedicalBenefit().getCompany());
@@ -175,11 +172,11 @@ public class EmployeeDashboardInterfaceTest extends TestMachine {
 			boolean result = true;
 			
 			setResult(result, "Fill and Sign Benefits");
-			Debugger.log("fillAndSignBenefit => "+result, isSaucelabs);
+			Debugger.log("fillAndSignBenefit => "+result, isRemote);
 			assertTrue(result);
 			
 		} catch(Exception ex){
-			failTest("Fill and Sign Benefits",  ex, isSaucelabs);
+			failTest("Fill and Sign Benefits",  ex, isRemote);
 			assertTrue(false);
 		}
 	}

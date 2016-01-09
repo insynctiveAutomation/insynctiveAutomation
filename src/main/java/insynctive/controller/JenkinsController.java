@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import insynctive.dao.AccountDao;
+import insynctive.dao.CreatePersonFormDao;
 import insynctive.dao.InsynctivePropertyDao;
 import insynctive.model.Account;
 import insynctive.model.ParamObject;
 import insynctive.utils.TestResults;
 import insynctive.dao.test.TestDao;
+import insynctive.dao.test.TestPlanDao;
+import insynctive.dao.test.TestPlanRunDao;
+import insynctive.dao.test.TestRunDao;
+import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.utils.TestWebRunner;
 import insynctive.utils.jenkins.JenkinsForm;
@@ -33,23 +38,11 @@ public class JenkinsController {
 	final String NIGHTLY_DEFAULT_ENVIRONMENT = "AutomationQA";
 	
 	//DB Connections.
-	private final InsynctivePropertyDao propertyDao;
 	private final AccountDao accDao;
-	private final TestSuiteRunDao testSuiteDao;
 	
-	//Servlet Context Helper
-	private final ServletContext servletContext;
-
-	//Test Runner
-	private final TestWebRunner testRunner;
-
 	@Inject
-	public JenkinsController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, TestSuiteRunDao testSuiteDao) {
-		this.servletContext = servletContext;
-		this.propertyDao = propertyDao;
+	public JenkinsController(AccountDao accDao) {
 		this.accDao = accDao;
-		this.testSuiteDao = testSuiteDao;
-		this.testRunner = new TestWebRunner(servletContext, testSuiteDao, accDao, testDao);
 	}
 	
 	@RequestMapping(value = "/build", method = RequestMethod.POST)

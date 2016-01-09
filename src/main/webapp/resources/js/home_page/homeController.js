@@ -43,12 +43,12 @@ app.controller('HomeController', function($cookies, $http, $window, $modal, $sco
 	};
 	
 	/* On Start Button */
-	this.startTest = function(testSuiteValue, selectedEnvironment, selectedBrowser) {
+	this.startTest = function(testSuiteValue, selectedEnvironment, selectedBrowser, isNotification, remote) {
 		self.start = true;
 		self.runStatus = "Running..";
 		self.videoLink = "";
 		self.loaderVisible = "visible";
-		homeService.startTest(self.testDetails, testSuiteValue, selectedEnvironment, selectedBrowser, function(data) {
+		homeService.startTest(self.testDetails, selectedEnvironment, selectedBrowser, isNotification, remote, function(data) {
 			
 			self.runStatus = "The Test is Running...";
 			self.tlaIndex = data.index;

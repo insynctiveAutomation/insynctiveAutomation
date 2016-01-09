@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.pages.insynctive.MyTasksPage;
@@ -17,10 +18,11 @@ import insynctive.utils.data.TestEnvironment;
 @Deprecated
 public class PDFSignatureTest extends TestMachine {
 	
-	@BeforeClass(alwaysRun = true)
-	public void tearUp() throws Exception {
-		super.tearUp();
-		this.sessionName = "PDF Signature";
+	@BeforeClass
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
 	}
 
 	@DataProvider(name = "hardCodedBrowsers", parallel = true)
@@ -33,23 +35,23 @@ public class PDFSignatureTest extends TestMachine {
 	public void PDF(TestEnvironment testEnvironment)
 			throws Exception {
 
-		startTest(testEnvironment);
+		startTest();
 		
 		login();
-		new HomeForAgentsPage(driver, properties.getEnvironment()).waitPageIsLoad();
+		new HomeForAgentsPage(driver, environment).waitPageIsLoad();
 		
-				CheckListsPage checkListPage = new CheckListsPage(driver, properties.getEnvironment());
-				checkListPage.loadPage();
-				checkListPage.startChecklist("PDF", "Eugenio Valeiras");
-				
-				Sleeper.sleep(3000, driver);
-				MyTasksPage myTasksPage = new MyTasksPage(driver, properties.getEnvironment());
-				myTasksPage.loadPage();
-				myTasksPage.openJustNowTask();
-				
-				assertTrue(myTasksPage.SingPDF());
-		}
+		CheckListsPage checkListPage = new CheckListsPage(driver, environment);
+		checkListPage.loadPage();
+		checkListPage.startChecklist("PDF", "Eugenio Valeiras");
 		
+		Sleeper.sleep(3000, driver);
+		MyTasksPage myTasksPage = new MyTasksPage(driver, environment);
+		myTasksPage.loadPage();
+		myTasksPage.openJustNowTask();
+		
+		assertTrue(myTasksPage.SingPDF());
 	}
+		
+}
 	
 

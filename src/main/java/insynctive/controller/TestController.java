@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
+import org.testng.xml.XmlClass;
+import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
@@ -100,7 +102,7 @@ public class TestController {
 		
 		this.accDao = accDao;
 		this.createPersonFormDao = createPersonFormDao;
-		this.testRunner = new TestWebRunner(servletContext, testSuiteRunDao, accDao, testDao);
+		this.testRunner = new TestWebRunner();
 	}
 	
 	@RequestMapping(value = "/test/{testID}" ,method = RequestMethod.GET)
@@ -299,16 +301,57 @@ public class TestController {
 		return testSuiteRunDao.getAllTestSuiteRuns();
 	}
 	
-	@RequestMapping(value = "/test/{xmlName}/{environment}/{browser}", method = RequestMethod.POST)
+	@RequestMapping(value = "/run/testPlan/{isNotification}", method = RequestMethod.POST)
 	@ResponseBody
-	public String runTest(@RequestBody TestSuite form, @PathVariable("xmlName") String xmlName, @PathVariable("environment") String environment, @PathVariable("browser") String browser) throws Exception{
+	public String runTestPlan(@RequestBody TestPlan tp, @PathVariable("isNotification") Boolean isNotification) throws Exception{
+		
+		testRunner.runTest(tp, isNotification);
+		return "{\"status\" : 200}";
+	}
+	
+	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}/{remote}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestPlanByID(@PathVariable("tpID") Integer tpID, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
+		
+		TestPlan tp = testPlanDao.getTestPlanByID(tpID);
+		testRunner.runTest(tp, isNotification, isRemote);
+		
+		return "{\"status\" : 200}";
+	}
+	
+	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestPlanByID(@PathVariable("tpID") Integer tpID, @PathVariable("isNotification") Boolean isNotification) throws Exception{
+		
+		TestPlan tp = testPlanDao.getTestPlanByID(tpID);
+		testRunner.runTest(tp, isNotification);
+		
+		return "{\"status\" : 200}";
+	}
+	
+	@RequestMapping(value = "/run/testSuite/{environment}/{browser}/{isNotification}/{remote}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestSuite(@RequestBody TestSuite ts, @PathVariable("environment") String environment, @PathVariable("browser") String browser, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
 		Account acc = accDao.getAccountByID(SessionController.account.getAccountID());
 		
-		TestSuiteRun tsRun = testRunner.getTestSuiteRun(form, environment, browser, acc);
-		
+		TestSuiteRun tsRun = testRunner.getTestSuiteRun(ts, environment, browser, acc);
 		testSuiteRunDao.save(tsRun);		
 		
-		return "{\"index\" : \""+(testRunner.runTest(tsRun,acc))+"\"}";
+		return "{\"index\" : \""+(testRunner.runTest(tsRun,isNotification, isRemote))+"\"}";
+	}
+	
+	@RequestMapping(value = "/run/testSuite/{tsID}/{isNotification}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestSuiteByID(@PathVariable("tsID") Integer tsID, @PathVariable("isNotification") Boolean isNotification) throws Exception{
+		TestSuite ts = testSuiteDao.getTestByID(tsID);
+		return "{\"index\" : \""+(testRunner.runTest(ts, isNotification))+"\"}";
+	}
+
+	@RequestMapping(value = "/run/testSuite/{tsID}/{isNotification}/{remote}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestSuiteByID(@PathVariable("tsID") Integer tsID, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
+		TestSuite ts = testSuiteDao.getTestByID(tsID);
+		return "{\"index\" : \""+(testRunner.runTest(ts, isNotification, isRemote))+"\"}";
 	}
 	
 //	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
@@ -320,6 +363,13 @@ public class TestController {
 //		
 //		return "{\"index\" : \""+(testRunner.runTest(testSuite, accDao.getAccountByID(logedAccID)))+"\"}";
 //	}
+	
+	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
+	@ResponseBody
+	public String retry(@PathVariable("ID") Integer testSuiteID) throws Exception {
+		
+		return "{\"error\" : \"Do not working\"}";
+	}
 	
 	@RequestMapping(value = "/test/{testName}/{index}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
 	@ResponseBody
@@ -335,60 +385,26 @@ public class TestController {
 	
 	@RequestMapping(value = "/start/OE" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String startCreatePersonOpenEnrollment(@RequestBody CreatePersonForm form) throws ConfigurationException {
+	public String startCreatePersonOpenEnrollment(@RequestBody CreatePersonForm form) throws Exception {
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
-		List<XmlSuite> suites = testRunner.getXmlTestSuiteForExternalUser("CreatePerson_OpenEnrollment");
-		HashMap<String,String> params = new HashMap<String, String>();
-		params.put("personID", String.valueOf(newPersonID));
+		TestSuite ts = testSuiteDao.getTestSuiteByName("Create Person - Open Enrollment");
+		TestSuiteRun tsRun = ts.run();
+		testSuiteRunDao.save(tsRun);
 		
-		for (XmlSuite suite : suites){
-			for(XmlTest test : suite.getTests()){
-				test.setParameters(params);
-			}
-		}
-		
-		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
-		
-		TestNG testNG = new TestNG();
-		testNG.setXmlSuites(suites);
-		testNG.setPreserveOrder(true);
-		testNG.addListener(testListenerAdapter);
-		
-		//START TEST IN OTHER THREAD
-		Thread thread = new Thread(new RunnableTest(testNG));
-		thread.start();
-		
-		return "{\"status\" : 200}";
+		return testRunner.runExternalCreatePerson(tsRun, newPersonID);
 	}
 	
 	@RequestMapping(value = "/start/OB" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
-	public String startCreatePersonOnBoarding(@RequestBody CreatePersonForm form) throws ConfigurationException{
-		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
+	public String startCreatePersonOnBoarding(@RequestBody CreatePersonForm form) throws Exception{
+Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
-		List<XmlSuite> suites = testRunner.getXmlTestSuiteForExternalUser("CreatePerson_Onboarding");
-		HashMap<String,String> params = new HashMap<String, String>();
-		params.put("personID", String.valueOf(newPersonID));
+		TestSuite ts = testSuiteDao.getTestSuiteByName("Create Person - On Boarding");
+		TestSuiteRun tsRun = ts.run();
+		testSuiteRunDao.save(tsRun);
 		
-		for (XmlSuite suite : suites){
-			for(XmlTest test : suite.getTests()){
-				test.setParameters(params);
-			}
-		}
-		
-		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
-		
-		TestNG testNG = new TestNG();
-		testNG.setXmlSuites(suites);
-		testNG.setPreserveOrder(true);
-		testNG.addListener(testListenerAdapter);
-		
-		//START TEST IN OTHER THREAD
-		Thread thread = new Thread(new RunnableTest(testNG));
-		thread.start();
-		
-		return "{\"index\" : 200}";
+		return testRunner.runExternalCreatePerson(tsRun, newPersonID);
 	}
 	
 	@RequestMapping(value = "/isPersonCreated/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")

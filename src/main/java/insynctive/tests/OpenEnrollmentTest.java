@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.model.ParamObject;
@@ -17,11 +18,11 @@ public class OpenEnrollmentTest extends TestMachine {
 
 	ParamObject person;
 
-	@BeforeClass(alwaysRun = true)
-	public void tearUp() throws Exception {
-		super.tearUp();
-		person = new ParamObject(String.valueOf(account.getRunIDString()));
-		this.sessionName = "Open Enrollment";
+	@BeforeClass
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
+		this.sessionName = testName;
 	}
 
 	@DataProvider(name = "hardCodedBrowsers", parallel = true)
@@ -33,10 +34,10 @@ public class OpenEnrollmentTest extends TestMachine {
 	@Test(dataProvider = "hardCodedBrowsers")
 	public void updatePersonalInformation(TestEnvironment testEnvironment) throws Throwable {
 		
-		startTest(testEnvironment);
+		startTest();
 		login("InsynctiveTestNG+206@gmail.com", "password", null);
 		
-		OpenEnrollmentPage openEnrollmentPage = new OpenEnrollmentPage(driver, properties.getEnvironment());
+		OpenEnrollmentPage openEnrollmentPage = new OpenEnrollmentPage(driver, environment);
 		openEnrollmentPage.waitPageIsLoad();
 
 		assertTrue(openEnrollmentPage.startUpdateInfo());

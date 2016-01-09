@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import insynctive.model.ParamObject;
@@ -14,9 +15,10 @@ public class InstallAppTest extends TestMachine {
 
 	ParamObject person;
 
-	@BeforeClass(alwaysRun = true)
-	public void tearUp() throws Exception {
-		super.tearUp();
+	@BeforeClass
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
 		this.sessionName = "Install Apps";
 	}
 	

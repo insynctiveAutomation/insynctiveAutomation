@@ -8,8 +8,8 @@ app.service('homeService', function($http) {
 		$http.get('/testSuitesNames').success(callback);
 	};
 
-	this.startTest = function(testDetails, testSuiteName, environmentName, browser, callback, errorCallback) {
-		$http.post('/test/'+testSuiteName+"/"+environmentName+"/"+browser, testDetails).success(callback).error(errorCallback);
+	this.startTest = function(testDetails, environmentName, browser, isNotification, remote, callback, errorCallback) {
+		$http.post('/run/testSuite/'+environmentName+"/"+browser+"/"+isNotification+"/"+remote, testDetails).success(callback).error(errorCallback);
 	};
 	
 	this.getTestDetails = function(testSuiteName, callback) {

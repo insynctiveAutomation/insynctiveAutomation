@@ -69,7 +69,7 @@
 		</div>
 		<div class="top-left-corner h4"><a id="configurationLink" ng-click="homeCtrl.logout()">Logout</a></div>
 		<div ng-show="homeCtrl.showPanel()" class="container">
-			<form  ng-submit="homeCtrl.startTest(testSuiteName, selectedEnvironment, selectedBrowser)" class="form-signin" name="sendTest">
+			<form  ng-submit="homeCtrl.startTest(testSuiteName, selectedEnvironment, selectedBrowser, isNotification, remote)" class="form-signin" name="sendTest">
 		
 		  	<select name="testSuite" ng-model="testSuiteName" data-ng-options="testSuite as testSuite for testSuite in homeCtrl.testsSuites" ng-change="homeCtrl.getTestDetails(testSuiteName)" required>
 		    	<option value="">Select a Test Suite</option>
@@ -85,7 +85,13 @@
 		    	<option value="IE_11">IE 11</option>
 		    	<option value="IPAD">iPad</option>
 		 	</select> 
-		 	
+			<select name="notification" ng-model="isNotification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'Do not notify', v: false }]" required>
+				<option value="">Notification</option>
+			</select>
+			<select name="remote" ng-model="remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required>
+				<option value="">Run in</option>
+			</select>
+		
 			<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Run Test</button>
 			</form>	
 		</div>

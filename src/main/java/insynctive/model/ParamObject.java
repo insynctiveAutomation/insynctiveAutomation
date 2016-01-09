@@ -96,6 +96,9 @@ public class ParamObject {
 	@Column(name = "boolean_param_two")
 	public Boolean booleanParamTwo;
 	
+	@Column(name = "gmail_password")
+	public String gmailPassword;
+	
 	@AttributeOverrides({
 		@AttributeOverride(name="name",column=@Column(name="medicalBenefitName")),
 		@AttributeOverride(name="company",column=@Column(name="medicalBenefitCompany"))
@@ -256,14 +259,6 @@ public class ParamObject {
 
 	public void setEmergencyContact(EmergencyContact emergencyContact) {
 		this.emergencyContact = emergencyContact;
-	}
-
-	public USAddress getUSAddress() {
-		return usAddress;
-	}
-
-	public void setUSAddress(USAddress uSAddress) {
-		usAddress = uSAddress;
 	}
 
 	public String getDepartamentOfEmployee() {
@@ -427,6 +422,22 @@ public class ParamObject {
 		this.waitTime = waitTime;
 	}
 
+	public String getGmailPassword() {
+		return gmailPassword;
+	}
+
+	public void setGmailPassword(String gmailPassword) {
+		this.gmailPassword = gmailPassword;
+	}
+
+	public USAddress getUsAddress() {
+		return usAddress;
+	}
+
+	public void setUsAddress(USAddress usAddress) {
+		this.usAddress = usAddress;
+	}
+
 	@JsonIgnore
 	public Field getFieldByName(String name) throws Exception {
 		try {
@@ -526,6 +537,7 @@ public class ParamObject {
 		newParamObject.usAddress = p.usAddress;
 		newParamObject.visionBenefit = p.visionBenefit;
 		newParamObject.waitTime = p.waitTime;
+		newParamObject.gmailPassword = p.gmailPassword;
 		
 		newParamObject.paramObjectID = null;
 		return newParamObject;

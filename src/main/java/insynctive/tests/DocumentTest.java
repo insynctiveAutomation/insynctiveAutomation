@@ -18,14 +18,11 @@ import insynctive.utils.data.TestEnvironment;
  */
 public class DocumentTest extends TestMachine{
 
-    @BeforeClass
-    @Parameters({"accountID", "runID", "bowser", "testID", "testName", "environment"})
-    public void tearUp(String accountID, String runID, String bowser, String testSuiteID, String testName, String environment) throws Exception {
-        super.testSuiteID = Integer.parseInt(testSuiteID);
-        super.tearUp(Integer.valueOf(accountID), Integer.valueOf(runID));
-        testEnvironment = TestEnvironment.valueOf(bowser);
+	@BeforeClass
+	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
+	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
+		tearUp(browser, environment, isRemote, isNotification, testSuiteID);
         this.sessionName = testName;
-		properties.setEnvironment(environment);
     }
 
     @Test
@@ -34,15 +31,15 @@ public class DocumentTest extends TestMachine{
     public void loginTest(@Optional("TestID") Integer testID)
             throws Exception {
         changeParamObject(testID);
-        startTest(testEnvironment);
+        startTest();
 
         try{
             login("/Insynctive.Hub/Protected/Documents.aspx");
             setResult(true, "Login Test");
-            Debugger.log("loginTest => " + true, isSaucelabs);
+            Debugger.log("loginTest => " + true, isRemote);
             assertTrue(true);
         } catch(Exception ex){
-            failTest("Login",  ex, isSaucelabs);
+            failTest("Login",  ex, isRemote);
             assertTrue(false);
         }
     }
@@ -55,7 +52,7 @@ public class DocumentTest extends TestMachine{
     public void getDocuments(@Optional("TestID") Integer testID) throws Exception {
         changeParamObject(testID);
         try{
-            EmployeeDocumentsPage employeeDocuments = new EmployeeDocumentsPage(driver, properties.getEnvironment());
+            EmployeeDocumentsPage employeeDocuments = new EmployeeDocumentsPage(driver, environment);
             Boolean result = true;
             
             for(int index = 1; index <= paramObject.loadingTime; index++){
@@ -65,14 +62,14 @@ public class DocumentTest extends TestMachine{
             	employeeDocuments.closeBigOverlay();
             }
 
-            Debugger.log("getDocuments => "+result, isSaucelabs);
+            Debugger.log("getDocuments => "+result, isRemote);
             setResult(result, "Documents displayed");
             assertTrue(result);
             
             
             
         } catch(Exception ex){
-            failTest("No Documents displayed",  ex, isSaucelabs);
+            failTest("No Documents displayed",  ex, isRemote);
             assertTrue(false);
         }
     }

@@ -88,32 +88,6 @@ public class Account {
 		this.runID = runID;
 	}
 	
-	@JsonIgnore
-	public void setRunID() throws IOException {
-		URL u = new URL("https://insynctive-support.herokuapp.com/runID");
-		HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-		
-		conn.setRequestMethod("GET");
-		conn.setConnectTimeout(5000);
-		conn.setUseCaches(false);
-		conn.setDoInput(true);
-		conn.setDoOutput(true);
-		
-		InputStream is = conn.getInputStream();
-		
-		BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
-		StringBuilder responseStrBuilder = new StringBuilder();
-
-		String inputStr;
-		while ((inputStr = streamReader.readLine()) != null){
-			responseStrBuilder.append(inputStr);
-		}
-		
-		JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
-		Integer runID = jsonObject.getInt("runID");
-		this.runID = runID;
-	}
-
 	public int incrementRunID(){
 		return this.runID+=1;
 	}

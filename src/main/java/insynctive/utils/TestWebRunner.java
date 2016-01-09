@@ -24,10 +24,15 @@ import org.xml.sax.SAXException;
 
 import insynctive.dao.AccountDao;
 import insynctive.dao.test.TestDao;
+import insynctive.dao.test.TestPlanDao;
+import insynctive.dao.test.TestPlanRunDao;
+import insynctive.dao.test.TestRunDao;
+import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.Account;
 import insynctive.model.ParamObject;
 import insynctive.model.test.Test;
+import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
 import insynctive.model.test.run.TestPlanRun;
 import insynctive.model.test.run.TestRun;
@@ -37,34 +42,77 @@ import insynctive.runnable.RunnableTest;
 @Transactional
 public class TestWebRunner {
 
-	private final ServletContext servletContext;
-	private final TestSuiteRunDao testSuiteRunDao;
 	private final AccountDao accDao;
-	private final TestDao testDao;
 
-	public TestWebRunner(ServletContext servletContext, TestSuiteRunDao testSuiteRunDao, AccountDao accDao, TestDao testDao) {
-		this.servletContext = servletContext;
-		this.testSuiteRunDao = testSuiteRunDao;
-		this.accDao = accDao;
-		this.testDao = testDao;
+	private final TestDao testDao;
+	private final TestSuiteDao testSuiteDao;
+	private final TestPlanDao testPlanDao;
+	
+	private final TestRunDao testRunDao;
+	private final TestSuiteRunDao testSuiteRunDao;
+	private final TestPlanRunDao testPlanRunDao;
+
+	public TestWebRunner() {
+		this.accDao = HibernateUtil.accDao;
+		
+		this.testDao = HibernateUtil.testDao;
+		this.testSuiteDao = HibernateUtil.testSuiteDao;
+		this.testPlanDao = HibernateUtil.testPlanDao;
+		
+		this.testRunDao = HibernateUtil.testRunDao;
+		this.testSuiteRunDao = HibernateUtil.testSuiteRunDao;
+		this.testPlanRunDao = HibernateUtil.testPlanRunDao;
 	}
 	
-	public void runTest(TestPlanRun tpRun, Account acc) {
-
-		for(TestSuiteRun tsRun : tpRun.testSuiteRuns){
-			runTest(tsRun, acc);
+	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestPlanRun tpRun = tp.run();
+		testPlanRunDao.save(tpRun);
+		runTest(tpRun, isNotification, isRemote);
+	}
+	
+	public void runTest(TestPlan tp, Boolean isNotification) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestPlanRun tpRun = tp.run();
+		testPlanRunDao.save(tpRun);
+		runTest(tpRun, isNotification);
+	}
+	
+	public Integer runTest(TestSuite ts, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = ts.run();
+		testSuiteRunDao.save(tsRun);
+		return runTest(tsRun, isNotification, isRemote, new Thread[]{});
+	}
+	
+	public Integer runTest(TestSuite ts, Boolean isNotification) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = ts.run();
+		testSuiteRunDao.save(tsRun);
+		return runTest(tsRun, isNotification, tsRun.isRemote(), new Thread[]{});
+	}
+	
+	public void runTest(TestPlanRun tpRun, Boolean isNotification) {
+		for(TestSuiteRun tsRun : tpRun.getTestSuiteRuns()){
+			runTest(tsRun, isNotification, tsRun.isRemote());
 		}
 	}
 	
-	public Integer runTest(TestSuiteRun form, Account acc) {
-		return runTest(form, acc, new Thread[]{});
-	}
-
-	public Integer runTest(TestSuiteRun form, Account acc, Thread threadToJoin) {
-		return runTest(form, acc, new Thread[]{threadToJoin});
+	public void runTest(TestPlanRun tpRun, Boolean isNotification, Boolean isRemote) {
+		for(TestSuiteRun tsRun : tpRun.getTestSuiteRuns()){
+			runTest(tsRun, isNotification, isRemote);
+		}
 	}
 	
-	public Integer runTest(TestSuiteRun tsRun, Account acc, Thread[] threadToJoin) {
+	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification) {
+		return runTest(tsRun, isNotification, tsRun.isRemote(), new Thread[]{});
+	}
+
+	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Thread threadToJoin) {
+		return runTest(tsRun, isNotification, tsRun.isRemote(), new Thread[]{threadToJoin});
+	}
+	
+	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Boolean isRemote) {
+		return runTest(tsRun, isNotification, isRemote, new Thread[]{});
+	}
+	
+	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Boolean isRemote, Thread[] threadToJoin) {
 		XmlSuite suite = createXmlTest(tsRun);
 		List<XmlSuite> suites = new ArrayList<>();
 		suites.add(suite);
@@ -83,15 +131,15 @@ public class TestWebRunner {
 		}
 		
 		//Initialize tests.
+//		"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put("accountID", String.valueOf(acc.getAccountID()));
-		parameters.put("runID", acc.getRunIDString());
-		parameters.put("bowser", tsRun.getBrowser());
-		parameters.put("testID", tsRun.getTestSuiteRunID().toString());
-		parameters.put("testName", tsRun.getName());
 		parameters.put("environment", tsRun.getEnvironment());
-		
-		
+		parameters.put("browser", tsRun.getBrowser());
+		parameters.put("isRemote", String.valueOf(isRemote));
+		parameters.put("isNotification", String.valueOf(isNotification));
+		parameters.put("testSuiteID", tsRun.getTestSuiteRunID().toString());
+		parameters.put("testName", tsRun.getName());
+
 		//Add to Test Suite
 		suite.setParameters(parameters);
 		
@@ -112,28 +160,6 @@ public class TestWebRunner {
 		
 		return tsRun.getTestSuiteRunID();
 	}
-	
-	public TestSuite getTestSuiteByXML(ParamObject paramObject, String testSuiteName) throws Exception {
-		TestSuite testSuite = new TestSuite();
-		testSuite.setTestSuiteName(testSuiteName);
-		List<XmlSuite> suites = getXmlTestSuiteForUI(testSuiteName);
-		List<Test> listIncMethod = new ArrayList<Test>();
-		for (XmlSuite suite : suites) {
-			for(XmlTest test : suite.getTests()){
-				for(XmlClass clazz : test.getClasses()){
-					for(XmlInclude incMethod : clazz.getIncludedMethods()){
-							Test newTest= new Test(incMethod.getName());
-							newTest.setClassName(clazz.getName());
-							newTest.setParamObject(ParamObject.getNewWithOutIDs(paramObject));
-							listIncMethod.add(newTest);
-					}
-				}
-			}
-		}
-		testSuite.setTests(new ArrayList<Test>(listIncMethod));
-		
-		return testSuite;
-	}
 
 	public TestSuiteRun getTestSuiteRun(TestSuite testSuite, String environment, String browser) throws Exception {
 		TestSuiteRun testSuiteRun = testSuite.toTestSuiteRun();
@@ -149,41 +175,6 @@ public class TestWebRunner {
 		testSuiteRun.setTester(account.getUsername());
 		
 		return testSuiteRun;
-	}
-	
-	
-	public TestSuiteRun getTestSuiteRunByXML(ParamObject paramObject, String testSuiteName, String environment, String browser) throws Exception {
-		TestSuite testSuite = getTestSuiteByXML(paramObject, testSuiteName);
-		TestSuiteRun testSuiteRun = getTestSuiteRun(testSuite, environment, browser);
-		
-		return testSuiteRun;
-	}
-	
-	public String getClassnameFromXMLTestSuite(String xmlName) {
-		List<XmlSuite> suites = getXmlTestSuiteForUI(xmlName);
-		for(XmlTest xmlTest : suites.get(0).getTests()){
-			for(XmlClass classes : xmlTest.getClasses()){
-				return classes.getName();
-			}
-		}
-		return null;
-	}
-	
-	/*private Methods*/
-	public List<XmlSuite> getXmlTestSuiteForUI(String xmlName){
-		return getXmlTestSuite(xmlName, "/WEB-INF/testsSuits/");
-	}
-	
-	public List<XmlSuite> getXmlTestSuiteForExternalUser(String xmlName){
-		return getXmlTestSuite(xmlName, "/WEB-INF/externalTest/");
-	}
-	
-	public List<XmlSuite> getXmlTestSuite(String xmlName, String path) {
-		String xmlFileName = new File( servletContext.getRealPath(path+xmlName+".xml")).getPath();
-		
-		List<XmlSuite> suite = getSuite(xmlFileName);
-		
-		return suite;
 	}
 
 	public List<XmlSuite> getSuite(String xmlFileName) {
@@ -205,27 +196,6 @@ public class TestWebRunner {
 		    e.printStackTrace();
 		}
 		return suite;
-	}
-	
-	public List<String> getTestSuitesForRunUI() throws MalformedURLException, URISyntaxException{
-		return getTestSuites("/WEB-INF/testsSuits/");
-	}
-	
-	public List<String> getTestSuitesForExternalClient() throws MalformedURLException, URISyntaxException{
-		return getTestSuites("/WEB-INF/externalTest/");
-	}
-	
-	public List<String> getTestSuites(String path) throws MalformedURLException, URISyntaxException{
-		List<String> results = new ArrayList<String>();
-
-		File[] files = new File( servletContext.getRealPath(path)).listFiles();
-		
-		for (File file : files) {
-		    if (file.isFile()) {
-		        results.add(file.getName());
-		    }
-		}
-		return results;
 	}
 
 	private XmlSuite createXmlTest(TestSuiteRun tsRun) {
@@ -255,5 +225,37 @@ public class TestWebRunner {
 		test.setXmlClasses(classes);
 
 		return suite;
+	}
+	
+	public String runExternalCreatePerson(TestSuiteRun tsRun, Integer newPersonID){
+		XmlSuite suite = createXmlTest(tsRun);
+		List<XmlSuite> suites = new ArrayList<>();
+		suites.add(suite);
+		
+		//Add Parameters to Test
+		for(TestRun testRun : tsRun.getTestsRuns()){
+			for(XmlTest xmlTest : suite.getTests()){
+				for(XmlClass classes : xmlTest.getClasses()){
+					for(XmlInclude methodsInXML: classes.getIncludedMethods()){
+						if(methodsInXML.getName().equals(testRun.getTestName())){
+							methodsInXML.addParameter("personID", String.valueOf(newPersonID));
+						}
+					}
+				}
+			}
+		}
+		
+		TestListenerAdapter testListenerAdapter = new TestListenerAdapter();
+		
+		TestNG testNG = new TestNG();
+		testNG.setXmlSuites(suites);
+		testNG.setPreserveOrder(true);
+		testNG.addListener(testListenerAdapter);
+		
+		//START TEST IN OTHER THREAD
+		Thread thread = new Thread(new RunnableTest(testNG));
+		thread.start();
+		
+		return "{\"status\" : 200}";
 	}
 }

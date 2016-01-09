@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import insynctive.dao.AccountDao;
+import insynctive.dao.CreatePersonFormDao;
 import insynctive.dao.InsynctivePropertyDao;
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestPlanDao;
+import insynctive.dao.test.TestPlanRunDao;
+import insynctive.dao.test.TestRunDao;
 import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.Account;
@@ -40,49 +43,23 @@ public class NightlyController {
 	private final TestWebRunner testRunner;
 
 	@Inject
-	public NightlyController(TestDao testDao, InsynctivePropertyDao propertyDao, ServletContext servletContext, AccountDao accDao, TestSuiteRunDao testSuiteRunDao, TestSuiteDao testSuiteDao, TestPlanDao tpDao) {
+	public NightlyController(TestDao testDao, TestSuiteDao testSuiteDao, TestPlanDao testPlanDao, 
+			TestRunDao testRunDao, TestSuiteRunDao testSuiteRunDao, TestPlanRunDao testPlanRunDao, 
+			 ServletContext servletContext, AccountDao accDao, CreatePersonFormDao createPersonFormDao) {
 		this.accDao = accDao;
 		this.testSuiteRunDao = testSuiteRunDao;
 		this.testSuiteDao = testSuiteDao;
-		this.testPlanDao = tpDao;
-		this.testRunner = new TestWebRunner(servletContext, testSuiteRunDao, accDao, testDao);
+		this.testPlanDao = testPlanDao;
+		this.testRunner = new TestWebRunner();
 	}
 	
-	@RequestMapping(value = "/run/tp/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public String runTestPlanByID(@PathVariable("id") Integer tpID) throws Exception{
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		
-		TestPlan testPlan = testPlanDao.getTestPlanByID(tpID);
-		TestPlanRun tpRun = testPlan.run();
-		testPlanDao.save(tpRun);
-		
-		testRunner.runTest(tpRun, nightlyAcc);
-		
-		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
-	}
-	
-//	@RequestMapping(value = "/run/ts/{id}", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String runTestSuite(@PathVariable("id") Integer tpID) throws Exception{
-//		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-//		
-//		TestSuite testPlan = testSuiteDao.getTestByID(tpID);
-//		TestPlanRun tpRun = testPlan.run(); TODO
-//		testPlanDao.save(tpRun);
-//		
-//		return "{\"index\" : \""+(testRunner.runTest(tpRun, nightlyAcc))+"\"}";
-//	}
-
 	@RequestMapping(value = "/nightly", method = RequestMethod.GET)
 	@ResponseBody
 	public String runNightly() throws Exception {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		TestPlan testPlan = testPlanDao.getTestPlanByName("Nightly");
-		TestPlanRun tpRun = testPlan.run();
-		testPlanDao.save(tpRun);
+		testRunner.runTest(testPlan, true);
 		
-		testRunner.runTest(tpRun, nightlyAcc);
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
 	
@@ -92,18 +69,4 @@ public class NightlyController {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
-	
-	@RequestMapping(value = "/run_ts/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public String runID(@PathVariable("id") Integer id) throws Exception{
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		TestSuite ts = testSuiteDao.getTestByID(id);
-		TestSuiteRun tsRun = testRunner.getTestSuiteRun(ts, "automationQA", "FIREFOX", nightlyAcc);
-		testSuiteRunDao.save(tsRun);
-		
-		testRunner.runTest(tsRun, nightlyAcc);
-		
-		return "{\"status\" : 200}";
-	}
-
 }

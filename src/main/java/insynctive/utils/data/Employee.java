@@ -55,7 +55,7 @@ public enum Employee {
 			person.setPrimaryPhone("2015555574");
 			person.setEmergencyContact(new EmergencyContact("Sarasa", "Children", "sarasa@gmail.com", "1111111112"));
 			person.setSsn("111223333");
-			person.setUSAddress(address);
+			person.setUsAddress(address);
 		return person;
 	}
 	

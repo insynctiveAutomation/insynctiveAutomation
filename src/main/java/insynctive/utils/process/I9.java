@@ -216,7 +216,7 @@ public class I9 extends Process implements PageInterface {
 	private void addUsAddress() throws Exception, ElementNotFoundException,
 			IOException, InterruptedException {
 		clickAButton(addAddressButton);
-		USAddress address = employee.personData.getUSAddress();
+		USAddress address = employee.personData.getUsAddress();
 		setTextInField(streetAddressField, address.getStreet());
 		setTextInField(aptField, address.getApt());
 		setTextInField(cityField, address.getCity());
