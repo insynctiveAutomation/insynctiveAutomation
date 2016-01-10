@@ -64,7 +64,7 @@ public class TestSuiteRun {
 	private List<TestRun> testsRuns = new ArrayList<>();
 
 	@ManyToOne()
-	@JoinColumn(name = "testSuiteRunID")
+	@JoinColumn(name = "depends_test_suite_run")
 	private TestSuiteRun dependsTestSuiteRun;
 	
 	public TestSuiteRun() {

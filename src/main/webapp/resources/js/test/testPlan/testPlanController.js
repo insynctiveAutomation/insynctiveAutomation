@@ -89,8 +89,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
 			var tsIterate = self.testPlan.testSuiteRunners[i].testSuite;
 			var ts = self.testPlan.testSuiteRunners[index].testSuite;
-			
-			if(i != index  && self.doNotHaveMeDepends(ts, tsIterate)){
+			if(i != index  && self.doNotHaveCicleDependent(ts, tsIterate)){
 				indexs.push(i);
 			}
 		}
@@ -98,7 +97,11 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.doNotHaveMeDepends = function(ts, tsIterate){
-		return !tsIterate.dependsTestSuite || tsIterate.dependsTestSuite === null || tsIterate.dependsTestSuite.testSuiteID != ts.testSuiteID;  
+		return (tsIterate === undefined || tsIterate === null ||  tsIterate.dependsTestSuite === undefined || tsIterate.dependsTestSuite === null) || (tsIterate.dependsTestSuite.testSuiteID != ts.testSuiteID);  
+	}
+	
+	this.doNotHaveCicleDependent = function(ts, tsIterate){
+		return self.doNotHaveMeDepends(ts, tsIterate) && ((tsIterate.dependsTestSuite === undefined || tsIterate.dependsTestSuite === null) || self.doNotHaveCicleDependent(ts, tsIterate.dependsTestSuite));
 	}
 	
 	this.addDependTS = function(ts){

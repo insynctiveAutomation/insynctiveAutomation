@@ -54,7 +54,7 @@ public class TestSuite {
 	private List<Test> tests = new ArrayList<Test>();
 	
 	@ManyToOne()
-	@JoinColumn(name = "testSuiteID")
+	@JoinColumn(name = "depends_test_suite")
 	private TestSuite dependsTestSuite;
 	
 	@Transient
