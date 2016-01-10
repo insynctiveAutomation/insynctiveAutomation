@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,6 +21,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.Test;
+import insynctive.model.test.TestSuite;
 
 @Entity
 @Table(name = "test_suite_run")
@@ -61,6 +63,10 @@ public class TestSuiteRun {
 	)
 	private List<TestRun> testsRuns = new ArrayList<>();
 
+	@ManyToOne()
+	@JoinColumn(name = "testSuiteRunID")
+	private TestSuiteRun dependsTestSuiteRun;
+	
 	public TestSuiteRun() {
 		this.setStatus(null);
 	}
@@ -145,10 +151,30 @@ public class TestSuiteRun {
 		return remote;
 	}
 
+	public TestSuiteRun getDependsTestSuiteRun() {
+		return dependsTestSuiteRun;
+	}
+	
+	public Integer getDependsRunID() {
+		if(dependsTestSuiteRun != null){
+			return dependsTestSuiteRun.getTestSuiteRunID();
+		}
+		return null;
+	}
+
+	public void setDependsTestSuiteRun(TestSuiteRun dependsTestSuite) {
+		this.dependsTestSuiteRun = dependsTestSuite;
+	}
+
 	public void addTestRun(TestRun testRun){
 		this.testsRuns.add(testRun);
 	}
 
+	@JsonIgnoreProperties
+	public boolean isDependingOnAnotherTS(){
+		return dependsTestSuiteRun != null;
+	}
+	
 	public void addTestsRuns(List<Test> tests) throws IllegalArgumentException, IllegalAccessException, Exception {
 		for(Test test : tests){
 			TestRun testRun = test.toTestRun();

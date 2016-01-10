@@ -3,14 +3,17 @@
 <table class="table table-striped table-hover table-condensed">
 	<tbody>
 		<tr>
+			<th></th>
 			<th>Test Suite Name</th>
 			<th>Browser</th>
 			<th>Environment</th>
 			<th>Edit</th>
 			<th>Remove</th>
+			<th>depends on</th>
 		</tr>
 		<tr data-ng-repeat="testSuiteRunner in controller.testPlan.testSuiteRunners" class="animate-repeat">
-			<td class="col-sm-2"><input type="text" ng-model="testSuiteRunner.testSuite.testSuiteName"></input></td>
+			<td class="col-sm-0">{{$index}}</td>
+			<td class="col-sm-3"><input class="col-sm-12" type="text" ng-model="testSuiteRunner.testSuite.testSuiteName"></input></td>
 			<td class="col-sm-2"><select name="environment" ng-model="testSuiteRunner.environment" data-ng-options="environment as environment for environment in controller.environments" required>
 				<option value="">Select an Environment</option>
 			</select></td>
@@ -25,7 +28,12 @@
 			</select></td>
 			<td class="col-sm-2"><a id="edit" ng-click="controller.openEditTestSuite(testSuiteRunner.testSuite)">Edit Test Suite</a></td>
 			<td class="col-sm-2"><a id="edit" ng-click="controller.removeTest(testSuiteRunner.testSuite)">Remove Test Suite</a></td>
+			<td class="col-sm-1">
+			<select name="depndsTestSuite" ng-model="testSuiteRunner.testSuite.dependsTestSuiteIndex" data-ng-options="index as index for index in controller.getIndexOfTestSuites($index)" ng-change="controller.addDependTS(testSuiteRunner.testSuite)">
+				<option value="">None</option>
+			</select>
+			</td>
 		</tr>
 	</tbody>
 </table>
-<a class="btn" ng-click="controller.addTestSuite()">add Test Suite</a>
+<a class="btn" ng-click="controller.addTestSuite()">add new Test Suite</a>

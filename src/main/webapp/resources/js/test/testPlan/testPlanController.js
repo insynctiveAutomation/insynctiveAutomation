@@ -15,11 +15,14 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	this.environments = Environment.getEnvironments();
 	this.message = '';
 	
+	
+	
 	/*On Load Methods*/
 	this.getTestPlanByID = function(id) {
 		if(id){
 			testPlanService.findTestPlan(id, function(data){
 				self.testPlan = data;
+				self.addTestSuiteDependentIndex();
 				self.isLoading = false;
 			}, function(data){
 				self.message = 'Error =>'+data;
@@ -73,4 +76,39 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		});
 	}
 	
+	this.getIndexOfTestSuites = function(index){
+		var indexs = [];
+		for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
+			var tsIterate = self.testPlan.testSuiteRunners[i].testSuite;
+			var ts = self.testPlan.testSuiteRunners[index].testSuite;
+			
+			if(i != index  && self.doNotHaveMeDepends(ts, tsIterate)){
+				indexs.push(i);
+			}
+		}
+		return indexs;
+	}
+	
+	this.doNotHaveMeDepends = function(ts, tsIterate){
+		return !tsIterate.dependsTestSuite || tsIterate.dependsTestSuite === null || tsIterate.dependsTestSuite.testSuiteID != ts.testSuiteID;  
+	}
+	
+	this.addDependTS = function(ts){
+		ts.dependsTestSuite = ts.dependsTestSuiteIndex ? self.testPlan.testSuiteRunners[ts.dependsTestSuiteIndex].testSuite : undefined;
+	}
+	
+	this.findIndexOf = function(ts){
+		if(ts){
+			return self.testPlan.testSuiteRunners.findIndex(function(elem){return elem.testSuite.testSuiteID === ts.testSuiteID})
+		} else {
+			return null
+		}
+	}
+	
+	this.addTestSuiteDependentIndex = function(){
+		for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
+			var index = self.findIndexOf(self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuite)
+			self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuiteIndex = index; 
+		}
+	}
 });

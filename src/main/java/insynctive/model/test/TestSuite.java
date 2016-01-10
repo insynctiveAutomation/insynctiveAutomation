@@ -7,12 +7,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -35,7 +37,7 @@ import insynctive.model.test.run.TestSuiteRun;
 public class TestSuite {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "test_suite_id")
 	private Integer testSuiteID; 
 	
@@ -51,9 +53,12 @@ public class TestSuite {
 	)
 	private List<Test> tests = new ArrayList<Test>();
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToOne(cascade={CascadeType.ALL} )
+	@ManyToOne()
+	@JoinColumn(name = "testSuiteID")
 	private TestSuite dependsTestSuite;
+	
+	@Transient
+	public TestSuiteRun run;
 	
 	public TestSuite() {
 		// TODO Auto-generated constructor stub
@@ -116,6 +121,10 @@ public class TestSuite {
 		TestSuiteRun tsRun = new TestSuiteRun();
 		tsRun.setName(testSuiteName);
 		tsRun.addTestsRuns(tests);
+		if(dependsTestSuite != null){
+			tsRun.setDependsTestSuiteRun(dependsTestSuite.run);
+		}
+		run = tsRun;
 		return tsRun;
 	}
 

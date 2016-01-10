@@ -309,7 +309,7 @@ public class TestController {
 		return "{\"status\" : 200}";
 	}
 	
-	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}/{remote}", method = RequestMethod.POST)
+	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}/{remote}", method = RequestMethod.GET)
 	@ResponseBody
 	public String runTestPlanByID(@PathVariable("tpID") Integer tpID, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
 		

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
@@ -64,55 +65,61 @@ public class TestWebRunner {
 		this.testPlanRunDao = HibernateUtil.testPlanRunDao;
 	}
 	
-	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestPlanRun tpRun = tp.run();
-		testPlanRunDao.save(tpRun);
-		runTest(tpRun, isNotification, isRemote);
-	}
-	
 	public void runTest(TestPlan tp, Boolean isNotification) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestPlanRun tpRun = tp.run();
 		testPlanRunDao.save(tpRun);
 		runTest(tpRun, isNotification);
 	}
 	
-	public Integer runTest(TestSuite ts, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestSuiteRun tsRun = ts.run();
-		testSuiteRunDao.save(tsRun);
-		return runTest(tsRun, isNotification, isRemote, new Thread[]{});
+	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestPlanRun tpRun = tp.run();
+		testPlanRunDao.save(tpRun);
+		runTest(tpRun, isNotification, isRemote);
 	}
 	
 	public Integer runTest(TestSuite ts, Boolean isNotification) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = ts.run();
 		testSuiteRunDao.save(tsRun);
-		return runTest(tsRun, isNotification, tsRun.isRemote(), new Thread[]{});
+		return runTest(tsRun, isNotification, tsRun.isRemote());
+	}
+	
+	public Integer runTest(TestSuite ts, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = ts.run();
+		testSuiteRunDao.save(tsRun);
+		return runTest(tsRun, isNotification, isRemote);
 	}
 	
 	public void runTest(TestPlanRun tpRun, Boolean isNotification) {
-		for(TestSuiteRun tsRun : tpRun.getTestSuiteRuns()){
+		List<TestSuiteRun> tsNoDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> !tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
+		List<TestSuiteRun> tsDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
+			
+		for(TestSuiteRun tsRun : tsNoDepends){
+			runTest(tsRun, isNotification, tsRun.isRemote());
+		}
+		
+		for(TestSuiteRun tsRun : tsDepends){
 			runTest(tsRun, isNotification, tsRun.isRemote());
 		}
 	}
 	
 	public void runTest(TestPlanRun tpRun, Boolean isNotification, Boolean isRemote) {
-		for(TestSuiteRun tsRun : tpRun.getTestSuiteRuns()){
+		List<TestSuiteRun> tsNoDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> !tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
+		List<TestSuiteRun> tsDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
+		
+		for(TestSuiteRun tsRun : tsNoDepends){
+			runTest(tsRun, isNotification, isRemote);
+		}
+		
+		for(TestSuiteRun tsRun : tsDepends){
 			runTest(tsRun, isNotification, isRemote);
 		}
 	}
 	
 	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification) {
-		return runTest(tsRun, isNotification, tsRun.isRemote(), new Thread[]{});
-	}
-
-	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Thread threadToJoin) {
-		return runTest(tsRun, isNotification, tsRun.isRemote(), new Thread[]{threadToJoin});
+		return runTest(tsRun, isNotification, tsRun.isRemote());
 	}
 	
 	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Boolean isRemote) {
-		return runTest(tsRun, isNotification, isRemote, new Thread[]{});
-	}
-	
-	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Boolean isRemote, Thread[] threadToJoin) {
 		XmlSuite suite = createXmlTest(tsRun);
 		List<XmlSuite> suites = new ArrayList<>();
 		suites.add(suite);
@@ -154,7 +161,8 @@ public class TestWebRunner {
 		testNG.addListener(testListenerAdapter);
 		
 		//START TEST IN OTHER THREAD
-		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, testSuiteRunDao, testDao, threadToJoin));
+		Thread threadToJoin = TestResults.workers.get(tsRun.getDependsRunID());
+		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, testSuiteRunDao, testDao, (threadToJoin != null ? new Thread[]{threadToJoin} : new Thread[]{})));
 		TestResults.addWorker(tsRun.getTestSuiteRunID(), thread);
 		thread.start();
 		
