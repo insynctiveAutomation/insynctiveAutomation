@@ -21,8 +21,7 @@ app.controller('testPlanListController', function($cookies, $scope, $window, $mo
 	}
 	this.getAllTestPlans();
 	
-	this.goTo = function(path){
-		$window.location.href = path;
+	this.goTo = function(event, path ){
+		Util.goTo(path, event, $window);
 	}
-	
 });

@@ -19,6 +19,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.run.TestPlanRun;
+import junit.textui.TestRunner;
 
 @Entity
 @Table(name = "test_plan")
@@ -85,5 +86,11 @@ public class TestPlan {
 		TestPlanRun tpRun = toTestPlanRun();
 		tpRun.setStatus("Running");
 		return tpRun;
+	}
+	
+	public void setNewEnvironmentInTests(String environment){
+		for(TestSuiteRunner tsRunner : testSuiteRunners){
+			tsRunner.setEnvironment(environment);
+		}
 	}
 }

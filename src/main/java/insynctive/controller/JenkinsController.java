@@ -16,6 +16,7 @@ import insynctive.dao.CreatePersonFormDao;
 import insynctive.dao.InsynctivePropertyDao;
 import insynctive.model.Account;
 import insynctive.model.ParamObject;
+import insynctive.model.test.TestPlan;
 import insynctive.utils.TestResults;
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestPlanDao;
@@ -34,15 +35,18 @@ import insynctive.utils.slack.builders.SlackMessageBuilder;
 public class JenkinsController {
 
 	//NIGHTLY SETTINGS
-	private final int NIGHTLY_ACCOUNT_ID = 6;
 	final String NIGHTLY_DEFAULT_ENVIRONMENT = "AutomationQA";
 	
 	//DB Connections.
-	private final AccountDao accDao;
+	private final TestPlanDao testPlanDao;
 	
+	//Test Runner
+	private final TestWebRunner testRunner;
+		
 	@Inject
-	public JenkinsController(AccountDao accDao) {
-		this.accDao = accDao;
+	public JenkinsController(TestPlanDao testPlanDao) {
+		this.testPlanDao = testPlanDao;
+		this.testRunner = new TestWebRunner();
 	}
 	
 	@RequestMapping(value = "/build", method = RequestMethod.POST)
@@ -75,31 +79,26 @@ public class JenkinsController {
 		
 		return "{\"status\" : 200}";
 	}
-	
-	private void runOtherBranchesTests(JenkinsForm jenkinsForm) throws Exception {
-		runMasterTests(jenkinsForm);
-	}
-
-	private void runIntegrationsTests(JenkinsForm jenkinsForm) throws Exception {
-		runMasterTests(jenkinsForm);
-	}
 
 	private boolean needComunication(JenkinsForm jenkinsForm) {
 		return jenkinsForm.isStatusFailure() || jenkinsForm.isPhaseStarted() || jenkinsForm.isStatusAborted() || jenkinsForm.isTypeInstall(); 
 	}
-
+	
 	public void runMasterTests(JenkinsForm jenkinsForm) throws Exception{
-		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
-		ParamObject defaultParamObject = nightlyAcc.getParamObject();
-		String insynctiveAccount = jenkinsForm.getBuild().getParameters().getAccount();
-		
-		//FIRST LOGIN
-//		TestSuite firstLoginform = testRunner.createTestSuite(defaultParamObject,"First Login", insynctiveAccount, "FIREFOX");
-//		Integer firstLoginRun = testRunner.runTest(firstLoginform, nightlyAcc);
-//		
-//		//Person File - FIREFOX
-//		TestSuite form = testRunner.createTestSuite(defaultParamObject,"Person File", insynctiveAccount, "FIREFOX");
-//			form.getTestByName("createPersonTest").getParamObject().setBooleanParamOne(false);
-//		Integer PersonFileFirefox = testRunner.runTest(form, nightlyAcc, TestResults.workers.get(firstLoginRun));
+		TestPlan testPlan = testPlanDao.getTestPlanByName("Jenkins Build - Master");
+		testPlan.setNewEnvironmentInTests(jenkinsForm.getBuild().getParameters().getAccount());
+		testRunner.runTest(testPlan, true, true);
+	}
+
+	private void runIntegrationsTests(JenkinsForm jenkinsForm) throws Exception {
+		TestPlan testPlan = testPlanDao.getTestPlanByName("Jenkins Build - Integration");
+		testPlan.setNewEnvironmentInTests(jenkinsForm.getBuild().getParameters().getAccount());
+		testRunner.runTest(testPlan, true, true);
+	}
+	
+	public void runOtherBranchesTests(JenkinsForm jenkinsForm) throws Exception {
+		TestPlan testPlan = testPlanDao.getTestPlanByName("Jenkins Build - Other");
+		testPlan.setNewEnvironmentInTests(jenkinsForm.getBuild().getParameters().getAccount());
+		testRunner.runTest(testPlan, true, true);
 	}
 }

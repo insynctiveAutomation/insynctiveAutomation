@@ -32,6 +32,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/test.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/util/util.js"></script>
 	
 	<!-- Directive -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
@@ -92,11 +93,11 @@
 			</tr>
 			<tr data-ng-repeat="testPlan in controller.testPlans" class="animate-repeat">
 				<td class="col-sm-1"><span ng-bind="testPlan.name"></span></td>
-				<td class="col-sm-4"><a ng-click="controller.goTo('testPlan?id='+testPlan.testPlanID)" id="viewTestPlanLink">View Test Plan</a></td>
+				<td class="col-sm-4"><a ng-click="controller.goTo($event, 'testPlan?id='+testPlan.testPlanID)" id="viewTestPlanLink">View Test Plan</a></td>
 			</tr>
 		</tbody>
 	</table>
-	<a ng-click="controller.goTo('/testPlan')" id="createPersonPlanLink">Create Test Plan</a>
+	<a ng-click="controller.goTo($event, '/testPlan')" id="createPersonPlanLink">Create Test Plan</a>
 	</div>
 	<img class="centered img-30" ng-if="controller.isLoading" alt="Loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif">
 </body>

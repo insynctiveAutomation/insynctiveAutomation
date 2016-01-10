@@ -30,11 +30,11 @@
 			<td class="col-sm-2"><a id="edit" ng-click="controller.removeTestSuite($index)">Remove Test Suite</a></td>
 			<td class="col-sm-1"><a id="edit" ng-click="controller.copy($index)">Copy</a></td>
 			<td class="col-sm-1">
-			<select name="depndsTestSuite" ng-model="testSuiteRunner.testSuite.dependsTestSuiteIndex" data-ng-options="index as index for index in controller.getIndexOfTestSuites($index)" ng-change="controller.addDependTS(testSuiteRunner.testSuite)">
+			<select name="depndsTestSuite" ng-model="testSuiteRunner.testSuite.dependsTestSuiteIndex" data-ng-options="index as index for index in controller.getPossibleDependentIndex($index)" ng-change="controller.addDependTS(testSuiteRunner.testSuite)">
 				<option value="">None</option>
 			</select>
 			</td>
 		</tr>
 	</tbody>
 </table>
-<a class="btn" ng-click="controller.addTestSuite()">add new Test Suite</a>
+<a class="btn" ng-click="controller.addNewTestSuite()">add new Test Suite</a>

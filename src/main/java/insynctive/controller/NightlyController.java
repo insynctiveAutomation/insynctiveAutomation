@@ -53,7 +53,7 @@ public class NightlyController {
 		this.testRunner = new TestWebRunner();
 	}
 	
-	@RequestMapping(value = "/nightly", method = RequestMethod.GET)
+	@RequestMapping(value = "/nightly", method = RequestMethod.POST)
 	@ResponseBody
 	public String runNightly() throws Exception {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
@@ -67,6 +67,9 @@ public class NightlyController {
 	@ResponseBody
 	public String runNightlyMicrosoft() throws Exception {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
+		TestPlan testPlan = testPlanDao.getTestPlanByName("Nightly-Microsoft");
+		testRunner.runTest(testPlan, true);
+		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
 }

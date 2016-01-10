@@ -50,20 +50,20 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		}); 
 	};
 	
-	this.addTestSuite = function(){
-		self.testPlan.testSuiteRunners.push(new TestSuiteRunner());
-	}
-	
-	this.removeTestSuite = function(index){
-		self.testPlan.testSuiteRunners.pop(index)
-	}
-	
 	this.copy = function(index){
 		var copyTS = {}
 		angular.copy(self.testPlan.testSuiteRunners[index], copyTS)
 		
 		self.testPlan.testSuiteRunners.push(TestSuite.makeNew(copyTS))
 		
+	};
+	
+	this.addNewTestSuite = function(){
+		self.testPlan.testSuiteRunners.push(new TestSuiteRunner());
+	}
+	
+	this.removeTestSuite = function(index){
+		self.testPlan.testSuiteRunners.pop(index)
 	}
 	
 	//On Edit Parameters click
@@ -84,7 +84,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		});
 	}
 	
-	this.getIndexOfTestSuites = function(index){
+	this.getPossibleDependentIndex = function(index){
 		var indexs = [];
 		for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
 			var tsIterate = self.testPlan.testSuiteRunners[i].testSuite;
@@ -105,7 +105,9 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.addDependTS = function(ts){
-		ts.dependsTestSuite = ts.dependsTestSuiteIndex ? self.testPlan.testSuiteRunners[ts.dependsTestSuiteIndex].testSuite : undefined;
+		var isNull = ts.dependsTestSuiteIndex === null || ts.dependsTestSuiteIndex === undefined
+		
+		ts.dependsTestSuite = !isNull ? self.testPlan.testSuiteRunners[ts.dependsTestSuiteIndex].testSuite : undefined;
 	}
 	
 	this.findIndexOf = function(ts){
