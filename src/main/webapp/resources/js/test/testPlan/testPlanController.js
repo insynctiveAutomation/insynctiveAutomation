@@ -54,8 +54,16 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		self.testPlan.testSuiteRunners.push(new TestSuiteRunner());
 	}
 	
-	this.removeTestSuite = function(testSuite){
-		self.testPlan.testSuites.pop(testSuite);
+	this.removeTestSuite = function(index){
+		self.testPlan.testSuiteRunners.pop(index)
+	}
+	
+	this.copy = function(index){
+		var copyTS = {}
+		angular.copy(self.testPlan.testSuiteRunners[index], copyTS)
+		
+		self.testPlan.testSuiteRunners.push(TestSuite.makeNew(copyTS))
+		
 	}
 	
 	//On Edit Parameters click
