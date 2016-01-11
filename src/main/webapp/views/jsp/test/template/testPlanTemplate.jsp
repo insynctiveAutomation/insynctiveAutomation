@@ -6,8 +6,8 @@
 			<th></th>
 			<th></th>
 			<th>Test Suite Name</th>
-			<th>Browser</th>
 			<th>Environment</th>
+			<th>Browser</th>
 			<th>Edit</th>
 			<th>Copy</th>
 			<th>Run After</th>

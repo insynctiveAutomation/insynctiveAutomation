@@ -24,8 +24,8 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 		self.testSuite.tests.push(new Test(self.testSuite));
 	}
 	
-	this.removeTest = function(test){
-		self.testSuite.tests.pop(test);
+	this.removeTest = function(index){
+		self.testSuite.tests.splice(index, 1);
 	}
 	
 	//On Edit Parameters click
