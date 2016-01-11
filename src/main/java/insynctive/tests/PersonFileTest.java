@@ -32,13 +32,6 @@ public class PersonFileTest extends TestMachine {
 	
 	private USAddress usaddress = null;
 	
-	public Integer runID;
-	public String environment;
-	public TestEnvironment testEnvironment;
-	public boolean isRemote;
-	public boolean isNotification;
-	public Integer testSuiteID;
-	
 	@BeforeClass
 	@Parameters({"environment", "browser", "isRemote", "isNotification", "testSuiteID", "testName"})
 	public void tearUp(String environment, String browser, String isRemote, String isNotification, String testSuiteID, String testName) throws Exception {
@@ -89,7 +82,6 @@ public class PersonFileTest extends TestMachine {
 		}
 	}
 	
-	//TODO DUPLICATED CODE
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(attrs={ParamObjectField.LOGIN_USERNAME, ParamObjectField.LOGIN_PASSWORD}, 
