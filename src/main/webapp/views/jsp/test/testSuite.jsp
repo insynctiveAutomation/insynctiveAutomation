@@ -10,6 +10,8 @@
 <head>
 	<!-- JQUERY -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/jquery/dist/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/jquery.browser/dist/jquery.browser.js"></script>
 	
 	<!-- BOOTSTRAP -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -22,6 +24,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-animate/angular-animate.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular/sortable.js"></script>
 	
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>

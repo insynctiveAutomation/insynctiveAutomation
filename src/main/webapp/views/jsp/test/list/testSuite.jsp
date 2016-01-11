@@ -69,7 +69,7 @@
 
 <body data-ng-controller="testSuiteController as controller">
 	<form ng-submit="controller.save()" name="form" id="form">
-		<test-suite-view controller="controller"></test-suite-view>
+		<test-suite controller="controller"></test-suite>
 		<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit">Save</button>
 	</form>
 </body>
