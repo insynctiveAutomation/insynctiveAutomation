@@ -13,8 +13,14 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	
 	this.testSuite = testSuite;
 	this.save = function(){
+		self.message = 'Saving...';
 		testSuiteService.saveTestSuite(self.testSuite, function(data){
 			self.message = 'Saved!';
+			setTimeout(function(){
+					self.message = '';
+					$scope.$apply();
+				}, 5000);
+			self.testSuite = data;
 		}, function(data){
 			self.message = 'Error => '+data;
 		}); 
@@ -25,7 +31,12 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	}
 	
 	this.removeTest = function(index){
-		self.testSuite.tests.splice(index, 1);
+		bootbox.confirm("Are you sure you want to remove "+self.testSuite.tests[index].testName+"?", function(result){
+			if(result) {
+				self.testSuite.tests.splice(index, 1)
+				$scope.$apply();
+			}
+		})
 	}
 	
 	//On Edit Parameters click

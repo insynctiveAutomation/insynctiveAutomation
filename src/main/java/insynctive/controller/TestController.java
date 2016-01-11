@@ -114,9 +114,9 @@ public class TestController {
 	
 	@RequestMapping(value = "/test" ,method = RequestMethod.POST)
 	@ResponseBody
-	public String saveTest(@RequestBody Test test) throws Exception{
+	public Test saveTest(@RequestBody Test test) throws Exception{
 		testDao.saveOrUpdate(test);
-		return "{\"statut\" : 200}";
+		return test;
 	}
 	
 	@RequestMapping(value = "/testSuite/{testSuiteID}" ,method = RequestMethod.GET)
@@ -128,9 +128,9 @@ public class TestController {
 	
 	@RequestMapping(value = "/testSuite" ,method = RequestMethod.POST)
 	@ResponseBody
-	public String saveTestSuite(@RequestBody TestSuite testSuite) throws Exception{
+	public TestSuite saveTestSuite(@RequestBody TestSuite testSuite) throws Exception{
 		testSuiteDao.saveOrUpdate(testSuite);
-		return "{\"statut\" : 200}";
+		return testSuite;
 	}
 	
 	@RequestMapping(value = "/testPlan/{testPlanID}" ,method = RequestMethod.GET)
@@ -142,9 +142,9 @@ public class TestController {
 	
 	@RequestMapping(value = "/testPlan" ,method = RequestMethod.POST)
 	@ResponseBody
-	public String saveTestPlan(@RequestBody TestPlan testPlan) throws Exception{
+	public TestPlan saveTestPlan(@RequestBody TestPlan testPlan) throws Exception{
 		testPlanDao.saveOrUpdate(testPlan);
-		return "{\"statut\" : 200}";
+		return testPlan;
 	} 
 	
 	@RequestMapping(value = "/remove/testPlan" ,method = RequestMethod.POST)

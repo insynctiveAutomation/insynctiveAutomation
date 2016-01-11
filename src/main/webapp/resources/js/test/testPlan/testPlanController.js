@@ -35,19 +35,29 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	this.getTestPlanByID(this.testPlanID);
 	
 	this.save = function(){
+		self.message = 'Saving...';
 		testPlanService.saveTestPlan(self.testPlan, function(data){
 			self.message = 'Saved!';
+			setTimeout(function(){
+					self.message = '';
+					$scope.$apply();
+				}, 5000);
+			self.testPlan = data;
 		}, function(data){
 			self.message = 'Error => '+data;
 		}); 
 	};
 	
 	this.remove = function(){
-		testPlanService.removeTestPlan(self.testPlan, function(data){
-			$window.location.href = '/';
-		}, function(data){
-			self.message = 'Error => '+data;
-		}); 
+		bootbox.confirm("Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(result){
+			if(result){
+				testPlanService.removeTestPlan(self.testPlan, function(data){
+					$window.location.href = '/';
+				}, function(data){
+					self.message = 'Error => '+data;
+				}); 
+			}
+		})
 	};
 	
 	this.copy = function(index){
@@ -63,7 +73,12 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.removeTestSuite = function(index){
-		self.testPlan.testSuiteRunners.splice(index, 1)
+		bootbox.confirm("Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(result){
+			if(result) {
+				self.testPlan.testSuiteRunners.splice(index, 1)
+				$scope.$apply();
+			}
+		})
 	}
 	
 	//On Edit Parameters click
