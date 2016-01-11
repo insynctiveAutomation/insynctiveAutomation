@@ -54,7 +54,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		var copyTSRunner = {}
 		angular.copy(self.testPlan.testSuiteRunners[index], copyTSRunner)
 		
-		self.testPlan.testSuiteRunners.push(TestSuiteRunner.makeNew(copyTS))
+		self.testPlan.testSuiteRunners.push(TestSuiteRunner.makeNew(copyTSRunner))
 		
 	};
 	
@@ -63,7 +63,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.removeTestSuite = function(index){
-		self.testPlan.testSuiteRunners.pop(index)
+		self.testPlan.testSuiteRunners.splice(index, 1)
 	}
 	
 	//On Edit Parameters click

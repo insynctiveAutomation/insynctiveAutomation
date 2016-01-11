@@ -21,13 +21,13 @@ TestSuite.makeNew = function(ts){
 }
 
 TestSuite.removeID = function(ts){
-	if(ts){ ts.testSuiteID = undefined; }
+	if(ts){ ts.testSuiteID = undefined }
 }
 
 TestSuite.removeDependsTestSuite = function(ts){
-	if(ts){ ts.dependsTestSuite = undefined; }
+	if(ts){ ts.dependsTestSuite = undefined }
 }
 
 TestSuite.removeDependsTestSuiteIndex = function(ts){
-	if(ts){ ts.dependsTestSuiteIndex = undefined; }
+	if(ts){ ts.dependsTestSuiteIndex = undefined }
 }

@@ -446,7 +446,6 @@ Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		for (Class<? extends TestMachine> testClass : testsClasses) {
 			String[] split = className.split("\\.");
 			if (testClass.getSimpleName().equals(split[split.length-1])) {
-				System.out.println(Arrays.asList(testClass.getDeclaredMethods()).stream().filter(meth -> meth.isAnnotationPresent(org.testng.annotations.Test.class)).toArray());
 				testsMethods = Arrays.asList(testClass.getDeclaredMethods()).stream().filter(meth -> meth.isAnnotationPresent(org.testng.annotations.Test.class)).map(meth -> meth.getName()).toArray();
 			}
 		}

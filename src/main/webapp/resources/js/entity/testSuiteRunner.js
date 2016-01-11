@@ -9,7 +9,7 @@ TestSuiteRunner.asTestSuiteRunner = function (jsonTestSuiteRunner) {
 	return angular.extend(new TestSuiteRunner(), jsonTestSuiteRunner);
 };
 
-TestSuiteRunner.makeNew(tsRunner){
+TestSuiteRunner.makeNew = function(tsRunner){
 	TestSuiteRunner.removeID(tsRunner);
 	TestSuiteRunner.removeBrowser(tsRunner);
 	TestSuiteRunner.removeEnvironment(tsRunner);
@@ -19,13 +19,13 @@ TestSuiteRunner.makeNew(tsRunner){
 }
 
 TestSuiteRunner.removeID = function(tsRunner){
-	if(tsRunner){ tsRunner.testSuiteRunnerID = undefined; }
+	if(tsRunner){ tsRunner.testSuiteRunnerID = undefined }
 }
 
 TestSuiteRunner.removeBrowser = function(tsRunner){
-	if(tsRunner){ tsRunner.browser = undefined; }
+	if(tsRunner){ tsRunner.browser = undefined }
 }
 
 TestSuiteRunner.removeEnvironment = function(tsRunner){
-	if(tsRunner){ tsRunner.environment = undefined; }
+	if(tsRunner){ tsRunner.environment = undefined }
 }

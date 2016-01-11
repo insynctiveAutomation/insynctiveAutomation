@@ -85,3 +85,8 @@ a:hover {
 	padding-right: 10px;
 	padding-top: 5px;
 }
+
+.red-cross {
+	color: red;  
+	text-decoration: blink;
+}
