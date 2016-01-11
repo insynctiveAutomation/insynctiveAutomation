@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('testPlanApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'testSuiteApp']).config(function($locationProvider) {
+var app = angular.module('testPlanApp', [ 'ngAnimate', 'ui.sortable', 'ui.bootstrap', 'ngCookies', 'testSuiteApp']).config(function($locationProvider) {
 	 $locationProvider.html5Mode({
 	   	  enabled: true,
 	   	  requireBase: false
@@ -119,9 +119,11 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.addTestSuiteDependentIndex = function(){
-		for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
-			var index = self.findIndexOf(self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuite)
-			self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuiteIndex = index; 
+		if(self.testPlan){
+			for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
+				var index = self.findIndexOf(self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuite)
+				self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuiteIndex = index; 
+			}
 		}
 	}
 });

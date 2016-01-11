@@ -1,7 +1,7 @@
 <span>Test Plan Name: </span>
 <input type="text" ng-model="controller.testPlan.name" />
 <table class="table table-striped table-hover table-condensed">
-	<tbody>
+	<thead>
 		<tr>
 			<th></th>
 			<th>Test Suite Name</th>
@@ -12,6 +12,8 @@
 			<th>Copy</th>
 			<th>Run After</th>
 		</tr>
+	</thead>
+	<tbody ui-sortable="controller.addTestSuiteDependentIndex()" ng-model="controller.testPlan.testSuiteRunners">
 		<tr data-ng-repeat="testSuiteRunner in controller.testPlan.testSuiteRunners" class="animate-repeat">
 			<td class="col-sm-0">{{$index}}</td>
 			<td class="col-sm-3"><input class="col-sm-12" type="text" ng-model="testSuiteRunner.testSuite.testSuiteName"></input></td>
