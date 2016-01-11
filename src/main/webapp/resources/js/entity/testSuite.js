@@ -4,30 +4,30 @@ function TestSuite() {
 	this.tests = [];
 }
 
-TestSuite.makeNew = function(tsRunner){
-	tsRunner.testSuiteRunnerID = undefined;
-	tsRunner.testSuite.testSuiteID = undefined;
-	tsRunner.testSuite.dependsTestSuite = undefined;
-	tsRunner.testSuite.dependsTestSuiteIndex = undefined;
-	
-	for(var testIndex in tsRunner.testSuite.tests){
-		
-		tsRunner.testSuite.tests[testIndex].paramObject.paramObjectID = undefined;
-		
-		if(tsRunner.testSuite.tests[testIndex].paramObject.emergencyContact){
-			tsRunner.testSuite.tests[testIndex].paramObject.emergencyContact.emergencyID = undefined;
-		}
-		
-		if(tsRunner.testSuite.tests[testIndex].paramObject.usAddress){
-			tsRunner.testSuite.tests[testIndex].paramObject.usAddress.usAddressID = undefined;
-		}
-		
-		tsRunner.testSuite.tests[testIndex].testID = undefined
-	}
-	
-	return tsRunner;
-}
-
 TestSuite.asTestSuite = function (jsonTestSuite) {
 	return angular.extend(new TestSuite(), jsonTestSuite);
 };
+
+TestSuite.makeNew = function(ts){
+	TestSuite.removeID(ts);
+	TestSuite.removeDependsTestSuite(ts);
+	TestSuite.removeDependsTestSuiteIndex(ts);
+	
+	for(var testIndex in ts.tests){
+		Test.makeNew(ts.tests[testIndex]);
+	}
+	
+	return ts;
+}
+
+TestSuite.removeID = function(ts){
+	if(ts){ ts.testSuiteID = undefined; }
+}
+
+TestSuite.removeDependsTestSuite = function(ts){
+	if(ts){ ts.dependsTestSuite = undefined; }
+}
+
+TestSuite.removeDependsTestSuiteIndex = function(ts){
+	if(ts){ ts.dependsTestSuiteIndex = undefined; }
+}

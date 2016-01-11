@@ -51,10 +51,10 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	};
 	
 	this.copy = function(index){
-		var copyTS = {}
-		angular.copy(self.testPlan.testSuiteRunners[index], copyTS)
+		var copyTSRunner = {}
+		angular.copy(self.testPlan.testSuiteRunners[index], copyTSRunner)
 		
-		self.testPlan.testSuiteRunners.push(TestSuite.makeNew(copyTS))
+		self.testPlan.testSuiteRunners.push(TestSuiteRunner.makeNew(copyTS))
 		
 	};
 	
