@@ -8,29 +8,18 @@
 <meta charset="utf-8">
 <title>Recetas en Angular</title>
 <head>
-	<!-- JQUERY -->
-	<script src="node_modules/jquery/dist/jquery.min.js"></script>
-	<!-- BOOTSTRAP -->
-	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-	<link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-	<script src="node_modules/underscore/underscore-min.js"></script>
 	
-	<!-- ANGULAR -->
-	<script src="node_modules/angular/angular.js"></script>
-	<script src="node_modules/angular-animate/angular-animate.js"></script>
-	<script src="node_modules/angular-cookies/angular-cookies.js"></script>
-	
-	<script src="node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+	<%@include file="/views/jsp/import/import-jquery.jsp" %>
+	<%@include file="/views/jsp/import/import-angular.jsp" %>
+	<%@include file="/views/jsp/import/import-bootstrap.jsp" %>
+	<%@include file="/views/jsp/import/import-entities.jsp" %>
+	<%@include file="/views/jsp/import/module/import-configuration_modal.jsp" %>
 	
 	<!-- MY CSS -->
 	<link rel="stylesheet" href="resources/css/account_config/accountConfig.css">
+	
 </head>
 <body data-ng-controller="AccountController as accountCtrl">
 	<account-config-content/>
 </body>
-<script src="resources/js/entity/accountConfig.js"></script>
-<script src="resources/js/account_config/accountController.js"></script>
-<script src="resources/js/account_config/accountService.js"></script>
-<script src="resources/js/account_config/accountDirectives.js"></script>
 </html>

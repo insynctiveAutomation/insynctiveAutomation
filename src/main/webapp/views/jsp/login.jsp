@@ -9,29 +9,16 @@
 <title>Automated Tests Project</title>
 <head>
 
-<!-- JQUERY -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/jquery/dist/jquery.min.js"></script>
+	<%@include file="/views/jsp/import/import-jquery.jsp" %>
+	<%@include file="/views/jsp/import/import-angular.jsp" %>
+	<%@include file="/views/jsp/import/import-bootstrap.jsp" %>
+	<%@include file="/views/jsp/import/import-entities.jsp" %>
 
-<!-- BOOTSTRAP -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/css/bootstrap.min.css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<link href="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/underscore/underscore-min.js"></script>
-
-<!-- ANGULAR -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular/angular.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-animate/angular-animate.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-
-<!-- MY CSS -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login/login.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/account_config/accountConfig.css">
-
-<!-- MODAL -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/accountConfig.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
+	<%@include file="/views/jsp/import/module/import-login.jsp" %>
+	
+	<!-- MY CSS -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login/login.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/account_config/accountConfig.css">
 
 </head>
 

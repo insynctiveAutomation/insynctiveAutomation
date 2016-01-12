@@ -4,34 +4,18 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="configuration">
 <head>
-	<!-- JQUERY -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/jquery/dist/jquery.min.js"></script>
-	
-	<!-- BOOTSTRAP -->
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/css/bootstrap.min.css">
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-	<link href="${pageContext.request.contextPath}/resources/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/underscore/underscore-min.js"></script>
-	
-	<!-- ANGULAR -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular/angular.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-animate/angular-animate.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-cookies/angular-cookies.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-	
 	<!-- MY CSS -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/configuration/configuration.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home_page/test.css">
-	
-	<!-- Login -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginController.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login/loginService.js"></script>
-	
-	<!-- Advanced Modules -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationController.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/configuration/configurationService.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/fieldDirectives.js"></script>
 
+	<%@include file="/views/jsp/import/import-jquery.jsp" %>
+	<%@include file="/views/jsp/import/import-angular.jsp" %>
+	<%@include file="/views/jsp/import/import-bootstrap.jsp" %>
+	<%@include file="/views/jsp/import/import-entities.jsp" %>
+	<%@include file="/views/jsp/import/module/import-configuration_modal.jsp" %>
+	
+	<%@include file="/views/jsp/import/module/import-login.jsp" %>
+	<%@include file="/views/jsp/import/module/import-advanced_configuration.jsp" %>	
 </head>
 
 	<body data-ng-controller="configurationController as configCtl">
