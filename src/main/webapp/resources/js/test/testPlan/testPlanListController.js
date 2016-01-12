@@ -16,7 +16,7 @@ app.controller('testPlanListController', function($cookies, $scope, $window, $mo
 	this.getAllTestPlans = function(){
 		testPlanService.getAllTestPlan(function(data){
 			self.isLoading = false;
-			self.testPlans = data;
+			self.testPlans = data.sort(function(a,b) { return (b.name < a.name) });
 		});
 	}
 	this.getAllTestPlans();
