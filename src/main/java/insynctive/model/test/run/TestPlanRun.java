@@ -2,6 +2,7 @@ package insynctive.model.test.run;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +19,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import insynctive.model.test.TestPlan;
+import insynctive.model.test.TestSuite;
 import insynctive.model.test.TestSuiteRunner;
 
 @Entity
@@ -45,8 +48,23 @@ public class TestPlanRun {
 	)
 	public List<TestSuiteRun> testSuiteRuns = new ArrayList();
 
-	public TestPlanRun() {
-		// TODO Auto-generated constructor stub
+	public TestPlanRun() {	}
+	
+	public TestPlanRun(String name) {
+		this.name = name;
+		this.status = "New";
+	}
+
+	public TestPlanRun(TestPlan tp, Boolean isRemote) throws Exception {
+		this.name = tp.name;
+		this.status = "New";
+		addTestSuiteRuns(tp.getTestSuiteRunners(), isRemote);
+	}
+
+	public TestPlanRun(TestPlan tp, Boolean isRemote, String tester) throws Exception {
+		this.name = tp.name;
+		this.status = "New";
+		addTestSuiteRuns(tp.getTestSuiteRunners(), isRemote, tester);
 	}
 	
 	public Integer getTestPlanRunID() {
@@ -85,11 +103,32 @@ public class TestPlanRun {
 		testSuiteRuns.add(tsRun);
 	}
 	
-	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners) throws IllegalArgumentException, IllegalAccessException, Exception{
-		for(TestSuiteRunner tsRunner : testSuitesRunners){
-			TestSuiteRun tsRun = tsRunner.toTestSuiteRun();
-			this.addTestSuiteRun(tsRun);
+	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception{
+		addTestSuiteRuns(testSuitesRunners, new ArrayList<TestSuiteRunner>(), isRemote, tester);
+	}
+	
+	private void addTestSuiteRuns(List<TestSuiteRunner> notRunned, List<TestSuiteRunner> runned, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception{
+		List<TestSuiteRunner> canRun = notRunned.stream().filter(tsRunner -> canBeAdded(tsRunner, runned)).collect(Collectors.toList());
+		List<TestSuiteRunner> canNotRun = notRunned.stream().filter(tsRunner -> !canBeAdded(tsRunner, runned)).collect(Collectors.toList());
+		
+		
+		for(TestSuiteRunner tsRunner : canRun){
+			TestSuiteRun tsRun = new TestSuiteRun(tsRunner, isRemote, tester);
+			tsRun.setDependsTestSuiteRun(tsRunner.getTestSuite().isDependingOnAnotherTS() ? tsRunner.getTestSuite().getDependsTestSuite().run : null); 
+			addTestSuiteRun(tsRun);
+		
+			tsRunner.getTestSuite().run = tsRun;
+			runned.add(tsRunner);
 		}
+		if(canNotRun.size() > 0){ addTestSuiteRuns(canNotRun, runned, isRemote, tester); }
+	}
+	
+	private Boolean canBeAdded(TestSuiteRunner tsRunner, List<TestSuiteRunner> added) {
+		return !tsRunner.getTestSuite().isDependingOnAnotherTS() || added.stream().anyMatch(tsRunnerAdded -> tsRunnerAdded.getTestSuite().equals(tsRunner.getTestSuite().getDependsTestSuite()));
+	}
+
+	public void addTestSuiteRuns(List<TestSuiteRunner> testSuitesRunners, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception{
+		addTestSuiteRuns(testSuitesRunners, isRemote, "");
 	}
 
 }

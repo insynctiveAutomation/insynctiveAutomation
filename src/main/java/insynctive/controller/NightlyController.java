@@ -58,7 +58,7 @@ public class NightlyController {
 	public String runNightly() throws Exception {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		TestPlan testPlan = testPlanDao.getTestPlanByName("Nightly");
-		testRunner.runTest(testPlan, true);
+		testRunner.runTest(testPlan, true, true);
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}
@@ -68,7 +68,7 @@ public class NightlyController {
 	public String runNightlyMicrosoft() throws Exception {
 		Account nightlyAcc = accDao.getAccountByID(NIGHTLY_ACCOUNT_ID);
 		TestPlan testPlan = testPlanDao.getTestPlanByName("Nightly-Microsoft");
-		testRunner.runTest(testPlan, true);
+		testRunner.runTest(testPlan, true, true);
 		
 		return "{\"status\" : 200, \"user\" : \""+nightlyAcc.getUsername()+"}";
 	}

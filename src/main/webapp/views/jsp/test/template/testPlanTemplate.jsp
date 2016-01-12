@@ -41,4 +41,4 @@
 </table>
 <a class="btn" ng-click="controller.addNewTestSuite()">Add new Test Suite</a>
 <span>    </span>
-<a class="btn" ng-click="controller.importTestSuite()">Import existing Test Suite</a>
+<a class="btn" ng-click="controller.importTestSuite()"><span ng-if="controller.importLabel">{{controller.importLabel}}</span><span ng-if="!controller.importLabel">Import existing Test Suite</span></a>

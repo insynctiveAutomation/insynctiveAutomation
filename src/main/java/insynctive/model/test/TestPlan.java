@@ -43,8 +43,10 @@ public class TestPlan {
 	)
 	public List<TestSuiteRunner> testSuiteRunners = new ArrayList<>();
 
-	public TestPlan() {
-		// TODO Auto-generated constructor stub
+	public TestPlan() {	}
+
+	public TestPlan(String name) {
+		this.name = name;
 	}
 
 	public Integer getTestPlanID() {
@@ -74,18 +76,15 @@ public class TestPlan {
 	public void setTestSuiteRunners(List<TestSuiteRunner> testSuiteRunners) {
 		this.testSuiteRunners = testSuiteRunners;
 	}
-	
-	public TestPlanRun toTestPlanRun() throws IllegalArgumentException, IllegalAccessException, Exception{
-		TestPlanRun tpRun = new TestPlanRun();
-		tpRun.setName(name);
-		tpRun.addTestSuiteRuns(testSuiteRunners);
+
+	public TestPlanRun run(Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestPlanRun tpRun = new TestPlanRun(this, isRemote, tester);
+		tpRun.setStatus("Running");
 		return tpRun;
 	}
 
-	public TestPlanRun run() throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestPlanRun tpRun = toTestPlanRun();
-		tpRun.setStatus("Running");
-		return tpRun;
+	public TestPlanRun run(Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		return run(isRemote, "");
 	}
 	
 	public void setNewEnvironmentInTests(String environment){

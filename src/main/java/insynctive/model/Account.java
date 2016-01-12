@@ -107,4 +107,8 @@ public class Account {
 	public void setParamObject(ParamObject paramObject) {
 		this.paramObject = paramObject;
 	}
+	
+	public static String getAccountUsername(Account account){
+		return account != null ? account.getUsername() : "";
+	}
 }

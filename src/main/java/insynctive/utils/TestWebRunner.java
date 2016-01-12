@@ -35,6 +35,7 @@ import insynctive.model.ParamObject;
 import insynctive.model.test.Test;
 import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
+import insynctive.model.test.TestSuiteRunner;
 import insynctive.model.test.run.TestPlanRun;
 import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
@@ -65,61 +66,53 @@ public class TestWebRunner {
 		this.testPlanRunDao = HibernateUtil.testPlanRunDao;
 	}
 	
-	public void runTest(TestPlan tp, Boolean isNotification) throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestPlanRun tpRun = tp.run();
+	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestPlanRun tpRun = tp.run(isRemote, tester);
 		testPlanRunDao.save(tpRun);
 		runTest(tpRun, isNotification);
 	}
 	
 	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestPlanRun tpRun = tp.run();
-		testPlanRunDao.save(tpRun);
-		runTest(tpRun, isNotification, isRemote);
+		runTest(tp, isNotification, isRemote, "");
 	}
 	
-	public Integer runTest(TestSuite ts, Boolean isNotification) throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestSuiteRun tsRun = ts.run();
+	public Integer runTest(TestSuiteRunner tsRunner, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = tsRunner.run(isRemote, tester);
 		testSuiteRunDao.save(tsRun);
-		return runTest(tsRun, isNotification, tsRun.isRemote());
+		return runTest(tsRun, isNotification);
 	}
 	
-	public Integer runTest(TestSuite ts, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestSuiteRun tsRun = ts.run();
+	public Integer runTest(TestSuiteRunner tsRunner, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		return runTest(tsRunner, isNotification, isRemote, "");
+	}
+	
+	public void runTest(TestSuite ts, String environment, String browser, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = ts.run(environment, browser, isRemote, tester);
 		testSuiteRunDao.save(tsRun);
-		return runTest(tsRun, isNotification, isRemote);
+		runTest(tsRun, isNotification);
+	}
+	
+	public void runTest(TestSuite ts, String environment, String browser, Boolean isNotification, Boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		runTest(ts, environment, browser, isNotification, isRemote, "");
 	}
 	
 	public void runTest(TestPlanRun tpRun, Boolean isNotification) {
-		List<TestSuiteRun> tsNoDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> !tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
-		List<TestSuiteRun> tsDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
-			
-		for(TestSuiteRun tsRun : tsNoDepends){
-			runTest(tsRun, isNotification, tsRun.isRemote());
-		}
-		
-		for(TestSuiteRun tsRun : tsDepends){
-			runTest(tsRun, isNotification, tsRun.isRemote());
-		}
+		runTest(tpRun.getTestSuiteRuns(), isNotification);
 	}
 	
-	public void runTest(TestPlanRun tpRun, Boolean isNotification, Boolean isRemote) {
-		List<TestSuiteRun> tsNoDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> !tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
-		List<TestSuiteRun> tsDepends = tpRun.getTestSuiteRuns().stream().filter(tsrun -> tsrun.isDependingOnAnotherTS()).collect(Collectors.toList());
+	public void runTest(List<TestSuiteRun> tests, Boolean isNotification) {
+		List<TestSuiteRun> canRunTS = tests.stream().filter(tsrun -> canRun(tsrun)).collect(Collectors.toList());
+		List<TestSuiteRun> canNotRunTS = tests.stream().filter(tsrun -> !canRun(tsrun)).collect(Collectors.toList());
 		
-		for(TestSuiteRun tsRun : tsNoDepends){
-			runTest(tsRun, isNotification, isRemote);
+		for(TestSuiteRun tsRun : canRunTS){
+			runTest(tsRun, isNotification);
 		}
 		
-		for(TestSuiteRun tsRun : tsDepends){
-			runTest(tsRun, isNotification, isRemote);
-		}
+		//If are not running test suites retry in 5 segs.
+		if(canNotRunTS.size() > 0){ runTest(canNotRunTS, isNotification); }
 	}
 	
 	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification) {
-		return runTest(tsRun, isNotification, tsRun.isRemote());
-	}
-	
-	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification, Boolean isRemote) {
 		XmlSuite suite = createXmlTest(tsRun);
 		List<XmlSuite> suites = new ArrayList<>();
 		suites.add(suite);
@@ -142,7 +135,7 @@ public class TestWebRunner {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("environment", tsRun.getEnvironment());
 		parameters.put("browser", tsRun.getBrowser());
-		parameters.put("isRemote", String.valueOf(isRemote));
+		parameters.put("isRemote", String.valueOf(tsRun.isRemote()));
 		parameters.put("isNotification", String.valueOf(isNotification));
 		parameters.put("testSuiteID", tsRun.getTestSuiteRunID().toString());
 		parameters.put("testName", tsRun.getName());
@@ -169,22 +162,6 @@ public class TestWebRunner {
 		return tsRun.getTestSuiteRunID();
 	}
 
-	public TestSuiteRun getTestSuiteRun(TestSuite testSuite, String environment, String browser) throws Exception {
-		TestSuiteRun testSuiteRun = testSuite.toTestSuiteRun();
-		testSuiteRun.setEnvironment(environment);
-		testSuiteRun.setBrowser(browser);
-		
-		return testSuiteRun;
-	}
-	
-	public TestSuiteRun getTestSuiteRun(TestSuite testSuite, String environment, String browser, Account account) throws Exception {
-		TestSuiteRun testSuiteRun = getTestSuiteRun(testSuite, environment, browser);
-		testSuiteRun.setRemote(account.getAccountProperty().isRemote());
-		testSuiteRun.setTester(account.getUsername());
-		
-		return testSuiteRun;
-	}
-
 	public List<XmlSuite> getSuite(String xmlFileName) {
 		List<XmlSuite> suite = null;
 		try
@@ -207,7 +184,6 @@ public class TestWebRunner {
 	}
 
 	private XmlSuite createXmlTest(TestSuiteRun tsRun) {
-		List<XmlSuite> suites = new ArrayList<XmlSuite>();
 		List<XmlClass> classes = new ArrayList<XmlClass>();
 		Integer index = 1;
 		
@@ -265,5 +241,10 @@ public class TestWebRunner {
 		thread.start();
 		
 		return "{\"status\" : 200}";
+	}
+	
+	public boolean canRun(TestSuiteRun tsRun){
+		Integer dependsID = tsRun.getDependsRunID();
+		return (dependsID == null || TestResults.workers.get(dependsID) != null);
 	}
 }

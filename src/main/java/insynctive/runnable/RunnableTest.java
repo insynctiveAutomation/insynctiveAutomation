@@ -46,7 +46,7 @@ public class RunnableTest implements Runnable {
 		testNG.setPreserveOrder(true);
 		testNG.run();
 		setResult();
-		Sleeper.threadSleep(3500);
+		Sleeper.sleep(3500);
 		TestResults.removeScopeVars(testSuiteRun.getTestSuiteRunID());
 	}
 

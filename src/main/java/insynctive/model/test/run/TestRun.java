@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.ParamObject;
+import insynctive.model.test.Test;
 
 @Entity
 @Table(name = "test_run")
@@ -43,6 +44,13 @@ public class TestRun {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public TestRun(Test test) throws Exception {
+		this.testName = test.getTestName();
+		this.className = test.getClassName();
+		this.paramObject = ParamObject.getNewWithOutIDs(test.getParamObject());
+		this.status = "New";
+	}
+
 	public String getStatus() {
 		return status;
 	}

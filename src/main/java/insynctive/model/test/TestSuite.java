@@ -60,9 +60,7 @@ public class TestSuite {
 	@Transient
 	public TestSuiteRun run;
 	
-	public TestSuite() {
-		// TODO Auto-generated constructor stub
-	}
+	public TestSuite() { }
 	
 	public TestSuite(XmlClass clazz, String suiteName) {
 		testSuiteName = suiteName;
@@ -116,23 +114,9 @@ public class TestSuite {
 		this.dependsTestSuite = dependsTestSuite;
 	}
 
-	@JsonIgnore
-	public TestSuiteRun toTestSuiteRun() throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestSuiteRun tsRun = new TestSuiteRun();
-		tsRun.setName(testSuiteName);
-		tsRun.addTestsRuns(tests);
-		if(dependsTestSuite != null){
-			tsRun.setDependsTestSuiteRun(dependsTestSuite.run);
-		}
-		run = tsRun;
-		return tsRun;
-	}
-
-	@JsonIgnore
-	public TestSuiteRun run() throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestSuiteRun tsRun = toTestSuiteRun();
-		tsRun.setStatus("Running");
-		return tsRun;
+	@JsonIgnoreProperties
+	public boolean isDependingOnAnotherTS(){
+		return dependsTestSuite != null;
 	}
 	
 	@JsonIgnore
@@ -142,29 +126,15 @@ public class TestSuite {
 		}
 		return null;
 	}
-	
-	@Deprecated
-	public TestSuite resetTestSuite() {
-		for(Test test : this.getTests()){
-			//Reset the paramObject IDS
-			ParamObject paramObject = test.getParamObject();
-			if(paramObject.getEmergencyContact() != null) paramObject.getEmergencyContact().setEmergencyID(null);
-			if(paramObject.getUsAddress() != null) paramObject.getUsAddress().setUsAddressID(null);
-		}
-		return this;
+
+	public TestSuiteRun run(String environment, String browser, Boolean isRemote, String tester) throws Exception {
+		TestSuiteRun tsRun = new TestSuiteRun(this, browser, environment, isRemote, tester);
+		tsRun.setStatus("Running");
+		this.run = tsRun;
+		return tsRun;
 	}
-	
-	@JsonIgnore
-	@Deprecated
-	public static TestSuite getNewWithOutIDs(TestSuiteRun testSuite) throws Exception {
-		TestSuite newTestSuite = new TestSuite();
-		
-		for(Test test : newTestSuite.getTests()){
-			Test newTest = Test.getNewWithOutIDs(test);
-			newTestSuite.addMethod(newTest);
-		}
-		
-		newTestSuite.setTestSuiteID(null);
-		return newTestSuite;
+
+	public TestSuiteRun run(String environment, String browser, Boolean isRemote) throws Exception {
+		return run(environment, browser, isRemote, "");
 	}
 }

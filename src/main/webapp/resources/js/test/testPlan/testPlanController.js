@@ -14,7 +14,10 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	this.testPlanID = $location.search().id
 	this.environments = Environment.getEnvironments();
 	this.message = '';
+	this.isImporting = false;
 	
+	this.importLabel = undefined;
+	this.saveLabel = undefined;
 	
 	
 	/*On Load Methods*/
@@ -35,13 +38,13 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	this.getTestPlanByID(this.testPlanID);
 	
 	this.save = function(){
-		self.message = 'Saving...';
+		self.saveLabel = 'Saving...';
 		testPlanService.saveTestPlan(self.testPlan, function(data){
-			self.message = 'Saved!';
+			self.saveLabel = 'Saved!';
 			setTimeout(function(){
-					self.message = '';
+					self.saveLabel = undefined;
 					$scope.$apply();
-				}, 5000);
+				}, 3000);
 			self.testPlan = data;
 		}, function(data){
 			self.message = 'Error => '+data;
@@ -73,11 +76,13 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.importTestSuite = function(){
+		self.importLabel = "Importing..";
 		testSuiteService.findAllTestSuites(function(data) {
+			self.importLabel = undefined;
 			bootboxService.listSelection($scope, data, "Select a Test Suite", function(ts){
 				var tsRunner = new TestSuiteRunner();
 				tsRunner.testSuite = ts;
-				self.testPlan.testSuiteRunners.push(tsRunner);
+				self.testPlan.testSuiteRunners.push(TestSuiteRunner.makeNew(tsRunner))
 				$scope.$apply();
 			});
 		});

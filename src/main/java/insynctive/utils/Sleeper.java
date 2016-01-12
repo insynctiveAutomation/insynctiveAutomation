@@ -19,7 +19,7 @@ public class Sleeper {
 		}
 	}
 	
-	public static void threadSleep(int time){
+	public synchronized static void sleep(int time){
 		try{
 			Thread.sleep(time); //This is for LOCAL
 		} catch(Exception cE) {

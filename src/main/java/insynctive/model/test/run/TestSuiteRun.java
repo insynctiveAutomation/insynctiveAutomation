@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.Test;
 import insynctive.model.test.TestSuite;
+import insynctive.model.test.TestSuiteRunner;
 
 @Entity
 @Table(name = "test_suite_run")
@@ -67,8 +68,35 @@ public class TestSuiteRun {
 	@JoinColumn(name = "depends_test_suite_run")
 	private TestSuiteRun dependsTestSuiteRun;
 	
-	public TestSuiteRun() {
-		this.setStatus(null);
+	public TestSuiteRun() { }
+	
+	public TestSuiteRun(String name, String browser, String environment, Boolean remote, String tester) {
+		this.name = name;
+		this.browser = browser;
+		this.environment = environment;
+		this.remote = remote;
+		this.tester = tester;
+		this.setStatus("New");
+	}
+
+	public TestSuiteRun(TestSuiteRunner tsRunner, Boolean isRemote, String tester) throws Exception {
+		this.name = tsRunner.getTestSuite().getTestSuiteName();
+		this.browser = tsRunner.getBrowser();
+		this.environment = tsRunner.getEnvironment();
+		this.remote = isRemote;
+		this.tester = tester;
+		this.setStatus("New");
+		addTestsRuns(tsRunner.getTestSuite().getTests());
+	}
+
+	public TestSuiteRun(TestSuite ts, String browser, String environment, Boolean isRemote, String tester) throws Exception {
+		this.name = ts.getTestSuiteName();
+		this.browser = browser;
+		this.environment = environment;
+		this.remote = isRemote;
+		this.tester = tester;
+		this.setStatus("New");
+		addTestsRuns(ts.getTests());
 	}
 
 	public String getBrowser() {
@@ -154,6 +182,11 @@ public class TestSuiteRun {
 	public TestSuiteRun getDependsTestSuiteRun() {
 		return dependsTestSuiteRun;
 	}
+
+	@JsonIgnoreProperties
+	public boolean isDependingOnAnotherTS(){
+		return dependsTestSuiteRun != null;
+	}
 	
 	public Integer getDependsRunID() {
 		if(dependsTestSuiteRun != null){
@@ -169,15 +202,10 @@ public class TestSuiteRun {
 	public void addTestRun(TestRun testRun){
 		this.testsRuns.add(testRun);
 	}
-
-	@JsonIgnoreProperties
-	public boolean isDependingOnAnotherTS(){
-		return dependsTestSuiteRun != null;
-	}
 	
 	public void addTestsRuns(List<Test> tests) throws IllegalArgumentException, IllegalAccessException, Exception {
 		for(Test test : tests){
-			TestRun testRun = test.toTestRun();
+			TestRun testRun = new TestRun(test);
 			testRun.setStatus("Running");
 			this.addTestRun(testRun);
 		}

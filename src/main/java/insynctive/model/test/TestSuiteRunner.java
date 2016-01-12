@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.run.TestSuiteRun;
@@ -34,8 +35,12 @@ public class TestSuiteRunner {
 	@Column(name = "environment")
 	private String environment;
 
-	public TestSuiteRunner() {
-		// TODO Auto-generated constructor stub
+	public TestSuiteRunner() {	}
+	
+	public TestSuiteRunner(TestSuite newTestSuite, String environment, String browser) {
+		this.testSuite = newTestSuite;
+		this.environment = environment;
+		this.browser = browser;
 	}
 	
 	public TestSuiteRunner(TestSuite newTestSuite, String environment, TestEnvironment browser) {
@@ -76,13 +81,15 @@ public class TestSuiteRunner {
 		this.environment = environment;
 	}
 
-	public TestSuiteRun toTestSuiteRun() throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestSuiteRun tsRun = testSuite.toTestSuiteRun();
-		tsRun.setEnvironment(environment);
-		tsRun.setBrowser(browser);
-		tsRun.setName(testSuite.getTestSuiteName());
-//		tsRun.setDate(new Date());
-//		tsRun.setTester("tester");
+	@JsonIgnore
+	public TestSuiteRun run(boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
+		TestSuiteRun tsRun = new TestSuiteRun(this, isRemote, tester);
+		tsRun.setStatus("Running");
 		return tsRun;
+	}
+
+	@JsonIgnore
+	public TestSuiteRun run(boolean isRemote) throws IllegalArgumentException, IllegalAccessException, Exception {
+		return run(isRemote, "");
 	}
 }

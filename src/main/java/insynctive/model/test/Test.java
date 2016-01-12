@@ -94,25 +94,4 @@ public class Test {
 		testID = null;
 		paramObject.setParamObjectID(null);
 	}
-	
-	@Deprecated
-	@JsonIgnore
-	public static Test getNewWithOutIDs(Test test) throws IllegalArgumentException, IllegalAccessException, Exception{
-		Test newtest = new Test();
-		
-		newtest.paramObject = ParamObject.getNewWithOutIDs(test.getParamObject());
-		newtest.testName = test.getTestName();
-		
-		newtest.testID = null;
-		return newtest;
-	}
-
-	public TestRun toTestRun() throws IllegalArgumentException, IllegalAccessException, Exception {
-		TestRun testRun = new TestRun();
-		testRun.setTestName(testName);
-		testRun.setClassName(className);
-		testRun.setParamObject(ParamObject.getNewWithOutIDs(paramObject));
-		testRun.setStatus("Running");
-		return testRun;
-	}
 }

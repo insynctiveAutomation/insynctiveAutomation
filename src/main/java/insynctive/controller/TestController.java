@@ -51,6 +51,7 @@ import insynctive.model.CreatePersonForm;
 import insynctive.model.test.Test;
 import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
+import insynctive.model.test.TestSuiteRunner;
 import insynctive.model.test.run.TestPlanRun;
 import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
@@ -61,6 +62,7 @@ import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
 import insynctive.utils.TestResults;
 import insynctive.utils.TestWebRunner;
+import insynctive.utils.data.TestEnvironment;
 
 @Controller
 @Transactional
@@ -301,30 +303,24 @@ public class TestController {
 		return testSuiteRunDao.getAllTestSuiteRuns();
 	}
 	
-	@RequestMapping(value = "/run/testPlan/{isNotification}", method = RequestMethod.POST)
-	@ResponseBody
-	public String runTestPlan(@RequestBody TestPlan tp, @PathVariable("isNotification") Boolean isNotification) throws Exception{
-		
-		testRunner.runTest(tp, isNotification);
-		return "{\"status\" : 200}";
-	}
-	
-	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}/{remote}", method = RequestMethod.GET)
+	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}/{remote}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runTestPlanByID(@PathVariable("tpID") Integer tpID, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
 		
 		TestPlan tp = testPlanDao.getTestPlanByID(tpID);
-		testRunner.runTest(tp, isNotification, isRemote);
+		testRunner.runTest(tp, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
 		
 		return "{\"status\" : 200}";
 	}
 	
-	@RequestMapping(value = "/run/testPlan/{tpID}/{isNotification}", method = RequestMethod.POST)
+	@RequestMapping(value = "/run/testSuite/{tsID}/{environment}/{browser}/{isNotification}/{remote}", method = RequestMethod.POST)
 	@ResponseBody
-	public String runTestPlanByID(@PathVariable("tpID") Integer tpID, @PathVariable("isNotification") Boolean isNotification) throws Exception{
+	public String runTestSuiteByID(@PathVariable("tsID") Integer tsID, @PathVariable("environment") String environment, @PathVariable("browser") String browser, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
 		
-		TestPlan tp = testPlanDao.getTestPlanByID(tpID);
-		testRunner.runTest(tp, isNotification);
+		TestSuite ts = testSuiteDao.getTestByID(tsID);
+
+		TestSuiteRunner tsRunner = new TestSuiteRunner(ts, environment, browser);
+		testRunner.runTest(tsRunner, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
 		
 		return "{\"status\" : 200}";
 	}
@@ -332,26 +328,20 @@ public class TestController {
 	@RequestMapping(value = "/run/testSuite/{environment}/{browser}/{isNotification}/{remote}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runTestSuite(@RequestBody TestSuite ts, @PathVariable("environment") String environment, @PathVariable("browser") String browser, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
-		Account acc = accDao.getAccountByID(SessionController.account.getAccountID());
 		
-		TestSuiteRun tsRun = testRunner.getTestSuiteRun(ts, environment, browser, acc);
-		testSuiteRunDao.save(tsRun);		
+		TestSuiteRunner tsRunner = new TestSuiteRunner(ts, environment, browser);
 		
-		return "{\"index\" : \""+(testRunner.runTest(tsRun,isNotification, isRemote))+"\"}";
+		return "{\"index\" : \""+(testRunner.runTest(tsRunner, isNotification, isRemote, Account.getAccountUsername(SessionController.account)))+"\"}";
 	}
 	
-	@RequestMapping(value = "/run/testSuite/{tsID}/{isNotification}", method = RequestMethod.POST)
+	@RequestMapping(value = "/run/name/testPlan/{name}/{isNotification}/{remote}", method = RequestMethod.POST)
 	@ResponseBody
-	public String runTestSuiteByID(@PathVariable("tsID") Integer tsID, @PathVariable("isNotification") Boolean isNotification) throws Exception{
-		TestSuite ts = testSuiteDao.getTestByID(tsID);
-		return "{\"index\" : \""+(testRunner.runTest(ts, isNotification))+"\"}";
-	}
-
-	@RequestMapping(value = "/run/testSuite/{tsID}/{isNotification}/{remote}", method = RequestMethod.POST)
-	@ResponseBody
-	public String runTestSuiteByID(@PathVariable("tsID") Integer tsID, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
-		TestSuite ts = testSuiteDao.getTestByID(tsID);
-		return "{\"index\" : \""+(testRunner.runTest(ts, isNotification, isRemote))+"\"}";
+	public String runTestPlanByName(@PathVariable("name") String name, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
+		
+		TestPlan tp = testPlanDao.getTestPlanByName(name);
+		testRunner.runTest(tp, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
+		
+		return "{\"status\" : 200}";
 	}
 	
 //	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
@@ -388,23 +378,33 @@ public class TestController {
 	public String startCreatePersonOpenEnrollment(@RequestBody CreatePersonForm form) throws Exception {
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
-		TestSuite ts = testSuiteDao.getTestSuiteByName("Create Person - Open Enrollment");
-		TestSuiteRun tsRun = ts.run();
-		testSuiteRunDao.save(tsRun);
+		String tester = "External User";
+		Boolean isRemote = true;
+
+		TestPlan tp = testPlanDao.getTestPlanByName("Create Person - Open Enrollment");
 		
-		return testRunner.runExternalCreatePerson(tsRun, newPersonID);
+		for(TestSuiteRunner tsRunner : tp.getTestSuiteRunners()){
+			testRunner.runExternalCreatePerson(tsRunner.run(isRemote, tester), newPersonID);
+		}
+		
+		return "{\"status\" : 200}";
 	}
 	
 	@RequestMapping(value = "/start/OB" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String startCreatePersonOnBoarding(@RequestBody CreatePersonForm form) throws Exception{
-Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
+		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
-		TestSuite ts = testSuiteDao.getTestSuiteByName("Create Person - On Boarding");
-		TestSuiteRun tsRun = ts.run();
-		testSuiteRunDao.save(tsRun);
+		String tester = "External User";
+		Boolean isRemote = true;
+
+		TestPlan tp = testPlanDao.getTestPlanByName("Create Person - On Boarding");
 		
-		return testRunner.runExternalCreatePerson(tsRun, newPersonID);
+		for(TestSuiteRunner tsRunner : tp.getTestSuiteRunners()){
+			testRunner.runExternalCreatePerson(tsRunner.run(isRemote, tester), newPersonID);
+		}
+		
+		return "{\"status\" : 200}";
 	}
 	
 	@RequestMapping(value = "/isPersonCreated/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
