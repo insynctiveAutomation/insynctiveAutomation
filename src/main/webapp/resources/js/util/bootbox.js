@@ -1,9 +1,9 @@
 function Bootbox(){}
 
-Bootbox.removeDialog = function(message, yesCallback){
+Bootbox.removeDialog = function(title, message, yesCallback){
 	return bootbox.dialog({
 		  message: message,
-		  title: "Remove Element",
+		  title: title,
 		  buttons: {
 		    success: {
 		      label: "Yes",
