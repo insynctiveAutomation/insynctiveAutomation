@@ -1,13 +1,13 @@
 'use strict';
 
-var app = angular.module('testPlanApp', [ 'ngAnimate', 'ui.sortable', 'ui.bootstrap', 'ngCookies', 'testSuiteApp']).config(function($locationProvider) {
+var app = angular.module('testPlanApp', [ 'ngAnimate', 'ui.sortable', 'ui.bootstrap', 'ngCookies', 'testSuiteApp', 'utilApp']).config(function($locationProvider) {
 	 $locationProvider.html5Mode({
 	   	  enabled: true,
 	   	  requireBase: false
 	   	})
 	});
 
-app.controller('testPlanController', function($cookies, $scope, $window, $modal, $location, testPlanService) {
+app.controller('testPlanController', function($cookies, $scope, $window, $modal, $location, $compile, testPlanService, testSuiteService, bootboxService) {
 
 	var self = this;
 	this.isLoading = true;
@@ -49,7 +49,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	};
 	
 	this.remove = function(){
-		Bootbox.removeDialog("Remove Test Plan", "Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(result){
+		bootboxService.removeDialog("Remove Test Plan", "Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(result){
 			if(result){
 				testPlanService.removeTestPlan(self.testPlan, function(data){
 					$window.location.href = '/';
@@ -72,31 +72,24 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		self.testPlan.testSuiteRunners.push(new TestSuiteRunner());
 	}
 	
+	this.importTestSuite = function(){
+		testSuiteService.findAllTestSuites(function(data) {
+			bootboxService.listSelection($scope, data, "Select a Test Suite", function(ts){
+				var tsRunner = new TestSuiteRunner();
+				tsRunner.testSuite = ts;
+				self.testPlan.testSuiteRunners.push(tsRunner);
+				$scope.$apply();
+			});
+		});
+	}
+	
 	this.removeTestSuite = function(index){
-		Bootbox.removeDialog("Remove Test Suite", "Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(result){
+		bootboxService.removeDialog("Remove Test Suite", "Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(result){
 			if(result) {
 				self.testPlan.testSuiteRunners.splice(index, 1)
 				$scope.$apply();
 			}
 		})
-	}
-	
-	//On Edit Parameters click
-	this.openEditTestSuite = function(testSuite) {
-		var modalInstance = $modal.open({
-			animation : true,
-			controller: 'testSuiteController',
-			controllerAs: 'controller',
-			template : '<test-suite controller="controller"></test-suite>',
-			backdrop: true,
-			windowClass: 'edit-parameter-modal',
-			size : 'lg',
-			resolve : {
-				testSuite: function () {
-			          return testSuite
-				}
-			}
-		});
 	}
 	
 	this.getPossibleDependentIndex = function(index){
@@ -140,5 +133,23 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 				self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuiteIndex = index; 
 			}
 		}
+	}
+	
+	//On Edit Parameters click
+	this.openEditTestSuite = function(testSuite) {
+		var modalInstance = $modal.open({
+			animation : true,
+			controller: 'testSuiteController',
+			controllerAs: 'controller',
+			template : '<test-suite controller="controller"></test-suite>',
+			backdrop: true,
+			windowClass: 'edit-parameter-modal',
+			size : 'lg',
+			resolve : {
+				testSuite: function () {
+			          return testSuite
+				}
+			}
+		});
 	}
 });

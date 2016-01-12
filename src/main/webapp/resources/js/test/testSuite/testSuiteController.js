@@ -1,13 +1,13 @@
 'use strict';
 
-var app = angular.module('testSuiteApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'parameterApp', 'homeApp', 'testApp']).config(function($locationProvider) {
+var app = angular.module('testSuiteApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 'parameterApp', 'homeApp', 'testApp', 'utilApp']).config(function($locationProvider) {
 	 $locationProvider.html5Mode({
    	  enabled: true,
    	  requireBase: false
    	})
 });
 
-app.controller('testSuiteController', function($cookies, $scope, $window, $modal, $location, testSuiteService, testService, testSuite) {
+app.controller('testSuiteController', function($cookies, $scope, $window, $modal, $location, testSuiteService, testService, testSuite, bootboxService) {
 
 	var self = this;
 	
@@ -31,7 +31,7 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	}
 	
 	this.removeTest = function(index){
-		Bootbox.removeDialog("Remove Test", "Are you sure you want to remove "+self.testSuite.tests[index].testName+"?", function(result){
+		bootboxService.removeDialog("Remove Test", "Are you sure you want to remove "+self.testSuite.tests[index].testName+"?", function(result){
 			if(result) {
 				self.testSuite.tests.splice(index, 1)
 				$scope.$apply();

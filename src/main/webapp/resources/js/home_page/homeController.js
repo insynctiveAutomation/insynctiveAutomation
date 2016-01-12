@@ -29,7 +29,7 @@ app.controller('HomeController', function($cookies, $http, $window, $modal, $sco
 	/* On Load Methods */
 	this.getTestsSuites = function() {
 		homeService.getTestsSuites(function(data) {
-			self.testsSuites = (_.map(data,self.split)).sort();
+			self.testsSuites = data.sort();
 		});
 	};
 	this.getTestsSuites();
@@ -87,10 +87,6 @@ app.controller('HomeController', function($cookies, $http, $window, $modal, $sco
 	/* Private Methods */
 	this.transformarATestSuite = function(jsonTestSuite) {
 		return TestSuite.asTestSuite(jsonTestSuite);
-	};
-	
-	this.split = function(jsonTestSuiteName) {
-		return jsonTestSuiteName.split(".")[0];
 	};
 	
 	this.updateStatus = function(){

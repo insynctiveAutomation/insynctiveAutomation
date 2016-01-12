@@ -39,4 +39,6 @@
 		</tr>
 	</tbody>
 </table>
-<a class="btn" ng-click="controller.addNewTestSuite()">add new Test Suite</a>
+<a class="btn" ng-click="controller.addNewTestSuite()">Add new Test Suite</a>
+<span>    </span>
+<a class="btn" ng-click="controller.importTestSuite()">Import existing Test Suite</a>
