@@ -3,7 +3,9 @@ function Bootbox(){}
 Bootbox.removeDialog = function(title, message, yesCallback){
 	return bootbox.dialog({
 		  message: message,
-		  title: title,
+		  title: title, 
+		  backdrop: true,
+		  onEscape: function() { },
 		  buttons: {
 		    success: {
 		      label: "Yes",
