@@ -49,7 +49,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	};
 	
 	this.remove = function(){
-		bootbox.confirm("Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(result){
+		Bootbox.removeDialog("Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(result){
 			if(result){
 				testPlanService.removeTestPlan(self.testPlan, function(data){
 					$window.location.href = '/';
@@ -73,7 +73,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.removeTestSuite = function(index){
-		bootbox.confirm("Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(result){
+		Bootbox.removeDialog("Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(result){
 			if(result) {
 				self.testPlan.testSuiteRunners.splice(index, 1)
 				$scope.$apply();

@@ -29,6 +29,8 @@
 	<!-- Entities -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/testSuite.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/entity/environment.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/util/util.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/util/bootbox.js"></script>
 	
 	<!-- Directive -->
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/directive/directiveApp.js"></script>
