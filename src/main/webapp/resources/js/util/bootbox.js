@@ -68,7 +68,7 @@ app.service('bootboxService', function($compile) {
 		var html = 
 		'<select ng-model="isNotification" ng-options="o.v as o.n for o in [{ n: \'Notify in Slack\', v: true }, { n: \'Do not notify\', v: false }]" required><option value="">Notification</option></select>'+
 		'<span>   </span>'+
-		'<select ng-model="isRemote" ng-options="o.v as o.n for o in [{ n: \'Crossbrowser\', v: true }, { n: \'Local\', v: false }]" required><option value="">Run in</option></select>';
+		'<select ng-model="isRemote" ng-options="o.v as o.n for o in [{ n: \'Remote\', v: true }, { n: \'Local\', v: false }]" required><option value="">Run in</option></select>';
 		
 		var templateHtml = angular.element(html);
 		var htmlCompile = $compile(templateHtml);

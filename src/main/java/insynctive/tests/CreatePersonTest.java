@@ -42,7 +42,7 @@ public class CreatePersonTest extends TestMachine {
 		super.teardown();
 		createPersonForm = HibernateUtil.createPersonFormDao.getAccountByID(personID);
 		createPersonForm.setStatusOfTest(generalStatus);
-		createPersonForm.setEnvironment(TestEnvironment.FIREFOX.browser);
+		createPersonForm.setEnvironment(TestEnvironment.FIREFOX.browserCrossBrowser);
 		
 		HibernateUtil.createPersonFormDao.saveCreatePersonForm(createPersonForm);
 	}

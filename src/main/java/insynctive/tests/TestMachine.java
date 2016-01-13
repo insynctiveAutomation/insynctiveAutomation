@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,18 +28,18 @@ import org.testng.annotations.AfterClass;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import insynctive.exception.ConfigurationException;
-import insynctive.model.Account;
 import insynctive.model.CrossBrowserAccount;
-import insynctive.model.InsynctiveProperty;
 import insynctive.model.ParamObject;
 import insynctive.model.test.run.TestRun;
 import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
+import insynctive.utils.ExternalTestRunner;
 import insynctive.utils.HibernateUtil;
 import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
+import insynctive.utils.crossbrowser.CrossBrowserUtil;
 import insynctive.utils.data.TestEnvironment;
+import insynctive.utils.saucelabs.SauceLabsUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
@@ -57,12 +56,14 @@ public abstract class TestMachine {
 	public TestEnvironment testEnvironment;
 	public boolean isRemote;
 	public boolean isNotification;
-	public Integer testSuiteID; //TestSuiteID represent the test in list of video links and listeners.
+	public Integer testSuiteID; //TestSuiteID represent the test in the lists of 'video links' and 'result listeners'.
 	
 	//Parameter to chenge ParamObject
 	public ParamObject paramObject;
 	
 	//WebDriver
+//	public ExternalTestRunner externalTestRunner = new CrossBrowserUtil();
+	public ExternalTestRunner externalTestRunner = new SauceLabsUtil();
 	public WebDriver driver;
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();
@@ -71,8 +72,6 @@ public abstract class TestMachine {
 	//Final result.
 	boolean generalStatus = true;
 	
-	
-	
 	//SLACK link
 	private String slackChannel = "https://hooks.slack.com/services/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";
 
@@ -80,11 +79,9 @@ public abstract class TestMachine {
 	List<String> tags = new ArrayList<String>();
 	
 	//Remote Testing parameters (CROSSBROWSING)
-	String remoteTestingUsername;
-	String remoteTestingPassword;
 	
 	private String getJobURL() throws IOException, JSONException {
-		return getPublicVideoLinkOfJob();
+		return externalTestRunner.getPublicVideoLinkOfJob(jobID);
 	}
 	
 	public WebDriver getWebDriver() {
@@ -99,13 +96,15 @@ public abstract class TestMachine {
 	public void tearUp(String browser, String environment, String isRemote, String isNotification, String testSuiteID) throws Exception {
 		tearUp(TestEnvironment.valueOf(browser), environment, Boolean.valueOf(isRemote), Boolean.valueOf(isNotification), Integer.parseInt(testSuiteID));
 	}
-	
+
+	//@BeforeClass()
 	public void tearUp(TestEnvironment testEnvironment, String environment, Boolean isRemote, Boolean isNotification, Integer testSuiteID) throws Exception{
 		try{
-			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);//CrossBrowser account in DB
 
-			remoteTestingUsername = crossBrowserAccount.getEmail();
-			remoteTestingPassword = crossBrowserAccount.getPassword();
+//			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);//CrossBrowser account in DB
+//
+//			externalTestRunner.setRemoteTestingUsername(crossBrowserAccount.getEmail());
+//			externalTestRunner.setRemoteTestingPassword(crossBrowserAccount.getPassword());
 		
 			this.runID = getRunID();
 			this.isRemote = isRemote;
@@ -134,23 +133,10 @@ public abstract class TestMachine {
 		}
 	}
 	
-	public WebDriver createDriver(TestEnvironment testEnvironment) throws MalformedURLException {
+	public WebDriver createDriver() throws MalformedURLException {
 
-		this.testEnvironment = testEnvironment;
-		
-		DesiredCapabilities caps = new DesiredCapabilities();
-
-		caps.setCapability("name", sessionName+" ["+testEnvironment+"]");
-	    caps.setCapability("build", "1.0");
-	    caps.setCapability("browser_api_name", testEnvironment.browser+testEnvironment.version);
-	    caps.setCapability("os_api_name", testEnvironment.os);
-	    caps.setCapability("screen_resolution", testEnvironment.screenSize);
-	    caps.setCapability("record_video", "true");
-	    caps.setCapability("record_network", "true");
-	    caps.setCapability("record_snapshot", "false");
-	    caps.setCapability("max_duration", 3600);
-
-	    webDriver.set(new RemoteWebDriver(new URL("http://"+getEmailForCurl()+":"+remoteTestingPassword+"@hub.crossbrowsertesting.com:80/wd/hub"), caps));
+		webDriver.set(externalTestRunner.getRemoteWebDriver(sessionName, testEnvironment));
+	  
 	    jobID = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
 		sessionId.set(jobID);
 		if(testEnvironment.isDesktop) webDriver.get().manage().window().maximize();
@@ -160,7 +146,7 @@ public abstract class TestMachine {
 
 	public void startTest() throws ConfigurationException, JSONException, IOException {
 		if (isRemote) {
-			driver = createDriver(testEnvironment);
+			driver = createDriver();
 		} else {
 			FirefoxProfile firefoxProfile = new FirefoxProfile();
 			firefoxProfile.setAcceptUntrustedCertificates(true);
@@ -169,31 +155,6 @@ public abstract class TestMachine {
 			driver.manage().window().maximize();
 		}
 		TestResults.addVideo(testSuiteID, getJobURL());
-	}
-
-	public LoginPage login(String username, String password, String returnURL) throws Exception {
-		LoginPage loginPage = new LoginPage(driver, environment);
-		if(returnURL != null) loginPage.setReturnURL(returnURL);
-		loginPage.loadPage();
-		loginPage.login(username, password);
-		return loginPage;
-	}
-	
-	public LoginPage login() throws Exception {
-		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), null);
-	}
-	
-	public LoginPage login(String returnURL) throws Exception {
-		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), returnURL);
-	}
-	
-	public LoginPage loginAsEmployee(String email, String password) throws Exception {
-		LoginPage loginPage = new LoginPage(driver, environment);
-		loginPage.setReturnAsEmployee();
-		loginPage.loadPage();
-		loginPage.login(email, password);
-		return loginPage;
-		
 	}
 
 	public void failTest(String testName,Exception ex, boolean isSaucelabs) throws Exception{
@@ -224,10 +185,12 @@ public abstract class TestMachine {
 		setResult(false, nameAndCause, duration);
 	}
 	
+	//Set Result WITHOUT duration
 	public void setResult(boolean status, String nameOfTest) throws MalformedURLException, IOException {
 		setResult(status, nameOfTest, null);
 	}
 	
+	//Set Result WITH duration
 	public void setResult(boolean status, String nameOfTest, Long duration) throws MalformedURLException, IOException {
 		
 		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
@@ -239,59 +202,8 @@ public abstract class TestMachine {
 	}
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		if(isRemote){
-			makeCurlToChangeStatus();
-		}
-		if(isNotification) {sendSlack();}
-	}
-	
-	public JSONObject makeCurl(String url, String type) throws IOException, JSONException{
-		String userPassword = remoteTestingUsername + ":" + remoteTestingPassword;
-		
-		java.util.Base64.Encoder encoded = java.util.Base64.getEncoder();
-		String crud = encoded.encodeToString(userPassword.getBytes());
-		URL u = new URL(url);
-		HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-		
-		conn.setRequestMethod(type);
-		conn.setRequestProperty("Authorization", "Basic " + crud);
-        		
-		InputStream is = conn.getInputStream();
-		
-		BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
-		StringBuilder responseStrBuilder = new StringBuilder();
-
-		String inputStr;
-		while ((inputStr = streamReader.readLine()) != null){
-			responseStrBuilder.append(inputStr);
-		}
-		return new JSONObject(responseStrBuilder.toString());
-	}
-	
-	public void makeCurlToChangeStatus() throws MalformedURLException, IOException, JSONException{
-		String url = "http://app.crossbrowsertesting.com/api/v3/selenium/" + jobID + "?action=set_score&score="+(generalStatus ? "pass" : "fail");
-		makeCurl(url, "PUT");
-	}
-	
-	public String getPublicVideoLinkOfJob() throws IOException, JSONException{
-		if (jobID != null){
-			String url = "http://crossbrowsertesting.com/api/v3/selenium/" + jobID;
-			JSONObject response = makeCurl(url, "GET");
-			
-			org.json.JSONArray videos = response.getJSONArray("videos");
-			JSONObject video = (JSONObject) videos.get(0);
-			return video.getString("show_result_public_url");
- 		} else {
- 			return null;
- 		}
-	}
-	
-	private String getEmailForCurl() {
-		String returnEmail = "";
-		String[] returnUsernameForCurl = remoteTestingUsername.split("\\+");
-		returnEmail += (returnUsernameForCurl.length == 2) ? returnUsernameForCurl[0]+"%2B"+returnUsernameForCurl[1] : returnUsernameForCurl[0];
-		returnUsernameForCurl = returnEmail.split("@");
-		return returnUsernameForCurl[0]+"%40"+returnUsernameForCurl[1];
+		if(isRemote) { externalTestRunner.makeCurlToChangeStatus(jobID, generalStatus); }
+		if(isNotification) { sendSlack(); }
 	}
 
 	@SuppressWarnings("unchecked")
@@ -410,6 +322,32 @@ public abstract class TestMachine {
 	
 	public String getRunIDAsString(){
 		return String.valueOf(runID);
+	}
+	
+	
+	//TODO need to be moved
+	public LoginPage login() throws Exception {
+		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), null);
+	}
+	
+	public LoginPage login(String returnURL) throws Exception {
+		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), returnURL);
+	}
+	
+	public LoginPage loginAsEmployee(String email, String password) throws Exception {
+		LoginPage loginPage = new LoginPage(driver, environment);
+		loginPage.setReturnAsEmployee();
+		loginPage.loadPage();
+		loginPage.login(email, password);
+		return loginPage;
+	}
+
+	public LoginPage login(String username, String password, String returnURL) throws Exception {
+		LoginPage loginPage = new LoginPage(driver, environment);
+		if(returnURL != null) loginPage.setReturnURL(returnURL);
+		loginPage.loadPage();
+		loginPage.login(username, password);
+		return loginPage;
 	}
 	
 }

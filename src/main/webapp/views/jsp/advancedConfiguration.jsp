@@ -49,7 +49,7 @@
 				<select name="notification" ng-model="configCtl.configuration.accountProperty.notification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'Do not notify', v: false }]" required></select><br/><br/>      
 				
 				<label for="">Remote: </label>
-				<select name="remote" ng-model="configCtl.configuration.accountProperty.remote" ng-options="o.v as o.n for o in [{ n: 'Crossbrowser', v: true }, { n: 'Local', v: false }]" required></select>   <br/>   
+				<select name="remote" ng-model="configCtl.configuration.accountProperty.remote" ng-options="o.v as o.n for o in [{ n: 'Remote', v: true }, { n: 'Local', v: false }]" required></select>   <br/>   
 			</div>
 			<div class="col-xs-12 col-md-12">
 				<h3 class="text-center">Parameters Object Template</h3>
