@@ -313,11 +313,33 @@ public class TestController {
 		return "{\"status\" : 200}";
 	}
 	
+	@RequestMapping(value = "/run/name/testPlan/{tpName}/{isNotification}/{remote}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestPlanByName(@PathVariable("tpName") String name, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
+		
+		TestPlan tp = testPlanDao.getTestPlanByName(name);
+		testRunner.runTest(tp, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
+		
+		return "{\"status\" : 200}";
+	}
+	
 	@RequestMapping(value = "/run/testSuite/{tsID}/{environment}/{browser}/{isNotification}/{remote}", method = RequestMethod.POST)
 	@ResponseBody
 	public String runTestSuiteByID(@PathVariable("tsID") Integer tsID, @PathVariable("environment") String environment, @PathVariable("browser") String browser, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
 		
 		TestSuite ts = testSuiteDao.getTestByID(tsID);
+
+		TestSuiteRunner tsRunner = new TestSuiteRunner(ts, environment, browser);
+		testRunner.runTest(tsRunner, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
+		
+		return "{\"status\" : 200}";
+	}
+	
+	@RequestMapping(value = "/run/name/testSuite/{tsName}/{environment}/{browser}/{isNotification}/{remote}", method = RequestMethod.POST)
+	@ResponseBody
+	public String runTestSuiteByName(@PathVariable("tsName") String tsName, @PathVariable("environment") String environment, @PathVariable("browser") String browser, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
+		
+		TestSuite ts = testSuiteDao.getTestSuiteByName(tsName);
 
 		TestSuiteRunner tsRunner = new TestSuiteRunner(ts, environment, browser);
 		testRunner.runTest(tsRunner, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
@@ -332,16 +354,6 @@ public class TestController {
 		TestSuiteRunner tsRunner = new TestSuiteRunner(ts, environment, browser);
 		
 		return "{\"index\" : \""+(testRunner.runTest(tsRunner, isNotification, isRemote, Account.getAccountUsername(SessionController.account)))+"\"}";
-	}
-	
-	@RequestMapping(value = "/run/name/testPlan/{name}/{isNotification}/{remote}", method = RequestMethod.POST)
-	@ResponseBody
-	public String runTestPlanByName(@PathVariable("name") String name, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
-		
-		TestPlan tp = testPlanDao.getTestPlanByName(name);
-		testRunner.runTest(tp, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
-		
-		return "{\"status\" : 200}";
 	}
 	
 //	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)

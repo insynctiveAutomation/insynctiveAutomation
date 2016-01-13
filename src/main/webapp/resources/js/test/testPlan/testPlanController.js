@@ -13,6 +13,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	this.isLoading = true;
 	this.testPlanID = $location.search().id
 	this.environments = Environment.getEnvironments();
+	this.browsers = Environment.getBrowsers();
 	this.message = '';
 	this.isImporting = false;
 	

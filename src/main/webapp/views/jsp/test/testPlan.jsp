@@ -38,7 +38,7 @@
 		</form>
 		<span ng-bind="controller.message"></span>
 		<br>
-		<button class="btn-primary" ng-show="controller.testPlan.testPlanID" ng-click="controller.remove()">Remove</button>
+		<button class="btn-danger" ng-show="controller.testPlan.testPlanID" ng-click="controller.remove()">Remove</button>
 	</div>
 	<img class="centered img-30" ng-hide="!controller.isLoading" alt="Loading" src="${pageContext.request.contextPath}/resources/gif/loader.gif">
 </body>

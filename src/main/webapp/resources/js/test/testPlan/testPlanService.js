@@ -8,6 +8,10 @@ app.service('testPlanService', function($http) {
 		$http.get('/testPlan/'+id).success(callback).error(error);
 	};
 	
+	this.runTestPlan = function(testPlanID, isNotification, isRemote, callback, error){
+		$http.post('/run/testPlan/'+testPlanID+'/'+isNotification+'/'+isRemote).success(callback).error(error);
+	}
+	
 	this.saveTestPlan  = function(testPlan, callback, error) {
 		$http.post('/testPlan',testPlan).success(callback).error(error);
 	};

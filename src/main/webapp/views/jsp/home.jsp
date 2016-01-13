@@ -42,13 +42,8 @@
 		  	<select name="environment" ng-model="selectedEnvironment" data-ng-options="environment as environment for environment in homeCtrl.environments" required>
 		    	<option value="">Select an Environment</option>
 		 	</select> 
-		  	<select name="browser" ng-model="selectedBrowser" required>
+		  	<select name="browser" ng-model="selectedBrowser" data-ng-options="browser.value as browser.text for browser in homeCtrl.browsers" required>
 		    	<option value="">Select a Browser</option>
-		    	<option value="FIREFOX">Firefox</option>
-		    	<option value="CHROME">Chrome</option>
-		    	<option value="IE_10">IE 10</option>
-		    	<option value="IE_11">IE 11</option>
-		    	<option value="IPAD">iPad</option>
 		 	</select> 
 			<select name="notification" ng-model="isNotification" ng-options="o.v as o.n for o in [{ n: 'Notify in Slack', v: true }, { n: 'Do not notify', v: false }]" required>
 				<option value="">Notification</option>

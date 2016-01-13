@@ -12,6 +12,7 @@ app.controller('HomeController', function($cookies, $http, $window, $modal, $sco
 	this.runStatus;
 	this.testDetails;
 	this.environments = Environment.getEnvironments();
+	this.browsers = Environment.getBrowsers();
 	this.testStatus = [];
 	this.start = false;
 	this.videoLink;

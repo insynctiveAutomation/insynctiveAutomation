@@ -18,17 +18,8 @@
 			<td class="col-sm-0"><a class="red-cross" id="remove" ng-click="controller.removeTestSuite($index)">&#10006;</a></td>
 			<td class="col-sm-0">{{$index}}</td>
 			<td class="col-sm-3"><input class="col-sm-12" type="text" ng-model="testSuiteRunner.testSuite.testSuiteName"></input></td>
-			<td class="col-sm-3"><select name="environment" ng-model="testSuiteRunner.environment" data-ng-options="environment as environment for environment in controller.environments" required>
-				<option value="">Select an Environment</option>
-			</select></td>
-			<td class="col-sm-2"><select name="browser" ng-model="testSuiteRunner.browser" required>
-					<option value="">Select a Browser</option>
-					<option value="FIREFOX">Firefox</option>
-					<option value="CHROME">Chrome</option>
-					<option value="IE_10">IE 10</option>
-					<option value="IE_11">IE 11</option>
-					<option value="IPAD">iPad</option>
-			</select></td>
+			<td class="col-sm-3"><select name="environment" ng-model="testSuiteRunner.environment" data-ng-options="environment as environment for environment in controller.environments" required><option value="">Select an Environment</option></select></td>
+			<td class="col-sm-2"><select name="browser" ng-model="testSuiteRunner.browser" data-ng-options="browser.value as browser.text for browser in controller.browsers" required><option value="">Select a Browser</option></select></td>
 			<td class="col-sm-2"><a id="edit" ng-click="controller.openEditTestSuite(testSuiteRunner.testSuite)">Edit Test Suite</a></td>
 			<td class="col-sm-1"><a id="edit" ng-click="controller.copy($index)">Copy</a></td>
 			<td class="col-sm-1">

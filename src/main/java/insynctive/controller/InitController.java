@@ -22,6 +22,7 @@ import insynctive.dao.test.TestRunDao;
 import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.exception.ConfigurationException;
+import insynctive.model.Account;
 import insynctive.model.test.Test;
 import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
@@ -45,6 +46,12 @@ public class InitController {
 		this.testPlanDao = testPlanDao;
 		this.testDao = testDao;
 		this.testSuiteDao = testSuiteDao;
+	}
+	
+	@RequestMapping(value = "/init", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public String init() throws Exception{
+		return "{\"status\" : 200}";
 	}
 	
 }
