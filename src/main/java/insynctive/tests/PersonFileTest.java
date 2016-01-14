@@ -262,7 +262,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			personFilePage.changePrimaryEmail(paramObject.getEmailToChange(getRunIDAsString()));
-			
+			Sleeper.sleep(3000, driver);
 			boolean result = personFilePage.isChangePrimaryEmail(paramObject.getEmailToChange(getRunIDAsString()));
 			Debugger.log("changePrimaryEmail => "+result, isRemote);
 			setResult(result, "Change Primary Email");
@@ -742,7 +742,7 @@ public class PersonFileTest extends TestMachine {
 			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 			int count = personFilePage.getNumberOfEmergencyContacts();
 			personFilePage.removeLastEmergencyContact();
-		
+			Sleeper.sleep(3000, driver);
 			boolean result = personFilePage.isEmergencyContactRemoved(count);
 			Debugger.log("Remove Emergency Contact => "+result, isRemote);
 			setResult(result, "Add Emergency Contact");

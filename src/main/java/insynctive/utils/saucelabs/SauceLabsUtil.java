@@ -12,6 +12,8 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import com.saucelabs.saucerest.SauceREST;
+
 import insynctive.utils.ExternalTestRunner;
 import insynctive.utils.data.TestEnvironment;
 
@@ -19,7 +21,12 @@ public class SauceLabsUtil implements ExternalTestRunner {
 
 	private String username = "Insynctive";
 	private String password = "ce1eeaf8-abcf-4c05-81ed-33ae8d747c21";
-
+	private SauceREST rest;
+	
+	public SauceLabsUtil() {
+		rest = new SauceREST(username, password);
+	}
+	
 	@Override
 	public String getRemoteTestingUsername() {
 		return username;
@@ -57,14 +64,12 @@ public class SauceLabsUtil implements ExternalTestRunner {
 	}
 
 	@Override
-	public void makeCurlToChangeStatus(String jobID, Boolean generalStatus)
-			throws MalformedURLException, IOException, JSONException {
-
+	public void changeStatusOfJob(String jobID, Boolean generalStatus) throws MalformedURLException, IOException, JSONException {
+		if(generalStatus) { rest.jobPassed(jobID); } else { rest.jobFailed(jobID);}
 	}
 
 	@Override
 	public String getPublicVideoLinkOfJob(String jobID) throws IOException, JSONException {
-		// TODO Auto-generated method stub
-		return null;
+		return "https://saucelabs.com/beta/tests/" + jobID + "/watch";
 	}
 }

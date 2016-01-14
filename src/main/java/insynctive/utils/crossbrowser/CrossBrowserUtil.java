@@ -66,7 +66,7 @@ public class CrossBrowserUtil implements ExternalTestRunner {
 	}
 
 	@Override
-	public void makeCurlToChangeStatus(String jobID, Boolean generalStatus) throws MalformedURLException, IOException, JSONException{
+	public void changeStatusOfJob(String jobID, Boolean generalStatus) throws MalformedURLException, IOException, JSONException{
 		String url = "http://app.crossbrowsertesting.com/api/v3/selenium/" + jobID + "?action=set_score&score="+(generalStatus ? "pass" : "fail");
 		MakeCurl.makeCurl(url, username, password, "PUT");
 	}

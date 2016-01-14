@@ -16,6 +16,6 @@ public interface ExternalTestRunner {
 	public void setRemoteTestingPassword(String password);
 	
 	public RemoteWebDriver getRemoteWebDriver(String sessionName, TestEnvironment testEnvironment) throws MalformedURLException;
-	public void makeCurlToChangeStatus(String jobID, Boolean generalStatus) throws MalformedURLException, IOException, JSONException;
+	public void changeStatusOfJob(String jobID, Boolean generalStatus) throws MalformedURLException, IOException, JSONException;
 	public String getPublicVideoLinkOfJob(String jobID) throws IOException, JSONException;
 }

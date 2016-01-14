@@ -202,7 +202,7 @@ public abstract class TestMachine {
 	}
 
 	public void setFinalResult() throws ConfigurationException, MalformedURLException, IOException, JSONException {
-		if(isRemote) { externalTestRunner.makeCurlToChangeStatus(jobID, generalStatus); }
+		if(isRemote) { externalTestRunner.changeStatusOfJob(jobID, generalStatus); }
 		if(isNotification) { sendSlack(); }
 	}
 
