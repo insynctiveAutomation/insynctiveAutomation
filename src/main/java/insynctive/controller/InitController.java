@@ -32,25 +32,45 @@ import insynctive.utils.HibernateUtil;
 @Transactional
 public class InitController {
 
-	TestPlanDao testPlanDao;
-	TestDao testDao;
-	TestSuiteDao testSuiteDao;
+	private final TestDao testDao;
+	private final TestSuiteDao testSuiteDao;
+	private final TestPlanDao testPlanDao;
+	
+	private final TestRunDao testRunDao;
+	private final TestSuiteRunDao testSuiteRunDao;
+	private final TestPlanRunDao testPlanRunDao;
+	
+	private final AccountDao accDao;
+	private final InsynctivePropertyDao propertyDao;
+	private final CreatePersonFormDao createPersonFormDao;
+	private final CrossBrowserAccountDao crossDao;
 	
 	@Inject
 	public InitController(TestDao testDao, TestSuiteDao testSuiteDao, TestPlanDao testPlanDao,
 			TestRunDao testRunDao, TestSuiteRunDao testSuiteRunDao, TestPlanRunDao testPlanRunDao,
 			InsynctivePropertyDao propertyDao, AccountDao accDao, CreatePersonFormDao createPersonFormDao, CrossBrowserAccountDao crossDao) throws Exception {
 		
-		HibernateUtil.init(testDao, testSuiteDao, testPlanDao, testRunDao, testSuiteRunDao, testPlanRunDao, propertyDao, accDao, createPersonFormDao, crossDao);
-		
-		this.testPlanDao = testPlanDao;
 		this.testDao = testDao;
 		this.testSuiteDao = testSuiteDao;
+		this.testPlanDao = testPlanDao;
+		
+		this.testRunDao = testRunDao;
+		this.testSuiteRunDao = testSuiteRunDao;
+		this.testPlanRunDao = testPlanRunDao;
+		
+		this.accDao = accDao;
+		this.propertyDao = propertyDao;
+		this.createPersonFormDao = createPersonFormDao;
+		this.crossDao = crossDao;
+		
+		HibernateUtil.init(testDao, testSuiteDao, testPlanDao, testRunDao, testSuiteRunDao, testPlanRunDao, propertyDao, accDao, createPersonFormDao, crossDao);
+		
 	}
 	
 	@RequestMapping(value = "/init", method = {RequestMethod.GET, RequestMethod.POST})
 	@ResponseBody
 	public String init() throws Exception{
+		new InitController(testDao, testSuiteDao, testPlanDao, testRunDao, testSuiteRunDao, testPlanRunDao, propertyDao, accDao, createPersonFormDao, crossDao);
 		return "{\"status\" : 200}";
 	}
 	
