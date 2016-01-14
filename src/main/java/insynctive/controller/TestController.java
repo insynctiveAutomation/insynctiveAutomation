@@ -402,9 +402,54 @@ public class TestController {
 		return "{\"status\" : 200}";
 	}
 	
+	@RequestMapping(value = "/start/OE" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String startCreatePersonOpenEnrollmentTEST() throws Exception {
+		
+		CreatePersonForm form = new CreatePersonForm();
+		form.setEmail("eugenio.valeiras+123456@gmail.com");
+		form.setName("eugenio");
+		form.setLastName("valeiras");
+		
+		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
+		String tester = "External User";
+		Boolean isRemote = true;
+
+		TestPlan tp = testPlanDao.getTestPlanByName("Create Person - Open Enrollment");
+		
+		for(TestSuiteRunner tsRunner : tp.getTestSuiteRunners()){
+			testRunner.runExternalCreatePerson(tsRunner.run(isRemote, tester), newPersonID);
+		}
+		
+		return "{\"status\" : 200}";
+	}
+	
 	@RequestMapping(value = "/start/OB" ,method = RequestMethod.POST, produces = "text/plain; charset=utf-8")
 	@ResponseBody
 	public String startCreatePersonOnBoarding(@RequestBody CreatePersonForm form) throws Exception{
+		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
+		
+		String tester = "External User";
+		Boolean isRemote = true;
+
+		TestPlan tp = testPlanDao.getTestPlanByName("Create Person - On Boarding");
+		
+		for(TestSuiteRunner tsRunner : tp.getTestSuiteRunners()){
+			testRunner.runExternalCreatePerson(tsRunner.run(isRemote, tester), newPersonID);
+		}
+		
+		return "{\"status\" : 200}";
+	}
+	
+	@RequestMapping(value = "/start/OB" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
+	@ResponseBody
+	public String startCreatePersonOnBoardingTEST() throws Exception{
+
+		CreatePersonForm form = new CreatePersonForm();
+		form.setEmail("eugenio.valeiras+123456@gmail.com");
+		form.setName("eugenio");
+		form.setLastName("valeiras");
+		
 		Integer newPersonID = createPersonFormDao.saveCreatePersonForm(form);
 		
 		String tester = "External User";

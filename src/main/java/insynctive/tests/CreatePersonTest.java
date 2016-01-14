@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
+import insynctive.model.ParamObject;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
@@ -32,8 +33,9 @@ public class CreatePersonTest extends TestMachine {
 	@BeforeClass
 	public void tearUp() throws Exception {
 		Account account = HibernateUtil.accDao.getAccountByID(2);
-		tearUp(TestEnvironment.FIREFOX, account.getAccountProperty().getEnvironment(), true, account.getAccountProperty().isNotification(), null);
+		tearUp(TestEnvironment.FIREFOX, account.getAccountProperty().getEnvironment(), true, account.getAccountProperty().isNotification(), 0);
 		this.sessionName = "Create Person Test";
+		paramObject = new ParamObject();
 	}
 	
 	@Override

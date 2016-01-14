@@ -29,7 +29,7 @@
 	<div ng-if="homeCtrl.isLogin">
 		<div class="top-right-corner h4 float-right">
 			<a id="configurationLink" ng-click="homeCtrl.openConfig()">Configuration</a></br>
-			<a href="/dashboard" id="dashboardLink">Dashboard</a></br>
+			<a href="/dashboard" id="dashboardLink">History</a></br>
 			<a href="/listTestPlan" id="testPlansLink">Test Plans</a></br>
 		</div>
 		<div class="top-left-corner h4"><a id="configurationLink" ng-click="homeCtrl.logout()">Logout</a></div>
