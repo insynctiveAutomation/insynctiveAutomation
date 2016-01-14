@@ -5,7 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.json.JSONException;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -41,7 +43,7 @@ public class SauceLabsUtil implements ExternalTestRunner {
 	@Override
 	public RemoteWebDriver getRemoteWebDriver(String sessionName, TestEnvironment testEnvironment) throws MalformedURLException {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-	
+		
 		capabilities.setCapability("name", sessionName+" ["+testEnvironment+"]");
 		//Set BROWSER > VERSION > PLATAFORM
 		capabilities.setCapability(CapabilityType.BROWSER_NAME, testEnvironment.browserSauceLabs);

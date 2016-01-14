@@ -52,7 +52,7 @@
 				<option value="">Run in</option>
 			</select>
 		
-			<button ng-disabled="sendTest.testSuite.$error.required || sendTest.environment.$error.required" class="btn btn-lg btn-primary" type="submit">Run Test</button>
+			<button ng-disabled="sendTest.$error.required || !homeCtrl.isTestLoaded" class="btn btn-lg btn-primary" type="submit">Run Test</button>
 			</form>	
 		</div>
 	</div>

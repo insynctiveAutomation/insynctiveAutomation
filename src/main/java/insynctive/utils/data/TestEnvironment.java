@@ -1,34 +1,37 @@
 package insynctive.utils.data;
 
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.remote.BrowserType;
+
 public enum TestEnvironment {
 
 	FIREFOX("FF", "39", "Win7x64-C1", "1024x768", 
-			"firefox", "39.0", "Windows 7",
+			BrowserType.FIREFOX, "39.0", "Windows 7",
 			"Firefox 39 | Windows 7 64bits", true), 
 	
 	
 	CHROME("Chrome", "44", "Win7x64-C1", "1024x768", 
-			"chrome", "44.0", "Windows 7",
+			BrowserType.CHROME, "44.0", "Windows 7",
 			"Chrome 44 | Windows 7 64bits", true), 
 	
 	
 	IPAD("MblSafari", "8.0", "iPadAir-iOS8Sim", "1024x768", 
-			"iPad Air", "9.2", "OS X 10.10",
+			BrowserType.IPAD, "9.2", "mac",
 			"Safari 8 | iPadAir", false), 
 	
 	
 	IPHONE("MblSafari", "8.0", "iPhone6Plus-iOS8sim", "1080x1920", 
-			"iPad Air", "9.2", "OS X 10.10",
+			BrowserType.IPHONE, "9.2", "mac",
 			"Safari 8 | Iphone 6 PLUS", false),
 	
 	
 	IE_10("IE", "10", "Win7x64-C2", "1024x768", 
-			"internet explorer", "10.0", "Windows 7",
+			BrowserType.IE, "10.0", "Windows 7",
 			"Internet Explorer 10 | Windows 7 64bits", true),
 	
 	
 	IE_11("IE", "11", "Win7x64-Base", "1024x768", 
-			"internet explorer", "11.0", "Windows 7", 
+			BrowserType.IE, "11.0", "Windows 7", 
 			"Internet Explorer 11 | Windows 7 64bits", true);
 	
 	public final String browserCrossBrowser;

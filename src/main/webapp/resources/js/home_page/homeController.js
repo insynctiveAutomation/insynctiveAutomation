@@ -5,6 +5,7 @@ var app = angular.module('homeApp', [ 'ngAnimate', 'ui.bootstrap', 'ngCookies', 
 app.controller('HomeController', function($cookies, $http, $window, $modal, $scope, $interval, homeService, loginService, accountService) {
 	var self = this;
 	this.isLogin = false;
+	this.isTestLoaded = false;
 	this.paramObject = {};
 	this.tlaIndex;
 	this.errors = [];
@@ -37,9 +38,11 @@ app.controller('HomeController', function($cookies, $http, $window, $modal, $sco
 	
 	/* On change TestSuite Combo */
 	this.getTestDetails = function(testSuiteValue){
+		self.isTestLoaded = false;
 		homeService.getTestDetails(testSuiteValue, function(data) {
 			self.testDetails = data;
 			self.getTestsStatus();
+			self.isTestLoaded = true;
 		});
 	};
 	

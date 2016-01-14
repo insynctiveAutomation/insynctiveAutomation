@@ -38,9 +38,11 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	};
 	this.getTestPlanByID(this.testPlanID);
 	
-	this.save = function(){
+	this.save = function($event){
+		$event.target.disabled = true;
 		self.saveLabel = 'Saving...';
 		testPlanService.saveTestPlan(self.testPlan, function(data){
+			$event.target.disabled = false;
 			self.saveLabel = 'Saved!';
 			setTimeout(function(){
 					self.saveLabel = undefined;

@@ -32,9 +32,9 @@
 
 <body data-ng-controller="testPlanController as controller">
 	<div ng-hide="controller.isLoading">
-		<form ng-submit="controller.save()" name="form" id="form">
+		<form name="form" id="form">
 			<test-plan controller="controller"></test-plan>
-			<button class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit"><span ng-if="controller.saveLabel">{{controller.saveLabel}}</span><span ng-if="!controller.saveLabel">Save</span></button>
+			<button ng-click="controller.save($event)" class="center-block btn btn-primary btn-block" ng-disabled="form.$invalid" type="submit"><span ng-if="controller.saveLabel">{{controller.saveLabel}}</span><span ng-if="!controller.saveLabel">Save</span></button>
 		</form>
 		<span ng-bind="controller.message"></span>
 		<br>
