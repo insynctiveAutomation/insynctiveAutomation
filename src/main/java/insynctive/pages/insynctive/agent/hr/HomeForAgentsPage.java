@@ -112,7 +112,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 		setTextInField(departmentTextBox, personData.getDepartamentOfEmployee());
 		setTextInField(emailTextBox, personData.getEmail());
 		clickAButton(openPersonFileCheckBox);
-		Sleeper.sleep(3500, driver);
+		Sleeper.sleep(5500, driver);
 		clickAButton(saveNewEmployeeButton);
 		//TODO To the correct message [<User> added [admin/agent/employee]  <Person Name>]
 		String assertMessage = loginUserFullName.getText()+" added employee "+personData.getName()+" "+personData.getLastName();

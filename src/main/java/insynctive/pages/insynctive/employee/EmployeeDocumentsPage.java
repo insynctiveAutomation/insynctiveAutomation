@@ -57,7 +57,7 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 	}
 
 	public void viewDocument(String documentName) throws Exception{
-		clickAButton(getViewButton(documentName));
+		clickAButton(1000, getViewButton(documentName));
 		swichToIframe(documentIFrame);
 	}
 	

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -26,10 +27,8 @@ import org.xml.sax.SAXException;
 import insynctive.dao.AccountDao;
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestPlanDao;
-import insynctive.dao.test.TestPlanRunDao;
 import insynctive.dao.test.TestRunDao;
 import insynctive.dao.test.TestSuiteDao;
-import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.Account;
 import insynctive.model.ParamObject;
 import insynctive.model.test.Test;
@@ -43,32 +42,10 @@ import insynctive.runnable.RunnableTest;
 
 @Transactional
 public class TestWebRunner {
-
-	private final AccountDao accDao;
-
-	private final TestDao testDao;
-	private final TestSuiteDao testSuiteDao;
-	private final TestPlanDao testPlanDao;
-	
-	private final TestRunDao testRunDao;
-	private final TestSuiteRunDao testSuiteRunDao;
-	private final TestPlanRunDao testPlanRunDao;
-
-	public TestWebRunner() {
-		this.accDao = HibernateUtil.accDao;
-		
-		this.testDao = HibernateUtil.testDao;
-		this.testSuiteDao = HibernateUtil.testSuiteDao;
-		this.testPlanDao = HibernateUtil.testPlanDao;
-		
-		this.testRunDao = HibernateUtil.testRunDao;
-		this.testSuiteRunDao = HibernateUtil.testSuiteRunDao;
-		this.testPlanRunDao = HibernateUtil.testPlanRunDao;
-	}
 	
 	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestPlanRun tpRun = tp.run(isRemote, tester);
-		testPlanRunDao.save(tpRun);
+		HibernateUtil.testPlanRunDao.save(tpRun);
 		runTest(tpRun, isNotification);
 	}
 	
@@ -78,7 +55,7 @@ public class TestWebRunner {
 	
 	public Integer runTest(TestSuiteRunner tsRunner, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = tsRunner.run(isRemote, tester);
-		testSuiteRunDao.save(tsRun);
+		HibernateUtil.testSuiteRunDao.save(tsRun);
 		return runTest(tsRun, isNotification);
 	}
 	
@@ -88,7 +65,7 @@ public class TestWebRunner {
 	
 	public void runTest(TestSuite ts, String environment, String browser, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = ts.run(environment, browser, isRemote, tester);
-		testSuiteRunDao.save(tsRun);
+		HibernateUtil.testSuiteRunDao.save(tsRun);
 		runTest(tsRun, isNotification);
 	}
 	
@@ -155,7 +132,7 @@ public class TestWebRunner {
 		
 		//START TEST IN OTHER THREAD
 		Thread threadToJoin = TestResults.workers.get(tsRun.getDependsRunID());
-		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, testSuiteRunDao, testDao, (threadToJoin != null ? new Thread[]{threadToJoin} : new Thread[]{})));
+		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, HibernateUtil.testSuiteRunDao, HibernateUtil.testDao, (threadToJoin != null ? new Thread[]{threadToJoin} : new Thread[]{})));
 		TestResults.addWorker(tsRun.getTestSuiteRunID(), thread);
 		thread.start();
 		

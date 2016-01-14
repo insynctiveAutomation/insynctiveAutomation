@@ -308,9 +308,6 @@ public class TestController {
 	public String runTestPlanByID(@PathVariable("tpID") Integer tpID, @PathVariable("isNotification") Boolean isNotification, @PathVariable("remote") Boolean isRemote) throws Exception{
 		
 		TestPlan tp = testPlanDao.getTestPlanByID(tpID);
-		System.out.println("Test Runner: "+testRunner);
-		System.out.println("Test Plan: "+tp);
-		System.out.println("Username: "+Account.getAccountUsername(SessionController.account));
 		testRunner.runTest(tp, isNotification, isRemote, Account.getAccountUsername(SessionController.account));
 		
 		return "{\"status\" : 200}";

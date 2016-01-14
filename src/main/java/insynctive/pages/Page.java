@@ -246,6 +246,12 @@ public class Page {
     	if(msSleepAfterCommand != null) Sleeper.sleep(msSleepAfterCommand, driver);
     }
     
+    public void clickAButton(Integer msSleepBeforeCommand, WebElement element) throws Exception {
+    	waitUntilIsLoaded(element);
+    	if(msSleepBeforeCommand != null) Sleeper.sleep(msSleepBeforeCommand, driver);
+    	element.click();
+    }
+    
     public void setTextInField(WebElement textField, String text) throws ElementNotFoundException, IOException, InterruptedException {
     	setTextInField(textField, text, null);
     }

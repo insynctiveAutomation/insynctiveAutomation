@@ -114,7 +114,7 @@ public class TestSuite {
 		this.dependsTestSuite = dependsTestSuite;
 	}
 
-	@JsonIgnoreProperties
+	@JsonIgnore
 	public boolean isDependingOnAnotherTS(){
 		return dependsTestSuite != null;
 	}

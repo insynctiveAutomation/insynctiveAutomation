@@ -196,27 +196,22 @@ public class PersonFileTest extends TestMachine {
 	@Test
 	@Parameters({"TestID"})
 	@ParametersFront(
-			attrs={ParamObjectField.BOOLEAN_PARAM_ONE ,ParamObjectField.EMAIL, ParamObjectField.NAME, 
+			attrs={ParamObjectField.EMAIL, ParamObjectField.NAME, 
 					ParamObjectField.LAST_NAME, ParamObjectField.DEPARTMENT_OF_EMPLYEE, 
 					ParamObjectField.TITLE_OF_EMPLOYEE}, 
-			labels={"Create OR Open Person?", "Email (+RunID is automatically added)", "Name", "Last Name", "Department", "Title"})
+			labels={"Email (+RunID is automatically added)", "Name", "Last Name", "Department", "Title"})
 	public void createPersonTest(@Optional("TestID") Integer testID) throws Throwable {
 		changeParamObject(testID);
 		try{ 
 			HomeForAgentsPage.SELENIUM_TIMEOUT_SEC = 50;
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			boolean result;
-			if(paramObject.getBooleanParamOne()){//True = Open Person file > False = Create Person.
-				homePage.openPersonFile(paramObject.getSearchEmail());
-				result = homePage.isPersonFileOpened();
-				Sleeper.sleep(5000, driver);
-			} else {
-				paramObject.setName(paramObject.getName() + " " + getRunIDAsString());
-				paramObject.setEmail(paramObject.getEmailWithRunID(getRunIDAsString()));
-				homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
-				homePage.sendInviteEmail(paramObject, CheckInApp.NO);
-				result = homePage.checkIfPersonIsCreated(paramObject);
-			}
+
+			paramObject.setName(paramObject.getName() + " " + getRunIDAsString());
+			paramObject.setEmail(paramObject.getEmailWithRunID(getRunIDAsString()));
+			homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
+			homePage.sendInviteEmail(paramObject, CheckInApp.NO);
+			result = homePage.checkIfPersonIsCreated(paramObject);
 			
 			setResult(result, "Create Person");
 			Debugger.log("createPerson => "+result, isRemote);

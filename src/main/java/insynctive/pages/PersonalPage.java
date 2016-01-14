@@ -318,7 +318,7 @@ public abstract class PersonalPage extends Page {
 	public void changePrimaryEmail(String newEmail) throws Exception {
 		waitPageIsLoad();
 		Sleeper.sleep(1000, driver);
-		clickAButton(primaryEmailLink);
+		clickAButton(primaryEmailLink, 4500);
 		waitUntilnotVisibility(loadingSpinner);
 		swichToIframe(editEmailiFrame);
 		setTextInField(primaryEmailField, newEmail);

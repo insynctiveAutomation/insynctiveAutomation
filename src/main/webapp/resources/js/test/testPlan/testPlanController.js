@@ -102,9 +102,9 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	
 	this.getPossibleDependentIndex = function(index){
 		var indexs = [];
+		var ts = self.testPlan.testSuiteRunners[index].testSuite;
 		for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
 			var tsIterate = self.testPlan.testSuiteRunners[i].testSuite;
-			var ts = self.testPlan.testSuiteRunners[index].testSuite;
 			if(i != index  && self.doNotHaveCicleDependent(ts, tsIterate)){
 				indexs.push(i);
 			}
@@ -113,7 +113,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.doNotHaveMeDepends = function(ts, tsIterate){
-		return (tsIterate === undefined || tsIterate === null ||  tsIterate.dependsTestSuite === undefined || tsIterate.dependsTestSuite === null) || (tsIterate.dependsTestSuite.testSuiteID != ts.testSuiteID);  
+		return (tsIterate === undefined || tsIterate === null ||  tsIterate.dependsTestSuite === undefined || tsIterate.dependsTestSuite === null) || (tsIterate.dependsTestSuite != ts);  
 	}
 	
 	this.doNotHaveCicleDependent = function(ts, tsIterate){
@@ -128,7 +128,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	
 	this.findIndexOf = function(ts){
 		if(ts){
-			return self.testPlan.testSuiteRunners.findIndex(function(elem){return elem.testSuite.testSuiteID === ts.testSuiteID})
+			return self.testPlan.testSuiteRunners.findIndex(function(elem){return elem.testSuite === ts})
 		} else {
 			return null
 		}
@@ -138,7 +138,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 		if(self.testPlan){
 			for (var i = 0; i < self.testPlan.testSuiteRunners.length; i++) {
 				var index = self.findIndexOf(self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuite)
-				self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuiteIndex = index; 
+				self.testPlan.testSuiteRunners[i].testSuite.dependsTestSuiteIndex = (index != undefined || index != null) ? index : undefined; 
 			}
 		}
 	}

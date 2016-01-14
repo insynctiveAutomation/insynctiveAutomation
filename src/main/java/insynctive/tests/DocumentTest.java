@@ -60,13 +60,13 @@ public class DocumentTest extends TestMachine{
             	employeeDocuments.viewDocument(paramObject.docName+" "+index);
             	result = result && employeeDocuments.isOpenDocument();
             	employeeDocuments.closeBigOverlay();
+            	if(!result){ break; }
+            	
             }
 
             Debugger.log("getDocuments => "+result, isRemote);
             setResult(result, "Documents displayed");
             assertTrue(result);
-            
-            
             
         } catch(Exception ex){
             failTest("No Documents displayed",  ex, isRemote);
