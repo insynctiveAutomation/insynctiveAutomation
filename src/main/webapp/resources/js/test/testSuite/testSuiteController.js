@@ -31,11 +31,9 @@ app.controller('testSuiteController', function($cookies, $scope, $window, $modal
 	}
 	
 	this.removeTest = function(index){
-		bootboxService.removeDialog("Remove Test", "Are you sure you want to remove "+self.testSuite.tests[index].testName+"?", function(result){
-			if(result) {
+		bootboxService.removeDialog("Remove Test", "Are you sure you want to remove "+self.testSuite.tests[index].testName+"?", function(){
 				self.testSuite.tests.splice(index, 1)
 				$scope.$apply();
-			}
 		})
 	}
 	

@@ -55,14 +55,12 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	};
 	
 	this.remove = function(){
-		bootboxService.removeDialog("Remove Test Plan", "Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(result){
-			if(result){
+		bootboxService.removeDialog("Remove Test Plan", "Are you sure you want to remove the Test Plan "+self.testPlan.name+"?", function(){
 				testPlanService.removeTestPlan(self.testPlan, function(data){
 					$window.location.href = '/';
 				}, function(data){
 					self.message = 'Error => '+data;
 				}); 
-			}
 		})
 	};
 	
@@ -92,11 +90,9 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	}
 	
 	this.removeTestSuite = function(index){
-		bootboxService.removeDialog("Remove Test Suite", "Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(result){
-			if(result) {
+		bootboxService.removeDialog("Remove Test Suite", "Are you sure you want to remove "+self.testPlan.testSuiteRunners[index].testSuite.testSuiteName+"?", function(){
 				self.testPlan.testSuiteRunners.splice(index, 1)
 				$scope.$apply();
-			}
 		})
 	}
 	

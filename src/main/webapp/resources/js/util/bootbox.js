@@ -12,17 +12,10 @@ app.service('bootboxService', function($compile) {
 			  backdrop: true,
 			  onEscape: function() { },
 			  buttons: {
-			    success: {
-			      label: "Yes",
-			      className: "btn-success",
-			      callback: yesCallback
-			    },
-			    danger: {
-			      label: "No",
+			    Remove: {
+			      label: "Remove",
 			      className: "btn-danger",
-			      callback: function() {
-			    	  
-			      }
+			      callback: yesCallback
 			    }
 			  }
 			});
