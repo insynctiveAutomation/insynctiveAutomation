@@ -50,7 +50,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
-			boolean result = loginPage.isLoggedIn(1000);
+			boolean result = loginPage.isLoggedIn(50);
 			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);
@@ -72,7 +72,7 @@ public class PersonFileTest extends TestMachine {
 		try{ 
 			LoginPage loginPage = login();
 			Sleeper.sleep(1500, driver);
-			boolean result = loginPage.isLoggedIn(1000);
+			boolean result = loginPage.isLoggedIn(5000);
 			Debugger.log("loginTest => "+result, isRemote);
 			setResult(result, "Login Test");
 			assertTrue(result);

@@ -181,10 +181,9 @@ public class Page {
     }
 
     public boolean isElementPresent(WebElement element) {
-        try{
-            element.getTagName();
-            return true;
-        } catch(Exception e){
+        try {
+            return element.isDisplayed();
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
