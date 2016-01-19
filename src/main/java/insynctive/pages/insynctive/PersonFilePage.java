@@ -335,7 +335,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public boolean isChangePrimaryPhone(Map<String, String> resultsPhones) throws Exception {
-		Sleeper.sleep(4000, driver);
+		Sleeper.sleep(9000, driver);
 		waitPageIsLoad();
 		return phoneNumberLink.getText().equals(resultsPhones.get("newPrimaryPhone")) && alternativePhoneLink.getText().equals(resultsPhones.get("oldPrimaryPhone"));
 	}
@@ -357,7 +357,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public boolean isAddAlternativePhoneNumber(String primaryPhone, String runIDString) throws Exception {
-		Sleeper.sleep(4000, driver);
+		Sleeper.sleep(8000, driver);
 		waitPageIsLoad();
 		List<WebElement> elements = phones;
 		for(WebElement element : elements){
