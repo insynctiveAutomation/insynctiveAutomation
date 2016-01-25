@@ -78,8 +78,6 @@ public abstract class TestMachine {
 	//TAGS => Add tests results (only the fail tests).
 	List<String> tags = new ArrayList<String>();
 	
-	//Remote Testing parameters (CROSSBROWSING)
-	
 	private String getJobURL() throws IOException, JSONException {
 		return externalTestRunner.getPublicVideoLinkOfJob(jobID);
 	}
@@ -101,11 +99,6 @@ public abstract class TestMachine {
 	public void tearUp(TestEnvironment testEnvironment, String environment, Boolean isRemote, Boolean isNotification, Integer testSuiteID) throws Exception{
 		try{
 
-//			CrossBrowserAccount crossBrowserAccount = HibernateUtil.crossDao.getAccountByID(1);//CrossBrowser account in DB
-//
-//			externalTestRunner.setRemoteTestingUsername(crossBrowserAccount.getEmail());
-//			externalTestRunner.setRemoteTestingPassword(crossBrowserAccount.getPassword());
-		
 			this.runID = getRunID();
 			this.isRemote = isRemote;
 			this.testEnvironment = testEnvironment;
