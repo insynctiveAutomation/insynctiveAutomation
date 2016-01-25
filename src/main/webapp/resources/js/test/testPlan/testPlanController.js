@@ -124,7 +124,7 @@ app.controller('testPlanController', function($cookies, $scope, $window, $modal,
 	
 	this.findIndexOf = function(ts){
 		if(ts){
-			return self.testPlan.testSuiteRunners.findIndex(function(elem){return elem.testSuite === ts})
+			return self.testPlan.testSuiteRunners.findIndex(function(elem){return TestSuite.isEqual(elem.testSuite, ts)})
 		} else {
 			return null
 		}

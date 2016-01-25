@@ -31,3 +31,13 @@ TestSuite.removeDependsTestSuite = function(ts){
 TestSuite.removeDependsTestSuiteIndex = function(ts){
 	if(ts){ ts.dependsTestSuiteIndex = undefined }
 }
+
+TestSuite.isEqual = function(ts1, ts2){
+	var aux1 = ts1
+	var aux2 = ts2
+	
+	delete aux1.dependsTestSuiteIndex
+	delete aux2.dependsTestSuiteIndex
+	
+	return _.isEqual(aux1, aux2)
+}
