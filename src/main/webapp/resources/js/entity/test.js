@@ -27,7 +27,7 @@ Test.removeParamObjectID = function(test){
 }
 
 Test.removeEmergencyContactID = function(test){
-	if(test.paramObject.emergencyContact){ test.paramObject.emergencyID = undefined }
+	if(test.paramObject.emergencyContact){ test.paramObject.emergencyContact.emergencyID = undefined }
 }
 
 Test.removeUsAddressID = function(test){
