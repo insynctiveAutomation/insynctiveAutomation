@@ -128,7 +128,7 @@ public class HomeForAgentsPage extends Page implements PageInterface {
 	public void sendInviteEmail(ParamObject personData, CheckInApp checkInApp) throws Exception {
 		waitUntilInvitePanelIsLoad();
 		setTextInField(inviteEmailField, personData.getEmail());
-		Sleeper.sleep(3500, driver);
+		Sleeper.sleep(7000, driver);
 		clickAButton(sendInviteButton);
 		
 		String assertMessage = "Invitation to Sign up was sent to "+personData.getName()+" "+personData.getLastName();
