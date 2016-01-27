@@ -396,7 +396,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public void openDocument(String documentName) throws Exception {
-		clickAButton(findViewDocumentBtn(documentName));
+		clickAButton(2000, findViewDocumentBtn(documentName));
 	}
 
 	public WebElement findViewDocumentBtn(String documentName) throws ElementNotFoundException, Exception {
