@@ -5,9 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.json.JSONException;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -19,8 +16,8 @@ import insynctive.utils.data.TestEnvironment;
 
 public class SauceLabsUtil implements ExternalTestRunner {
 
-	private String username = "Insynctive";
-	private String password = "ce1eeaf8-abcf-4c05-81ed-33ae8d747c21";
+	private String username = "Insynctive1";
+	private String password = "363640d1-9cec-43c7-b966-26cff68bbdba";
 	private SauceREST rest;
 	
 	public SauceLabsUtil() {
