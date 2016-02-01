@@ -20,6 +20,9 @@ public class SauceLabsUtil implements ExternalTestRunner {
 	private String password = "363640d1-9cec-43c7-b966-26cff68bbdba";
 	private SauceREST rest;
 	
+	private final int COMMAND_TIMEOUT = 420;
+	private final int IDLE_COMMAND_TIMEOUT = 300;
+	
 	public SauceLabsUtil() {
 		rest = new SauceREST(username, password);
 	}
@@ -48,6 +51,8 @@ public class SauceLabsUtil implements ExternalTestRunner {
 	public RemoteWebDriver getRemoteWebDriver(String sessionName, TestEnvironment testEnvironment) throws MalformedURLException {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		
+		capabilities.setCapability("command-timeout", COMMAND_TIMEOUT);
+		capabilities.setCapability("commandTimeout", IDLE_COMMAND_TIMEOUT);
 		capabilities.setCapability("name", sessionName+" ["+testEnvironment+"]");
 		//Set BROWSER > VERSION > PLATAFORM
 		capabilities.setCapability(CapabilityType.BROWSER_NAME, testEnvironment.browserSauceLabs);

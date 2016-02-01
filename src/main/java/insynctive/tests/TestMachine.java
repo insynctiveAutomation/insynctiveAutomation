@@ -214,7 +214,7 @@ public abstract class TestMachine {
 		attachment.put("fallback", "Status of the Test "+sessionName+": "+(generalStatus ? "PASS" : "FAIL"));
 		String testDetailsUrl = getTestDetailsUrl();
 		attachment.put("pretext", 
-				(jobID == null ? "JOB NO OPENED " : "<"+getJobURL()+"|Watch test video here> | ") + 
+				(jobID == null ? "Job didn't open " : "<"+getJobURL()+"|Watch test video here> | ") + 
 				(testDetailsUrl != null ? "<"+testDetailsUrl+" |See details> | " : "") + 
 				"Environment: "+environment);
 		
