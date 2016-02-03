@@ -16,8 +16,8 @@ import insynctive.utils.data.TestEnvironment;
 
 public class SauceLabsUtil implements ExternalTestRunner {
 
-	private String username = "Insynctive1";
-	private String password = "363640d1-9cec-43c7-b966-26cff68bbdba";
+	private String username = "Insynctive2";
+	private String password = "d2f371f8-fc76-4b7c-9b60-e069c996c879";
 	private SauceREST rest;
 	
 	private final int COMMAND_TIMEOUT = 420;
