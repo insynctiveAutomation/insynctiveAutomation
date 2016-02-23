@@ -13,7 +13,7 @@
             <pattern><![CDATA[\(${HOSTNAME}\) %d %-5level [%X{tid}] [%X{uow}] [%X{requestId}] [%thread] %logger{55} - %msg %n]]></pattern>
         </encoder>
     </appender>
-
+    
     <root level="info">
         <appender-ref ref="console"/>
     </root>

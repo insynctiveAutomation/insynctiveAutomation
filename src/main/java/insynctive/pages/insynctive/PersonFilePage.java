@@ -323,7 +323,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 			throws Exception {
 		Sleeper.sleep(5000, driver);
 		waitPageIsLoad();		
-		return lastEmergencyContactName.getText().equals(emg.getName());
+		return lastEmergencyContactGrid.get(0).getText().equals(emg.getName());
 
 	}
 	

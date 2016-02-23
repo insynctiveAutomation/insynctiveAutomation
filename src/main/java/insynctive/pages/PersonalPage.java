@@ -69,7 +69,9 @@ public abstract class PersonalPage extends Page {
 	public WebElement emergencyContactPhone;
 	@FindBy(xpath = ".//*[@id='saveBtn']")
 	public WebElement emergencyContactSave;
-	@FindBy(css = "#emergency-contacts-grid > div:nth-child(2) > span.col-sm-3.name-col.em-col.standard-cut-overflow > span:nth-of-type(1)")
+	@FindBy(css = "#emergency-contacts-grid > div:nth-child(2) > span.col-sm-3")
+	public List<WebElement> lastEmergencyContactGrid;
+	@FindBy(css = "#emergency-contacts-grid > div:nth-child(2) > span.col-sm-3.name-col.em-col > span")
 	public WebElement lastEmergencyContactName;
 	@FindBy(css = "#emergency-contacts-grid > div:nth-child(2) > span.col-sm-1.delete-col.em-col-right > img")
 	public WebElement lastEmergencyContactDelete;

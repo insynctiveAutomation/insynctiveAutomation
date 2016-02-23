@@ -406,10 +406,14 @@ public class Page {
 	
 	public String getMessageFromWebElement(WebElement element){
 		String[] elementSplit = element.toString().split("-> ");
-		return (elementSplit.length > 0) ? 
-				(elementSplit[1].split("]").length > 0 ? 
-						elementSplit[1].split("]")[0] : elementSplit[1]) 
-				: element.toString(); 
+		try{
+			return (elementSplit.length > 0) ? 
+					(elementSplit[1].split("]").length > 0 ? 
+							elementSplit[1].split("]")[0] : elementSplit[1]) 
+					: element.toString(); 
+		} catch (Exception ex){
+			return element.toString();
+		}
 	}
 	
 	public void logout() throws Exception{
