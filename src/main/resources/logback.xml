@@ -14,6 +14,16 @@
         </encoder>
     </appender>
     
+    <appender name="AIRBRAKE" class="airbrake.AirbrakeAppender">
+     <param name="api_key" value="c565ae6163c7924243ac326dd3487a5b"/>
+    <param name="env" value="test"/>
+    <param name="enabled" value="true"/>
+	</appender>
+
+	<root>
+    	<appender-ref ref="AIRBRAKE"/>
+	</root>
+    
     <root level="info">
         <appender-ref ref="console"/>
     </root>

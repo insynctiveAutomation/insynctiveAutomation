@@ -154,7 +154,7 @@ public abstract class TestMachine {
 		failTest(testName, ex, isSaucelabs, null);
 	}
 	
-	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception{
+	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception {
 		Reporter.log( testName, true );
 		ex.printStackTrace();
 		
@@ -173,7 +173,7 @@ public abstract class TestMachine {
 			nameAndCause = testName;
 		}
 		
-		Debugger.log(nameAndCause +" => false", isSaucelabs);
+		Debugger.log(ex, "Exception");
 		
 		setResult(false, nameAndCause, duration);
 	}

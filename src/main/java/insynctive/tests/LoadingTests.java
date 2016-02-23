@@ -51,7 +51,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = loginPage.isLoggedIn();
 			long endTime = System.nanoTime();
 			setResult(result, "Login Test", endTime - startTime);
-			Debugger.log("loginTest => "+result, isRemote);
+			Debugger.log("loginTest => "+result, "Loading-Time");
 			assertTrue(result);
 		} catch(Exception ex){
 			long endTime = System.nanoTime();
@@ -73,7 +73,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > People > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrPeopleLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("hrPeopleLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("hrPeopleLoadingTest", ex, isRemote);
@@ -94,7 +94,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > Tasks > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrTasksLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("hrTasksLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("hrTasksLoadingTest", ex, isRemote);
@@ -117,7 +117,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > Checklist > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrChecklistLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("hrChecklistLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("hrChecklistLoadingTest", ex, isRemote);
@@ -140,7 +140,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "HR > HelpDesk > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("hrHelpDeskLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("hrHelpDeskLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("hrHelpDeskLoadingTest", ex, isRemote);
@@ -163,7 +163,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "APP > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("apptLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("apptLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("apptLoadingTest", ex, isRemote);
@@ -186,7 +186,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > Account > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("settingAccountLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("settingAccountLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("settingAccountLoadingTest", ex, isRemote);
@@ -209,7 +209,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > People > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("settingPeopleLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("settingPeopleLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("settingPeopleLoadingTest", ex, isRemote);
@@ -232,7 +232,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > Other Settings > Loading Test (Duration: "+timeToLoad+" ms)");
-			Debugger.log("settingOtherSettingsLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("settingOtherSettingsLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("settingOtherSettingsLoadingTest", ex, isRemote);
@@ -255,7 +255,7 @@ public class LoadingTests extends TestMachine {
 			boolean result = timeToLoad < TIME_EXPECTED;
 			
 			setResult(result, "Setting > V3 Settings > Loading Test (Duration: "+timeToLoad+" ms)"); 
-			Debugger.log("settingV3SettingsLoadingTest "+timeToLoad+"=> "+result, isRemote);
+			Debugger.log("settingV3SettingsLoadingTest "+timeToLoad+"=> "+result, "Loading-Time");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			failTest("settingV3SettingsLoadingTest", ex, isRemote);

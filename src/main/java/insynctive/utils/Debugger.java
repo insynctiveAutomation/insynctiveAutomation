@@ -1,24 +1,45 @@
 package insynctive.utils;
 
-public class Debugger {
+import airbrake.AirbrakeNotice;
+import airbrake.AirbrakeNoticeBuilder;
+import airbrake.AirbrakeNotifier;
+import airbrake.Backtrace;
+import insynctive.exception.FailTest;
 
-	public static void log(Object message, boolean isSauceLabs){
-		if(isSauceLabs){
-			//LOG IN SAUCELABS
-			frameOf(message,'#');
-			System.out.println("#"+message+"#");
-			frameOf(message,'#');
-		} else {
-			frameOf(message,'#');
-			System.out.println("#"+message+"#");
-			frameOf(message,'#');
+public class Debugger {
+	
+	public static void log(String message, String tag){
+		Debugger.log(message);		
+		
+		if(!message.contains("true")){
+			AirbrakeNotice notice = new AirbrakeNoticeBuilder("c565ae6163c7924243ac326dd3487a5b", new Backtrace(new FailTest(message)), new FailTest(message), tag).newNotice();
+			AirbrakeNotifier notifier = new AirbrakeNotifier();
+			notifier.notify(notice);
 		}
 	}
+	
+	
 
-	public static void log(String message) {
+	public static void log(Exception ex, String tag){
+		AirbrakeNotice notice = new AirbrakeNoticeBuilder("c565ae6163c7924243ac326dd3487a5b", new Backtrace(ex), ex, tag).newNotice();
+		AirbrakeNotifier notifier = new AirbrakeNotifier();
+		notifier.notify(notice);
+	}
+
+	public static void log(String message, boolean isSauceLabs){
+		Debugger.log(message, isSauceLabs ? "Remote" : "Local");
+	}
+
+	public static void log(Exception ex, boolean isSauceLabs){
+		Debugger.log(ex, isSauceLabs ? "Remote" : "Local");
+	}
+	
+	
+	private static void log(String message) {
 		frameOf(message,'#');
 		System.out.println("#"+message+"#");
-		frameOf(message,'#');		
+		frameOf(message,'#');
+	    
 	}
 
 	public static void subLog(Object message, boolean isSauceLabs){
@@ -27,7 +48,7 @@ public class Debugger {
 		} else {
 			frameOf(message, '_');
 			System.out.println("|"+message+"|");
-			frameOf(message, '¯');
+			frameOf(message, 'ï¿½');
 		}
 	}
 	
