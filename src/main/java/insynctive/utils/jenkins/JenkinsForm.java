@@ -81,7 +81,7 @@ public class JenkinsForm {
 	@JsonIgnore
 	private String getType() {
 		String jenkinsName = name != null ? name : "";
-		String[] split = jenkinsName.split("MASTER - Main - ");
+		String[] split = jenkinsName.split("TS - Main - ");
 		String type = split.length > 0 ? split[1] : "";
 		
 		return type;
