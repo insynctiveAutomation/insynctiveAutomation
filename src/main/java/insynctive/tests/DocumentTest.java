@@ -58,7 +58,7 @@ public class DocumentTest extends TestMachine{
             for(int index = 1; index <= paramObject.loadingTime; index++){
             	result = result && employeeDocuments.isDocumentInGrid(paramObject.docName+" "+index, paramObject.docCategory);
             	employeeDocuments.viewDocument(paramObject.docName+" "+index);
-            	result = result && employeeDocuments.isOpenDocument();
+            	result = result && employeeDocuments.isDocumentOpened();
             	employeeDocuments.closeBigOverlay();
             	if(!result){ break; }
             	

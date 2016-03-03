@@ -40,17 +40,14 @@ public class TaskTest extends TestMachine {
 			throws Exception {
 		startTest();
 
-		long startTime = System.nanoTime();
 		try{ 
 			LoginPage loginPage = login();
 			boolean result = loginPage.isLoggedIn();
-			long endTime = System.nanoTime();
-			setResult(result, "Login Test", endTime - startTime);
+			setResult(result, "Login Test");
 			Debugger.log("loginTest => "+result, isRemote);
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Login",  ex, isRemote, endTime - startTime);
+			failTest("Login",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -58,39 +55,33 @@ public class TaskTest extends TestMachine {
 //	//OPEN PERSON FILE NOT CREATE
 	@Test(dependsOnMethods="loginTest")
 	public void createPersonTest() throws Exception {
-		long startTime = System.nanoTime();
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			homePage.openPersonFile("insynctiveapps+task");
 
 			boolean result = homePage.isPersonFileOpened();
 			Sleeper.sleep(5000, driver);
-			long endTime = System.nanoTime();
-			setResult(result, "Open Person File", endTime - startTime);
+			setResult(result, "Open Person File");
 			Debugger.log("createPersonTest => "+result, isRemote);
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Open Person File", ex, isRemote, endTime - startTime);
+			failTest("Open Person File", ex, isRemote);
 			assertTrue(false);
 		}
 	} 
 	
 	@Test(dependsOnMethods="createPersonTest")
 	public void assignTask() throws Exception{
-		long startTime = System.nanoTime();
 		PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 		try{ 
 			personFilePage.assignTask();
 			
 			boolean result = personFilePage.isTaskAssigned();
 			Debugger.log("asssignTask => "+result, isRemote);
-			long endTime = System.nanoTime();
-			setResult(result, "Assign Task", endTime - startTime);
+			setResult(result, "Assign Task");
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Assign Task", ex, isRemote, endTime - startTime);
+			failTest("Assign Task", ex, isRemote);
 			assertTrue(false);
 		}
 	}

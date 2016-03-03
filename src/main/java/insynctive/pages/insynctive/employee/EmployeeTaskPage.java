@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import insynctive.exception.ElementNotFoundException;
 import insynctive.pages.PageInterface;
 
 public class EmployeeTaskPage extends EmployeePage implements PageInterface {
@@ -26,4 +27,18 @@ public class EmployeeTaskPage extends EmployeePage implements PageInterface {
 		return false;
 	}
 
+	public void openTask(String name) throws ElementNotFoundException, Exception{
+		clickAButton(1500, findElementByText("div", name));
+	}
+	
+	public Boolean isTaskPresent(String name) throws ElementNotFoundException, Exception{
+		try{
+			swichToFirstFrame(driver);
+			findElementByText("div", name).getTagName();
+			return true;
+		} catch(Exception ex) {
+			return false;
+		}
+	}
+	
 }

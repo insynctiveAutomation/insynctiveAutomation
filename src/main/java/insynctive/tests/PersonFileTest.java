@@ -797,12 +797,6 @@ public class PersonFileTest extends TestMachine {
 	public void logOut3(@Optional("TestID") Integer testID) throws Exception{
 		logOut();
 	}
-
-	private void logOut() throws Exception {
-		Page page = new Page(driver);
-		page.logout();
-	}
-	
 	
 	@Test
 	@Parameters({"TestID"})

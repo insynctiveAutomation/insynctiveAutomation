@@ -30,6 +30,7 @@ public class InsynctiveProperty {
 
 	@Column(name = "notification")
 	private Boolean notification;
+	
 	@Column(name = "remote")
 	private Boolean remote;
 

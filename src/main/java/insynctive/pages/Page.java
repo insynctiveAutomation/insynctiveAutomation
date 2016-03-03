@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -31,6 +32,9 @@ public class Page {
     public String PAGE_TITLE;
     public String enviroment;
     
+    public JavascriptExecutor jsx;
+	
+    
     /* InApp */
 	@FindBy(css = "#jqxNotificationDefaultContainer-top-right > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > div:nth-child(2)")
 	public WebElement inAppNotification;
@@ -42,7 +46,7 @@ public class Page {
 	public WebElement taskPopup;
 	
 	@FindBy(id = "frmTask")
-	public WebElement taskFrame;
+	public WebElement taskiFrame;
 	
 	@FindBy(id = "loadingSpinner")
 	public WebElement loadingSpinner;
@@ -68,6 +72,7 @@ public class Page {
     
     public Page(WebDriver driver) {
         this.driver = driver;
+        jsx = (JavascriptExecutor)driver;
         PageFactory.initElements(driver, this);
     }
 
@@ -252,20 +257,33 @@ public class Page {
     }
     
     public void setTextInField(WebElement textField, String text) throws ElementNotFoundException, IOException, InterruptedException {
-    	setTextInField(textField, text, null);
+    	try {
+			waitUntilIsLoaded(textField);
+			textField.clear();
+			textField.sendKeys(text);
+		} catch (NullPointerException nEx){
+			throw new ElementNotFoundException(getMessageFromWebElement(textField)+" is not found",null);
+		}
     }
     
 	public void setTextInField(WebElement textField, String text, Integer msSleepAfterCommand) throws ElementNotFoundException, IOException, InterruptedException {
 		try {
-			waitUntilIsLoaded(textField);
-			textField.clear();
-			textField.sendKeys(text);
+			setTextInField(textField, text);
 			if(msSleepAfterCommand != null) Sleeper.sleep(msSleepAfterCommand, driver);
 		} catch (NullPointerException nEx){
 			throw new ElementNotFoundException(getMessageFromWebElement(textField)+" is not found",null);
 		}
 	}
-	
+    
+	public void setTextInField(Integer msSleepBeforeCommand, WebElement textField, String text) throws ElementNotFoundException, IOException, InterruptedException {
+		try {
+			if(msSleepBeforeCommand != null) Sleeper.sleep(msSleepBeforeCommand, driver);
+			setTextInField(textField, text);
+		} catch (NullPointerException nEx){
+			throw new ElementNotFoundException(getMessageFromWebElement(textField)+" is not found",null);
+		}
+	}
+    
 	public void setTextInCombo(WebElement combo, String text) throws ElementNotFoundException, IOException, InterruptedException {
 		try{
 			waitUntilIsLoaded(combo);
@@ -409,7 +427,7 @@ public class Page {
 		try{
 			return (elementSplit.length > 0) ? 
 					(elementSplit[1].split("]").length > 0 ? 
-							elementSplit[1].split("]")[0] : elementSplit[1]) 
+							elementSplit[1].split("]")[0]+"]" : elementSplit[1]) 
 					: element.toString(); 
 		} catch (Exception ex){
 			return element.toString();

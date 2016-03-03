@@ -79,7 +79,7 @@ public class PDFTaskPage extends PDFItemsPage implements PageInterface {
 	private void goToTaskiFrame(String outerIframe) throws Exception {
 		driver.switchTo().window(outerIframe);
 		swichToIframe(taskPopup);
-		swichToIframe(taskFrame);
+		swichToIframe(taskiFrame);
 	}
 
 	private void goToRadPDFiFrame(String outerIframe) throws Exception {
@@ -92,7 +92,7 @@ public class PDFTaskPage extends PDFItemsPage implements PageInterface {
 	
 	private void waitPDFIsSigned() throws Exception {
 		swichToIframe(taskPopup);
-		swichToIframe(taskFrame);
+		swichToIframe(taskiFrame);
 		waitUntilIsLoaded(DoneButton);
 	}
 
@@ -112,8 +112,8 @@ public class PDFTaskPage extends PDFItemsPage implements PageInterface {
 		waitUntilIsLoaded(taskPopup);
 		swichToIframe(taskPopup);
 		
-		waitUntilIsLoaded(taskFrame);
-		swichToIframe(taskFrame);
+		waitUntilIsLoaded(taskiFrame);
+		swichToIframe(taskiFrame);
 		
 		waitUntilIsLoaded(signBtn);
 	}

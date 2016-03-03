@@ -55,6 +55,7 @@ import insynctive.model.test.TestSuiteRunner;
 import insynctive.model.test.run.TestPlanRun;
 import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
+import insynctive.results.TestResult;
 import insynctive.results.TestResultsTestNG;
 import insynctive.runnable.RunnableTest;
 import insynctive.tests.TestMachine;
@@ -250,29 +251,30 @@ public class TestController {
 	
 	@RequestMapping(value = "/status/{index}" ,method = RequestMethod.GET)
 	@ResponseBody
-	public TestResultsTestNG getStatus(@PathVariable("index") Integer index){ 
+	public TestResultsTestNG getStatus(@PathVariable("index") Integer index) throws InterruptedException{ 
 		Map<Integer, TestListenerAdapter> tla = TestResults.listeners;
+		TestListenerAdapter assignedListener = tla.get(index);
 		
-		List<Test> resultsAux = new ArrayList<Test>();
+		List<TestResult> resultsAux = new ArrayList<TestResult>();
 		TestResultsTestNG testResults = new TestResultsTestNG();
 		
-		for(ITestResult testResult : tla.get(index).getPassedTests()){
-			resultsAux.add(new Test(testResult.getName(),"SUCCESS"));
+		for(ITestResult testResult : assignedListener.getPassedTests()){
+			resultsAux.add(new TestResult(testResult.getName()));
 		}
 		testResults.setPassedTests(resultsAux);
-		resultsAux = new ArrayList<Test>();
 		
-		for(ITestResult testResult : tla.get(index).getFailedTests()){
-			resultsAux.add(new Test(testResult.getName(),"FAILED"));
+		resultsAux = new ArrayList<TestResult>();
+		for(ITestResult testResult : assignedListener.getFailedTests()){
+			String airbrakeLink = TestResults.getAirbrakeLinkOrDefault(index.toString(), testResult.getName(), "FAILURE");
+			resultsAux.add(new TestResult(testResult.getName(), airbrakeLink));
 		}
 		testResults.setFailedTests(resultsAux);
-		resultsAux = new ArrayList<Test>();
-		
-		for(ITestResult testResult : tla.get(index).getSkippedTests()){
-			resultsAux.add(new Test(testResult.getName(),"SKIPPED"));
+
+		resultsAux = new ArrayList<TestResult>();
+		for(ITestResult testResult : assignedListener.getSkippedTests()){
+			resultsAux.add(new TestResult(testResult.getName()));
 		}
 		testResults.setSkipedTests(resultsAux);
-		resultsAux = new ArrayList<Test>();
 		
 		return testResults;
 	}
@@ -356,16 +358,6 @@ public class TestController {
 		return "{\"index\" : \""+(testRunner.runTest(tsRunner, isNotification, isRemote, Account.getAccountUsername(SessionController.account)))+"\"}";
 	}
 	
-//	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String retry(@PathVariable("ID") Integer testSuiteID) throws Exception {
-//		
-//		TestSuiteRun testSuiteToRetry = testSuiteDao.getTestSuiteRunByID(testSuiteID);
-//		TestSuiteRun testSuite = TestSuiteRun.getNewWithOutIDs(testSuiteToRetry);
-//		
-//		return "{\"index\" : \""+(testRunner.runTest(testSuite, accDao.getAccountByID(logedAccID)))+"\"}";
-//	}
-	
 	@RequestMapping(value = "/retry/{ID}", method = RequestMethod.GET)
 	@ResponseBody
 	public String retry(@PathVariable("ID") Integer testSuiteID) throws Exception {
@@ -418,23 +410,11 @@ public class TestController {
 		
 		return "{\"status\" : 200}";
 	}
-	
-	@RequestMapping(value = "/isPersonCreated/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
-	@ResponseBody
-	public String isPersonCreated(@PathVariable("tlaIndex") Integer tlaIndex) throws Exception{
-		return checkStatusOfMethodInTLA(tlaIndex, "createPersonTest");
-	}
-	
-	@RequestMapping(value = "/checkIfIsJobAdded/{tlaIndex}" ,method = RequestMethod.GET, produces = "text/plain; charset=utf-8")
-	@ResponseBody
-	public String checkIfIsJobAdded(@PathVariable("tlaIndex") Integer tlaIndex) throws Exception{
-		return checkStatusOfMethodInTLA(tlaIndex, "assignJob");
-	}
 
 	@RequestMapping(value = "/clearTest/{index}" ,method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public void clearTestResult(@PathVariable("index") Integer index) throws ConfigurationException {
+	public void clearTestResult(@PathVariable("index") Integer index) throws ConfigurationException, InterruptedException {
 		TestResults.removeListener(index);
 	}
 

@@ -1,7 +1,10 @@
 package insynctive.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,7 @@ import insynctive.exception.ConfigurationException;
 public class ViewsController {
 	
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
-	public ModelAndView root(HttpSession session){
+	public ModelAndView root(HttpSession session) throws ClientProtocolException, IOException{
 		ModelAndView model = new ModelAndView();
 		if(SessionController.account != null){
 			model.setViewName("/home");

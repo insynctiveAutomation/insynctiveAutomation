@@ -45,17 +45,14 @@ public class LoadingTests extends TestMachine {
 		changeParamObject(testID);
 		startTest();
 
-		long startTime = System.nanoTime();
 		try{ 
 			LoginPage loginPage = login();
 			boolean result = loginPage.isLoggedIn();
-			long endTime = System.nanoTime();
-			setResult(result, "Login Test", endTime - startTime);
+			setResult(result, "Login Test");
 			Debugger.log("loginTest => "+result, "Loading-Time");
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Login",  ex, isRemote, endTime - startTime);
+			failTest("Login",  ex, isRemote);
 			assertTrue(false);
 		}
 	}

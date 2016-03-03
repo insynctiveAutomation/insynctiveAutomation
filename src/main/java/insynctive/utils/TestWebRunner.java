@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
@@ -45,7 +46,7 @@ public class TestWebRunner {
 	
 	public void runTest(TestPlan tp, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestPlanRun tpRun = tp.run(isRemote, tester);
-		HibernateUtil.testPlanRunDao.save(tpRun);
+		HibernateUtil.getTestPlanRunDao().save(tpRun);
 		runTest(tpRun, isNotification);
 	}
 	
@@ -55,7 +56,7 @@ public class TestWebRunner {
 	
 	public Integer runTest(TestSuiteRunner tsRunner, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = tsRunner.run(isRemote, tester);
-		HibernateUtil.testSuiteRunDao.save(tsRun);
+		HibernateUtil.getTestSuiteRunDao().save(tsRun);
 		return runTest(tsRun, isNotification);
 	}
 	
@@ -65,7 +66,7 @@ public class TestWebRunner {
 	
 	public void runTest(TestSuite ts, String environment, String browser, Boolean isNotification, Boolean isRemote, String tester) throws IllegalArgumentException, IllegalAccessException, Exception {
 		TestSuiteRun tsRun = ts.run(environment, browser, isRemote, tester);
-		HibernateUtil.testSuiteRunDao.save(tsRun);
+		HibernateUtil.getTestSuiteRunDao().save(tsRun);
 		runTest(tsRun, isNotification);
 	}
 	
@@ -73,11 +74,11 @@ public class TestWebRunner {
 		runTest(ts, environment, browser, isNotification, isRemote, "");
 	}
 	
-	public void runTest(TestPlanRun tpRun, Boolean isNotification) {
+	public void runTest(TestPlanRun tpRun, Boolean isNotification) throws InterruptedException, ClientProtocolException, IOException {
 		runTest(tpRun.getTestSuiteRuns(), isNotification);
 	}
 	
-	public void runTest(List<TestSuiteRun> tests, Boolean isNotification) {
+	public void runTest(List<TestSuiteRun> tests, Boolean isNotification) throws InterruptedException, ClientProtocolException, IOException {
 		List<TestSuiteRun> canRunTS = tests.stream().filter(tsrun -> canRun(tsrun)).collect(Collectors.toList());
 		List<TestSuiteRun> canNotRunTS = tests.stream().filter(tsrun -> !canRun(tsrun)).collect(Collectors.toList());
 		
@@ -89,7 +90,7 @@ public class TestWebRunner {
 		if(canNotRunTS.size() > 0){ runTest(canNotRunTS, isNotification); }
 	}
 	
-	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification) {
+	public Integer runTest(TestSuiteRun tsRun, Boolean isNotification) throws InterruptedException, ClientProtocolException, IOException {
 		XmlSuite suite = createXmlTest(tsRun);
 		List<XmlSuite> suites = new ArrayList<>();
 		suites.add(suite);
@@ -132,7 +133,7 @@ public class TestWebRunner {
 		
 		//START TEST IN OTHER THREAD
 		Thread threadToJoin = TestResults.workers.get(tsRun.getDependsRunID());
-		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, HibernateUtil.testSuiteRunDao, HibernateUtil.testDao, (threadToJoin != null ? new Thread[]{threadToJoin} : new Thread[]{})));
+		Thread thread = new Thread(new RunnableTest(testNG, tsRun, testListenerAdapter, HibernateUtil.getTestSuiteRunDao(), HibernateUtil.getTestDao(), (threadToJoin != null ? new Thread[]{threadToJoin} : new Thread[]{})));
 		TestResults.addWorker(tsRun.getTestSuiteRunID(), thread);
 		thread.start();
 		

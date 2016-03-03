@@ -171,7 +171,7 @@ public class ChecklistsTest extends TestMachine {
 		homeForAgent.waitPageIsLoad();
 		
 		checkListsPage.loadPage(); 
-		checkListsPage.assignChecklist(checklist,employee,true);
+		checkListsPage.assignChecklist(checklist,employee.personData.toString(),true);
 		
 		checkListsPage.logout();
 		loginAsEmployee(employee.personData.getEmail(), employee.password);

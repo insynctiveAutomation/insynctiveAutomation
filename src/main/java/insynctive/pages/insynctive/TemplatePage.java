@@ -73,7 +73,7 @@ public class TemplatePage extends Page implements PageInterface{
 		throw new MethodNoImplementedException("Add Template is not implemented");
 	}
 	
-	public void editTemplate(Checklist checklist) throws Throwable{
+	public void editTemplate(Checklist checklist) throws Exception {
 		for(Process process : checklist.getProcess()){
 			process.setDriver(driver);
 			process.initElements(driver);

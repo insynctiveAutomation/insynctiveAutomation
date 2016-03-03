@@ -32,7 +32,7 @@ public class CreatePersonTest extends TestMachine {
 	
 	@BeforeClass
 	public void tearUp() throws Exception {
-		Account account = HibernateUtil.accDao.getAccountByID(2);
+		Account account = HibernateUtil.getAccDao().getAccountByID(2);
 		tearUp(TestEnvironment.FIREFOX, account.getAccountProperty().getEnvironment(), true, account.getAccountProperty().isNotification(), 0);
 		this.sessionName = "Create Person Test";
 		paramObject = new ParamObject();
@@ -42,11 +42,11 @@ public class CreatePersonTest extends TestMachine {
 	@AfterClass
 	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
 		super.teardown();
-		createPersonForm = HibernateUtil.createPersonFormDao.getAccountByID(personID);
+		createPersonForm = HibernateUtil.getCreatePersonFormDao().getAccountByID(personID);
 		createPersonForm.setStatusOfTest(generalStatus);
 		createPersonForm.setEnvironment(TestEnvironment.FIREFOX.browserCrossBrowser);
 		
-		HibernateUtil.createPersonFormDao.saveCreatePersonForm(createPersonForm);
+		HibernateUtil.getCreatePersonFormDao().saveCreatePersonForm(createPersonForm);
 	}
 	
 	@Parameters({"personID"})	
@@ -60,7 +60,7 @@ public class CreatePersonTest extends TestMachine {
 		testEnvironment = TestEnvironment.FIREFOX;
 		
 		//Search for The Person Data
-		createPersonForm = HibernateUtil.createPersonFormDao.getAccountByID(personID);
+		createPersonForm = HibernateUtil.getCreatePersonFormDao().getAccountByID(personID);
 		
 		//Complete Data
 		paramObject.setEmail(createPersonForm.getEmail());
@@ -70,17 +70,14 @@ public class CreatePersonTest extends TestMachine {
 		
 		startTest();
 
-		long startTime = System.nanoTime();
 		try{ 
 			LoginPage loginPage = login();
 			boolean result = loginPage.isLoggedIn();
-			long endTime = System.nanoTime();
-			setResult(result, "Login Test", endTime - startTime);
+			setResult(result, "Login Test");
 			Debugger.log("loginTest => "+result, isRemote);
 			assertTrue(result);
 		} catch(Exception ex){
-			long endTime = System.nanoTime();
-			failTest("Login",  ex, isRemote, endTime - startTime);
+			failTest("Login",  ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -88,7 +85,6 @@ public class CreatePersonTest extends TestMachine {
 	@Parameters({"personID"})
 	@Test(dependsOnMethods="loginTest")
 	public void createPersonTest(@Optional("person_id") String personID) throws Throwable {
-		long startTime = System.nanoTime();
 		try{ 
 			HomeForAgentsPage homePage = new HomeForAgentsPage(driver, environment);
 			
@@ -97,13 +93,11 @@ public class CreatePersonTest extends TestMachine {
 			
 			boolean result = homePage.checkIfPersonIsCreated(paramObject);
 			
-			long endTime = System.nanoTime();
-			setResult(result, "Create Person", endTime - startTime);
+			setResult(result, "Create Person");
 			Debugger.log("createPerson => "+result, isRemote);
 			assertTrue(result);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Create Person", ex, isRemote, endTime - startTime);
+			failTest("Create Person", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -111,18 +105,15 @@ public class CreatePersonTest extends TestMachine {
 	@Parameters({"personID"})
 	@Test(dependsOnMethods="createPersonTest")
 	public void assignJob(@Optional("person_id") String personID) throws Exception{
-		long startTime = System.nanoTime();
 		try{ 
 			PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 
 			personFilePage.assignJob();
-			long endTime = System.nanoTime();
-			setResult(true, "AssignJob", endTime - startTime);
+			setResult(true, "AssignJob");
 			Debugger.log("assignJob => "+true, isRemote);
 			assertTrue(true);
 		}catch (Exception ex){ 
-			long endTime = System.nanoTime();
-			failTest("Assign Job", ex, isRemote, endTime - startTime);
+			failTest("Assign Job", ex, isRemote);
 			assertTrue(false);
 		}
 	}
@@ -130,20 +121,17 @@ public class CreatePersonTest extends TestMachine {
 	@Parameters({"personID"})
 	@Test(dependsOnMethods="createPersonTest")
 	public void startChecklist(@Optional("person_id") String personID) throws Exception{
-		long startTime = System.nanoTime();
 		PersonFilePage personFilePage = new PersonFilePage(driver, environment);
 		try{ 
 			personFilePage.assignChecklist("Employee Onboarding");
 			Sleeper.sleep(5000, driver);
 			boolean result = personFilePage.isChecklistAssigned();
 			Debugger.log("startChecklist => "+result, isRemote);
-			long endTime = System.nanoTime();
-			setResult(result, "Start Checklist", endTime - startTime);
+			setResult(result, "Start Checklist");
 			assertTrue(result);
 		}catch (Exception ex){ 
 			personFilePage.goToPersonalTab();
-			long endTime = System.nanoTime();
-			failTest("Start Checklist", ex, isRemote, endTime - startTime);
+			failTest("Start Checklist", ex, isRemote);
 			assertTrue(false);
 		}
 	}

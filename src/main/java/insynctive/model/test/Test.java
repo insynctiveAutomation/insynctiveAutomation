@@ -46,11 +46,6 @@ public class Test {
 		this.paramObject = new ParamObject();
 	}
 	
-	public Test(String testName, String status) {
-		this.testName = testName;
-		this.paramObject = new ParamObject();
-	}
-	
 	public Test(XmlInclude method, String className) {
 		this.setTestName(method.getName());
 		this.setClassName(className);

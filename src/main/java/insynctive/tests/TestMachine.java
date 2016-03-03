@@ -31,6 +31,7 @@ import insynctive.exception.ConfigurationException;
 import insynctive.model.CrossBrowserAccount;
 import insynctive.model.ParamObject;
 import insynctive.model.test.run.TestRun;
+import insynctive.pages.Page;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.ExternalTestRunner;
@@ -137,7 +138,7 @@ public abstract class TestMachine {
 	    return webDriver.get();
 	}
 
-	public void startTest() throws ConfigurationException, JSONException, IOException {
+	public void startTest() throws ConfigurationException, JSONException, IOException, InterruptedException {
 		if (isRemote) {
 			driver = createDriver();
 		} else {
@@ -149,12 +150,8 @@ public abstract class TestMachine {
 		}
 		TestResults.addVideo(testSuiteID, getJobURL());
 	}
-
-	public void failTest(String testName,Exception ex, boolean isSaucelabs) throws Exception{
-		failTest(testName, ex, isSaucelabs, null);
-	}
 	
-	public void failTest(String testName,Exception ex, boolean isSaucelabs, Long duration) throws Exception {
+	public void failTest(String testName, Exception ex, boolean isSaucelabs) throws Exception {
 		Reporter.log( testName, true );
 		ex.printStackTrace();
 		
@@ -173,20 +170,20 @@ public abstract class TestMachine {
 			nameAndCause = testName;
 		}
 		
-		Debugger.log(ex, "Exception");
+		String airbrakeUrl = Debugger.log(ex, sessionName + " - Exception");
+		TestResults.addAirbrakeLink(testSuiteID.toString(), Thread.currentThread().getStackTrace()[2].getMethodName(), airbrakeUrl);
 		
-		setResult(false, nameAndCause, duration);
+		setResult(false, nameAndCause, airbrakeUrl);
 	}
 	
-	//Set Result WITHOUT duration
-	public void setResult(boolean status, String nameOfTest) throws MalformedURLException, IOException {
-		setResult(status, nameOfTest, null);
+	public void setResult(boolean status, String nameAndCause) throws MalformedURLException, IOException {
+		setResult(status, nameAndCause, null);
 	}
 	
 	//Set Result WITH duration
-	public void setResult(boolean status, String nameOfTest, Long duration) throws MalformedURLException, IOException {
+	public void setResult(boolean status, String nameOfTest, String airbrrakeUrl) throws MalformedURLException, IOException {
 		
-		String result = nameOfTest+"["+(status ? "PASS" : "FAIL")+"]";
+		String result = nameOfTest+"["+(status ? "PASS" : (airbrrakeUrl != null) ? "<"+airbrrakeUrl+"|FAIL>" : "FAIL")+"]";
 
 		if (!status){
 			tags.add(result);
@@ -279,11 +276,11 @@ public abstract class TestMachine {
 	
 	public void changeParamObject(Integer testID) throws Exception{
 		try{
-			TestRun testRun = HibernateUtil.testRunDao.getTestRunByID(testID);
+			TestRun testRun = HibernateUtil.getTestRunDao().getTestRunByID(testID);
 			paramObject = testRun.getParamObject();
 			System.out.println("Param Object Changes to: "+testID+" ID");
 		} catch(Exception ex) {
-			System.out.println(ex);
+			ex.printStackTrace();
 			throw new Exception("Fail on changeObject "+ex);
 		}
 	}
@@ -319,9 +316,15 @@ public abstract class TestMachine {
 	
 	
 	//TODO need to be moved
-	public LoginPage login() throws Exception {
+	protected LoginPage login() throws Exception {
 		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), null);
 	}
+
+	protected void logOut() throws Exception {
+		Page page = new Page(driver);
+		page.logout();
+	}
+	
 	
 	public LoginPage login(String returnURL) throws Exception {
 		return login(paramObject.getLoginUsername(),paramObject.getLoginPassword(), returnURL);

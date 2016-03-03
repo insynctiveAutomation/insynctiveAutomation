@@ -34,9 +34,6 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 	@FindBy(id = "pcc-pageList-viewer1")
 	WebElement documentElement;
 
-
-
-
 	public EmployeeDocumentsPage(WebDriver driver, String enviroment) {
 		super(driver);
 		this.enviroment = enviroment;
@@ -62,7 +59,7 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 	}
 	
 	//TODO Duplicate code
-	public boolean isOpenDocument() throws Exception {
+	public boolean isDocumentOpened() throws Exception {
 		Sleeper.sleep(3000, driver);
 		swichToFirstFrame(driver);
 		swichToIframe(documentIFrame);
@@ -74,11 +71,7 @@ public class EmployeeDocumentsPage extends Page implements PageInterface {
 	public void searchKeyword(String benefitName) throws Exception {
 
 	}
-
-	public void goToDocumentsPage() throws Exception {
-//		waitUntilIsLoaded(Dashboard);
-//		clickAButton(Documents);
-	}
+	
 	public WebElement getViewButton (String text){
 		String sel = "//div[contains(text(), '"+text+"')]/ancestor::div[3]/div[@class='col-view']//img";
 		WebElement element = driver.findElement(By.xpath(sel));

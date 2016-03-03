@@ -47,7 +47,13 @@ public class RunnableTest implements Runnable {
 		testNG.run();
 		setResult();
 		Sleeper.sleep(3500);
-		TestResults.removeScopeVars(testSuiteRun.getTestSuiteRunID());
+		
+		try {
+			TestResults.removeScopeVars(testSuiteRun.getTestSuiteRunID());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void setResult() {

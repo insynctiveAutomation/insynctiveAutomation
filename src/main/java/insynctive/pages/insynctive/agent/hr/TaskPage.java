@@ -21,7 +21,7 @@ public class TaskPage extends Page implements PageInterface {
 	@FindBy(id = "select-option")
 	WebElement pendingTaskCombo;
 	
-	public TaskPage(WebDriver driver, String enviroment) {
+	public TaskPage(WebDriver driver, String environment) {
 		super(driver);
 		this.enviroment = enviroment;
 		this.PAGE_URL = "http://" + enviroment + ".insynctiveapps.com/Insynctive.Hub/Protected/HrTasks.aspx?SkipGuide=True";

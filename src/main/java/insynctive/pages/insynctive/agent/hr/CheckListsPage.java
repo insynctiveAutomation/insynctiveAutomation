@@ -70,14 +70,14 @@ public class CheckListsPage extends Page implements PageInterface {
 	@FindBy(className = "close")
 	WebElement closeiFrame;
 
-	@FindBy(className = "chosen-default")
-	WebElement choosePerson;
-
 	@FindBy(id = "btnStartChecklist")
 	WebElement startNewChecklist;
 
 	@FindBy(css = "#ddChecklist_chosen > a:nth-child(1)")
 	WebElement chooseChecklist;
+	
+	@FindBy(css = "#ddPerson_chosen > a:nth-child(1)")
+	WebElement chosenPerson;
 
 	@FindBy(className = "ladda-button")
 	WebElement deleteFinalTemplate;
@@ -91,7 +91,7 @@ public class CheckListsPage extends Page implements PageInterface {
 	}
 
 	/* Actions **/
-	public void createTemplate(Checklist checkList) throws Throwable{
+	public void createTemplate(Checklist checkList) throws Exception{
 		String newCheckListName = "Test Process "+checkList.getName();
 
 		goToChecklistTemplate();
@@ -132,27 +132,22 @@ public class CheckListsPage extends Page implements PageInterface {
 		clickAButton(startChecklist);
 	}
 	
-	public void assignChecklist(Checklist checklist, Employee employee, boolean restartChecklist) throws Throwable {
+	public void assignChecklist(Checklist checklist, String employeeName, boolean restartChecklist) throws Exception {
 		swichToFirstFrame(driver);
 		clickAButton(btnStartChecklist);
 		swichToIframe(startCheckListiFrame);
 		Sleeper.sleep(1500, driver);
-		boolean checklistExist = selectElementInComboLi(chooseChecklist, "Test Process "+checklist.getName());
+		boolean checklistExist = selectElementInComboLi(chooseChecklist, checklist.getName());
 		Sleeper.sleep(1000, driver);
-		if(restartChecklist){
-			if(!checklistExist) createChecklist(checklist,true); else deleteThenCreate(checklist);
-		}
+		boolean personExists = selectElementInComboLi(chosenPerson, employeeName);
+		Sleeper.sleep(1000, driver);
 		clickAButton(btnStartChecklist);
-		swichToIframe(startCheckListiFrame);
-		selectElementInComboLi(chooseChecklist, "Test Process "+checklist.getName());
-		Sleeper.sleep(1000, driver);
-		setTextInCombo(choosePerson, employee.personData.toString());
-		Sleeper.sleep(1000, driver); 
-		clickAButton(startNewChecklist);
-		
-		Sleeper.sleep(5000, driver);
+		Sleeper.sleep(15000, driver);
 	}
 	
+	public boolean isChecklistAssigned(Checklist checklist){
+		return true;
+	}
 	/* Waits **/
 	public void waitPageIsLoad() throws Exception {
 		swichToFirstFrame(driver);
@@ -168,7 +163,7 @@ public class CheckListsPage extends Page implements PageInterface {
 	}
 	
 	/* Private Methods*/
-	private void createChecklist(Checklist checklist, boolean comeFromAssign) throws Throwable {
+	private void createChecklist(Checklist checklist, boolean comeFromAssign) throws Exception {
 		if(comeFromAssign) {
 			swichToFirstFrame(driver);
 			clickAButton(closeiFrame);
@@ -178,7 +173,7 @@ public class CheckListsPage extends Page implements PageInterface {
 		loadPage();
 	}
 	
-	private void deleteThenCreate(Checklist checklist) throws Throwable {
+	private void deleteThenCreate(Checklist checklist) throws Exception {
 		String newCheckListName = "Test Process "+checklist.getName();
 		loadPage();//THIS IS BECAUSE JS IS FULLY TODO
 		goToChecklistTemplate();

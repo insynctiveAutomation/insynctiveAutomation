@@ -106,6 +106,7 @@ app.controller('HomeController', function($cookies, $http, $window, $modal, $sco
 			method.status = "SUCCESS"
 		} else if(failedTestsNames.indexOf(method.testName) != -1){
 			method.status = "FAILED"
+			method.status = self.testStatus.failedTests.find(function(test){return test.testName === method.testName}).detail
 		} else if(skipedTestsNames.indexOf(method.testName) != -1){
 			method.status = "SKIPED"
 		} else {

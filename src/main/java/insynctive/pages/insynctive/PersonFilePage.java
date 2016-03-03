@@ -307,7 +307,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public boolean isRemoveUsAddress(USAddress usAddress) {
-		Sleeper.sleep(4000, driver);
+		Sleeper.sleep(6000, driver);
 		return searchAddress(usAddress) == null;
 	}
 
