@@ -341,11 +341,16 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public Boolean isJobAdded() throws Exception {
-		try { } 
+		try { 
+			//TODO
+		} 
 		
 		catch (Exception ex){ throw ex;} 
 		
-		finally { goToPersonalTab();}
+		finally {
+			Sleeper.sleep(4500);
+			goToPersonalTab();
+		}
 		
 		return true;
 	}
@@ -396,7 +401,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 	}
 
 	public void openDocument(String documentName) throws Exception {
-		clickAButton(2000, findViewDocumentBtn(documentName));
+		clickAButton(3000, findViewDocumentBtn(documentName));
 	}
 
 	public WebElement findViewDocumentBtn(String documentName) throws ElementNotFoundException, Exception {

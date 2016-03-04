@@ -10,21 +10,15 @@ import insynctive.pages.PageInterface;
 
 public class TaskPage extends Page implements PageInterface {
 
-	String enviroment;
+	String environment;
 	
-	@FindBy(css = "#statusesList > li:nth-child(1)")
-	WebElement myTaskTab;
-	@FindBy(css = "#statusesList > li:nth-child(2)")
-	WebElement allTaskTab;
-	@FindBy(id = "cboSortBy")
-	WebElement mostRecentStartCombo;
-	@FindBy(id = "select-option")
-	WebElement pendingTaskCombo;
+	@FindBy(id = "statusesMenu")
+	WebElement statusesMenu;
 	
 	public TaskPage(WebDriver driver, String environment) {
 		super(driver);
-		this.enviroment = enviroment;
-		this.PAGE_URL = "http://" + enviroment + ".insynctiveapps.com/Insynctive.Hub/Protected/HrTasks.aspx?SkipGuide=True";
+		this.environment = environment;
+		this.PAGE_URL = "http://" + environment + ".insynctiveapps.com/Insynctive.Hub/Protected/HrTasks.aspx?SkipGuide=True";
 		this.PAGE_TITLE = "Checklists";
 		PageFactory.initElements(driver, this);
 	}
@@ -37,10 +31,7 @@ public class TaskPage extends Page implements PageInterface {
 	
 	@Override
 	public void waitPageIsLoad() throws Exception {
-		waitUntilIsLoaded(myTaskTab);
-		waitUntilIsLoaded(allTaskTab);
-		waitUntilIsLoaded(mostRecentStartCombo);
-		waitUntilIsLoaded(pendingTaskCombo);
+		waitUntilIsLoaded(statusesMenu);
 	}
 	
 

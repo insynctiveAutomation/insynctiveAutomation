@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -52,7 +53,7 @@ public abstract class TestMachine {
 	public String suiteName = "Suite Name";
 	
 	//Parameters
-	public Integer runID;
+	public BigInteger runID;
 	public String environment;
 	public TestEnvironment testEnvironment;
 	public boolean isRemote;
@@ -286,7 +287,7 @@ public abstract class TestMachine {
 	}
 	
 	@JsonIgnore
-	public Integer getRunID() throws IOException {
+	public BigInteger getRunID() throws IOException {
 		URL u = new URL("https://insynctive-support.herokuapp.com/runID");
 		HttpURLConnection conn = (HttpURLConnection) u.openConnection();
 		
@@ -307,7 +308,7 @@ public abstract class TestMachine {
 		}
 		
 		JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
-		return jsonObject.getInt("runID");
+		return new BigInteger(jsonObject.get("runID").toString());
 	}
 	
 	public String getRunIDAsString(){
