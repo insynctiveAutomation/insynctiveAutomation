@@ -12,7 +12,6 @@ import insynctive.pages.PageInterface;
 import insynctive.pages.insynctive.TemplatePage;
 import insynctive.utils.Sleeper;
 import insynctive.utils.data.Checklist;
-import insynctive.utils.data.Employee;
 
 public class CheckListsPage extends Page implements PageInterface {
 

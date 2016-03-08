@@ -29,7 +29,6 @@ import org.testng.annotations.AfterClass;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import insynctive.exception.ConfigurationException;
-import insynctive.model.CrossBrowserAccount;
 import insynctive.model.ParamObject;
 import insynctive.model.test.run.TestRun;
 import insynctive.pages.Page;
@@ -39,7 +38,6 @@ import insynctive.utils.ExternalTestRunner;
 import insynctive.utils.HibernateUtil;
 import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
-import insynctive.utils.crossbrowser.CrossBrowserUtil;
 import insynctive.utils.data.TestEnvironment;
 import insynctive.utils.saucelabs.SauceLabsUtil;
 

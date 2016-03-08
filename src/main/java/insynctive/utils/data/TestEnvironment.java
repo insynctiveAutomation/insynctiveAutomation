@@ -1,6 +1,5 @@
 package insynctive.utils.data;
 
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.BrowserType;
 
 public enum TestEnvironment {

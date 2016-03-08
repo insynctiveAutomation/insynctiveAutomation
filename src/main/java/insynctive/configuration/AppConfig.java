@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.naming.ConfigurationException;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,14 +19,16 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import insynctive.utils.Property;
+
 @Configuration
 @ComponentScan(basePackages = "insynctive")
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 	
-	@Value("${environment}")
-	private Integer environment;
+	@Autowired
+	private Property property;
 	
 	@Value("${hibernate.auto}")
 	private String hibernateAuto;
@@ -63,7 +66,7 @@ public class AppConfig {
 	public DataSource dataSource() throws ConfigurationException {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		
-		switch(environment){
+		switch(property.getEnvironmentNumber()){
 			/*LOCAL*/
 			case 1 :
 				dataSource.setDriverClassName(driverClassName);
@@ -86,7 +89,7 @@ public class AppConfig {
 				dataSource.setPassword("3d6e38cf");
 				break;
 			default :
-				throw new ConfigurationException(environment == null ? "No environment added in application.properties" : "Wrong environment added in application.properties");
+				throw new ConfigurationException(property.getEnvironmentNumber() == null ? "No environment added in application.properties" : "Wrong environment added in application.properties");
 		}
 		
 		return dataSource;

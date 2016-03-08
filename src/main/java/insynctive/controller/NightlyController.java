@@ -5,14 +5,12 @@ import javax.servlet.ServletContext;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import insynctive.dao.AccountDao;
 import insynctive.dao.CreatePersonFormDao;
-import insynctive.dao.InsynctivePropertyDao;
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestPlanDao;
 import insynctive.dao.test.TestPlanRunDao;
@@ -21,9 +19,6 @@ import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
 import insynctive.model.Account;
 import insynctive.model.test.TestPlan;
-import insynctive.model.test.TestSuite;
-import insynctive.model.test.run.TestPlanRun;
-import insynctive.model.test.run.TestSuiteRun;
 import insynctive.utils.TestWebRunner;
 
 @Controller

@@ -5,7 +5,6 @@ import org.testng.TestNG;
 
 import insynctive.dao.test.TestDao;
 import insynctive.dao.test.TestSuiteRunDao;
-import insynctive.model.test.Test;
 import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.utils.Sleeper;

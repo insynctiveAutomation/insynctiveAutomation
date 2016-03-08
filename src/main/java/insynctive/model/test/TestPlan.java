@@ -19,7 +19,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.run.TestPlanRun;
-import junit.textui.TestRunner;
 
 @Entity
 @Table(name = "test_plan")

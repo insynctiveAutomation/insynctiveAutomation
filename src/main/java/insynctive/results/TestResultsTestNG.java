@@ -3,8 +3,6 @@ package insynctive.results;
 import java.util.ArrayList;
 import java.util.List;
 
-import insynctive.model.test.Test;
-
 public class TestResultsTestNG {
 
 	private List<TestResult> passedTests = new ArrayList<TestResult>();

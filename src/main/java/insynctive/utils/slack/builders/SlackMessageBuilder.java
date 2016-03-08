@@ -1,14 +1,14 @@
 package insynctive.utils.slack.builders;
 
 import insynctive.utils.slack.SlackAttachment;
-import insynctive.utils.slack.SlackMessage;
+import insynctive.utils.slack.SlackMessageObject;
 
 public class SlackMessageBuilder {
 
-	SlackMessage slackMessage;
+	SlackMessageObject slackMessage;
 	
 	public SlackMessageBuilder() {
-		slackMessage = new SlackMessage(); 
+		slackMessage = new SlackMessageObject(); 
 	}
 	
 	public SlackMessageBuilder setUrl(String url){
@@ -41,7 +41,7 @@ public class SlackMessageBuilder {
 		return this;
 	}
 	
-	public SlackMessage build(){
+	public SlackMessageObject build(){
 		return slackMessage;
 	}
 }

@@ -20,7 +20,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.TestPlan;
-import insynctive.model.test.TestSuite;
 import insynctive.model.test.TestSuiteRunner;
 
 @Entity

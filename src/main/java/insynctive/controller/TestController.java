@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,11 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
-import org.testng.TestNG;
-import org.testng.xml.XmlClass;
-import org.testng.xml.XmlInclude;
-import org.testng.xml.XmlSuite;
-import org.testng.xml.XmlTest;
 
 import insynctive.annotation.ParametersFront;
 import insynctive.dao.AccountDao;
@@ -57,13 +51,11 @@ import insynctive.model.test.run.TestRun;
 import insynctive.model.test.run.TestSuiteRun;
 import insynctive.results.TestResult;
 import insynctive.results.TestResultsTestNG;
-import insynctive.runnable.RunnableTest;
 import insynctive.tests.TestMachine;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.ParametersFrontObject;
 import insynctive.utils.TestResults;
 import insynctive.utils.TestWebRunner;
-import insynctive.utils.data.TestEnvironment;
 
 @Controller
 @Transactional

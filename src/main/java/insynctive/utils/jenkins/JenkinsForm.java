@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import insynctive.utils.Notify;
 import insynctive.utils.slack.SlackUtil;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,7 +15,9 @@ public class JenkinsForm {
 	
 	@JsonIgnore
 	public String getMessage() throws IOException {
-		String mentionUser = (build.parameters.user != null ? SlackUtil.getSlackAccountMentionByEmail(build.parameters.user, Notify.NOTIFY, this.getChannel()) : "@channel")+ " - ";
+		String slackAccountMentionByEmail = SlackUtil.getSlackAccountMentionByEmail(build.parameters.user);
+		
+		String mentionUser = (build.parameters.user != null ? slackAccountMentionByEmail  : "@channel")+ " - ";
 		
 		if(isPhaseStarted()){
 			

@@ -17,7 +17,6 @@ import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.Sleeper;
-import insynctive.utils.data.TestEnvironment;
 
 public class TaskTest extends TestMachine {
 

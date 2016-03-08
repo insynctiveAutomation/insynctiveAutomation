@@ -11,7 +11,6 @@ import insynctive.annotation.ParametersFront;
 import insynctive.pages.insynctive.employee.EmployeeDocumentsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.ParamObjectField;
-import insynctive.utils.data.TestEnvironment;
 
 /**
  * Created by cristi on 11/6/2015.

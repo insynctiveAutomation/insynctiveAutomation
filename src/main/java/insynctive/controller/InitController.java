@@ -1,12 +1,9 @@
 package insynctive.controller;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,11 +18,6 @@ import insynctive.dao.test.TestPlanRunDao;
 import insynctive.dao.test.TestRunDao;
 import insynctive.dao.test.TestSuiteDao;
 import insynctive.dao.test.TestSuiteRunDao;
-import insynctive.exception.ConfigurationException;
-import insynctive.model.Account;
-import insynctive.model.test.Test;
-import insynctive.model.test.TestPlan;
-import insynctive.model.test.TestSuite;
 import insynctive.utils.HibernateUtil;
 
 @Controller

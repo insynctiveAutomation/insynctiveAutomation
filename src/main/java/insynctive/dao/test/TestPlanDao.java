@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import insynctive.model.test.TestPlan;
-import insynctive.model.test.TestSuite;
 import insynctive.model.test.run.TestPlanRun;
 
 @Repository

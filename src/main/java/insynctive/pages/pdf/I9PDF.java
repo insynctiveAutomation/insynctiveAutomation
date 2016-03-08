@@ -1,18 +1,12 @@
 package insynctive.pages.pdf;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import insynctive.exception.ElementNotFoundException;
-import insynctive.exception.TextAreNotEquals;
-import insynctive.pages.Page;
-import insynctive.utils.Sleeper;
-import insynctive.utils.process.I9;
 
 public class I9PDF extends PDFForm {
 

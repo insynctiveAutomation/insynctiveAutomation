@@ -24,7 +24,6 @@ import org.testng.xml.XmlInclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import insynctive.model.ParamObject;
 import insynctive.model.test.run.TestSuiteRun;
 
 /**

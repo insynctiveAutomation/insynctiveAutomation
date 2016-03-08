@@ -2,12 +2,9 @@ package insynctive.utils;
 
 import java.io.IOException;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.context.annotation.ImportResource;
 
 import insynctive.dao.AccountDao;
 import insynctive.dao.CreatePersonFormDao;
@@ -61,7 +58,6 @@ public class HibernateUtil {
 	
 	public static InsynctivePropertyDao getPropertyDao() throws ClientProtocolException, IOException {
 		if(propertyDao == null){init();}
-		
 		return propertyDao;
 	}
 

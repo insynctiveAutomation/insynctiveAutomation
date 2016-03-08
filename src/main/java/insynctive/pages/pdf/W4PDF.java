@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import insynctive.exception.ElementNotFoundException;
-import insynctive.utils.Sleeper;
 
 public class W4PDF extends PDFForm {
 

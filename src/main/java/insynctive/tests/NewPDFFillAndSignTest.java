@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 
 import insynctive.annotation.ParametersFront;
 import insynctive.pages.insynctive.LoginPage;
-import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.agent.hr.CheckListsPage;
 import insynctive.pages.insynctive.employee.EmployeeDocumentsPage;
 import insynctive.pages.insynctive.employee.EmployeeTaskPage;

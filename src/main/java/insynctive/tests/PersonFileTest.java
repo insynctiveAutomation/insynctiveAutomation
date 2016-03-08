@@ -12,7 +12,6 @@ import org.testng.annotations.Test;
 import insynctive.annotation.ParametersFront;
 import insynctive.model.EmergencyContact;
 import insynctive.model.USAddress;
-import insynctive.pages.Page;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.pages.insynctive.PersonFilePage;
 import insynctive.pages.insynctive.ResetPasswordPage;
@@ -26,7 +25,6 @@ import insynctive.utils.MailManager;
 import insynctive.utils.ParamObjectField;
 import insynctive.utils.Sleeper;
 import insynctive.utils.Wait;
-import insynctive.utils.data.TestEnvironment;
  
 public class PersonFileTest extends TestMachine {
 	

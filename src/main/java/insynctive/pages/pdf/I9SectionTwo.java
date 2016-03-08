@@ -1,11 +1,7 @@
 package insynctive.pages.pdf;
 
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
-
-import insynctive.utils.Sleeper;
 
 public class I9SectionTwo extends I9PDF {
 

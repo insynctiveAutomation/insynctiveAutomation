@@ -22,7 +22,6 @@ import insynctive.pages.insynctive.agent.settings.PeoplePage;
 import insynctive.pages.insynctive.agent.settings.V3SettingsPage;
 import insynctive.utils.Debugger;
 import insynctive.utils.ParamObjectField;
-import insynctive.utils.data.TestEnvironment;
 
 @TransactionConfiguration
 @Transactional

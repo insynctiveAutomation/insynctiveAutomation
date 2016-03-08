@@ -1,17 +1,12 @@
 package insynctive.utils;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.client.ClientProtocolException;
@@ -25,14 +20,6 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.xml.sax.SAXException;
 
-import insynctive.dao.AccountDao;
-import insynctive.dao.test.TestDao;
-import insynctive.dao.test.TestPlanDao;
-import insynctive.dao.test.TestRunDao;
-import insynctive.dao.test.TestSuiteDao;
-import insynctive.model.Account;
-import insynctive.model.ParamObject;
-import insynctive.model.test.Test;
 import insynctive.model.test.TestPlan;
 import insynctive.model.test.TestSuite;
 import insynctive.model.test.TestSuiteRunner;

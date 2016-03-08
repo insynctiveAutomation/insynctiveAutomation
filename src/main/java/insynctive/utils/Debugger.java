@@ -2,7 +2,6 @@ package insynctive.utils;
 
 import airbrake.AirbrakeNotice;
 import airbrake.AirbrakeNoticeBuilder;
-import airbrake.AirbrakeNotifier;
 import airbrake.Backtrace;
 import insynctive.exception.FailTest;
 
