@@ -348,7 +348,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 		catch (Exception ex){ throw ex;} 
 		
 		finally {
-			Sleeper.sleep(4500);
+			Sleeper.sleep(7500);
 			goToPersonalTab();
 		}
 		
