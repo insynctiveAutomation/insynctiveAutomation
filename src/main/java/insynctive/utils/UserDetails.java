@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import insynctive.support.utils.InsynctiveVSEnvironment;
+import insynctive.support.utils.PositionInCompany;
+
 public enum UserDetails {
 
 	EUGENIO_VALEIRAS(
@@ -130,7 +133,14 @@ public enum UserDetails {
 			"vstojanoski@insynctive.com", 
 			"@vojche", 
 			"U0GJSHYSH", 
-			PositionInCompany.EXTERNAL);
+			PositionInCompany.EXTERNAL),
+	
+	PEPE(
+			"Petrica Petrea", 
+			"ppetrea@insynctive.com", 
+			"@pepe", 
+			"U06UN5W9G", 
+			PositionInCompany.DEV);
 	
 	public String name;
 	public String email;
