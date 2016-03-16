@@ -18,7 +18,7 @@ import insynctive.exception.ConfigurationException;
 public class ViewsController {
 	
 	@RequestMapping(value = "/" ,method = RequestMethod.GET)
-	public ModelAndView root(HttpSession session) throws ClientProtocolException, IOException{
+	public ModelAndView root(HttpSession session) throws ClientProtocolException, IOException, InterruptedException{
 		ModelAndView model = new ModelAndView();
 		if(SessionController.account != null){
 			model.setViewName("/home");

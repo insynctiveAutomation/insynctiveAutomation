@@ -19,7 +19,7 @@ public class SessionController {
 	//Scope
 	public static Account account;
 	
-	public static void refreshAccount() throws ClientProtocolException, IOException {
+	public static void refreshAccount() throws ClientProtocolException, IOException, InterruptedException {
 		account = HibernateUtil.getAccDao().getAccountByID(account.getAccountID());
 	}
 	

@@ -115,7 +115,7 @@ public abstract class TestMachine {
 	}
 	
 	@AfterClass(alwaysRun = true)
-	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
+	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException, InterruptedException {
 		try{
 			if(isRemote){this.driver.quit();}
 		} catch(Exception ex) {

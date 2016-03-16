@@ -30,7 +30,7 @@ public class TaskTest extends TestMachine {
 	
 	@Override
 	@AfterClass(alwaysRun = true)
-	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
+	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException, InterruptedException {
 		super.teardown();
 	}
 	

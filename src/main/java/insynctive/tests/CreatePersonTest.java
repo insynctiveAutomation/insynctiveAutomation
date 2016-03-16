@@ -40,7 +40,7 @@ public class CreatePersonTest extends TestMachine {
 	
 	@Override
 	@AfterClass
-	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException {
+	public void teardown() throws ConfigurationException, MalformedURLException, IOException, JSONException, InterruptedException {
 		super.teardown();
 		createPersonForm = HibernateUtil.getCreatePersonFormDao().getAccountByID(personID);
 		createPersonForm.setStatusOfTest(generalStatus);
