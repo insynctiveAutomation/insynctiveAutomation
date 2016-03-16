@@ -146,7 +146,7 @@ public class NewPDFFillAndSignTest extends TestMachine {
 		
 		try{ 
 			checklistPage.assignChecklist(checklist, paramObject.name, false);
-			Sleeper.sleep(5000, driver);
+			Sleeper.sleep(10000, driver);
 			//TODO CHECK IF IS ASSIGNED
 			boolean result = checklistPage.isChecklistAssigned(checklist);
 			Debugger.log("startChecklist => "+result, isRemote);
