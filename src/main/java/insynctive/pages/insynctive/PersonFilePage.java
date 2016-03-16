@@ -313,7 +313,7 @@ public class PersonFilePage extends PersonalPage implements PageInterface {
 
 	public boolean isSocialSecurityNumberAdded(String ssnNumber, String runID)
 			throws Exception {
-		Sleeper.sleep(5000, driver);
+		Sleeper.sleep(8000, driver);
 		waitPageIsLoad();
 		return addSocialSecurityNumber.getText().substring(7, 11)
 				.equals(getSSN(ssnNumber, runID).substring(5, 9));
