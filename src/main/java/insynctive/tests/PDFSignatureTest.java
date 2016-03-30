@@ -9,11 +9,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import support.utils.externaltesting.TestEnvironment;
 import insynctive.pages.insynctive.MyTasksPage;
 import insynctive.pages.insynctive.agent.hr.CheckListsPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
 import insynctive.utils.Sleeper;
-import insynctive.utils.data.TestEnvironment;
 
 @Deprecated
 public class PDFSignatureTest extends TestMachine {

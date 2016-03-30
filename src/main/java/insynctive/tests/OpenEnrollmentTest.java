@@ -9,9 +9,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import support.utils.externaltesting.TestEnvironment;
 import insynctive.model.ParamObject;
 import insynctive.pages.insynctive.OpenEnrollmentPage;
-import insynctive.utils.data.TestEnvironment;
 
 @Deprecated
 public class OpenEnrollmentTest extends TestMachine {

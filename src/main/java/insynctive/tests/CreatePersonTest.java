@@ -12,6 +12,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import support.utils.externaltesting.TestEnvironment;
 import insynctive.exception.ConfigurationException;
 import insynctive.model.Account;
 import insynctive.model.CreatePersonForm;
@@ -23,7 +24,6 @@ import insynctive.utils.CheckInApp;
 import insynctive.utils.Debugger;
 import insynctive.utils.HibernateUtil;
 import insynctive.utils.Sleeper;
-import insynctive.utils.data.TestEnvironment;
 
 public class CreatePersonTest extends TestMachine {
 

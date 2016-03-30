@@ -34,12 +34,12 @@ import insynctive.model.test.run.TestRun;
 import insynctive.pages.Page;
 import insynctive.pages.insynctive.LoginPage;
 import insynctive.utils.Debugger;
-import insynctive.utils.ExternalTestRunner;
 import insynctive.utils.HibernateUtil;
 import insynctive.utils.Sleeper;
 import insynctive.utils.TestResults;
-import insynctive.utils.data.TestEnvironment;
-import insynctive.utils.saucelabs.SauceLabsUtil;
+import support.utils.externaltesting.ExternalTestRunner;
+import support.utils.externaltesting.TestEnvironment;
+import support.utils.externaltesting.saucelabs.SauceLabsUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
@@ -63,8 +63,8 @@ public abstract class TestMachine {
 	
 	//WebDriver
 //	public ExternalTestRunner externalTestRunner = new CrossBrowserUtil();
-	public ExternalTestRunner externalTestRunner = new SauceLabsUtil();
-	public WebDriver driver;
+	public ExternalTestRunner externalTestRunner = new SauceLabsUtil("Insynctive5", "3a33c176-4758-4d4b-9cb6-1d51a018c430"); 
+	public WebDriver driver; 
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();
 	public String jobID;

@@ -5,17 +5,17 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import insynctive.utils.slack.SlackUtil;
+import insynctive.utils.slack.SlackUtilInsynctive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JenkinsForm {
 	
 	public String name;
-	public JenkinsBuild build;
+	public JenkinsBuild build; 
 	
 	@JsonIgnore
 	public String getMessage() throws IOException {
-		String slackAccountMentionByEmail = SlackUtil.getSlackAccountMentionByEmail(build.parameters.user);
+		String slackAccountMentionByEmail = SlackUtilInsynctive.getSlackAccountMentionByEmail(build.parameters.user);
 		
 		String mentionUser = (build.parameters.user != null ? slackAccountMentionByEmail  : "@channel")+ " - ";
 		

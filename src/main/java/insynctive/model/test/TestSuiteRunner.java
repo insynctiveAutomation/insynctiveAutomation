@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import insynctive.model.test.run.TestSuiteRun;
-import insynctive.utils.data.TestEnvironment;
+import support.utils.externaltesting.TestEnvironment;
 
 @Entity
 @Table(name = "test_suite_runner")

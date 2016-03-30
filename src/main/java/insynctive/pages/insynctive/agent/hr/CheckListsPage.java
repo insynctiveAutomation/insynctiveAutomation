@@ -150,7 +150,6 @@ public class CheckListsPage extends Page implements PageInterface {
 	/* Waits **/
 	public void waitPageIsLoad() throws Exception {
 		swichToFirstFrame(driver);
-		waitUntilIsLoaded(startChecklist);
 		waitUntilIsLoaded(searchRunningFor);
 		waitUntilIsLoaded(searchChecklist);
 	}

@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import support.utils.externaltesting.TestEnvironment;
 import insynctive.model.ParamObject;
 import insynctive.pages.insynctive.agent.hr.CheckListsPage;
 import insynctive.pages.insynctive.agent.hr.HomeForAgentsPage;
@@ -16,7 +17,6 @@ import insynctive.utils.Debugger;
 import insynctive.utils.data.Checklist;
 import insynctive.utils.data.Employee;
 import insynctive.utils.data.Task;
-import insynctive.utils.data.TestEnvironment;
 import insynctive.utils.data.WhenStart;
 import insynctive.utils.process.AssignTask;
 import insynctive.utils.process.I9;

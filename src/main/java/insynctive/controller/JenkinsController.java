@@ -12,9 +12,9 @@ import insynctive.dao.test.TestPlanDao;
 import insynctive.model.test.TestPlan;
 import insynctive.utils.TestWebRunner;
 import insynctive.utils.jenkins.JenkinsForm;
-import insynctive.utils.slack.SlackMessageObject;
-import insynctive.utils.slack.SlackUtil;
-import insynctive.utils.slack.builders.SlackMessageBuilder;
+import insynctive.utils.slack.SlackUtilInsynctive;
+import utils.slack.SlackMessageObject;
+import utils.slack.builder.SlackMessageBuilder;
 
 @Controller
 @RequestMapping(value = "/jenkins")
@@ -47,7 +47,7 @@ public class JenkinsController {
 					.setIconEmoji(jenkinsForm.getEmoji())
 					.setChannel(jenkinsForm.getChannel())
 					.build();
-			SlackUtil.sendMessage(Slackmessage);
+			SlackUtilInsynctive.sendMessage(Slackmessage);
 		}
 
 		//Start Tests if is install and finish success.
