@@ -209,6 +209,7 @@ public class PersonFileTest extends TestMachine {
 			paramObject.setEmail(paramObject.getEmailWithRunID(getRunIDAsString()));
 			homePage.createPersonCheckingInviteSS(paramObject, CheckInApp.NO);
 			homePage.sendInviteEmail(paramObject, CheckInApp.NO);
+			Sleeper.sleep(6000);
 			result = homePage.checkIfPersonIsCreated(paramObject);
 			
 			setResult(result, "Create Person");
