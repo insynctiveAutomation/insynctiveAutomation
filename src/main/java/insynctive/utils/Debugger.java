@@ -4,6 +4,7 @@ import airbrake.AirbrakeNotice;
 import airbrake.AirbrakeNoticeBuilder;
 import airbrake.Backtrace;
 import insynctive.exception.FailTest;
+import insynctive.utils.airbrake.AirbrakeUtil;
 
 public class Debugger {
 	

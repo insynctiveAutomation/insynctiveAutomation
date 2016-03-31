@@ -89,8 +89,8 @@ public class UsPersonUtil {
 	}
 	
 	public static void main(String[] args) throws ClientProtocolException, IOException {
-		UsPersonUtil insynctiveUtil = new UsPersonUtil("sandbox", "123.Qwe");
-		String personID = insynctiveUtil.saveEmployee(new Person("Eugenio", "Testing", "Title", "insynctiveapps+@gmail.com", "QA"));
+		UsPersonUtil insynctiveUtil = new UsPersonUtil("alpha8", "123.Qwe");
+		String personID = insynctiveUtil.saveEmployee(new Person("Eugenio", "Testing 2", "Title", "insynctiveapps+testingasd@gmail.com", "QA"));
 		Person person = insynctiveUtil.getEmployeeByID(personID);
 	}
 	

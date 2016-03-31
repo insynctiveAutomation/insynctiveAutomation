@@ -9,7 +9,7 @@ import insynctive.pages.Page;
 import insynctive.pages.PageInterface;
 import insynctive.utils.MailManager;
 import insynctive.utils.Sleeper;
-import insynctive.utils.TwilioUtil;
+import insynctive.utils.twilio.TwilioUtil;
 
 public class TwoFAPage extends Page implements PageInterface {
 

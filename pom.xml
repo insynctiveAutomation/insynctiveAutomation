@@ -320,14 +320,14 @@
 		<dependency>
 			<groupId>com.github.EugeValeiras</groupId>
 			<artifactId>SlackUtils</artifactId>
-			<version>30194d57eb33d0d407cdb412a4618a505658c6c2</version>
+			<version>8e2baf21e381171246f5fcda7690f0acdaa08dc5</version>
 		</dependency>
 
 		<!-- Extenal Testing - Eugenio -->
 		<dependency>
 			<groupId>com.github.EugeValeiras</groupId> 
 			<artifactId>ExternalTestingUtils</artifactId>
-			<version>35c97aa3f8e18c99ba1bc042eb252321930fecf1</version>
+			<version>d751267a0d73009ba0affb18eb43a5a721891df7</version>
 		</dependency>
 
 	</dependencies>

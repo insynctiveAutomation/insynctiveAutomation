@@ -63,7 +63,7 @@ public abstract class TestMachine {
 	
 	//WebDriver
 //	public ExternalTestRunner externalTestRunner = new CrossBrowserUtil();
-	public ExternalTestRunner externalTestRunner = new SauceLabsUtil("Insynctive5", "3a33c176-4758-4d4b-9cb6-1d51a018c430"); 
+	public ExternalTestRunner externalTestRunner = new SauceLabsUtil("Insynctive6", "2e0bf32b-6709-407e-957b-ddea4539a6f2"); 
 	public WebDriver driver; 
 	public ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
 	public ThreadLocal<String> sessionId = new ThreadLocal<String>();

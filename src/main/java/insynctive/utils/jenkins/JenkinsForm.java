@@ -15,7 +15,7 @@ public class JenkinsForm {
 	
 	@JsonIgnore
 	public String getMessage() throws IOException {
-		String slackAccountMentionByEmail = SlackUtilInsynctive.getSlackAccountMentionByEmail(build.parameters.user);
+		String slackAccountMentionByEmail = new SlackUtilInsynctive().getSlackAccountMentionByEmail(build.parameters.user);
 		
 		String mentionUser = (build.parameters.user != null ? slackAccountMentionByEmail  : "@channel")+ " - ";
 		

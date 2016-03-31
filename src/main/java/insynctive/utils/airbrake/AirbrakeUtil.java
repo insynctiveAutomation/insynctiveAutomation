@@ -1,4 +1,4 @@
-package insynctive.utils;
+package insynctive.utils.airbrake;
 
 import java.io.IOException;
 import java.io.StringReader;

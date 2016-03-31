@@ -3,15 +3,17 @@ package insynctive.utils.slack;
 import java.io.IOException;
 
 import insynctive.utils.UserDetails;
-import utils.slack.SlackMessageObject;
-import utils.slack.SlackUtil;
-import utils.slack.builder.SlackMessageBuilder;
+import support.utils.slack.SlackMessageObject;
+import support.utils.slack.SlackUtil;
+import support.utils.slack.builder.SlackMessageBuilder;
 
 public class SlackUtilInsynctive extends SlackUtil {
 
-	public static final String token =  "xoxp-2598773363-6987940228-21463692417-b6025bd177";
-	
-	public static String getSlackAccountMentionByEmail(String email) throws IOException{
+	public SlackUtilInsynctive() {
+		super("xoxp-2598773363-6987940228-21463692417-b6025bd177");
+	}
+
+	public String getSlackAccountMentionByEmail(String email) throws IOException{
 		
 		UserDetails userDetailFindByEmail = UserDetails.findByEmail(email);
 		
@@ -25,7 +27,7 @@ public class SlackUtilInsynctive extends SlackUtil {
 		return null;
 	}
 	
-	public static String getSlackAccountMentionByName(String name) throws IOException{
+	public String getSlackAccountMentionByName(String name) throws IOException{
 		
 		UserDetails userDetailFindByName = UserDetails.findByName(name);
 		
@@ -39,7 +41,7 @@ public class SlackUtilInsynctive extends SlackUtil {
 		return null;
 	}
 
-	private static void notifyIfNotExist(String email) throws IOException {
+	private void notifyIfNotExist(String email) throws IOException {
 		if(email != null && !email.equals("")){
 			SlackMessageObject message = new SlackMessageBuilder() 
 					.setText(UserDetails.EUGENIO_VALEIRAS.slackMention+" please set "+email+" to match the right user in Slack")
@@ -47,7 +49,8 @@ public class SlackUtilInsynctive extends SlackUtil {
 					.setUsername("Bot Notify")
 					.setChannel("@eugeniovaleiras")
 					.build();
-			SlackUtilInsynctive.sendMessage(message);
+			
+			sendMessage(message);
 		}
 	}
 	
